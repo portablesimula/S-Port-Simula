@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item key="selection" value="SYSINSERT"/>
+		<item key="wrap" value="true"/>
+		<item key="casesensitive" value="true"/>
+		<item key="wholeword" value="true"/>
+		<item key="incremental" value="false"/>
+		<item key="isRegEx" value="false"/>
+		<list key="findhistory">
+			<item value="SYSINSERT"/>
+			<item value="BODY"/>
+			<item value="ROUTINE"/>
+			<item value="SYSPRI"/>
+			<item value="CURINS"/>
+			<item value="INTRHA"/>
+			<item value="STRING"/>
+			<item value="CALL_TOS"/>
+			<item value="CALL"/>
+			<item value="CALL-TOS"/>
+			<item value="verbose"/>
+			<item value="trace"/>
+			<item value="gettextinfo"/>
+			<item value="intinfo"/>
+			<item value="EDOADDR"/>
+		</list>
+		<list key="replacehistory">
+			<item value="%   "/>
+			<item value="par"/>
+			<item value=""/>
+			<item value="PUTINT"/>
+			<item value="%"/>
+			<item value="21"/>
+			<item value="Arr:16"/>
+			<item value="Arr"/>
+			<item value="size(booPro)=11"/>
+			<item value="digs"/>
+			<item value="mainqnt"/>
+			<item value="tokenizer.nextToken"/>
+			<item value="prevxtag"/>
+			<item value="res_exttag"/>
+			<item value="begListWritten"/>
+		</list>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+		<item key="DIALOG_X_ORIGIN" value="1077"/>
+		<item key="DIALOG_Y_ORIGIN" value="249"/>
+		<item key="DIALOG_WIDTH" value="412"/>
+		<item key="DIALOG_HEIGHT" value="446"/>
+		<item key="DIALOG_FONT_NAME" value="1|Segoe UI|11.25|0|WINDOWS|1|-15|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
+	</section>
+</section>

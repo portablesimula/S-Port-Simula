@@ -1,0 +1,5 @@
+INDEX VERSION 1.134+C:\GitHub\S-Port-Simula\Simuletta\.metadata\.plugins\org.eclipse.jdt.core
+896070659.index
+574438408.index
+2111456845.index
+2493521550.index
