@@ -39,7 +39,7 @@ begin text txt; short integer iii;
 
 % INSERT $SPORTLIB/rtsinit.ini                                            -- Ã˜M
 % -I %INSERT C:/GitHub/SimulaCompiler/Simula/src/sportFEC/sim/rtsinit.ini -- Ã˜M
-%-I %INSERT C:/WorkSpaces/SPort-System/S_Port/src/sport/fec/RTS-FEC-INTERFACE2.def
+%-I %INSERT C:/GitHub/S-Port-Simula/FEC/src/fec/source/RTS-FEC-INTERFACE2.def
 
       !*** recursive ***;
       procedure generatetagindexlist(qqq);ref(quantity)qqq;
@@ -173,7 +173,7 @@ sysout.outtext("PAS2INIT.main: BEGIN codegeneratorinit STATEMENTS"); sysout.outi
 %+D         end;
 
 --%INSERT $SPORTLIB/rtsinit.ini   --Ã˜M
-%INSERT C:/WorkSpaces/SPort-System/S_Port/src/sport/fec/RTSINIT.INI
+%INSERT C:/GitHub/S-Port-Simula/FEC/src/fec/source/RTSINIT.INI
 --	        regnewmodule("rt","cc",1052);
 --			lastusedtag:=1052;
 			

@@ -34,18 +34,19 @@ public final class FECmpRTS {
 //		names.add("ARR");
 //		names.add("FORM");
 //		names.add("LIBR");
-		names.add("FIL");
+//		names.add("FIL");
 //		names.add("SMST");
 //		names.add("SML");
 //		names.add("EDIT");
 //		names.add("MNTR");
 
-//		names.add("RTS$INTERFACE"); // Will call RTS_FEC_InterfaceGenerator  which creates the files:
-		                            // - "C:\Simuletta\Attrs\BEC\simulaRTS\RTS$INTERFACE.dat"
-									// - "C:/WorkSpaces/SPort-System/S_Port/src/sport/fec/RTSINIT.ini"
-									// - "C:/WorkSpaces/SPort-System/S_Port/src/sport/fec/RTS-FEC-INTERFACE1.def"
-		                            // - "C:/WorkSpaces/SPort-System/S_Port/src/sport/fec/RTS-FEC-INTERFACE2.def"
-									// - "C:/WorkSpaces/SPort-System/S_Port/attrs/FEC/PREDEF.atr
+		names.add("RTS$INTERFACE"); // Will call RTS_FEC_InterfaceGenerator  which creates the files:
+		                            // - C:\Simuletta\Attrs\BEC\simulaRTS\RTS$INTERFACE.dat
+									// - C:/GitHub/S-Port-Simula/FEC/src/fec/source/RTSINIT.ini
+									// - C:\GitHub\S-Port-Simula\FEC\src\fec\source\RTS-FEC-INTERFACE1.def
+									// - C:\GitHub\S-Port-Simula\FEC\src\fec\source\RTS-FEC-INTERFACE1.def
+									// - C:\GitHub\S-Port-Simula\FEC\src\fec\source\PREDEF.ATR
+									// - C:\GitHub\S-Port-Simula\FEC\src\fec\source\RTS-FEC-TAGTABLE.def
 
 
 	    // Selection Switches: +M  Myhres debug dumps
@@ -95,7 +96,8 @@ public final class FECmpRTS {
 //		Option.TRACE_LOOM=false;//true;
 
 //		File userDir=new File("C:/WorkSpaces/SPort-Backend/SimulettaFEC");
-		File userDir=new File("C:/WorkSpaces/SimulettaFECinJava/SimulettaFEC");
+//		File userDir=new File("C:/WorkSpaces/SimulettaFECinJava/SimulettaFEC");
+		File userDir=new File("C:/GitHub/S-Port-Simula/Simuletta/SimulettaFEC/");
 		Global.packetName="simulaRTS";
 		Global.simulaRtsLib="C:/Simuletta/Attrs/FEC/simulaRTS";
 		Global.outputDir=new File("C:/Simuletta");

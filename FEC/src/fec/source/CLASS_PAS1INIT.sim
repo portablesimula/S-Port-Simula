@@ -84,7 +84,7 @@ begin
 %+A %EOF
 
 % INSERT $SIMSRC/fec/common.ini
-%INSERT C:/WorkSpaces/SPort-System/S_Port/src/sport/fec/common.ini
+%INSERT C:/GitHub/S-Port-Simula/FEC/src/fec/source/common.ini
 
 %+I %INSERT $SIMSRC/fec/common.mne
 %+I %INSERT $SIMSRC/fec/parser.mne

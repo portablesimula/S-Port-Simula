@@ -33,7 +33,7 @@ begin
       begin
 
 % -I %INSERT $SIMSRC/fec/s-instr.ini
-%-I %INSERT C:/WorkSpaces/SPort-System/S_Port/src/sport/fec/s-instr.ini
+%-I %INSERT C:\GitHub\S-Port-Simula\FEC\src\fec\source\s-instr.ini
 
 %+D      procedure outTrace(t); text t; inspect sysout do
 %+D      begin outint(linenr,5); outtext(":" & t); outimage end;

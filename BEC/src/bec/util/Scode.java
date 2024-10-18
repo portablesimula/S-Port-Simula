@@ -21,7 +21,9 @@ public class Scode {
 
 
 	public static void initScode() {
-		initTagTable();
+//		initTagTable();
+		Scode.TAGTABLE = new String[10000];
+		INIT_TAGTABLE.INIT();
 		String fileName = Global.scodeSource;
 		try (FileInputStream scode = new FileInputStream(fileName)) {
 			SBUF = scode.readAllBytes();
@@ -377,61 +379,61 @@ public class Scode {
 //	end;
 //
 	// *** INIT TAGTABLE ***
-	private static void initTagTable() {
-		String fileName = "C:/WorkSpaces/SPort-System/S_Port/src/sport/fec/RTS-FEC-TAGTABLE.def";
-		try {
-			FileInputStream inputStream = new FileInputStream(fileName);
-			BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));	
-			Scanner scanner = new Scanner(in);
-			Scode.TAGTABLE = new String[10000];
-			scanUntil(scanner,"INIT");
-			while(true) tryPick(scanner);
-		} catch (Throwable e) { }
-	}
-	
-	private static void scanUntil(Scanner scanner,String s) throws IOException {
-		while(true) {
-			if(s.equals(scanner.nextToken())) return;
-		}
-	}
-	
-	private static boolean tryPick(Scanner scanner) throws IOException {
-		scanUntil(scanner,"ident");
-		if(nextIsChar(scanner,'(')) {
-			int index = nextAsInt(scanner);
-			if(index > 0 && nextIsChar(scanner,')')  && nextIsChar(scanner,':')) {
-				scanUntil(scanner,"copy");
-				if(nextIsChar(scanner,'(')  && nextIsChar(scanner,'"')) {
-					Object obj = scanner.nextToken();
-					if(obj instanceof String ident) {
-						if(nextIsChar(scanner,':')) {
-							ident = ident + ':' + (String)scanner.nextToken();
-						}
-//						System.out.println("GOT Index="+index+", ident="+ident);
-						Scode.TAGTABLE[index] = ident;
-						return true;
-					}
-				}				
-			}
-		}
-		return false;
-	}
-	
-	private static boolean nextIsChar(Scanner scanner,char c) throws IOException {
-		Object obj = scanner.nextToken();
-		if(obj instanceof Character C) {
-			if(C.charValue() == c) return(true);
-		}
-		return false;
-	}
-	
-	private static int nextAsInt(Scanner scanner) throws IOException {
-		Object obj = scanner.nextToken();
-		if(obj instanceof Integer I) {
-			return(I);
-		}
-		return -1;
-	}
+//	private static void initTagTable() {
+//		String fileName = "C:/GitHub/S-Port-Simula/FEC/src/fec/source/RTS-FEC-TAGTABLE.def";
+//		try {
+//			FileInputStream inputStream = new FileInputStream(fileName);
+//			BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));	
+//			Scanner scanner = new Scanner(in);
+//			Scode.TAGTABLE = new String[10000];
+//			scanUntil(scanner,"INIT");
+//			while(true) tryPick(scanner);
+//		} catch (Throwable e) { }
+//	}
+//	
+//	private static void scanUntil(Scanner scanner,String s) throws IOException {
+//		while(true) {
+//			if(s.equals(scanner.nextToken())) return;
+//		}
+//	}
+//	
+//	private static boolean tryPick(Scanner scanner) throws IOException {
+//		scanUntil(scanner,"ident");
+//		if(nextIsChar(scanner,'(')) {
+//			int index = nextAsInt(scanner);
+//			if(index > 0 && nextIsChar(scanner,')')  && nextIsChar(scanner,':')) {
+//				scanUntil(scanner,"copy");
+//				if(nextIsChar(scanner,'(')  && nextIsChar(scanner,'"')) {
+//					Object obj = scanner.nextToken();
+//					if(obj instanceof String ident) {
+//						if(nextIsChar(scanner,':')) {
+//							ident = ident + ':' + (String)scanner.nextToken();
+//						}
+////						System.out.println("GOT Index="+index+", ident="+ident);
+//						Scode.TAGTABLE[index] = ident;
+//						return true;
+//					}
+//				}				
+//			}
+//		}
+//		return false;
+//	}
+//	
+//	private static boolean nextIsChar(Scanner scanner,char c) throws IOException {
+//		Object obj = scanner.nextToken();
+//		if(obj instanceof Character C) {
+//			if(C.charValue() == c) return(true);
+//		}
+//		return false;
+//	}
+//	
+//	private static int nextAsInt(Scanner scanner) throws IOException {
+//		Object obj = scanner.nextToken();
+//		if(obj instanceof Integer I) {
+//			return(I);
+//		}
+//		return -1;
+//	}
 
 	
 	

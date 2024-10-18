@@ -19,12 +19,35 @@ public class MakeFEC {
 
 	
 	public static void main(String[] argv) {
-		compile("CLASS_COMMON.sim");
+//		compile("CLASS_COMMON.sim");   // Output -> C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_COMMON.jar
+//		compile("CLASS_ERRMSG.sim");   // Output -> C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_ERRMSG.jar
+//		compile("CLASS_SCANNER.sim");  // Output -> C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCANNER.jar
+//		compile("CLASS_SCANINP.sim");  // Output -> C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCANINP.jar
+//		compile("CLASS_PARSER.sim");   // Output -> C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_PARSER.jar
+//		compile("CLASS_PAS1INIT.sim"); // Output -> C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_PAS1INIT.jar
+//		compile("CLASS_BUILDER1.sim"); // Output -> C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_BUILDER1.jar
+//		compile("CLASS_BUILDER2.sim"); // Output -> C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_BUILDER2.jar
+//		compile("CLASS_CHECKER1.sim"); // Output -> C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_CHECKER1.jar
+		compile("CLASS_CHECKER2.sim"); // Output -> C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\CHECKER2.jar
+//		
+//		compile("CLASS_SCODER0.sim");  // Output -> C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\SCODER0.jar
+//		compile("CLASS_SCODER1.sim");  // Output -> C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\SCODER1.jar
+//		compile("CLASS_SCODER1E.sim"); // Output -> C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\SCODER1E.jar	
+//		compile("CLASS_SCODER2.sim");  // Output -> C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\SCODER2.jar
+//		compile("CLASS_SCODER3.sim");  // Output -> C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\SCODER3.jar
+//		compile("CLASS_SCODER4.sim");  // Output -> C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\SCODER4.jar
+//		
+//		compile("CLASS_PAS2INIT.sim"); // Output -> C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\PAS2INIT.jar 
+//		compile("CLASS_SCODMAIN.sim"); // Output -> C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\SCODMAIN.jar
+//
+//		compile("GENMSG.sim");            // WILL GENERATE FILE MessageGenerator.sim
+//		compile("MessageGenerator.sim");  // WILL GENERATE ERROR MESSAGE FILE FECERROR.txt
+//		
+//		compile("FECMAIN.sim");  // WILL CREATE THE S-PORT COMPILER
 	}
 	
 	private static void compile(String name) {
-//		String fileName = "C:/WorkSpaces/SPort-System/S_Port/src/sport/fec/"+name;
-		String fileName = "C:/WorkSpaces/SportFECinSimula/SPortFEC/src/fec/source/"+name;
+		String fileName = "C:\\GitHub\\S-Port-Simula\\FEC\\src\\fec\\source\\"+name;
 		
 		Vector<String> cmds = new Vector<String>();
 		cmds.add("java");

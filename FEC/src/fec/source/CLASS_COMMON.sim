@@ -31,14 +31,14 @@ virtual: procedure COMMONerror
 %      -----------------------------------------------------------------
 
 % INSERT $SIMSRC/fec/symtable.def
-%INSERT C:/WorkSpaces/SPort-System/S_Port/src/sport/fec/SYMTABLE.DEF
+%INSERT C:/GitHub/S-Port-Simula/FEC/src/fec/source/SYMTABLE.DEF
 
 %SPORT ON
 %REUSE ON
 %-Z %RECORD ON
 
 % INSERT sportid.def
-%INSERT C:/WorkSpaces/SPort-System/S_Port/src/sport/fec/SPORTID.DEF
+%INSERT C:/GitHub/S-Port-Simula/FEC/src/fec/source/SPORTID.DEF
 
 %+T		integer TRACE_ATTRIBUTE_OUTPUT=1;
 %+T		integer TRACE_ATTRIBUTE_INPUT=1;
@@ -91,7 +91,7 @@ virtual: procedure COMMONerror
     integer   RepeatMax    =   256;  ! max size of repetition;
 
 % INSERT $SIMSRC/fec/common.mne
-%INSERT C:/WorkSpaces/SPort-System/S_Port/src/sport/fec/COMMON.MNE
+%INSERT C:/GitHub/S-Port-Simula/FEC/src/fec/source/COMMON.MNE
 
 % ****** to avoid numerous type conversions ******;
 %+Z integer   zero =   0  , one =   1   ;
@@ -869,7 +869,7 @@ virtual: procedure COMMONerror
       		sysout.outtext("COMMON: new outcodefile +++++++++++++++++++++++++++++++++++++++++++++++++"); sysout.outimage;
       end;
 
-%INSERT C:/WorkSpaces/SPort-System/S_Port/src/sport/fec/RTS-FEC-TAGTABLE.def
+%INSERT C:/GitHub/S-Port-Simula/FEC/src/fec/source/RTS-FEC-TAGTABLE.def
 
 %title ***   attribute file   ***
 

@@ -28,7 +28,7 @@ begin
 
 %+I %INSERT $SIMSRC/fec/common.mne
 % INSERT $SIMSRC/fec/scoder.mne
-%INSERT C:/WorkSpaces/SPort-System/S_Port/src/sport/fec/scoder.mne
+%INSERT C:/GitHub/S-Port-Simula/FEC/src/fec/source//scoder.mne
 
 %+I %INSERT $SPORTLIB/rtsinit.mne
 
@@ -110,7 +110,7 @@ begin
          !*** the most common values of "staticencl" ***;
 
 --%-I %INSERT $SPORTLIB/rtsinit.dcl
-%-I %INSERT C:/WorkSpaces/SPort-System/S_Port/src/sport/fec/RTS-FEC-INTERFACE1.def
+%-I %INSERT C:/GitHub/S-Port-Simula/FEC/src/fec/source/RTS-FEC-INTERFACE1.def
 % - contains declarations to be visible within the code generator
 %title ****** the "assembly stack" with connected procedures ******
 

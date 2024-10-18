@@ -31,7 +31,7 @@ begin
 %+I %INSERT $SIMSRC/fec/parser.mne
 
 % INSERT $SIMSRC/fec/scanner.mne
-%INSERT C:/WorkSpaces/SPort-System/S_Port/src/sport/fec/SCANNER.MNE
+%INSERT C:/GitHub/S-Port-Simula/FEC/src/fec/source/SCANNER.MNE
 
 %     communication scanner -> parser/errmsg/L2coder:
       short integer extid;
