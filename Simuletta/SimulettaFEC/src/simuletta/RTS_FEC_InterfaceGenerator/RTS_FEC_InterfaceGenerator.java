@@ -99,23 +99,6 @@ public class RTS_FEC_InterfaceGenerator {
 		oupt.write("\n        Scode.TAGTABLE[10] = \"PADDR\";");						
 		oupt.write("\n        Scode.TAGTABLE[11] = \"RADDR\";");						
 		oupt.write("\n        Scode.TAGTABLE[12] = \"SIZE\";");						
-
-//		oupt.write("\n    }");
-//		oupt.write("\n}");
-
-//		oupt.flush(); oupt.close();
-//		Util.IERR();
-//		System.exit(0);
-		
-		
-//		//oupt.write("\n		ident(32):-copy(\"STRING\");");
-//		for(InsertedModule m:modset) {
-//			if(RTS_FEC_Interface_Option.INTERFACE_TRACE_LEVEL > 2) Util.println(m.identifier+" "+m.tagbase+" "+m.taglimit);
-//			oupt.write("\n		init_"+m.identifier+";");
-//		}
-//		oupt.write("\n	end;\n");
-		
-		
 		for(InsertedModule m:modset) {
 			if(RTS_FEC_Interface_Option.INTERFACE_TRACE_LEVEL > 2) Util.println(m.identifier+" "+m.tagbase+" "+m.taglimit);
 			oupt.write("\n\n	    // Module: "+m.identifier + "-- tagbase="+m.tagbase+", taglimit="+m.taglimit);

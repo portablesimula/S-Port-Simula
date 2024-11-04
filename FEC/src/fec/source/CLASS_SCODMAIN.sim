@@ -1014,10 +1014,6 @@ ENDPREFPAR:
     when     
     IPROC do begin ! PARAM-BEGIN procedure, opi=number of parameters;
       opq:-curcall;
-
-%+TD  STRC3("SCODMAIN",sourceline,"","============================= Quantity DUMP on next line");
-%+TD  opq.dump;
-
 %+K   if opq.categ=C_local and then opq.descr.thisused then goto BPriPro;
 %-Z %IMPLNONE OFF
       switch(NUL:Clfmax) if opq is extquantity then
@@ -3320,11 +3316,7 @@ end;
                s_endprogram                 ) );
       if termstatus<'4' then termstatus:='0';
       if option(rank('O'))<>NUL then begin
-         sysout.outtext(" *** END PASS 2 *** ");
-%+R      if RealCap then begin
-%+R         sysout.outtext("CPUtime: ");
-%+R         sysout.outreal(cputime-timer,4,0); end;
-         sysout.outimage;
+         sysout.outtext(" *** END PASS 2 *** "); sysout.outimage;
       end;
 
       ENDCOMP;

@@ -1,11 +1,16 @@
 package bec.util;
 
+import java.io.IOException;
+
+import bec.AttributeInputStream;
+import bec.AttributeOutputStream;
+
 public class QuantityDescriptor {
-	ResolvedType type;
-	int repCount;
+	public ResolvedType type;
+	public int repCount;
 	
 	public QuantityDescriptor() {
-		repCount = -1;
+		repCount = 1;
 		parse();
 	}
 
@@ -24,11 +29,36 @@ public class QuantityDescriptor {
 //		System.out.println("NEW QuantityDescriptor: " + this);
 	}
 	
+	public int size() {
+		int n = type.size();
+		if(repCount > 1) n = n * repCount;
+		return n;
+	}
+	
 	public String toString() {
-		if(repCount >= 0 )
+		if(repCount > 1 )
 		return "" + type + " " + repCount;
 		return "" + type;
 	}
 	
+
+	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+	
+	private QuantityDescriptor(AttributeInputStream inpt) throws IOException {
+		type = ResolvedType.read(inpt);
+		repCount = inpt.readShort();
+	}
+
+	public void write(AttributeOutputStream oupt) throws IOException {
+		type.write(oupt);
+		oupt.writeShort(repCount);
+	}
+
+	public static QuantityDescriptor read(AttributeInputStream inpt) throws IOException {
+		return new QuantityDescriptor(inpt);
+	}
+
 
 }

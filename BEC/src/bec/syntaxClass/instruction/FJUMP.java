@@ -1,6 +1,9 @@
 package bec.syntaxClass.instruction;
 
+import bec.compileTimeStack.CTStack;
+import bec.util.Global;
 import bec.util.Scode;
+import bec.virtualMachine.SVM_GOTO;
 
 public class FJUMP extends Instruction {
 	int destination;
@@ -15,6 +18,15 @@ public class FJUMP extends Instruction {
 	public void parse() {
 		destination = Scode.inByte();
 //		printTree(2);
+	}
+
+	@Override
+	public void doCode() {
+		CTStack.dumpStack();
+		Global.DESTAB[destination] = Global.PSEG.nextAddress();
+		Global.PSEG.emit(new SVM_GOTO(null), ""+this);
+		Global.PSEG.dump();
+//		Util.IERR(""+this);
 	}
 
 	@Override

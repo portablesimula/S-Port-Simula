@@ -1,8 +1,15 @@
 package bec.syntaxClass.programElement;
 
+import bec.segment.ProgramSegment;
+
 public class BODY extends ProgramElement {
 	
 	public BODY() {
+	}
+	
+	@Override
+	public void doCode() {
+		// NOTHING
 	}
 
 	@Override

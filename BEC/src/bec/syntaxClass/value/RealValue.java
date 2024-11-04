@@ -1,19 +1,24 @@
 package bec.syntaxClass.value;
 
+import java.io.IOException;
+
+import bec.AttributeInputStream;
+import bec.AttributeOutputStream;
 import bec.util.Scode;
 
 public class RealValue extends Value {
-	String value;
+	float value;
 	
-	public RealValue() {
-		parse();
+	public RealValue(float value) {
+		this.type = Scode.TAG_REAL;
+		this.value = value;
 	}
 
 	/**
 	 * real_value ::= c-real real_literal:string
 	 */
-	public void parse() {
-		value = Scode.inString();
+	public RealValue() {
+		value = Float.valueOf(Scode.inString());
 	}
 
 	@Override
@@ -25,5 +30,24 @@ public class RealValue extends Value {
 		return "C-REAL " + value;
 	}
 	
+
+	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+	private RealValue(AttributeInputStream inpt) throws IOException {
+		this.type = Scode.TAG_REAL;
+		value = inpt.readFloat();
+//		System.out.println("NEW IMPORT: " + this);
+	}
+
+	public void write(AttributeOutputStream oupt) throws IOException {
+		oupt.writeInstr(Scode.S_C_REAL);
+		oupt.writeFloat(value);
+	}
+
+	public static RealValue read(AttributeInputStream inpt) throws IOException {
+		return new RealValue(inpt);
+	}
+
 
 }

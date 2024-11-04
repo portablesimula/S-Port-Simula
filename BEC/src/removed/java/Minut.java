@@ -221,7 +221,7 @@ public class Minut {
 	    	  System.out.println("Minut.inConstant'constDef");
 //	      then
 //	    	  EmitRepValue(v,nbyte);
-	    	  Coasm.treatValue();
+	    	  Coasm.emitValue();
 //	%+S        if NextByte = S_SYSTEM
 //	%+S        then inputInstr;
 //	%+S             v.adr.kind:=extadr; v.adr.rela.val:=0;

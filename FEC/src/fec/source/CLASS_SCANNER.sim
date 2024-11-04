@@ -1556,6 +1556,7 @@ end recognizer;
       idpack class protpack; ;
 
       ref(L2coder) P1coder;
+      
       outcodefile class L2Coder;
       hidden protected notok,locals,ctype,ckind,dimcount,iii,jjj,
                        lanhi,lanlo,firstarr,fvis,x,pq,virq,cbrec,xbrec,
@@ -1714,7 +1715,8 @@ end recognizer;
             procedure outbuffer;
             begin text fname;
 %+S               Freq(12):=Freq(12)+1;
-%+D               if option(rank('5'))<>NUL then inspect sysout do begin
+%+D               if traceLevel > 0 then inspect sysout do begin
+% +D               if option(rank('5'))<>NUL then inspect sysout do begin
 %+D                  if pos>1 then outimage;
 %+D                  outtext(" L2output: (l. ");
 %+D                  outint(linenr,5);outchar(')');
@@ -1736,6 +1738,8 @@ end recognizer;
 
 %      ******************   M a i n   l o o p   ***********************
 
+%+T TRC("SCANNER",sourceline,"new L2Coder +++++++++++++++++++++++++++++++++++++++++++++++++");
+   
     detach;
     L2codebuffer:-L2buf:-blanks(L2max); goto CheckNxt;
 %   L2codebuffer:-L2buf:-blanks(1024 ); goto CheckNxt;
@@ -1753,30 +1757,32 @@ end recognizer;
 %-Z %setopt -D
 
    CheckNxt:
-	   sysout.outimage; sysout.outtext("SCANNER.MAIN LOOP: CheckNxt"); sysout.outimage; ! TODO: TESTING ;
+%+T    TRC("SCANNER",sourceline,"MAIN LOOP: CheckNxt");   
        if L2p > L2limit then begin
-       		sysout.outtext("SCANNER.MAIN LOOP: outbuffer"); sysout.outimage; ! TODO: TESTING ;
+%+T         TRC("SCANNER",sourceline,"MAIN LOOP: outbuffer");
        		outbuffer;
        end;
 
 % +D    if option(rank('5'))<>NUL then  ! TODO: TESTING ;
-%+D    inspect sysout do begin
-%+D         if pos>1 then outimage;
-%+D         outtext(" L2output: (l. "); outint(linenr,5); outchar(')');
-%+D         outtext(" OPN="); outtext(DB(rank(opn))); setpos(32);
-%+D         if optx<>NUL then begin outtext("OPD=" &
-%+D                    DB(rank(optx)) & " ");
-%+D            if optx=ICHAR then begin
-%+D               if opdlo>' ' and opdlo<'!127!' then outchar(opdlo)
-%+D               else begin outchar('!'); outint(rank(opdlo),0);
-%+D                          outchar('!') end
-%+D            end else outtext(nameof(opdhi,opdlo));
-%+D         end else if opdlo<>NUL or else opdhi<>NUL then begin
-%+D            outtext("OPD=("); outint(rank(opdhi),0);
-%+D            outchar(',');     outint(rank(opdlo),0); outchar(')');
-%+D         end;
-%+D    end dumpfromparser;
-	   sysout.outimage; ! TODO: TESTING ;
+%+D    if traceLevel > 1 then begin ! TODO: TESTING ;
+%+D       inspect sysout do begin
+%+D            if pos>1 then outimage;
+%+D            outtext(" L2output: (l. "); outint(linenr,5); outchar(')');
+%+D            outtext(" OPN="); outtext(DB(rank(opn))); setpos(32);
+%+D            if optx<>NUL then begin outtext("OPD=" &
+%+D                       DB(rank(optx)) & " ");
+%+D               if optx=ICHAR then begin
+%+D                  if opdlo>' ' and opdlo<'!127!' then outchar(opdlo)
+%+D                  else begin outchar('!'); outint(rank(opdlo),0);
+%+D                             outchar('!') end
+%+D               end else outtext(nameof(opdhi,opdlo));
+%+D            end else if opdlo<>NUL or else opdhi<>NUL then begin
+%+D               outtext("OPD=("); outint(rank(opdhi),0);
+%+D               outchar(',');     outint(rank(opdlo),0); outchar(')');
+%+D            end;
+%+D       end dumpfromparser;
+%+D	      sysout.outimage; ! TODO: TESTING ;
+%+D	   end;
 
 
 %+S    L2Freq(rank(opn)):=L2Freq(rank(opn))+1;
@@ -1909,15 +1915,15 @@ end recognizer;
 
        when
        IECWI, IEND do begin !4 + 4*(number of unmatched virts);
-       		sysout.outimage; sysout.outtext("SCANNER: when IECWI, IEND do"); sysout.outimage;  ! TODO: TESTING ;
+%+T    		sysout.outimage; sysout.outtext("SCANNER: when IECWI, IEND do"); sysout.outimage;  ! TODO: TESTING ;
             if cbrec.kind = K_class then begin
-       		  sysout.outimage; sysout.outtext("SCANNER: when IECWI, IEND (2)"); sysout.outimage;  ! TODO: TESTING ;
+%+T    		  sysout.outimage; sysout.outtext("SCANNER: when IECWI, IEND (2)"); sysout.outimage;  ! TODO: TESTING ;
 %-Z %IMPLNONE OFF
               inspect cbrec do begin
-       			  sysout.outimage; sysout.outtext("SCANNER: when IECWI, IEND (3)"); sysout.outimage;  ! TODO: TESTING ;
+%+T    			  sysout.outimage; sysout.outtext("SCANNER: when IECWI, IEND (3)"); sysout.outimage;  ! TODO: TESTING ;
                   virq:-favirt;
                   while true do inspect virq do begin
-       			     sysout.outimage; sysout.outtext("SCANNER: when IECWI, IEND (4)"); sysout.outimage;  ! TODO: TESTING ;
+%+T    			     sysout.outimage; sysout.outtext("SCANNER: when IECWI, IEND (4)"); sysout.outimage;  ! TODO: TESTING ;
                      ! insert dummy matches for non-matched virtprocs,
                      ! note that virt quant is unaffected by this;
                      if kind<>K_proc then goto NXTVIRT;
@@ -1954,7 +1960,7 @@ end recognizer;
                   
                   EXvloop:
 
-       			  sysout.outimage; sysout.outtext("SCANNER: when IECWI, IEND (5)"); sysout.outimage;  ! TODO: TESTING ;
+%+T    			  sysout.outimage; sysout.outtext("SCANNER: when IECWI, IEND (5)"); sysout.outimage;  ! TODO: TESTING ;
                   fvis:-hidlist; hidlist:-x:-none;
                   while fvis=/=none do begin
 %-Z %IMPLNONE OFF
@@ -2004,7 +2010,7 @@ end recognizer;
                   end idpacklist scan;
                   if x=/=none then x.next:-none;
               end inspect cbrec;
-       		  sysout.outimage; sysout.outtext("SCANNER: when IECWI, IEND (6)"); sysout.outimage;  ! TODO: TESTING ;
+%+T    		  sysout.outimage; sysout.outtext("SCANNER: when IECWI, IEND (6)"); sysout.outimage;  ! TODO: TESTING ;
             end termClass;
 
             if opdlo <> NUL then begin

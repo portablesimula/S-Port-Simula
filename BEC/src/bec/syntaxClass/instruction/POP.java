@@ -1,5 +1,7 @@
 package bec.syntaxClass.instruction;
 
+import bec.compileTimeStack.CTStack;
+
 public class POP extends Instruction {
 	
 	/**
@@ -11,6 +13,12 @@ public class POP extends Instruction {
 	@Override
 	public void printTree(final int indent) {
 		sLIST(indent, toString());
+	}
+
+	@Override
+	public void doCode() {
+		CTStack.dumpStack();
+		CTStack.pop();
 	}
 	
 	public String toString() {

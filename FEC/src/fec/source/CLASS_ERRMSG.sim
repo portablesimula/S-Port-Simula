@@ -35,9 +35,9 @@ begin
 
       procedure printDiag(t); text t; !*** print message ***;
       if t =/= notext then begin
-%+T			outimage; outimage; outtext("ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR "); outimage;
+% +T			outimage; outimage; outtext("ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR "); outimage;
       		outtext(t); outimage;       !    - on SYSOUT;
-%+T			outtext("ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR "); outimage; outimage;
+% +T			outtext("ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR "); outimage; outimage;
             if listfile=/=sysout then inspect listfile do begin
                outtext(t); outimage;    !and on listfile, if any;
             end;

@@ -48,7 +48,7 @@ public class IF extends Instruction {
 //		}
 		Scode.inputInstr();
 	
-		if(Scode.inputTrace > 3) printTree(0);
+//		if(Scode.inputTrace > 3) printTree(0);
 //		Util.IERR("STOP");;
 	}
 	

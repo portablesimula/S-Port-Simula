@@ -1,7 +1,10 @@
 package bec.syntaxClass.value;
 
+import java.io.IOException;
 import java.util.Vector;
 
+import bec.AttributeInputStream;
+import bec.AttributeOutputStream;
 import bec.util.Scode;
 
 public class RecordValue extends Value {
@@ -37,17 +40,18 @@ public class RecordValue extends Value {
 		Scode.expect(Scode.S_ENDRECORD);
 //		Scode.checkEqual(Scode.S_ENDRECORD);
 		
-		if(Scode.inputTrace > 3) printTree(0);
+//		if(Scode.inputTrace > 3) printTree(0);
 	}
+
 
 	@Override
 	public void printTree(final int indent) {
 		sLIST(indent, "C-RECORD " + Scode.edTag(tag));
 		for(AttributeValue value:attrValues) {
-			sLIST(indent, "   ATTR " + value);
+//			sLIST(indent, "   ATTR " + value);
+			sLIST(indent + 1, ""+value);
 		}
 		sLIST(indent, "ENDRECORD");
-		
 	}
 	
 	public String toString() {
@@ -59,5 +63,37 @@ public class RecordValue extends Value {
 		sb.append(" ENDRECORD");
 		return sb.toString();
 	}
+
+	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+	private RecordValue(AttributeInputStream inpt) throws IOException {
+		tag = inpt.readTag();
+		attrValues = new Vector<AttributeValue>();
+		int kind = inpt.readKind();
+		while(kind != Scode.S_ENDRECORD) {
+			AttributeValue value = AttributeValue.read(inpt);
+			attrValues.add(value);
+			kind = inpt.readKind();
+		}
+		System.out.println("NEW RECORD VALUE: ");
+		printTree(2);
+//		Util.IERR("");
+	}
+
+	public void write(AttributeOutputStream oupt) throws IOException {
+		oupt.writeInstr(Scode.S_C_RECORD);
+		oupt.writeTag(tag);
+		for(AttributeValue value:attrValues) value.write(oupt);
+		oupt.writeInstr(Scode.S_ENDRECORD);
+		
+		this.printTree(2);
+//		Util.IERR("");
+	}
+
+	public static RecordValue read(AttributeInputStream inpt) throws IOException {
+		return new RecordValue(inpt);
+	}
+
 	
 }

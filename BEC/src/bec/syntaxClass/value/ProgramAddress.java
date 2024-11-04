@@ -1,5 +1,9 @@
 package bec.syntaxClass.value;
 
+import java.io.IOException;
+
+import bec.AttributeInputStream;
+import bec.AttributeOutputStream;
 import bec.util.Scode;
 
 public class ProgramAddress extends Value {
@@ -7,6 +11,7 @@ public class ProgramAddress extends Value {
 	int tag;
 	
 	public ProgramAddress(boolean isNOWHERE) {
+		this.type = Scode.TAG_PADDR;
 		this.isNOWHERE = isNOWHERE;
 		parse();
 	}
@@ -30,5 +35,24 @@ public class ProgramAddress extends Value {
 		return("C-PADDR " + Scode.edTag(tag));
 	}
 	
+
+	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+	private ProgramAddress(AttributeInputStream inpt) throws IOException {
+		this.type = Scode.TAG_PADDR;
+		tag = inpt.readTag();
+//		System.out.println("NEW IMPORT: " + this);
+	}
+
+	public void write(AttributeOutputStream oupt) throws IOException {
+		oupt.writeInstr(Scode.S_C_PADDR);
+		oupt.writeTag(tag);
+	}
+
+	public static ProgramAddress read(AttributeInputStream inpt) throws IOException {
+		return new ProgramAddress(inpt);
+	}
+
 
 }

@@ -1,13 +1,50 @@
 package bec.syntaxClass.instruction;
 
+import bec.compileTimeStack.CTStack;
+import bec.util.Global;
 import bec.util.Scode;
+import bec.util.Util;
 
 public class DEREF extends Instruction {
 	
 	/**
 	 * addressing_instruction ::= deref
+	 * 
+	 * 
+	 * check TOS ref;
+	 * TOS.MODE := VAL; TOS.TYPE := GADDR;
+	 * TOS is modified to describe the address of the area.
+	 * 
+	 *     (TOS) ------------------------------------------,
+     *                              REF                     |
+     *                                                      |
+     *                                                      |
+     *  The resulting           .==================.        V
+     *       TOS ---------------|--> GADDR VALUE --|------->.========,
+     *  after deref             '=================='        |        |
+     *                                                      |        |
+     *                                                      '========'
 	 */
 	public DEREF() {
+	}
+
+	@Override
+	public void doCode() {
+		CTStack.dumpStack();
+
+		CTStack.checkTosRef();
+//        adr:=TOS;
+//%+S        if SYSGEN <> 0
+//%+S        then if adr.repdist <> (TTAB(adr.type).nbyte)
+//%+S             then WARNING("DEREF on parameter") endif;
+//%+S        endif;
+
+		CTStack.assertAtrStacked();
+		CTStack.pop();
+		CTStack.pushTemp(Scode.TAG_GADDR);
+
+		Global.PSEG.dump();
+		Util.IERR(""+this);
 	}
 
 	@Override

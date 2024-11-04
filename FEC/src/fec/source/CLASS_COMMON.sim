@@ -40,33 +40,33 @@ virtual: procedure COMMONerror
 % INSERT sportid.def
 %INSERT C:/GitHub/S-Port-Simula/FEC/src/fec/source/SPORTID.DEF
 
-%+T		integer TRACE_ATTRIBUTE_OUTPUT=1;
-%+T		integer TRACE_ATTRIBUTE_INPUT=1;
+% +T	integer TRACE_ATTRIBUTE_OUTPUT=1;
+%+T		integer TRACE_ATTRIBUTE_INPUT=0;
 %+T		integer indent;
 
 % +T		text procedure edIndent; begin edIndent:-blanks(3*indent); end;
 
 %+T      procedure TRC(m1,line,m2); integer line; text m1,m2; begin
-%+T    	 --if(Option.TRACE_CODING > 1) begin
-%+T			sysout.outtext(m1 & ".LINE " & edit(line) & ": TRC: ");
-%+T			sysout.outtext(m2);
-%+T			sysout.outimage;
-%+T		 --end;
+%+T    	    if traceLevel > 1 then begin
+%+T			   sysout.outtext(m1 & ".LINE " & edit(line) & ": TRC: ");
+%+T			   sysout.outtext(m2);
+%+T			   sysout.outimage;
+%+T		    end;
 %+T    	 end;
 
 %+T      procedure QTRC(m1,line,m2,q); integer line; text m1,m2; ref(Quantity) q; begin
-%+T    	 --if(Option.TRACE_CODING > 1) begin
-%+T			text qid;
-%+T			qid:-if q==none then copy("NO-Q") else q.ident;
-%+T			sysout.image:=m1 & ".LINE " & edit(line) & ": QTRC: ";
-% +T			sysout.image.sub(32,90):=m2 & qid;
-% +T			sysout.image.sub(32,sysout.image.length-33):=m2;
-%+T			sysout.outimage;
-%+T			inspect q do begin
-%+T				quantDump("QTRC:");
-%+T				inspect descr do blockDump("QTRC:");
-%+T			end;
-%+T		 --end;
+%+T    	    if traceLevel > 1 then begin
+%+T			   text qid;
+%+T			   qid:-if q==none then copy("NO-Q") else q.ident;
+%+T			   sysout.image:=m1 & ".LINE " & edit(line) & ": QTRC: ";
+% +T			  sysout.image.sub(32,90):=m2 & qid;
+% +T			  sysout.image.sub(32,sysout.image.length-33):=m2;
+%+T			   sysout.outimage;
+%+T			   inspect q do begin
+%+T				  quantDump("QTRC:");
+%+T				  inspect descr do blockDump("QTRC:");
+%+T			   end;
+%+T		    end;
 %+T    	 end;
 
 
@@ -311,6 +311,10 @@ virtual: procedure COMMONerror
 %+S %+R   long real array TL3(0:150);  !accum. time for this symbol;
 
 %title *** VARIABLES FOR PARAMETERS TO COMPILER ***
+
+	  boolean verbose;
+	  boolean traceScode;
+      short integer traceLevel;
 
       short integer numerrfound;
 %     short integer maxdepth;         ! max nesting of statements;
@@ -866,7 +870,7 @@ virtual: procedure COMMONerror
 
       outbytefile class outcodefile;  !*** byte output file ***;
       begin ref(quantity) opq;
-      		sysout.outtext("COMMON: new outcodefile +++++++++++++++++++++++++++++++++++++++++++++++++"); sysout.outimage;
+%+T			TRC("COMMON",sourceline,"new outcodefile ++++++++++++++++++++++++++++++++++++++++++");
       end;
 
 %INSERT C:/GitHub/S-Port-Simula/FEC/src/fec/source/RTS-FEC-TAGTABLE.def

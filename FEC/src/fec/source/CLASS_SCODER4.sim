@@ -489,7 +489,7 @@ begin
 %+K      end gen_quick_instances;
 
 
-sysout.outtext("SCODER4.main: BEGIN codegenerator4 STATEMENTS"); sysout.outimage;
+%+T TRC("SCODER4",sourceline,"BEGIN codegenerator4 STATEMENTS");
 
 
 

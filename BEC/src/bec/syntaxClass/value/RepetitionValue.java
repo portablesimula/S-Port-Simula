@@ -1,7 +1,10 @@
 package bec.syntaxClass.value;
 
+import java.io.IOException;
 import java.util.Vector;
 
+import bec.AttributeInputStream;
+import bec.AttributeOutputStream;
 import bec.util.Scode;
 
 public class RepetitionValue extends Value {
@@ -50,7 +53,6 @@ public class RepetitionValue extends Value {
 	 * 			<attribute_value>+ endrecord
 	 */
 	public void parse() {
-		Vector<Value> values = new Vector<Value>();
 		LOOP:while(true) {
 //			System.out.println("RepetitionValue.treatValue: "+Scode.edInstr(Scode.nextByte()));
 			switch(Scode.nextByte()) {
@@ -92,6 +94,35 @@ public class RepetitionValue extends Value {
 			sb.append(value).append(" ");
 		}
 		return sb.toString();
+	}
+
+	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+	private RepetitionValue(AttributeInputStream inpt) throws IOException {
+//		tag = inpt.readTag();
+//		type = ResolvedType.read(inpt);
+//		System.out.println("NEW IMPORT: " + this);
+		values = new Vector<Value>();
+		int n = inpt.readShort();
+		for(int i=0;i<n;i++) {
+			Value value = Value.read(inpt);
+			values.add(value);
+		}
+	}
+
+	public void write(AttributeOutputStream oupt) throws IOException {
+//		oupt.writeInstr(Scode.S_EXPORT);
+//		oupt.writeTag(tag);
+//		type.write(oupt);
+		oupt.writeShort(values.size());
+		for(Value value:values) {
+			value.write(oupt);
+		}
+	}
+
+	public static RepetitionValue read(AttributeInputStream inpt) throws IOException {
+		return new RepetitionValue(inpt);
 	}
 
 }

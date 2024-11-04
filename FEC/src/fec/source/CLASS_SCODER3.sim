@@ -1438,8 +1438,7 @@ begin
                      s_call    & RTS_EncArr2  );    !0;
       end fnp_acc_arr;
 
-
-sysout.outtext("SCODER3.main: BEGIN codegenerator3 STATEMENTS"); sysout.outimage;
+%+T TRC("SCODER3",sourceline,"BEGIN codegenerator3 STATEMENTS");
 
 
 end codegenerator3;

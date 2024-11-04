@@ -226,8 +226,8 @@ begin
                outbyte(i); outtext(leftintbuf.sub(13-i,i));
          end;
          
-%+T      procedure STRC3(m1,line,m2,m3); integer line; text m1,m2,m3; begin
-%+T    	 --if(Option.TRACE_CODING > 1) begin
+%+T      procedure STRC3(m1,line,m2,m3); integer line; text m1,m2,m3;
+%+T    	 if traceScode > 1 then begin
 %+T			if sysout.image.length < 300 then sysout.image :- blanks(300);
 % +T			sysout.outtext("SCODER0.STRC3: sysout.image.length=" & edit(sysout.image.length)); outimage;
 % +T			sysout.outtext("SCODER0.STRC3: m1=""" & m1 & """"); outimage;
@@ -239,21 +239,19 @@ begin
 %+T			sysout.image.sub(32,sysout.image.length-33):=m2;
 %+T			sysout.image.sub(45,sysout.image.length-46):=m3;
 %+T			sysout.outimage;
-%+T		 --end;
 %+T    	 end;
          
-%+T      procedure STRC2(m1,line,m2); integer line; text m1,m2; begin
-%+T    	 --if(Option.TRACE_CODING > 1) begin
+%+T      procedure STRC2(m1,line,m2); integer line; text m1,m2;
+%+T    	 if traceScode > 1 then begin
 %+T			sysout.image.sub(1,8):="SCode: ";
 %+T			sysout.image.sub(8,51):=m1 & ".LINE " & edit(line) & ": ";
 % +T			sysout.image.sub(32,90):=m2;
 %+T			sysout.image.sub(32,sysout.image.length-33):=m2;
 %+T			sysout.outimage;
-%+T		 --end;
 %+T    	 end;
          
-%+T      procedure STRC(m); text m; begin
-%+T    	 --if(Option.TRACE_CODING > 1)
+%+T      procedure STRC(m); text m;
+%+T    	 if traceScode > 1 then begin
 %+T          sysout.outtext("SCode: " & m ); 
 %+T          sysout.outimage;
 %+T    	 end;

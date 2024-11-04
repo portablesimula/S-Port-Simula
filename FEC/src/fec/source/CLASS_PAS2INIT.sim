@@ -110,7 +110,7 @@ begin text txt; short integer iii;
 
 
 
-sysout.outtext("PAS2INIT.main: BEGIN codegeneratorinit STATEMENTS"); sysout.outimage;
+%+T   TRC("PAS2INIT",sourceline,"main: BEGIN codegeneratorinit STATEMENTS");
 
 
 
@@ -339,9 +339,9 @@ sysout.outtext("PAS2INIT.main: BEGIN codegeneratorinit STATEMENTS"); sysout.outi
       inspect new semchecker do begin
 %+D      text t,feoptions; short integer i;
 		 
-		 sysout.outtext("PAS2INIT.main: "); outimage;
+%+T      TRC("PAS2INIT",sourceline,"main:");
          checker0:-checker:- this semchecker;
-		 sysout.outtext("PAS2INIT.main: " & edit(checker0.lowplev) ); outimage;
+%+T      TRC("PAS2INIT",sourceline,"main: " & edit(checker0.lowplev) );
 		 
          L2buf:-L2codebuffer;
          implNone:=true;
@@ -366,9 +366,9 @@ sysout.outtext("PAS2INIT.main: BEGIN codegeneratorinit STATEMENTS"); sysout.outi
 %+D         then begin option(rank('P')):=NUL;
 %+D            allocate;
 %+D            option(rank('P')):='1' end else
-		 sysout.outtext("PAS2INIT.main: (1)"); outimage;
+%+T         TRC("PAS2INIT",sourceline,"main: (1)");
             allocate;
-		 sysout.outtext("PAS2INIT.main: (2)"); outimage;
+%+T         TRC("PAS2INIT",sourceline,"main: (2)");
             ! Put the enclosure on display: ;
             ! cblev:=1;
             display(1):-brctab(0).val(0); brctab(0).val(0):-none;

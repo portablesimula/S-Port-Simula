@@ -1,19 +1,24 @@
 package bec.syntaxClass.value;
 
+import java.io.IOException;
+
+import bec.AttributeInputStream;
+import bec.AttributeOutputStream;
 import bec.util.Scode;
 
 public class CharacterValue extends Value {
 	int value;
 	
-	public CharacterValue() {
-		parse();
+	public CharacterValue(int value) {
+		this.value = value;
 	}
 
 	/**
 	 * character_value ::= c-char byte
 	 */
-	public void parse() {
-		value = Scode.inByte();
+	public CharacterValue() {
+		this.type = Scode.TAG_CHAR;
+		this.value = Scode.inByte();
 	}
 
 	@Override
@@ -25,5 +30,18 @@ public class CharacterValue extends Value {
 		return "C-CHAR " + value;
 	}
 	
+	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+
+	public void write(AttributeOutputStream oupt) throws IOException {
+		oupt.writeInstr(Scode.S_C_CHAR);
+		oupt.writeChar(value);
+	}
+
+	public static CharacterValue read(AttributeInputStream inpt) throws IOException {
+		return new CharacterValue(inpt.readChar());
+	}
+
 
 }

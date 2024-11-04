@@ -2,6 +2,7 @@ package bec.syntaxClass.instruction;
 
 import java.util.Vector;
 
+import bec.segment.ProgramSegment;
 import bec.syntaxClass.programElement.ProgramElement;
 import bec.syntaxClass.value.CONST;
 import bec.util.Scode;
@@ -30,8 +31,8 @@ public class Instruction extends ProgramElement {
 	public static Instruction inInstruction() {
 //		System.out.println("Parse.instruction: "+Scode.edInstr(Scode.curinstr));
 		switch(Scode.curinstr) {
-			case Scode.S_CONSTSPEC:   return new CONST(false);
-			case Scode.S_CONST:       return new CONST(true);
+			case Scode.S_CONSTSPEC:   return CONST.of(false);
+			case Scode.S_CONST:       return CONST.of(true);
 			case Scode.S_RECORD:      return new RECORD();
 			case Scode.S_ROUTINESPEC: Util.IERR("NOT IMPLEMENTED: " + Scode.edInstr(Scode.curinstr)); // SpecRut(false)
 			case Scode.S_SETOBJ:      Util.IERR("SSTMT.SETOBJ is not implemented");

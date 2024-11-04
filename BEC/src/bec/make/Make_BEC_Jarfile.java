@@ -5,8 +5,10 @@ import bec.util.Util;
 
 public class Make_BEC_Jarfile {
 	private final static String RELEASE_HOME  = "C:/SPORT";
-	private final static String SportBEC_ROOT = "C:/WorkSpaces/SPortBECinJava/SportBEC";
+	private final static String SportBEC_ROOT = "C:/GitHub/S-Port-Simula/BEC";
 	private final static String COMPILER_BIN  = SportBEC_ROOT+"/bin";
+	
+//	C:\GitHub\S-Port-Simula\BEC\src\bec\make\CompilerManifest.MF
 
 	public static void main(String[] args) {
 		try {

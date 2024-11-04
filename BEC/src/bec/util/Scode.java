@@ -1,9 +1,9 @@
 package bec.util;
 
-import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
+
+import bec.syntaxClass.SyntaxClass;
 import removed.java.Scomn;
 
 public class Scode {
@@ -14,8 +14,8 @@ public class Scode {
 	
 	public static StringBuilder traceBuff;         // Input Trace's StringBuilder
 	public static int curline;		// Current source line number
-	public static int inputTrace;	// Input trace switch
-	public static boolean listing = false;
+//	public static int inputTrace;	// Input trace switch
+//	public static boolean listing = false;
 	
 	public static String[] TAGTABLE;
 
@@ -25,6 +25,7 @@ public class Scode {
 		Scode.TAGTABLE = new String[10000];
 		INIT_TAGTABLE.INIT();
 		String fileName = Global.scodeSource;
+		System.out.println("Open SCode file: " + fileName);
 		try (FileInputStream scode = new FileInputStream(fileName)) {
 			SBUF = scode.readAllBytes();
 			SBUF_nxt = 0;
@@ -37,7 +38,7 @@ public class Scode {
 	}
 	
 	public static void close() {
-		if(Scode.inputTrace > 3) System.out.println(traceBuff);		
+		if(Global.SCODE_INPUT_TRACE) System.out.println(traceBuff);		
 	}
 	
 	public static int nextByte() {
@@ -66,10 +67,10 @@ public class Scode {
 //			dumpBytes(40);
 			Util.IERR("Illegal instruction["+(SBUF_nxt -1)+"]: " + Scode.curinstr);
 		}
-		if(inputTrace != 0) {
+		if(Global.SCODE_INPUT_TRACE) {
 			if(traceBuff != null) System.out.println(traceBuff);
 			Util.ITRC("Ininstr["+(SBUF_nxt-1)+"]", edInstr(Scode.curinstr));
-			System.out.println("Scode.inputInstr: " + edInstr(Scode.curinstr)+":"+Scode.curinstr);
+//			System.out.println("Scode.inputInstr: " + edInstr(Scode.curinstr)+":"+Scode.curinstr);
 		}
 	}
 	
@@ -115,7 +116,7 @@ public class Scode {
 	
 	public static String inString() {
 		String s = getString();
-		if(inputTrace != 0) {
+		if(Global.SCODE_INPUT_TRACE) {
 			traceBuff.append(" \"").append(s).append('"');
 		}
 		return s;
@@ -126,7 +127,7 @@ public class Scode {
 		int n = get2Bytes();
 		for(int i=0;i<n;i++) sb.append((char)getByte());
 		String s = sb.toString();
-		if(inputTrace != 0) {
+		if(Global.SCODE_INPUT_TRACE) {
 			traceBuff.append(" \"").append(s).append('"');
 		}
 		return s;
@@ -139,7 +140,7 @@ public class Scode {
 	
 	public static int inNumber() {
 		int n = get2Bytes();
-		if(inputTrace != 0) {
+		if(Global.SCODE_INPUT_TRACE) {
 			traceBuff.append(" ").append(n);
 		}
 		return n;
@@ -157,12 +158,18 @@ public class Scode {
 	
 	public static int inByte() {
 		int n = getByte();
-		if(inputTrace != 0) {
+		if(Global.SCODE_INPUT_TRACE) {
 			traceBuff.append(" ").append(n);
 		}
 		return n;
 	}	
 
+	public static int inTag(SyntaxClass displayEntry) {
+		int tag = inTag();
+		Global.Display.set(tag, displayEntry);
+		return tag;
+	}
+	
 	public static int inTag() {
 		int t = get2Bytes();
 		if(t == 0) {
@@ -170,18 +177,19 @@ public class Scode {
 			String id = getString();
 			TAGTABLE[t] = id;
 		}
-		if(inputTrace != 0) {
-			traceBuff.append(edTag(t));
+		if(Global.SCODE_INPUT_TRACE) {
+			traceBuff.append(" "+edTag(t));
 		}
 		return t;
 	}
 	
 	public static String edTag(int t) {
-		return " T:" + t + ':' + TAGTABLE[t];		
+//		return "T:" + t + ':' + TAGTABLE[t];		
+		return "T[" + t + ':' + TAGTABLE[t] + ']';		
 	}
 	
 	public static void inType() {
-		Util.IERR("'inType' SKAL IKKE BRUKES - BRUK  type = new Type();");
+		Util.IERR("'inType' SKAL IKKE BRUKES - BRUK  type = new ResolvedType();");
 		// export range(0:MaxType) type;
 //	begin infix(WORD) tag,lb,ub,fixrep; ref(RecordDescr) r;
 //	      InTag(%tag%);
@@ -436,6 +444,20 @@ public class Scode {
 //	}
 
 	
+
+	public final static int TAG_VOID  = 0;
+	public final static int TAG_BOOL  = 1;
+	public final static int TAG_CHAR  = 2;
+	public final static int	TAG_INT   = 3;
+	public final static int TAG_SINT  = 4;
+	public final static int TAG_REAL  = 5;
+	public final static int TAG_LREAL = 6;
+	public final static int TAG_AADDR = 7;
+	public final static int TAG_OADDR = 8;
+	public final static int TAG_GADDR = 9;
+	public final static int TAG_PADDR = 10;
+	public final static int TAG_RADDR = 11;
+	public final static int TAG_SIZE  = 12;
 	
 //    ------   S  -  I  N  S  T  R  U  C  T  I  O  N  S   ------
 
@@ -444,6 +466,7 @@ public final static int S_LSHIFTA=5;   // Extension to S-Code:  Left shift arith
 public final static int S_RSHIFTL=66;  // Extension to S-Code:  Right shift logical
 public final static int S_RSHIFTA=129; // Extension to S-Code:  Right shift arithmetical
 
+public final static int S_NULL=0;
 public final static int S_RECORD=1; public final static int S_PREFIX=3; public final static int S_ATTR=4; public final static int S_REP=6; public final static int S_ALT=7;
 public final static int S_FIXREP=8; public final static int S_ENDRECORD=9; public final static int S_C_RECORD=10; public final static int S_TEXT=11;
 public final static int S_C_CHAR=12; public final static int S_C_INT=13; public final static int S_C_SIZE=14; public final static int S_C_REAL=15;
@@ -491,6 +514,7 @@ public static String edInstr(int i) {
 		case S_RSHIFTL: return("RSHIFTL");  // Extension to S-Code:  Right shift logical
 		case S_RSHIFTA: return("RSHIFTA"); // Extension to S-Code:  Right shift arithmetical
 	
+		case S_NULL: return("NULL");
 		case S_RECORD: return("RECORD");
 		case S_PREFIX: return("PREFIX");
 		case S_ATTR: return("ATTR");

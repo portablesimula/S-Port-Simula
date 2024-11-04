@@ -1247,7 +1247,7 @@ begin short integer ll1,ll2;
          end get_SWTQNT;
 
 
-sysout.outtext("SCODER2.main: BEGIN codegenerator2 STATEMENTS"); sysout.outimage;
+%+T TRC("SCODER2",sourceline,"BEGIN codegenerator2 STATEMENTS");
 
 
 end codegenerator2;

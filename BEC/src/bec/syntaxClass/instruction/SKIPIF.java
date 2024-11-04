@@ -29,7 +29,7 @@ public class SKIPIF extends Instruction {
 		}
 		Scode.inputInstr();
 	
-		if(Scode.inputTrace > 3) print();
+//		if(Scode.inputTrace > 3) print();
 	}
 
 	@Override

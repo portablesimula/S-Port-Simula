@@ -350,7 +350,7 @@ public class Coasm {
 //	         do EmitZero(atr.rela-aStart.val) endrepeat;
 //	         if aStart.val <> atr.rela then IERR("EmitStructValue-1") endif;
 //	         TreatValue(TypeLength);
-			Coasm.treatValue();
+			Coasm.emitValue();
 			Util.IERR("HVA NÅ");
 //	      endrepeat;
 		}
@@ -442,7 +442,7 @@ public class Coasm {
 //	%title ***   T r e a t   V a l u e   I t e m   ***
 	
 
-	public static void treatValue() {
+	public static void emitValue() {
 //	import range(0:MaxWord) nbyte;
 //	begin infix(MemAddr) addr; ref(Descriptor) d,lab,rut;
 //	      range(0:MaxType) type;
@@ -602,7 +602,7 @@ public class Coasm {
 //	    Util.IERR("Coasm.treatValue: NOT IMPLEMENTED: "+Scode.edInstr(Scode.curinstr));
 //	           InTag(%rtag%); EmitStructValue(nbyte);
 	    Scode.inTag();
-//	    Coasm.treatValue();  ???
+//	    Coasm.emitValue();  ???
 	    break;
 //	      otherwise goto E endcase;
 		default: break LOOP;

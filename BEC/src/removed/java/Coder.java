@@ -1016,7 +1016,7 @@ public class Coder {
 	    	Scode.inTag();
 	    	Scode.inType();
 	    	System.out.println("Coder.pushConst'S_ATTR: ");
-//		    Coasm.treatValue();
+//		    Coasm.emitValue();
 	    	Util.IERR("HVA GJØR VI HER");
 	    }
 //	      otherwise goto E endcase;

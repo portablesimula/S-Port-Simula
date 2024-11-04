@@ -1,6 +1,6 @@
 package removed.java;
 
-import bec.SportBEC;
+import bec.BecCompiler;
 import bec.util.Scode;
 import removed.java.Parse;
 
@@ -25,7 +25,7 @@ public class Smain {
 //
 	public static void main(String[] args) {
 	
-		Scode.inputTrace = 4;
+//		Scode.inputTrace = 4;
 		
 //		Parse.INITIATE();
 //		Parse.PARAM();

@@ -35,6 +35,10 @@ begin
 
       L2NAME:-getTextInfo(7); nscodename:-getTextInfo(4); scodeListing:-getTextInfo(6);
 
+      verbose := getintinfo(44) > 0;
+	  traceScode := getintinfo(45) > 0;
+	  traceLevel := getintinfo(46);
+	  
 %+R   RealCap := getintinfo(43) <= 0;
 %+R   if RealCap then starttime:=cputime;
       recomp:=getintinfo(22)=1;
@@ -47,6 +51,13 @@ begin
       simob_descr:=  simob_level>0;
       simob_entity:= simob_level>=2; simob_const:=simob_level>=3;
 % %-A %+Z   simsetname:-gettextinfo(20); simulaname:-gettextinfo(21);
+
+	  if verbose then begin
+	  	outtext("BEGIN PASS 1:"); outimage;
+	  	outtext("   verbose    = " & edit(verbose)); outimage;
+	  	outtext("   traceLevel = " & edit(traceLevel)); outimage;
+	  	outtext("   traceScode = " & edit(traceScode)); outimage;
+	  end;
 
 %     ********* Open listing file ***********
 

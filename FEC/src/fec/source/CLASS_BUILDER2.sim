@@ -328,18 +328,20 @@ begin
 
          q:-b.fpar;
 
-%+T		 TRC("BUILDER2",sourceline,"BEGIN expandexternals DUMPS ******************************????????????????");
+%+T		 if traceLevel > 2 then begin
+%+T		    TRC("BUILDER2",sourceline,"BEGIN expandexternals DUMPS ******************************????????????????");
 %+T
-%+T		 b.blockDump("BUILDER2.LINE " & edit(sourceline) & ": ");
-%+T		 if q=/=none then q.quantDump("BUILDER2.LINE " & edit(sourceline) & ": ");
-%+T		 TRC("BUILDER2",sourceline,"ENDOF expandexternals DUMPS ******************************????????????????");
+%+T		    b.blockDump("BUILDER2.LINE " & edit(sourceline) & ": ");
+%+T		    if q=/=none then q.quantDump("BUILDER2.LINE " & edit(sourceline) & ": ");
+%+T		    TRC("BUILDER2",sourceline,"ENDOF expandexternals DUMPS ******************************????????????????");
+%+T		 end;
 
 restartloop:
          while q=/=none do begin                !*** main loop;
-%+T			q.quantDump("BUILDER2.LINE " & edit(sourceline) & ": ");
+%+T			if traceLevel > 2 then q.quantDump("BUILDER2.LINE " & edit(sourceline) & ": ");
             if q.descr is extbrecord then begin !*** another module;
                eb:-q.descr;
-%+T			   eb.blockDump("BUILDER2.LINE " & edit(sourceline) & ": ");
+%+T			   if traceLevel > 2 then eb.blockDump("BUILDER2.LINE " & edit(sourceline) & ": ");
                if eb.status <> 'M' then  begin  !*** not marker;
 %+R               if realCap then timeAttr:=cputime;
                   openattributefile(q);
@@ -1283,7 +1285,7 @@ begin
                Q:-Q.next;
             end;
             !*** All checks of virtuals are done in alloc2;
-         brc.blockDump("Builder2.LINE " & edit(sourceline) & ": END Alloc1 ");
+%+T         if traceLevel > 2 then brc.blockDump("Builder2.LINE " & edit(sourceline) & ": END Alloc1 ");
 
       end of alloc1;
 %title ***   Procedure ALLOC2 of allocate   ***
@@ -1650,7 +1652,7 @@ begin
                  goto LBL end;
             when NONE do LBL: leaveblock; !*** performs protect;
             end;
-         brc.blockDump("Builder2.LINE " & edit(sourceline) & ": END Alloc2 ");
+%+T         if traceLevel > 2 then brc.blockDump("Builder2.LINE " & edit(sourceline) & ": END Alloc2 ");
       end of alloc2;
 %title ******   Procedure  L A Y O U T  of allocate   ******
       procedure LAYOUT(brc); ref(brecord) brc;

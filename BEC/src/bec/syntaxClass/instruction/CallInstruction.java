@@ -2,8 +2,22 @@ package bec.syntaxClass.instruction;
 
 import java.util.Vector;
 
+import bec.compileTimeStack.ProfileItem;
+import bec.compileTimeStack.Address;
+import bec.compileTimeStack.CTStack;
+import bec.compileTimeStack.DataType;
+import bec.compileTimeStack.StackItem;
+import bec.syntaxClass.programElement.Variable;
+import bec.syntaxClass.programElement.routine.PROFILE;
+import bec.syntaxClass.programElement.routine.ParameterEval;
+import bec.syntaxClass.programElement.routine.ROUTINE;
+import bec.util.Global;
+import bec.util.QuantityDescriptor;
 import bec.util.Scode;
 import bec.util.Util;
+import bec.virtualMachine.SVM_CALL;
+import bec.virtualMachine.SVM_STORE;
+import bec.virtualMachine.SVM_SYSCALL;
 
 public class CallInstruction extends Instruction {
 	int n; // Kind
@@ -12,12 +26,6 @@ public class CallInstruction extends Instruction {
 	Vector<ParameterEval> argumentEvaluation;
 	Vector<Instruction> CALL_TOS_Instructions;
 	
-	public CallInstruction(int n) {
-		this.n = n;
-		argumentEvaluation = new Vector<ParameterEval>();
-		parse();
-	}
-
 	/**
 	 * call_instruction
 	 * 		::= connect_profile <parameter_eval>*
@@ -34,11 +42,13 @@ public class CallInstruction extends Instruction {
 	 * 			::= <instruction>+ asspar
 	 * 			::= <instruction>+ assrep n:byte
 	 */
-	public void parse() {
+	public CallInstruction(int n) {
+		this.n = n;
+		argumentEvaluation = new Vector<ParameterEval>();
 		profileTag = Scode.inTag();
 		Scode.inputInstr();
 		
-		if(Scode.inputTrace > 3) System.out.println("CallInstruction: n="+n+", Curinstr="+Scode.edInstr(Scode.curinstr));
+//		if(Scode.inputTrace > 3) System.out.println("CallInstruction: n="+n+", Curinstr="+Scode.edInstr(Scode.curinstr));
 		
 		LOOP:while(Scode.curinstr != Scode.S_CALL) {
 			Vector<Instruction> instructions = Instruction.inInstructionSet();
@@ -63,15 +73,240 @@ public class CallInstruction extends Instruction {
 		}
 	    //  ---------  Call Routine  ---------
 		if(CALL_TOS_Instructions == null) routineTag = Scode.inTag();
-		
-		if(Scode.inputTrace > 3) {
-			System.out.println("-------------------------------------------------- BEGIN PRINT CALL Instruction");
-			printTree(2);
-			System.out.println("-------------------------------------------------- ENDOF PRINT CALL Instruction");
+	}
+	
+	public void doCode() {
+		// CODING ....
+		PROFILE spec = (PROFILE) Global.Display.get(profileTag);
+		System.out.println("-------------------------------------------------- BEGIN PRINT CALL Instruction");
+		printTree(2);
+		spec.printTree(2);
+		System.out.println("-------------------------------------------------- ENDOF PRINT CALL Instruction");
+		int nstckval = 0;
+		if(spec.bodyTag > 0)
+			 callSYS(spec, nstckval);
+		else callDefault(spec, nstckval);
+//		Util.IERR("");
+	}
+	
+	private void callSYS(PROFILE spec, int nstckval) { //,Pkind;
+//		range(0:255) npop;
+//	    npop:=0;
+		ProfileItem pitem = new ProfileItem(Scode.TAG_VOID,spec);
+		if(nstckval == 0) CTStack.push(pitem);
+		else {
+			if(nstckval > 1) Util.IERR("PARSE.CallSYS-2");
+			CTStack.precede(pitem,CTStack.TOS);
+//			npop:=npop+PutPar(pitem,1)
+			Util.IERR("NOT IMPL");
 		}
+		
+	      for(ParameterEval par:argumentEvaluation) {
+	    	  par.doCode();
+	    	  putPar(pitem,1);
+	      }
+	      Global.PSEG.dump();
+	      spec.DSEG.dump();
+//	      ---------  Final Actions  ---------
+	      if(pitem.nasspar != pitem.spc.imports.size()) Util.IERR("Wrong number of Parameters");
+
+//	      ---------  Call Routine  ---------
+//	      InTag(%rtag%); rut:=DISPL(rtag.HI).elt(rtag.LO);
+//	      Qf5(qCALL,Pkind,0,spec.nparbyte,entr);
+	      Global.PSEG.emit(new SVM_SYSCALL(spec.ident), "");
+	      
+//	      repeat while npop<>0 do Pop; npop:=npop-1 endrepeat;
+	      if(CTStack.TOS != pitem) Util.IERR("PARSE.CallSYS-3");
+	      CTStack.pop();
+	      
+	      // System Routines return values on the RT-Stack
+	      int returnType = spec.type;
+	      if(returnType != 0) {
+	    	  CTStack.pushTemp(returnType);
+	      }
+    	  CTStack.dumpStack();
+	      Global.PSEG.dump();
+//		Util.IERR("Parse.XXX: NOT IMPLEMENTED");
+	}
+	
+	
+	private int putPar(ProfileItem pItm, int nrep) { // export range(0:255) npop;
+		int npop = 0;
+//	begin range(0:MaxWord) n; range(0:255) i,c; ref(StackItem) s;
+//	      range(0:MaxType) st,pt; infix(MemAddr) opr;
+
+//	      int pt = pItm.spc.imports.get(pItm.nasspar).type;
+//	      int c = pItm.spc.imports.get(pItm.nasspar).count;
+//		QuantityDescriptor pt = pItm.spc.imports.get(pItm.nasspar).quant;
+		Variable param = pItm.spc.imports.get(pItm.nasspar);
+		QuantityDescriptor quant = pItm.spc.imports.get(pItm.nasspar).quant;
+		int pt = quant.type.tag;
+		int c = quant.repCount;
+//	      n:=TTAB(pt).nbyte; i:=nrep;
+		if(nrep>c) Util.IERR("Too many values in repeated param: Got "+nrep+", expect "+c);
+		pItm.nasspar = pItm.nasspar+1;
+		StackItem s = CTStack.TOS;
+		int st = s.type;
+		//--- First: Treat TOS ---
+		System.out.println("CallInstruction.putPar: "+Scode.edTag(st) + " ===> " + Scode.edTag(pt));
+		if(st != pt) Util.GQconvert(pt);
+		else if(s instanceof Address) s.type = st;
+		else Util.GQconvert(pt);
+		
+		if(CTStack.TOS instanceof Address) Util.GQfetch();
+//		s = CTStack.TOS;
+		s = CTStack.takeTOS();
+		
+		System.out.println("CallInstruction.putPar: "+s.getClass().getSimpleName());
+		System.out.println("CallInstruction.putPar: "+s + " ===> " + param);
+		s.storeInto(param.address);
+		
+		pItm.spc.printTree(2);
+		pItm.spc.DSEG.dump();
+		CTStack.dumpStack();
+//		Util.IERR("");
+		
+		if(nrep > 1) { // --- Then: Treat rest of rep-par ---
+			Util.IERR("Parse.XXX: NOT IMPLEMENTED");
+//	      repeat i:=i-1 while i <> 0
+//	      do s:=s.suc;
+//	--??     Husk at integer-type skal legges p} stacken m.h.t spesifikasjon!!!
+//	--??     CheckTypesEqual(s.type,p.type);
+//	%+C      if s.kind=K_Address then IERR("MODE mismatch below TOS") endif;
+//	         if s.type <> pt
+//	         then
+//	%+S           if SYSGEN <> 0 then
+//	%+S           WARNING("PARSE: TYPE mismatch below TOS -- ASSREP") endif;
+//	              if    pt=T_WRD4 then ConvRepWRD4(nrep); goto L2;
+//	%-E           elsif pt=T_WRD2 then ConvRepWRD2(nrep); goto L1;
+//	%+C           else IERR("PARSE: TYPE mismatch below TOS -- ASSREP");
+//	              endif;
+//	         endif;
+//	      endrepeat;
+//	%-E  L1:
+//	   L2:if nrep < c
+//	      then
+//	%-E        Qf2(qDYADC,qSUB,qSP,cSTP,(c-nrep)*n);
+//	%+E        Qf2(qDYADC,qSUB,qESP,cSTP,(c-nrep)*n);
+//	      endif;
+		}
+		npop = nrep;
+		return npop;
 	}
 
+	private void callDefault(PROFILE spec, int nstckval) {
+//	import ref(ProfileDescr) spec; range(0:MaxWord) nstckval;
+//	begin ref(ProfileItem) pitem; range(0:255) npop; infix(MemAddr) entr;
+//	      ref(StackItem) z; ref(Temp) result; ref(Descriptor) rut;
+//	      range(0:MaxByte) b; infix(WORD) rtag;
+//	      range(0:MaxType) xt;
+//	      range(0:MaxByte) nwm,nbi; -- no.word/bytes to be moved/inserted on stack
+//	      range(0:MaxByte) xlng;    -- size of export on 86-stack (in bytes)
+//
+//	%+D   RST(R_CallDefault);
+		ProfileItem pitem = new ProfileItem(Scode.TAG_VOID,spec);
+//	      rut:=none; npop:=0; xt:=0; xlng:=0;
+	      if(nstckval == 0) {
+	    	  if(pitem.spc.type != 0) {
+//	    		  xt:=pitem.spc.type; pushTemp(xt); result:=takeTOS;
+//	                xlng:=TTAB(xt).nbyte;
+//	%-E             Qf2(qDYADC,qSUB,qSP,cSTP,wAllign(%xlng%));
+//	%+E             Qf2(qDYADC,qSUB,qESP,cSTP,wAllign(%xlng%));
+//	                Push(result); result.kind:=K_Result;
+	    		  Util.IERR("NOT IMPLEMENTED");
+	    	  }
+//    		  Util.IERR("NOT IMPLEMENTED");
+    		  CTStack.push(pitem);
+	      } else {
+	    	  StackItem z = CTStack.TOS;
+//	    	  nwm:=0; nbi:=0;
+	    	  if(nstckval > 1) Util.IERR("PARSE.REPCALL");
+	    	  if(pitem.spc.type == 0) CTStack.precede(pitem,z);
+	    	  else {
+	    		  int xt = pitem.spc.type; CTStack.pushTemp(xt); StackItem result = CTStack.takeTOS();
+//	                xlng:=TTAB(xt).nbyte; nbi:=wAllign(%xlng%);
+	    		  CTStack.precede(result,z); CTStack.precede(pitem,z);
+//	    		  result.kind:=K_Result;
+	    	  }
+//	           if nbi <> 0
+//	           then nwm:=wWordsOnStack(TOS);
+//	                if nwm <> 0 then SpaceOnStack(nwm,nbi)
+//	                else
+//	%-E                  Qf2(qDYADC,qSUB,qSP,cSTP,wAllign(%xlng%));
+//	%+E                  Qf2(qDYADC,qSUB,qESP,cSTP,wAllign(%xlng%));
+//	                endif;
+//	           endif;
+//	           npop:=npop+PutPar(pitem,nstckval);
+	      }
+		
+//	      repeat InputInstr while CurInstr <> S_CALL
+//	      do repeat while Instruction do InputInstr endrepeat;
+//	         if    CurInstr=S_ASSPAR    then npop:=npop+PutPar(pitem,1)
+//	         elsif CurInstr=S_ASSREP    then
+//	%+D                                      b:=InputByte;
+//	%-D                                      InByte(%b%);
+//	                                         npop:=npop+PutPar(pitem,b)
+//	         elsif CurInstr=S_CALL_TOS  then goto F
+//	         else  IERR("Syntax error in call Instruction") endif;
+//	%+D      if TraceMode <> 0 then DumpStack endif;
+//	      endrepeat;
+	      for(ParameterEval par:argumentEvaluation) {
+	    	  par.doCode();
+	    	  CTStack.dumpStack();
+	      }
+		  Util.IERR("NOT IMPLEMENTED");
 
+//		
+//		Scode.inputInstr();
+//		LOOP:while(Scode.curinstr != Scode.S_CALL) {
+//			while(instruction()) Scode.inputInstr();
+//				
+//			if(Scode.curinstr == Scode.S_ASSPAR) ; // OK
+//			else if(Scode.curinstr == Scode.S_ASSREP) Scode.inByte();
+//			else if(Scode.curinstr == Scode.S_CALL_TOS) break LOOP;
+//			else Util.IERR("Syntax error in call Instruction");
+//		
+//			
+//			Scode.inputInstr();
+//		}
+//	      ---------  Call Routine  ---------
+//	      InTag(%rtag%); rut:=DISPL(rtag.HI).elt(rtag.LO);
+	      ROUTINE rut = (ROUTINE) Global.Display.get(routineTag);
+//		
+//	      if rut.kind=K_IntRoutine then entr:=rut qua IntDescr.adr
+//	      else entr.kind:=extadr;
+//	%-E        entr.sbireg:=0;
+//	%+E        entr.sibreg:=NoIBREG;
+//	           entr.rela.val:=rut qua ExtDescr.adr.rela;
+//	           entr.smbx:=rut qua ExtDescr.adr.smbx;
+//	      endif;
+//	%+C   if entr=noadr then IERR("Undefined routine entry") endif;
+//	F:    ---------  Final Actions  ---------
+	      if(pitem.nasspar != pitem.spc.npar()) Util.IERR("Wrong number of Parameters");
+//	%+D   if TraceMode > 1
+//	%+D   then setpos(sysout,54); outstring(".   CALL "); print(TOS) endif;
+//	      if rut=none
+//	      then
+//	%+C        CheckTosType(T_RADDR);
+//	%-E        GetTosValueIn86R3(qAX,qBX,0); Pop;
+//	%-E        entr:=X_CALL; PreReadMask:=wOR(uAX,uBX);
+//	%+E        GetTosValueIn86(qEAX); Pop;
+//	%+E        entr.kind:=reladr; entr.rela.val:=0; entr.sibreg:=bEAX+iESP;
+//	      endif;
+//	      Qf5(qCALL,spec.WithExit,0,xlng+pitem.spc.nparbyte,entr);
+	      rut.PSEG.emit(new SVM_CALL(rut), ""+rut);
+	      
+//	      repeat while npop<>0 do Pop; npop:=npop-1 endrepeat;
+	      if(CTStack.TOS != pitem) Util.IERR("SSTMT.Call");
+//	      Pop;
+//	      if xlng <> 0 then Qf2(qADJST,0,0,0,xlng) endif;
+//	      if xt <> 0 then result.kind:=K_Temp endif;
+//	%-E   if CHKSTK
+//	%-E   then if spec.WithExit <> 0
+//	%-E        then Qf5(qCALL,1,0,0,X_CHKSTK) endif;
+//	%-E   endif;
+	      Util.IERR("Parse.XXX: NOT IMPLEMENTED");
+	}
 	
 	@Override
 	public void printTree(final int indent) {

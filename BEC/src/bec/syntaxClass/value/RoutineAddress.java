@@ -1,5 +1,9 @@
 package bec.syntaxClass.value;
 
+import java.io.IOException;
+
+import bec.AttributeInputStream;
+import bec.AttributeOutputStream;
 import bec.util.Scode;
 
 public class RoutineAddress extends Value {
@@ -7,6 +11,7 @@ public class RoutineAddress extends Value {
 	int tag;
 	
 	public RoutineAddress(boolean isNOBODY) {
+		this.type = Scode.TAG_RADDR;
 		this.isNOBODY = isNOBODY;
 		parse();
 	}
@@ -16,7 +21,7 @@ public class RoutineAddress extends Value {
 	 * 		::= c-raddr body:tag
 	 * 		::= nobody
 	 */
-	public void parse() {
+	private void parse() {
 		if(! isNOBODY) tag = Scode.inTag();
 	}
 
@@ -30,5 +35,25 @@ public class RoutineAddress extends Value {
 		return("C-RADDR " + Scode.edTag(tag));
 	}
 	
+	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+	private RoutineAddress(AttributeInputStream inpt) throws IOException {
+		this.type = Scode.TAG_RADDR;
+		tag = inpt.readTag();
+		isNOBODY = inpt.readBoolean();
+//		System.out.println("NEW IMPORT: " + this);
+	}
+
+	public void write(AttributeOutputStream oupt) throws IOException {
+		oupt.writeInstr(Scode.S_C_RADDR);
+		oupt.writeBoolean(isNOBODY);
+		oupt.writeTag(tag);
+	}
+
+	public static RoutineAddress read(AttributeInputStream inpt) throws IOException {
+		return new RoutineAddress(inpt);
+	}
+
 
 }

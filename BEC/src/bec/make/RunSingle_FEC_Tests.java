@@ -9,7 +9,7 @@ package bec.make;
 
 import java.util.Vector;
 
-import bec.SportBEC;
+import bec.BecCompiler;
 import bec.util.Global;
 import bec.util.Scode;
 
@@ -21,7 +21,7 @@ public final class RunSingle_FEC_Tests {
 	public static void main(String[] args) {
 		Global.INLINE_TESTING = true;
 		Global.verbose = true;
-		Scode.inputTrace = 4;
+//		Scode.inputTrace = 4;
 //		Scode.listing = true;
 
 		// Set Compiler Options.
@@ -223,7 +223,7 @@ public final class RunSingle_FEC_Tests {
 		for (String name : names) {
 			String fileName = fecSourceDir + name + ".scd";
 //			try {
-				new SportBEC(fileName);
+				new BecCompiler(fileName);
 //			} catch (IOException e) { Util.IERR("Compiler Error: " + e); }
 		}
 

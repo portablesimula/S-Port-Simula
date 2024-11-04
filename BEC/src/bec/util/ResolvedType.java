@@ -1,15 +1,14 @@
 package bec.util;
 
-import removed.java.Scomn;
+import java.io.IOException;
 
-public class ResolvedType {
-	int tag;
-	Range range;
+import bec.AttributeInputStream;
+import bec.AttributeOutputStream;
+
+public class ResolvedType extends Type {
+//	int tag;
+//	Range range;
 	Fixrep fixrep;
-	
-	public ResolvedType() {
-		parse();
-	}
 	
 	/**
 	 *	 type ::= structured_type | simple_type
@@ -25,11 +24,9 @@ public class ResolvedType {
 	 *
 	 *	 resolved_structure ::= structured_type < fixrep count:ordinal >?
 	 */
-	public void parse() {
-		tag = Scode.inTag();
-		if(tag <= Scomn.TAG_SIZE) {
-			if(Scode.accept(Scode.S_RANGE)) range = new Range();
-		} else {
+	public ResolvedType() {
+		super();
+		if(tag > Scode.TAG_SIZE) {
 			if(Scode.accept(Scode.S_FIXREP)) fixrep = new Fixrep();
 		}
 	}
@@ -39,5 +36,31 @@ public class ResolvedType {
 		if(fixrep != null) return Scode.edTag(tag) + " " + fixrep;
 		return Scode.edTag(tag);
 	}
+
+	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+	
+	private ResolvedType(AttributeInputStream inpt) throws IOException {
+//		tag = inpt.readTag();
+		super(inpt);
+		inpt.readInstr();
+		if(inpt.curinstr == Scode.S_RANGE) { range = Range.read(inpt); inpt.readInstr(); }
+		else if(inpt.curinstr == Scode.S_FIXREP) { fixrep = Fixrep.read(inpt); inpt.readInstr(); }
+		
+		if(inpt.curinstr != Scode.S_ENDIF) Util.IERR("IMPOSSIBLE: "+Scode.edInstr(inpt.curinstr));
+	}
+
+	public void write(AttributeOutputStream oupt) throws IOException {
+		oupt.writeTag(tag);
+		if(range != null) range.write(oupt);
+		if(fixrep != null) fixrep.write(oupt);
+		oupt.writeInstr(Scode.S_ENDIF);
+	}
+
+	public static ResolvedType read(AttributeInputStream inpt) throws IOException {
+		return new ResolvedType(inpt);
+	}
+
 
 }

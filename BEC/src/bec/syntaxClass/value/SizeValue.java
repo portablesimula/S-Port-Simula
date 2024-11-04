@@ -1,14 +1,18 @@
 package bec.syntaxClass.value;
 
+import java.io.IOException;
+
+import bec.AttributeInputStream;
+import bec.AttributeOutputStream;
 import bec.util.Scode;
+import bec.util.Type;
 
 public class SizeValue extends Value {
-	boolean isNOSIZE;
-	int tag;
+	int size;
 	
-	public SizeValue(boolean isNOSIZE) {
-		this.isNOSIZE = isNOSIZE;
-		parse();
+	public SizeValue(int size) {
+		this.type = Scode.TAG_SIZE;
+		this.size = size;
 	}
 
 	/**
@@ -16,8 +20,12 @@ public class SizeValue extends Value {
 	 * 		::= c-size type
 	 * 		::= NOSIZE
 	 */
-	public void parse() {
-		if(! isNOSIZE) tag = Scode.inTag();
+	public SizeValue(boolean isNOSIZE) {
+		this.type = Scode.TAG_SIZE;
+		if(! isNOSIZE) {
+			Type type = new Type();
+			size = type.size();
+		}
 	}
 
 	@Override
@@ -26,8 +34,26 @@ public class SizeValue extends Value {
 	}
 	
 	public String toString() {
-		if(isNOSIZE) return "NOSIZE";
-		return("C-OADDR " + Scode.edTag(tag));
+		if(size == 0) return "NOSIZE";
+		return("C-SIZE " + size);
+	}
+
+	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+	private SizeValue(AttributeInputStream inpt) throws IOException {
+		this.type = Scode.TAG_SIZE;
+		size = inpt.readShort();
+//		System.out.println("NEW IMPORT: " + this);
+	}
+
+	public void write(AttributeOutputStream oupt) throws IOException {
+		oupt.writeInstr(Scode.S_C_SIZE);
+		oupt.writeShort(size);
+	}
+
+	public static SizeValue read(AttributeInputStream inpt) throws IOException {
+		return new SizeValue(inpt);
 	}
 	
 

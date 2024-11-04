@@ -1,7 +1,13 @@
 package bec.syntaxClass.programElement;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import bec.AttributeInputStream;
+import bec.S_Module;
 import bec.util.Global;
 import bec.util.Scode;
+import bec.util.Util;
 
 public class INSERT extends ProgramElement {
 	boolean sysMode;
@@ -24,6 +30,30 @@ public class INSERT extends ProgramElement {
 	    biasTag = Scode.inTag();
 	    limitTag = Scode.inTag();
 	    Global.nTags = limitTag;
+	    
+	    System.out.println("NEW "+this);
+	    String fileName = Global.getAttrFileName(modid);
+//	    S_Module module = new S_Module();
+	    try {
+	    	insertModule(fileName);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//	    Util.IERR(""+fileName);
+	}
+	
+	public static void insertModule(String fileName) throws IOException {
+		AttributeInputStream inpt = new AttributeInputStream(new FileInputStream(fileName));
+		inpt.readInstr();
+		if(inpt.curinstr != Scode.S_MODULE) Util.IERR("Missing MODULE");
+		String modident = inpt.readString();
+		String modcheck = inpt.readString();
+		System.out.println("**************   Begin  -  Input-module  " + modident + "  " + modcheck + "   **************");
+		while(inpt.readObj(inpt) != null) {
+			
+		}
+		System.out.println("**************   End of  -  Input-module  " + modident + "  " + modcheck + "   **************");
 	}
 
 	@Override

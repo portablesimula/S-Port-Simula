@@ -174,17 +174,17 @@ public class Sbase {
 //	      repeat edchar(F,' ') while p>F.pos do endrepeat;
 //	end;
 
-	public static void ITRC(String id, String msg) {
-		if(Scode.inputTrace > 1) {
+//	public static void ITRC(String id, String msg) {
+//		if(Scode.inputTrace > 1) {
 //	%+D       then outstring("Line "); outword(curline);
 //	%+D            setpos(sysout,14); outstring(m); outchar(':');
 //	%+D            setpos(sysout,25); outstring(pickup(inptrace)); outimage;
-			Scode.traceBuff = new StringBuilder("Line " + Scode.curline + "  " + id + ": " + msg);
+//			Scode.traceBuff = new StringBuilder("Line " + Scode.curline + "  " + id + ": " + msg);
 //	%+D       else if inptrace.pos > 60 then printout(inptrace)
 //	%+D            elsif inptrace.pos<14 then setpos(inptrace,14)
 //	%+D            else  setpos(inptrace,inptrace.pos+1) endif;
-		}
-	}
+//		}
+//	}
 
 //	%title ***  E r r o r   R e p o r t i n g   ***
 //
@@ -224,14 +224,14 @@ public class Sbase {
 //	%+S   else EnvTerm(2,"FATAL-ERROR") endif;
 //	end;
 
-	public static void ERROR(String msg) {
+//	public static void ERROR(String msg) {
 //	begin eReport(eError,msg); nerr:=nerr+1;
 //	      if nerr > MXXERR then FATAL_ERROR("Too many errors") endif;
-		if(Scode.inputTrace != 0) {
-			System.out.println(Scode.traceBuff);
-		}
-		System.out.println(""+msg);
-	}
+//		if(Scode.inputTrace != 0) {
+//			System.out.println(Scode.traceBuff);
+//		}
+//		System.out.println(""+msg);
+//	}
 //
 //	Visible Routine CAPERR; import range(0:MaxCap) code;
 //	begin infix(String) msg; range(0:MaxByte) stat;
@@ -251,11 +251,11 @@ public class Sbase {
 //	      FATAL_ERROR("Capacity limit exceeded: ");
 //	end;
 
-	public static void IERR(String msg) {
-		ERROR("Internal error: " + msg);
-		Thread.dumpStack();
-		System.exit(0);
-	}
+//	public static void IERR(String msg) {
+//		ERROR("Internal error: " + msg);
+//		Thread.dumpStack();
+//		System.exit(0);
+//	}
 //
 //	Visible Routine FILERR; import range(0:MaxKey) key; infix(String) idnt;
 //	begin range(0:MaxByte) stat; stat:=status; status:=0;

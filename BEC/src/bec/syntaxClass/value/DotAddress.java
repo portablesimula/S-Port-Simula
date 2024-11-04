@@ -1,7 +1,10 @@
 package bec.syntaxClass.value;
 
+import java.io.IOException;
 import java.util.Vector;
 
+import bec.AttributeInputStream;
+import bec.AttributeOutputStream;
 import bec.util.Scode;
 import bec.util.Util;
 
@@ -13,6 +16,7 @@ public class DotAddress extends Value {
 	public DotAddress() {
 		attrTags = new Vector<Integer>();
 		parse();
+		this.type = (terminator == Scode.S_C_AADDR) ? Scode.TAG_AADDR : Scode.S_C_GADDR;
 	}
 
 	/**
@@ -48,6 +52,37 @@ public class DotAddress extends Value {
 		}
 		sb.append(" " + Scode.edInstr(terminator) + " " + Scode.edTag(globalOrConstTag));
 		return(sb.toString());
+	}
+
+	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+	private DotAddress(AttributeInputStream inpt) throws IOException {
+		int n = inpt.readShort();
+		attrTags = new Vector<Integer>();
+		for(int i=0;i<n;i++) {
+			int tag = inpt.readTag();
+			attrTags.add(tag);
+		}
+		globalOrConstTag = inpt.readTag();
+		terminator = inpt.readKind();
+		this.type = (terminator == Scode.S_C_AADDR) ? Scode.TAG_AADDR : Scode.S_C_GADDR;
+//		System.out.println("NEW IMPORT: " + this);
+	}
+
+//	Vector<Integer> attrTags;
+//	int globalOrConstTag;
+//	int terminator;
+	public void write(AttributeOutputStream oupt) throws IOException {
+		oupt.writeInstr(Scode.S_C_DOT);
+		oupt.writeShort(attrTags.size());
+		for(int t:attrTags) oupt.writeTag(t);
+		oupt.writeTag(globalOrConstTag);
+		oupt.writeKind(terminator);
+	}
+
+	public static DotAddress read(AttributeInputStream inpt) throws IOException {
+		return new DotAddress(inpt);
 	}
 	
 

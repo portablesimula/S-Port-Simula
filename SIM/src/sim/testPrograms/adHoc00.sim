@@ -1,0 +1,8 @@
+begin
+
+	outtext("Hello World");
+	outimage;
+	
+%	bare tull
+
+end;

@@ -23,7 +23,7 @@ public final class FECmpRTS {
 	public static void main(String[] args) {
 		long startTimeMs = System.currentTimeMillis( );
 		Vector<String> names=new Vector<String>();
-//		names.add("RT");
+		names.add("RT");
 //		names.add("SYSR");
 //		names.add("KNWN");
 //		names.add("UTIL");
@@ -40,14 +40,16 @@ public final class FECmpRTS {
 //		names.add("EDIT");
 //		names.add("MNTR");
 
-		names.add("RTS$INTERFACE"); // Will call RTS_FEC_InterfaceGenerator  which creates the files:
-		                            // - C:\Simuletta\Attrs\BEC\simulaRTS\RTS$INTERFACE.dat
+//		names.add("RTS$INTERFACE"); // Will call RTS_FEC_InterfaceGenerator  which creates the files:
+		                            // - C:/Simuletta/Attrs/BEC/simulaRTS/RTS$INTERFACE.dat
+									//
 									// - C:/GitHub/S-Port-Simula/FEC/src/fec/source/RTSINIT.ini
-									// - C:\GitHub\S-Port-Simula\FEC\src\fec\source\RTS-FEC-INTERFACE1.def
-									// - C:\GitHub\S-Port-Simula\FEC\src\fec\source\RTS-FEC-INTERFACE1.def
-									// - C:\GitHub\S-Port-Simula\FEC\src\fec\source\PREDEF.ATR
-									// - C:\GitHub\S-Port-Simula\FEC\src\fec\source\RTS-FEC-TAGTABLE.def
-
+									// - C:/GitHub/S-Port-Simula/FEC/src/fec/source/RTS-FEC-INTERFACE1.def
+									// - C:/GitHub/S-Port-Simula/FEC/src/fec/source/RTS-FEC-INTERFACE1.def
+									// - C:/GitHub/S-Port-Simula/FEC/src/fec/source/PREDEF.ATR
+									// - C:/GitHub/S-Port-Simula/FEC/src/fec/source/RTS-FEC-TAGTABLE.def
+									//
+									// - C:/GitHub/S-Port-Simula/BEC/src/bec/util/INIT_TAGTABLE.java
 
 	    // Selection Switches: +M  Myhres debug dumps
 	    //                     +C: storage checking incl.gettextInfo

@@ -1,5 +1,10 @@
 package bec.syntaxClass;
 
+import java.io.IOException;
+
+import bec.AttributeInputStream;
+import bec.AttributeOutputStream;
+import bec.segment.ProgramSegment;
 import bec.util.Scode;
 import bec.util.Util;
 
@@ -9,6 +14,11 @@ public class SyntaxClass {
 	public SyntaxClass() {
 		lineNumber = Scode.curline;
 	}
+	
+	public void doCode() {
+		Util.IERR("Method doCode need a redefinition in "+this.getClass().getSimpleName());
+	}
+
 	/**
 	 * Utility print method.
 	 * 
@@ -52,5 +62,19 @@ public class SyntaxClass {
 			s = s + "    ";
 		return (s);
 	}
+
+	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+
+	public void write(AttributeOutputStream oupt) throws IOException {
+		Util.IERR("Method 'write' needs a redefinition in "+this.getClass().getSimpleName());
+	}
+
+	public static SyntaxClass readObject(AttributeInputStream inpt) throws IOException {
+		Util.IERR("Static Method 'readObject' needs a redefiniton");
+		return(null);
+	}
+
 
 }

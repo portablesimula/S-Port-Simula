@@ -1,5 +1,7 @@
 package bec.syntaxClass.instruction;
 
+import bec.segment.ProgramSegment;
+import bec.syntaxClass.programElement.ProgramElement;
 import bec.util.Scode;
 
 public class LINE extends Instruction {
@@ -19,6 +21,11 @@ public class LINE extends Instruction {
 	 */
 	public void parse() {
 		Scode.curline = lineNo = Scode.inNumber();
+	}
+	
+	@Override
+	public void doCode() {
+		// TODO: HVA HER
 	}
 
 	@Override

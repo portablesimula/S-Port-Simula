@@ -1,6 +1,9 @@
 package bec.syntaxClass.instruction;
 
+import bec.compileTimeStack.CTStack;
+import bec.util.Global;
 import bec.util.Scode;
+import bec.virtualMachine.SVM_GOTO;
 
 public class BDEST extends Instruction {
 	int destination;
@@ -14,6 +17,14 @@ public class BDEST extends Instruction {
 	 */
 	public void parse() {
 		destination = Scode.inByte();
+	}
+
+	@Override
+	public void doCode() {
+		CTStack.dumpStack();
+		Global.DESTAB[destination] = Global.PSEG.nextAddress();
+//		Global.PSEG.dump();
+//		Util.IERR(""+this);
 	}
 
 	@Override

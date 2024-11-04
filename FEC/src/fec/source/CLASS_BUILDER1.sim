@@ -266,7 +266,7 @@ begin
 %+D            outimage end;
 
 
-sysout.outtext("BUILDER1.main: BEGIN visiblegenerator STATEMENTS"); sysout.outimage;
+%+T      TRC("PAS2INIT",sourceline,"main: BEGIN visiblegenerator STATEMENTS");
 
 
 
