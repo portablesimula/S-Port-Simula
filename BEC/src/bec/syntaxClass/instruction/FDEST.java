@@ -16,6 +16,12 @@ public class FDEST extends Instruction {
 
 	/**
 	 * forward_destination ::= fdest destination:index
+	 * 
+	 * check stack empty;
+	 * 
+	 * The destination must have been defined by a fjump or fjumpif instruction, otherwise: error.
+	 * The current program point becomes the destination of the jump-instruction and the destination becomes
+	 * undefined.
 	 */
 	public void parse() {
 		destination = Scode.inByte();
@@ -28,8 +34,11 @@ public class FDEST extends Instruction {
 
 	@Override
 	public void doCode() {
-		CTStack.dumpStack();
+		CTStack.checkStackEmpty();
+
+//		CTStack.dumpStack();
 		MemAddr addr = Global.DESTAB[destination];
+		Global.DESTAB[destination] = null;
 		SVM_GOTO instr = (SVM_GOTO) Global.PSEG.instructions.get(addr.ofst);
 		instr.destination = Global.PSEG.nextAddress();
 		Global.PSEG.dump();

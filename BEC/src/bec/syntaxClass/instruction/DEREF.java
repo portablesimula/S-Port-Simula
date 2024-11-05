@@ -1,9 +1,7 @@
 package bec.syntaxClass.instruction;
 
 import bec.compileTimeStack.CTStack;
-import bec.util.Global;
 import bec.util.Scode;
-import bec.util.Util;
 
 public class DEREF extends Instruction {
 	
@@ -43,8 +41,8 @@ public class DEREF extends Instruction {
 		CTStack.pop();
 		CTStack.pushTemp(Scode.TAG_GADDR);
 
-		Global.PSEG.dump();
-		Util.IERR(""+this);
+//		Global.PSEG.dump();
+//		Util.IERR(""+this);
 	}
 
 	@Override

@@ -2,7 +2,6 @@ package bec.syntaxClass.instruction;
 
 import bec.compileTimeStack.Coonst;
 import bec.compileTimeStack.CTStack;
-import bec.segment.ProgramSegment;
 import bec.syntaxClass.value.AttributeAddress;
 import bec.syntaxClass.value.BooleanValue;
 import bec.syntaxClass.value.CharacterValue;
@@ -20,7 +19,6 @@ import bec.syntaxClass.value.TextValue;
 import bec.syntaxClass.value.Value;
 import bec.util.Scode;
 import bec.util.Util;
-import bec.virtualMachine.SVM_CALL;
 
 public class PUSHC extends Instruction {
 	Value value;
@@ -102,24 +100,6 @@ public class PUSHC extends Instruction {
 		Coonst cns = new Coonst(value);
 		CTStack.push(cns);
 	}
-//	Visible Routine pushCoonst;
-//	import range(0:MaxType) type; infix(ValueItem) itm;
-//	begin ref(Object) cns;
-//	      cns:=FreeObj(K_Coonst);
-//	      if cns <> none
-//	      then FreeObj(K_Coonst):=cns qua FreeObject.next;
-//	      else L: cns:=PoolNxt; PoolNxt:=PoolNxt+size(Coonst);
-//	           if PoolNxt >= PoolBot
-//	           then PALLOC(size(Coonst),cns); goto L endif;
-//	%+D        ObjCount(K_Coonst):=ObjCount(K_Coonst)+1;
-//	      endif;
-//	      cns.kind:=K_Coonst; cns.type:=type;
-//	      cns qua StackItem.repdist:=TTAB(type).nbyte;
-//	      cns qua StackItem.suc:=none; cns qua StackItem.pred:=none;
-//	      cns qua Coonst.itm:=itm;
-//	%+C   if TTAB(type).nbyte=0 then IERR("No info TYPE-4") endif;
-//	      DOpush(cns);
-//	end;
 
 	@Override
 	public void printTree(final int indent) {

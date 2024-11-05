@@ -27,15 +27,15 @@ public class ProgramSegment extends Segment {
 	}
 	
 	public void dump() {
-		System.out.println("==================== " + ident + " DUMP ====================");
+		System.out.println("========================== " + ident + " DUMP ==========================");
 		for(int i=0;i<instructions.size();i++) {
 			String line = "" + i + ": ";
 			while(line.length() < 8) line = " " +line;
 			String value = ""+instructions.get(i);
-			while(value.length() < 25) value = value + ' ';
+			while(value.length() < 50) value = value + ' ';
 			System.out.println(line + value + "   " + comment.get(i));
 		}
-		System.out.println("==================== " + ident + " END  ====================");
+		System.out.println("========================== " + ident + " END  ==========================");
 	}
 
 }

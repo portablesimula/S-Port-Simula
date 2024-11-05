@@ -7,7 +7,21 @@ import bec.syntaxClass.programElement.AttributeDefinition;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
+import bec.virtualMachine.SVM_NOT_IMPL;
 
+/**
+ * select attr:tag
+ * 
+ * check TOS ref;
+ * TOS.TYPE := attr.TYPE;
+ * "TOS.OFFSET := TOS.OFFSET ++ attr.OFFSET";
+ * 
+ * (note that the BASE component of TOS is unchanged)
+ * The area described by TOS is considered to be holding a record of the type, say 'REC', in which
+ * the instruction argument attr is an attribute. TOS is modified to describe the designated
+ * component of that record. Note that no qualification check is implied, i.e. TOS.TYPE may be
+ * different from 'REC'.
+ */
 public class SELECT extends Instruction {
 	int instr;
 	int tag;
@@ -28,8 +42,7 @@ public class SELECT extends Instruction {
 	@Override
 	public void doCode() {
 //		CTStack.dumpStack();
-//		CTStack.checkTosRef();
-//        InTag(%tag%); attr:=DISPL(tag.HI).elt(tag.LO); adr:=TOS;
+		CTStack.checkTosRef();
 		AttributeDefinition attr = (AttributeDefinition) Global.getMeaning(tag);
 		Address adr = (Address) CTStack.TOS;
 		adr.offset = adr.offset + attr.rela;
@@ -37,7 +50,7 @@ public class SELECT extends Instruction {
 		adr.repdist = DataType.typeSize(adr.type);
 		if(adr.atrState == Address.State.FromConst) {
 			adr.atrState = Address.State.NotStacked;
-			Util.IERR("NOT IMPL");
+			Global.PSEG.emit(new SVM_NOT_IMPL(), ""+this);
 //             qPOPKill(AllignFac);
 		}
 		if(instr == Scode.S_SELECTV) Util.GQfetch();

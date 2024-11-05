@@ -3,6 +3,7 @@ package bec.syntaxClass.instruction;
 import bec.compileTimeStack.CTStack;
 import bec.util.Global;
 import bec.util.Scode;
+import bec.util.Util;
 import bec.virtualMachine.SVM_GOTO;
 
 public class FJUMP extends Instruction {
@@ -14,6 +15,11 @@ public class FJUMP extends Instruction {
 
 	/**
 	 * forward_jump ::= fjump destination:newindex
+	 * 
+	 * check stack empty;
+	 * 
+	 * The destination must be undefined,otherwise: error.
+	 * A jump to the (as yet unknown) program point is generated, and the destination becomes defined.
 	 */
 	public void parse() {
 		destination = Scode.inByte();
@@ -22,6 +28,9 @@ public class FJUMP extends Instruction {
 
 	@Override
 	public void doCode() {
+		CTStack.checkStackEmpty();
+		if(Global.DESTAB[destination] != null) Util.IERR("Destination is already defined");
+		
 		CTStack.dumpStack();
 		Global.DESTAB[destination] = Global.PSEG.nextAddress();
 		Global.PSEG.emit(new SVM_GOTO(null), ""+this);

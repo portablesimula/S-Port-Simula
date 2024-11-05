@@ -2,6 +2,7 @@ package bec.syntaxClass.programElement.routine;
 
 import java.util.Vector;
 
+import bec.compileTimeStack.CTStack;
 import bec.segment.DataSegment;
 import bec.segment.ProgramSegment;
 import bec.segment.Segment;
@@ -67,6 +68,7 @@ public class ROUTINE extends ProgramElement {
 		}
 		PROFILE prf = (PROFILE) Global.getMeaning(profileTag);
 		Global.PSEG.emit(new SVM_RETURN(prf), "");
+		CTStack.checkStackEmpty();
 
 		DSEG.dump();
 		PSEG.dump();

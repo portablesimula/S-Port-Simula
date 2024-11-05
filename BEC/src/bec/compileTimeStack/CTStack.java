@@ -5,6 +5,7 @@ import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
 import bec.virtualMachine.SVM_GOTO;
+import bec.virtualMachine.SVM_NOT_IMPL;
 import bec.virtualMachine.SVM_PUSH;
 
 public class CTStack {
@@ -19,7 +20,7 @@ public class CTStack {
 
 
 	public static void push(StackItem s) {
-		if(s.suc != null || s.pred != null) Util.IERR("CODER.CheckPush");
+		if(s.suc != null || s.pred != null) STKERR("CODER.CheckPush");
 		if(TOS == null) {
 			TOS = BOS = s; s.suc = null;
 		} else {
@@ -42,7 +43,7 @@ public class CTStack {
 	public static void precede(StackItem newItem, StackItem item) {
 //	begin
 //	%+D   RST(R_Precede);
-		if(item == null || item == SAV) Util.IERR("CODER.Precede");
+		if(item == null || item == SAV) STKERR("CODER.Precede");
 //	%+D   if TraceMode > 1
 //	%+D   then setpos(sysout,14); outstring("***PRECEDE:  "); print(item);
 //	%+D        setpos(sysout,14); outstring("        BY:  "); print(new);
@@ -54,7 +55,7 @@ public class CTStack {
 	}
 
 	public static StackItem pop() {
-		if(TOS == null) Util.IERR("CODER.CheckPop");
+		if(TOS == null) STKERR("CODER.CheckPop");
 		StackItem x = TOS;
 		TOS = x.suc;
 		if(TOS == null) BOS = null; else TOS.pred = null;
@@ -77,7 +78,14 @@ public class CTStack {
 //	--- end;
 
 	private static void checkRef(StackItem s) {
-		if(! (s instanceof Address)) Util.IERR("CheckRef fails");
+		if(! (s instanceof Address)) STKERR("CheckRef fails");
+	}
+	
+	private static void STKERR(String msg) {
+		System.out.println("\nERROR: " + msg + " ================================================");
+		CTStack.dumpStack();
+		Global.PSEG.dump();
+		Util.IERR("FORCED EXIT");
 	}
 
 	public static void checkTosRef() {
@@ -89,42 +97,42 @@ public class CTStack {
 	}
 
 	public static void checkSosValue() {
-		if(TOS.suc instanceof Address) Util.IERR("CheckSosValue fails");
+		if(TOS.suc instanceof Address) STKERR("CheckSosValue fails");
 	}
 
 	public static void checkTosType(int t) {
-		if(TOS.type != t) Util.IERR("Illegal type of TOS");
+		if(TOS.type != t) STKERR("Illegal type of TOS");
 	}
 
 	public static void checkSosType(int t) {
-		if(TOS.suc.type != t) Util.IERR("Illegal type of TOS");
+		if(TOS.suc.type != t) STKERR("Illegal type of TOS");
 	}
 
 	public static void checkTosInt() {
 		switch(TOS.type) {
 			case Scode.TAG_INT, Scode.TAG_SINT: break; 
-			default: Util.IERR("Illegal type of TOS");
+			default: STKERR("Illegal type of TOS");
 		}
 	}
 
 	public static void checkTosArith() {
 		switch(TOS.type) {
 			case Scode.TAG_INT, Scode.TAG_SINT, Scode.TAG_REAL, Scode.TAG_LREAL: break; 
-			default: Util.IERR("Illegal type of TOS");
+			default: STKERR("Illegal type of TOS");
 		}
 	}
 
 	public static void checkSosInt() {
 		switch(TOS.suc.type) {
 			case Scode.TAG_INT, Scode.TAG_SINT: break; 
-			default: Util.IERR("Illegal type of TOS");
+			default: STKERR("Illegal type of TOS");
 		}
 	}
 
 	public static void checkSosArith() {
 		switch(TOS.suc.type) {
 			case Scode.TAG_INT, Scode.TAG_SINT, Scode.TAG_REAL, Scode.TAG_LREAL: break; 
-			default: Util.IERR("Illegal type of TOS");
+			default: STKERR("Illegal type of TOS");
 		}
 	}
 	
@@ -144,7 +152,7 @@ public class CTStack {
 	public static void checkSosType2(int t1, int t2) {
 		if(TOS.suc.type == t1) ; // OK
 		else if(TOS.suc.type == t2) ; // OK
-		else Util.IERR("Illegal type of SOS");
+		else STKERR("Illegal type of SOS");
 	}
 
 	public static void checkTypesEqual() {
@@ -152,16 +160,16 @@ public class CTStack {
 		int t1 = TOS.type;
 		int t2 = TOS.suc.type;
 		if(t1 == t2) return;
-		if(t1 > Scode.TAG_SIZE) Util.IERR("CODER.CheckTypesEqual-1");
-		if(t2 > Scode.TAG_SIZE) Util.IERR("CODER.CheckTypesEqual-2");
+		if(t1 > Scode.TAG_SIZE) STKERR("CODER.CheckTypesEqual-1");
+		if(t2 > Scode.TAG_SIZE) STKERR("CODER.CheckTypesEqual-2");
 		t1 = arithType(t1,t1); t2 = arithType(t2,t2);
 		if(t1 == t2) return;
 //	%+C       if (t1>T_BYT1) or (t2>T_BYT1)
-		Util.IERR("Different types of TOS and SOS");
+		STKERR("Different types of TOS and SOS");
 	}
 
 	public static void checkStackEmpty() {
-		if(TOS != null) Util.IERR("Stack should be empty");
+		if(TOS != null) STKERR("Stack should be empty");
 		TOS = BOS = null;
 	}
 
@@ -177,8 +185,7 @@ public class CTStack {
 //	%+E             Qf2b(qPUSHC,0,qEBX,cOBJ,0,adr);
 //	%+C        otherwise IERR("CODER.AssertObjStacked-2")
 //	           endcase;
-			Global.PSEG.emit(new SVM_PUSH(adr, 1), "assertObjStacked: "+tos);
-
+			Global.PSEG.emit(new SVM_NOT_IMPL(), "assertObjStacked: "+tos);
 		}
 	}
 
@@ -196,9 +203,60 @@ public class CTStack {
 //	%+E             Qf2(qDYADR,qADD,qEAX,cVAL,qEBX); Qf1(qPUSHR,qEAX,cVAL);
 //	                TOS qua Address.Offset:=0;
 				CTStack.dumpStack();
-				Util.IERR("NOT IMPL");
+				Global.PSEG.emit(new SVM_NOT_IMPL(), "assertAtrStacked: "+tos);
 			}
 		}	      
+	}
+	
+	public static void getTosAdjustedIn86(int reg) {
+//	begin range(0:255) nbyte; infix(ValueItem) itm; range(0:MaxByte) type,cTYP;
+		if(TOS == null)Util.IERR("CODER.GetTosAdjusted-1");
+//	      type:=TOS.type; nbyte:=TTAB(type).nbyte;
+//	      if type<=T_MAX then cTYP:=cTYPE(type) else cTYP:=cANY endif;
+//	%+C   if nbyte=0 then IERR("CODER.GetTosAdjustedIn86-1") endif;
+//	%+C   if nbyte > AllignFac
+//	%+C   then WARNING("CODER.GetTosAdjusted-2");
+//	%+C        repeat while nbyte > AllignFac
+//	%+C        do qPOPKill(AllignFac); nbyte:=nbyte-AllignFac endrepeat
+//	%+C   endif;
+//	      if TOS.kind=K_Coonst
+//	      then qPOPKill(nbyte); itm:=TOS qua Coonst.itm;
+//	%-E        if type=T_NPADR
+//	%-E        then case 0:adrMax (itm.base.kind)
+//	%-E             when 0: Qf2(qLOADC,0,reg,cTYP,0) -- NOWHERE/NOBODY
+//	%-E             when reladr,locadr: Qf3(qLOADA,0,reg,cTYP,itm.base);
+//	%-E             when segadr,fixadr,extadr:
+//	%-E                           Qf2b(qLOADC,0,reg,cTYP,F_OFFSET,itm.base);
+//	%-E %+C         otherwise IERR("CODER.GetTosAdjusted-4")
+//	%-E             endcase;
+//	%-E        else Qf2(qLOADC,0,reg,cTYP,itm.wrd) endif;
+//	%+E        case 0:T_Max (type)
+//	%+E        when T_OADDR,T_PADDR,T_RADDR:
+//	%+E             case 0:adrMax (itm.base.kind)
+//	%+E             when 0: Qf2(qLOADC,0,reg,cTYP,0) -- NONE/NOWHERE/NOBODY
+//	%+E             when reladr,locadr: Qf3(qLOADA,0,reg,cTYP,itm.base);
+//	%+E             when segadr,fixadr,extadr: Qf2b(qLOADC,0,reg,cTYP,0,itm.base)
+//	%+E %+C         otherwise IERR("CODER.GetTosAdjusted-4")
+//	%+E             endcase;
+//	%+E        when T_BOOL,T_CHAR,T_BYT1,T_BYT2,T_WRD2,T_WRD4,
+//	%+E             T_REAL,T_SIZE,T_AADDR:
+//	%+E             Qf2(qLOADC,0,reg,cTYP,itm.int);
+//	%+E %+C    otherwise IERR("CODER:GetTosAdjusted-6");Qf2(qLOADC,0,reg,cTYP,0);
+//	%+E        endcase;
+//	      else case 0:AllignFac (nbyte)
+//	           when 1: GetTosValueIn86(LowPart(%reg%));
+//	                   if RegSize(reg) > 1
+//	                   then
+//	%-E                     Qf2(qLOADC,0,HighPart(%reg%),cTYP,0);
+//	%+E                     Qf2(qMOV,qZEXT,LowPart(%reg%),cTYP,LowPart(%reg%));
+//	                   endif;
+//	           when 2: GetTosValueIn86(WordReg(reg));
+//	%+E                if RegSize(reg) > 2
+//	%+E                then Qf2(qMOV,qZEXT,WordReg(reg),cTYP,WordReg(reg)) endif;
+//	%+E        when 4: GetTosValueIn86(WholeReg(reg));
+//	%+C        otherwise IERR("CODER.GetTosAdjusted-5")
+//	           endcase;
+//	      endif;
 	}
 
 	public static void dumpStack() {
@@ -223,7 +281,7 @@ public class CTStack {
 		}
 	}
 
-	private static int arithType(int t1, int t2) { // export range(0:MaxType) ct;
+	public static int arithType(int t1, int t2) { // export range(0:MaxType) ct;
 	switch(t1) {
 	      case Scode.TAG_LREAL:
 	    	  switch(t2) {

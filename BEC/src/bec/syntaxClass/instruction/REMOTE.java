@@ -8,6 +8,9 @@ import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
 
+/**
+ * 
+ */
 public class REMOTE extends Instruction {
 	int instr;
 	int tag;
@@ -19,6 +22,16 @@ public class REMOTE extends Instruction {
 
 	/**
 	 * addressing_instruction ::= remote attribute:tag | remotev attribute:tag
+	 * 
+	 * remote attr:tag
+	 * force TOS value; check TOS type(OADDR);
+	 * pop;
+	 * push( REF, attr.TYPE, BASE = value(TOS), OFFSET = attr.OFFSET" );
+	 * 
+	 * This instruction uses one step of indirection. The value is considered to be the address of an
+	 * object of the type 'REC' in which attr is an attribute. TOS is replaced by a descriptor of the
+	 * designated component of that object. Note again that no qualification check is implied (neither
+	 * could it be done).
 	 */
 	public void parse() {
 //		Util.IERR("NOT IMPLEMENTED");
@@ -27,20 +40,14 @@ public class REMOTE extends Instruction {
 
 	@Override
 	public void doCode() {
-		CTStack.dumpStack();
+//		CTStack.dumpStack();
 		CTStack.checkTosRef();
 		CTStack.checkTosType(Scode.TAG_OADDR); // CheckTosType(T_OADDR);
 		Address adr = (Address) CTStack.TOS;
 		Util.GQfetch();
-//		InTag(%tag%); attr:=DISPL(tag.HI).elt(tag.LO);
 		AttributeDefinition attr = (AttributeDefinition) Global.getMeaning(tag);
 		CTStack.pop();
 		MemAddr memAddr = new MemAddr(null,0); // a
-//        a.kind:=reladr; a.rela.val:=0; a.segmid.val:=0;
-//%-E        a.sbireg:=0;
-//%+E        a.sibreg:=NoIBREG;
-//        adr:=NewAddress(attr.type,attr.rela,a);
-		
 		adr = new Address(attr.quant.type.tag, attr.rela, memAddr);
         adr.objState = Address.State.Calculated;
         System.out.println("REMOTE.doCode: adr="+adr);
@@ -48,7 +55,6 @@ public class REMOTE extends Instruction {
         if(instr == Scode.S_REMOTEV) Util.GQfetch();
 		CTStack.dumpStack();
 		Global.PSEG.dump();
-//		Util.IERR("");
 	}
 	
 	@Override

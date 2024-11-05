@@ -5,7 +5,6 @@ import java.util.Vector;
 import bec.compileTimeStack.ProfileItem;
 import bec.compileTimeStack.Address;
 import bec.compileTimeStack.CTStack;
-import bec.compileTimeStack.DataType;
 import bec.compileTimeStack.StackItem;
 import bec.syntaxClass.programElement.Variable;
 import bec.syntaxClass.programElement.routine.PROFILE;
@@ -16,7 +15,6 @@ import bec.util.QuantityDescriptor;
 import bec.util.Scode;
 import bec.util.Util;
 import bec.virtualMachine.SVM_CALL;
-import bec.virtualMachine.SVM_STORE;
 import bec.virtualMachine.SVM_SYSCALL;
 
 public class CallInstruction extends Instruction {
@@ -86,12 +84,24 @@ public class CallInstruction extends Instruction {
 		if(spec.bodyTag > 0)
 			 callSYS(spec, nstckval);
 		else callDefault(spec, nstckval);
+
+		// Routines return values on the RT-Stack
+		if(spec.export != null) {
+			int returnType = spec.export.quant.type.tag;
+			System.out.println("CallInstructil.callSYS: returnType="+returnType);
+			CTStack.pushTemp(returnType);
+		}
+		CTStack.dumpStack();
+		Global.PSEG.dump();
 //		Util.IERR("");
 	}
 	
 	private void callSYS(PROFILE spec, int nstckval) { //,Pkind;
 //		range(0:255) npop;
 //	    npop:=0;
+		
+		spec.printTree(2);
+		
 		ProfileItem pitem = new ProfileItem(Scode.TAG_VOID,spec);
 		if(nstckval == 0) CTStack.push(pitem);
 		else {
@@ -118,15 +128,6 @@ public class CallInstruction extends Instruction {
 //	      repeat while npop<>0 do Pop; npop:=npop-1 endrepeat;
 	      if(CTStack.TOS != pitem) Util.IERR("PARSE.CallSYS-3");
 	      CTStack.pop();
-	      
-	      // System Routines return values on the RT-Stack
-	      int returnType = spec.type;
-	      if(returnType != 0) {
-	    	  CTStack.pushTemp(returnType);
-	      }
-    	  CTStack.dumpStack();
-	      Global.PSEG.dump();
-//		Util.IERR("Parse.XXX: NOT IMPLEMENTED");
 	}
 	
 	
@@ -305,6 +306,7 @@ public class CallInstruction extends Instruction {
 //	%-E   then if spec.WithExit <> 0
 //	%-E        then Qf5(qCALL,1,0,0,X_CHKSTK) endif;
 //	%-E   endif;
+
 	      Util.IERR("Parse.XXX: NOT IMPLEMENTED");
 	}
 	

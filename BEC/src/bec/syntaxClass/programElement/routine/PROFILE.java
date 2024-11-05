@@ -27,8 +27,8 @@ public class PROFILE extends ProgramElement {
 //	EXIT exit;
 //	EXPORT export;
 	public Vector<Variable> imports;
-	Variable exit;
-	Variable export;
+	public Variable exit;
+	public Variable export;
 
 	public int type; // Export type ?????
 	public int npar() {

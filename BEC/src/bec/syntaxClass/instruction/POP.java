@@ -1,13 +1,19 @@
 package bec.syntaxClass.instruction;
 
 import bec.compileTimeStack.CTStack;
+import bec.compileTimeStack.ProfileItem;
+import bec.util.Util;
 
 public class POP extends Instruction {
 	
 	/**
 	 * stack_instruction ::= pop
+	 * 
+	 * Pop off TOS;
+	 * This instruction is illegal if TOS is a profile description.
 	 */
 	public POP() {
+		if(CTStack.TOS instanceof ProfileItem) Util.IERR("Illegal pop of profileItem ");
 	}
 
 	@Override
@@ -17,7 +23,7 @@ public class POP extends Instruction {
 
 	@Override
 	public void doCode() {
-		CTStack.dumpStack();
+//		CTStack.dumpStack();
 		CTStack.pop();
 	}
 	
