@@ -1,5 +1,7 @@
 package bec.util;
 
+import java.io.File;
+
 import bec.segment.DataSegment;
 import bec.segment.MemAddr;
 import bec.segment.ProgramSegment;
@@ -39,6 +41,14 @@ public class Global {
 	public static ProgramSegment PSEG; // Current PSEG
 
 	public static MemAddr[] DESTAB = new MemAddr[64];
+
+	public static String getSourceID() {
+		File file = new File(scodeSource);
+		String name = file.getName();
+		int p = name.indexOf('.');
+		String s = name.substring(0, p);
+		return s;
+	}
 
 	public static String getAttrFileName(String modident) {
 		if(modident == null) {

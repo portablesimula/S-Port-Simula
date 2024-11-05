@@ -50,11 +50,11 @@ public class REMOTE extends Instruction {
 		MemAddr memAddr = new MemAddr(null,0); // a
 		adr = new Address(attr.quant.type.tag, attr.rela, memAddr);
         adr.objState = Address.State.Calculated;
-        System.out.println("REMOTE.doCode: adr="+adr);
+//        System.out.println("REMOTE.doCode: adr="+adr);
 		CTStack.push(adr);
         if(instr == Scode.S_REMOTEV) Util.GQfetch();
-		CTStack.dumpStack();
-		Global.PSEG.dump();
+//		CTStack.dumpStack();
+//		Global.PSEG.dump();
 	}
 	
 	@Override

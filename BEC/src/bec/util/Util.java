@@ -12,6 +12,7 @@ import bec.compileTimeStack.StackItem;
 import bec.compileTimeStack.Temp;
 import bec.segment.MemAddr;
 import bec.virtualMachine.SVM_CALL;
+import bec.virtualMachine.SVM_NOT_IMPL;
 import bec.virtualMachine.SVM_POP;
 import bec.virtualMachine.SVM_POPR;
 import bec.virtualMachine.SVM_PUSH;
@@ -168,7 +169,7 @@ public class Util {
 //			%+E        Qf1(qPOPR,qESI,cVAL);
 //			%+E        if a.sibreg=NoIBREG then a.sibreg:=bESI+iESI;
 //			%+E        else a.sibreg:=wOR(wAND(a.sibreg,BaseREG),iESI) endif;
-			Util.IERR("NOT IMPL");
+			Global.PSEG.emit(new SVM_NOT_IMPL(), "getTosSrcAdr");
 			break;
 		}
 
@@ -242,7 +243,7 @@ public class Util {
 //	      infix(ValueItem) itm; infix(MemAddr) opr; range(0:nregs) a,d;
 		int fromtype = CTStack.TOS.type;
 		System.out.println("Util.doConvert: "+Scode.edTag(fromtype) + " ===> " + Scode.edTag(totype));
-		CTStack.dumpStack();
+//		CTStack.dumpStack();
 //	%+D   if fromtype=totype then -- Nothing
 //	%+D   elsif fromtype > T_max
 //	%+D   then EdWrd(errmsg,fromtype); Ed(errmsg," ==> ");

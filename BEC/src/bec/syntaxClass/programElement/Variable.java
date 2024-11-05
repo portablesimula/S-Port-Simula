@@ -18,7 +18,7 @@ import bec.util.Scode;
 import bec.util.Util;
 
 public class Variable extends ProgramElement {
-	int instr; // S_GLOBAL, S_LOCAL, S_IMPORT, S_EXPORT, S_EXIT
+	public int instr; // S_GLOBAL, S_LOCAL, S_IMPORT, S_EXPORT, S_EXIT
 	int tag;
 	public MemAddr address;
 	public QuantityDescriptor quant;
@@ -40,12 +40,15 @@ public class Variable extends ProgramElement {
 	}
 	
 	public static Variable ofIMPORT(DataSegment seg) {
+		if(seg == null) Util.IERR("");
 		Variable var = new Variable();
 		var.instr = Scode.S_IMPORT;
 		var.tag = Scode.inTag(var);
 		var.quant = new QuantityDescriptor();
 		var.address = seg.nextAddress();
+		if(var.address.seg == null) Util.IERR("");
 		var.quant.type.emitDefaultValue(seg, "IMPORT " + var.quant);
+		System.out.println("Variable ofIMPORT: "+var);
 		return var;
 	}
 	
@@ -65,6 +68,15 @@ public class Variable extends ProgramElement {
 		var.tag = Scode.inTag(var);
 		var.address = seg.nextAddress();
 		var.quant.type.emitDefaultValue(seg, "EXIT " + var.quant);
+		return var;
+	}
+	
+	public static Variable ofRETUR(DataSegment seg) {
+		Variable var = new Variable();
+		var.instr = Scode.S_EXIT;
+		var.address = seg.nextAddress();
+//		var.quant.type.emitDefaultValue(seg, "RETUR ");
+		seg.emit(null, "RETUR");
 		return var;
 	}
 	
@@ -114,9 +126,11 @@ public class Variable extends ProgramElement {
 	}
 	
 	public void emit(DataSegment dseg, String cmnt) {
-		Value value = quant.type.defaultValue();
+//		Value value = quant.type.defaultValue();
 		String comment = Scode.edTag(tag) + " Quant=" + quant + "  " + cmnt;
-		dseg.emit(value, comment);
+//		dseg.emit(value, comment);
+		
+		quant.type.emitDefaultValue(dseg, comment);
 	}
 
 	@Override
@@ -135,19 +149,20 @@ public class Variable extends ProgramElement {
 	// ***********************************************************************************************
 	
 	private Variable(AttributeInputStream inpt, int instr) throws IOException {
-		System.out.println("NEW Variable: inpt.curinstr="+Scode.edInstr(inpt.curinstr));
+//		System.out.println("NEW Variable: inpt.curinstr="+Scode.edInstr(inpt.curinstr));
 		this.instr = instr;
-		System.out.println("NEW Variable: instr="+Scode.edInstr(instr));
+//		System.out.println("NEW Variable: instr="+Scode.edInstr(instr));
 		this.tag = inpt.readTag(this);
 		this.quant = QuantityDescriptor.read(inpt);
 		this.address = MemAddr.read(inpt);
 		
-		this.printTree(2);
+//		this.printTree(2);
 	}
 
 	public void write(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("BEGIN Write Variable: " + Scode.edTag(tag));
-		System.out.println("WRITE Variable: instr="+Scode.edInstr(instr));
+//		System.out.println("WRITE Variable: "+this);
+//		Thread.dumpStack();
 		oupt.writeKind(instr); // Mark: This is a S_GLOBAL, S_LOCAL, S_IMPORT, S_EXPORT, S_EXIT
 		oupt.writeTag(tag);
 		quant.write(oupt);

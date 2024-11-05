@@ -30,12 +30,12 @@ public class RUPDATE extends Instruction {
 
 	@Override
 	public void doCode() {
-		CTStack.dumpStack();
+//		CTStack.dumpStack();
 		CTStack.checkTosRef(); CTStack.checkSosValue(); CTStack.checkTypesEqual();
 		MemAddr adr = Util.getTosDstAdr();
 		CTStack.pop();
 		Global.PSEG.emit(new SVM_POP(adr, 1), ""+this); // Store into adr
-		Global.PSEG.dump();
+//		Global.PSEG.dump();
 	}
 	
 	public String toString() {

@@ -69,7 +69,7 @@ public class Type {
 			dseg.emit(defaultValue(), comment);
 		} else {
 			Object obj = Global.Display.get(tag);
-			System.out.println("Type.emitDefaultValue: tag="+tag);
+//			System.out.println("Type.emitDefaultValue: tag="+tag);
 			if(obj instanceof RECORD rec) {
 				rec.emitDefaultValues(dseg, 1, comment);
 			} else Util.IERR(""+obj);

@@ -37,7 +37,7 @@ public class FJUMPIF extends Instruction {
 
 	@Override
 	public void doCode() {
-		CTStack.dumpStack();
+//		CTStack.dumpStack();
 		CTStack.checkTypesEqual();
 		CTStack.checkSosValue();
 		
@@ -60,8 +60,8 @@ public class FJUMPIF extends Instruction {
 //		}
 		Global.DESTAB[destination] = Global.PSEG.nextAddress();
 		Global.PSEG.emit(new SVM_GOTOIF(relation, null), ""+this);
-		Global.PSEG.dump();
-		CTStack.dumpStack();
+//		Global.PSEG.dump();
+//		CTStack.dumpStack();
 //		Util.IERR(""+this);
 	}
 	

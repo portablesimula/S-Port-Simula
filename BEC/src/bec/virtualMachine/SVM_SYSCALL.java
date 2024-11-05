@@ -14,6 +14,8 @@ public class SVM_SYSCALL extends SVM_Instruction {
 		defName("PRINTO");
 		defName("BREAKO");
 		defName("INIMAG");
+		defName("INBYTE");
+		defName("OUTBYT");
 	}
 	
 	int kind;

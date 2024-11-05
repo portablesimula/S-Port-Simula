@@ -95,12 +95,14 @@ public class PROFILE extends ProgramElement {
 		if(Scode.accept(Scode.S_EXIT)) exit = Variable.ofEXIT(DSEG);
 		else if(Scode.accept(Scode.S_EXPORT)) export = Variable.ofEXPORT(DSEG);
 		Scode.expect(Scode.S_ENDPROFILE);
-		if(exit == null) exit = new Variable();
+//		if(exit == null) exit = Variable.ofRETUR(DSEG);
 		
-		System.out.println("-------------------------------------------------- BEGIN PRINT PROFILE Definition");
-		printTree(2);
-		System.out.println("-------------------------------------------------- ENDOF PRINT PROFILE Definition");
-		DSEG.dump();
+		if(Global.SCODE_INPUT_TRACE) {
+			System.out.println("-------------------------------------------------- BEGIN PRINT PROFILE Definition");
+			printTree(2);
+			System.out.println("-------------------------------------------------- ENDOF PRINT PROFILE Definition");
+		}
+//		DSEG.dump();
 //		if(Scode.inputTrace > 3) printTree(2);
 //		Util.IERR("");
 	}
@@ -144,26 +146,26 @@ public class PROFILE extends ProgramElement {
 		imports = new Vector<Variable>();
 		profileTag = inpt.readTag(this);
 		inpt.readInstr();
-		System.out.println("NEW PROFILE(1): inpt.curinstr="+Scode.edInstr(inpt.curinstr));
+//		System.out.println("NEW PROFILE(1): inpt.curinstr="+Scode.edInstr(inpt.curinstr));
 		switch(inpt.curinstr) {
 		case Scode.S_KNOWN ->     { kind = Scode.S_KNOWN;     bodyTag = inpt.readTag(); ident = inpt.readString(); inpt.readInstr(); }
 		case Scode.S_SYSTEM ->    { kind = Scode.S_SYSTEM;    bodyTag = inpt.readTag(); ident = inpt.readString(); inpt.readInstr(); }
 		case Scode.S_EXTERNAL ->  { kind = Scode.S_EXTERNAL;  bodyTag = inpt.readTag(); nature = inpt.readString(); ident = inpt.readString(); inpt.readInstr(); }
 		case Scode.S_INTERFACE -> { kind = Scode.S_INTERFACE; ident = inpt.readString(); inpt.readInstr(); }
 		}
-		System.out.println("NEW PROFILE(2): inpt.curinstr="+Scode.edInstr(inpt.curinstr));
+//		System.out.println("NEW PROFILE(2): inpt.curinstr="+Scode.edInstr(inpt.curinstr));
 		while(inpt.curinstr == Scode.S_IMPORT) {
 			imports.add(Variable.readObject(inpt, Scode.S_IMPORT));
 			inpt.readInstr();
-			System.out.println("NEW PROFILE(3): inpt.curinstr="+Scode.edInstr(inpt.curinstr));
+//			System.out.println("NEW PROFILE(3): inpt.curinstr="+Scode.edInstr(inpt.curinstr));
 		}
 		if(inpt.curinstr == Scode.S_EXIT)   { exit = Variable.readObject(inpt, Scode.S_EXIT); inpt.readInstr(); }
 		if(inpt.curinstr == Scode.S_EXPORT) { export = Variable.readObject(inpt, Scode.S_EXPORT); inpt.readInstr(); }
 		
-		System.out.println("NEW PROFILE(4): inpt.curinstr="+Scode.edInstr(inpt.curinstr));
+//		System.out.println("NEW PROFILE(4): inpt.curinstr="+Scode.edInstr(inpt.curinstr));
 		if(inpt.curinstr != Scode.S_ENDPROFILE) Util.IERR("IMPOSSIBLE: " + Scode.edTag(inpt.curinstr));
 
-		this.printTree(2);
+		if(Global.ATTR_INPUT_TRACE) this.printTree(2);
 	}
 
 	public void write(AttributeOutputStream oupt) throws IOException {

@@ -83,8 +83,8 @@ public class CTStack {
 	
 	private static void STKERR(String msg) {
 		System.out.println("\nERROR: " + msg + " ================================================");
-		CTStack.dumpStack();
-		Global.PSEG.dump();
+		CTStack.dumpStack("STKERR");
+		Global.PSEG.dump("STKERR");
 		Util.IERR("FORCED EXIT");
 	}
 
@@ -202,7 +202,8 @@ public class CTStack {
 //	%+E             Qf1(qPOPR,qEBX,cVAL);
 //	%+E             Qf2(qDYADR,qADD,qEAX,cVAL,qEBX); Qf1(qPUSHR,qEAX,cVAL);
 //	                TOS qua Address.Offset:=0;
-				CTStack.dumpStack();
+				
+//				CTStack.dumpStack("assertAtrStacked");
 				Global.PSEG.emit(new SVM_NOT_IMPL(), "assertAtrStacked: "+tos);
 			}
 		}	      
@@ -259,11 +260,11 @@ public class CTStack {
 //	      endif;
 	}
 
-	public static void dumpStack() {
+	public static void dumpStack(String title) {
 		StackItem item;
 		StringBuilder sb = new StringBuilder();
 //	%+D   if InputTrace <> 0 then printout(inptrace) endif;
-		String lead = " Current Stack";
+		String lead = title + ": Current Stack";
 		if(TOS == null) {
 			System.out.println(lead + ": **Empty**");
 		} else {

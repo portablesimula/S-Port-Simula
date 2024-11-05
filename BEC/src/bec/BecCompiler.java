@@ -83,7 +83,7 @@ public class BecCompiler {
 	 * 		::= <module_definition>*
 	 * 		::= main <local_quantity>* <program_element>*
 	 */
-	public void parse() {
+	private void parse() {
 		Scode.expect(Scode.S_PROGRAM);
   		Global.progIdent = Scode.inString();
   		

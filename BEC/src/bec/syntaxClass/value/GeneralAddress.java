@@ -43,7 +43,7 @@ public class GeneralAddress extends Value {
 		this.type = Scode.TAG_GADDR;
 		tag = inpt.readTag();
 		isGNONE = inpt.readBoolean();
-		System.out.println("NEW GeneralAddress: " + this);
+//		System.out.println("NEW GeneralAddress: " + this);
 	}
 
 	public void write(AttributeOutputStream oupt) throws IOException {

@@ -44,7 +44,10 @@ public class S_Module extends SyntaxClass {
 			else if(elt instanceof RECORD) doWrite = true;
 			else if(elt instanceof PROFILE) doWrite = true;
 			else if(elt instanceof CONST) doWrite = true;
-			else if(elt instanceof Variable) doWrite = true;
+			else if(elt instanceof Variable var) {
+				if(var.instr == Scode.S_GLOBAL) doWrite = true;
+				if(var.instr == Scode.S_LOCAL) doWrite = true;
+			}
 			
 			if(doWrite) elt.write(modoupt);
 		}
@@ -56,8 +59,8 @@ public class S_Module extends SyntaxClass {
 			System.out.println("**************   End of  -  Output-module  " + modident + "  " + modcheck + "   **************");
 		
 		if(Global.SEGMENT_OUTPUT_DUMP & Global.ATTR_OUTPUT_DUMP) {
-			Global.DSEG.dump();
-			Global.CSEG.dump();
+			Global.DSEG.dump("S_Module.write: ");
+			Global.CSEG.dump("S_Module.write: ");
 		}
 //		Util.IERR("");
 	}

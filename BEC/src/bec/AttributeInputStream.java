@@ -163,7 +163,7 @@ public class AttributeInputStream {
 	public SyntaxClass readObj(AttributeInputStream inpt) throws IOException {
 		int kind = inpt.readKind();
 	
-		System.out.println("AttributeInputStream.readObj: "+Scode.edInstr(kind));
+//		System.out.println("AttributeInputStream.readObj: "+Scode.edInstr(kind));
 		switch(kind) {
 			case Scode.S_BSEG:	    return DataSegment.readObject(inpt);
 			case Scode.S_RECORD:    return RECORD.readObject(inpt);

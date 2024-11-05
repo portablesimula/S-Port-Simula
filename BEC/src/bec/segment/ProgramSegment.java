@@ -26,8 +26,8 @@ public class ProgramSegment extends Segment {
 		comment.add(cmnt);
 	}
 	
-	public void dump() {
-		System.out.println("========================== " + ident + " DUMP ==========================");
+	public void dump(String title) {
+		System.out.println("========================== " + title + ident + " DUMP ==========================");
 		for(int i=0;i<instructions.size();i++) {
 			String line = "" + i + ": ";
 			while(line.length() < 8) line = " " +line;
@@ -35,7 +35,7 @@ public class ProgramSegment extends Segment {
 			while(value.length() < 50) value = value + ' ';
 			System.out.println(line + value + "   " + comment.get(i));
 		}
-		System.out.println("========================== " + ident + " END  ==========================");
+		System.out.println("========================== " + title + ident + " END  ==========================");
 	}
 
 }

@@ -17,6 +17,7 @@ import bec.syntaxClass.programElement.ProgramElement;
 import bec.syntaxClass.programElement.SETSWITCH;
 import bec.syntaxClass.programElement.TAGLIST;
 import bec.syntaxClass.programElement.routine.PROFILE;
+import bec.syntaxClass.programElement.routine.ROUTINE;
 import bec.syntaxClass.programElement.routine.ROUTINESPEC;
 import bec.syntaxClass.value.CONST;
 import bec.util.Global;
@@ -79,9 +80,10 @@ public class ModuleDefinition extends S_Module {
 		modident = Scode.inString();
 		modcheck = Scode.inString();
 		Global.moduleID = modident;
-		Global.CSEG = new DataSegment("CSEG_" + modident, Segment.SEG_CONST);
-		Global.DSEG = new DataSegment("DSEG_" + modident, Segment.SEG_DATA);
-		Global.PSEG = new ProgramSegment("PSEG_" + modident, Segment.SEG_CODE);
+		String sourceID = Global.getSourceID();
+		Global.CSEG = new DataSegment("CSEG_" + sourceID, Segment.SEG_CONST);
+		Global.DSEG = new DataSegment("DSEG_" + sourceID, Segment.SEG_DATA);
+		Global.PSEG = new ProgramSegment("PSEG_" + sourceID, Segment.SEG_CODE);
 
 		Scode.inputInstr();
 		while(visible()) Scode.inputInstr();
@@ -114,7 +116,15 @@ public class ModuleDefinition extends S_Module {
 			withEndProgram = true;
 		
 		for(ProgramElement elt:programElements) {
-			elt.doCode();
+			boolean ok = false;
+			if(elt instanceof CONST) ok = true;
+			else if(elt instanceof PROFILE) ok = true;
+			else if(elt instanceof ROUTINE) ok = true;
+			
+			else if(elt instanceof TAGLIST) ; // Nothing
+			else if(elt instanceof BODY) ; // Nothing
+			else Util.IERR("MISSING: "+elt.getClass().getSimpleName());
+			if(ok) elt.doCode();
 		}
 		
 		

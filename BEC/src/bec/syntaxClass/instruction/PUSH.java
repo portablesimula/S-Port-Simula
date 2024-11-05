@@ -27,9 +27,9 @@ public class PUSH extends Instruction {
 	
 	@Override
 	public void doCode() {
-		System.out.println("PUSH.doCode: tag="+Scode.edTag(tag)+"  "+tag);
+//		System.out.println("PUSH.doCode: tag="+Scode.edTag(tag)+"  "+tag);
 		Variable var = (Variable) Global.getMeaning(tag);
-		System.out.println("PUSH.doCode: var="+var);
+//		System.out.println("PUSH.doCode: var="+var);
 		CTStack.push(new Address(var.quant.type.tag,0,var.address));
 //        if v.kind=K_Parameter
 //        then TOS.repdist:= - wAllign(%TOS.repdist%) endif;

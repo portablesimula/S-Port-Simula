@@ -198,20 +198,17 @@ public class RECORD extends Instruction {
 		}
 		if(inpt.curinstr != Scode.S_ENDRECORD) Util.IERR("IMPOSSIBLE: " + Scode.edInstr(inpt.curinstr));
 		
-		this.printTree(2);
+		if(Global.ATTR_INPUT_TRACE) printTree(2);
 		if("TYPE".equalsIgnoreCase(info)) {
 			DataType.newRecType(this);
-		}
-		if(tag == 32) {
-			System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
-//			Util.IERR("STOP");
 		}
 	}
 
 	public void write(AttributeOutputStream oupt) throws IOException {
-		Util.TRACE_OUTPUT("BEGIN Write RECORD: " + Scode.edTag(tag));
-		this.printTree(2);
-		
+		if(Global.ATTR_OUTPUT_DUMP) {
+			Util.TRACE_OUTPUT("BEGIN Write RECORD: " + Scode.edTag(tag));
+			this.printTree(2);
+		}		
 		
 		oupt.writeKind(Scode.S_RECORD); // Mark: This is a ClassDeclaration
 		oupt.writeTag(tag);
@@ -228,11 +225,11 @@ public class RECORD extends Instruction {
 		}
 		oupt.writeInstr(Scode.S_ENDRECORD);
 //		Util.IERR("Method 'write' needs a redefinition in "+this.getClass().getSimpleName());
-		if(tag == 32) {
-			this.printTree(2);
-			System.out.println("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
+//		if(tag == 32) {
+//			this.printTree(2);
+//			System.out.println("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
 //			Util.IERR("STOP");
-		}
+//		}
 	}
 
 	public static SyntaxClass readObject(AttributeInputStream inpt) throws IOException {

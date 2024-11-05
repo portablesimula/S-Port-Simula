@@ -28,7 +28,7 @@ public class DEREF extends Instruction {
 
 	@Override
 	public void doCode() {
-		CTStack.dumpStack();
+//		CTStack.dumpStack();
 
 		CTStack.checkTosRef();
 //        adr:=TOS;

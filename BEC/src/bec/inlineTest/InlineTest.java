@@ -12,12 +12,12 @@ public class InlineTest {
 //		String scodeSource = Pick_FEC_Source();
 		String scodeSource = Pick_RTS_Source();		
 		
-		Global.SCODE_INPUT_TRACE = true;
+//		Global.SCODE_INPUT_TRACE = true;
 //		Global.PRINT_SYNTAX_TREE = true;
 //		Global.ATTR_INPUT_TRACE = true;
 //		Global.ATTR_OUTPUT_TRACE = true;
 //		Global.ATTR_INPUT_DUMP = true;
-		Global.ATTR_OUTPUT_DUMP = true;
+//		Global.ATTR_OUTPUT_DUMP = true;
 //		Global.SEGMENT_INPUT_DUMP = true;
 		Global.SEGMENT_OUTPUT_DUMP = true;
 

@@ -18,6 +18,7 @@ public class LongRealValue extends Value {
 	 * longreal_value ::= c-lreal real_literal:string
 	 */
 	public LongRealValue() {
+		this.type = Scode.TAG_LREAL;
 		value = Double.valueOf(Scode.inString());
 	}
 
@@ -35,6 +36,7 @@ public class LongRealValue extends Value {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 	private LongRealValue(AttributeInputStream inpt) throws IOException {
+		this.type = Scode.TAG_LREAL;
 		value = inpt.readDouble();
 //		System.out.println("NEW IMPORT: " + this);
 	}

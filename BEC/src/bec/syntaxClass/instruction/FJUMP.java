@@ -31,10 +31,10 @@ public class FJUMP extends Instruction {
 		CTStack.checkStackEmpty();
 		if(Global.DESTAB[destination] != null) Util.IERR("Destination is already defined");
 		
-		CTStack.dumpStack();
+//		CTStack.dumpStack();
 		Global.DESTAB[destination] = Global.PSEG.nextAddress();
 		Global.PSEG.emit(new SVM_GOTO(null), ""+this);
-		Global.PSEG.dump();
+//		Global.PSEG.dump();
 //		Util.IERR(""+this);
 	}
 

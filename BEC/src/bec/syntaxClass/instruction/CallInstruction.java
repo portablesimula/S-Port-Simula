@@ -76,10 +76,10 @@ public class CallInstruction extends Instruction {
 	public void doCode() {
 		// CODING ....
 		PROFILE spec = (PROFILE) Global.Display.get(profileTag);
-		System.out.println("-------------------------------------------------- BEGIN PRINT CALL Instruction");
-		printTree(2);
-		spec.printTree(2);
-		System.out.println("-------------------------------------------------- ENDOF PRINT CALL Instruction");
+//		System.out.println("-------------------------------------------------- BEGIN PRINT CALL Instruction");
+//		printTree(2);
+//		spec.printTree(2);
+//		System.out.println("-------------------------------------------------- ENDOF PRINT CALL Instruction");
 		int nstckval = 0;
 		if(spec.bodyTag > 0)
 			 callSYS(spec, nstckval);
@@ -91,8 +91,8 @@ public class CallInstruction extends Instruction {
 			System.out.println("CallInstructil.callSYS: returnType="+returnType);
 			CTStack.pushTemp(returnType);
 		}
-		CTStack.dumpStack();
-		Global.PSEG.dump();
+//		CTStack.dumpStack();
+//		Global.PSEG.dump();
 //		Util.IERR("");
 	}
 	
@@ -115,8 +115,8 @@ public class CallInstruction extends Instruction {
 	    	  par.doCode();
 	    	  putPar(pitem,1);
 	      }
-	      Global.PSEG.dump();
-	      spec.DSEG.dump();
+//	      Global.PSEG.dump();
+//	      spec.DSEG.dump();
 //	      ---------  Final Actions  ---------
 	      if(pitem.nasspar != pitem.spc.imports.size()) Util.IERR("Wrong number of Parameters");
 
@@ -149,7 +149,7 @@ public class CallInstruction extends Instruction {
 		StackItem s = CTStack.TOS;
 		int st = s.type;
 		//--- First: Treat TOS ---
-		System.out.println("CallInstruction.putPar: "+Scode.edTag(st) + " ===> " + Scode.edTag(pt));
+//		System.out.println("CallInstruction.putPar: "+Scode.edTag(st) + " ===> " + Scode.edTag(pt));
 		if(st != pt) Util.GQconvert(pt);
 		else if(s instanceof Address) s.type = st;
 		else Util.GQconvert(pt);
@@ -158,13 +158,13 @@ public class CallInstruction extends Instruction {
 //		s = CTStack.TOS;
 		s = CTStack.takeTOS();
 		
-		System.out.println("CallInstruction.putPar: "+s.getClass().getSimpleName());
-		System.out.println("CallInstruction.putPar: "+s + " ===> " + param);
+//		System.out.println("CallInstruction.putPar: "+s.getClass().getSimpleName());
+//		System.out.println("CallInstruction.putPar: "+s + " ===> " + param);
 		s.storeInto(param.address);
 		
-		pItm.spc.printTree(2);
-		pItm.spc.DSEG.dump();
-		CTStack.dumpStack();
+//		pItm.spc.printTree(2);
+//		pItm.spc.DSEG.dump();
+//		CTStack.dumpStack();
 //		Util.IERR("");
 		
 		if(nrep > 1) { // --- Then: Treat rest of rep-par ---
@@ -253,7 +253,7 @@ public class CallInstruction extends Instruction {
 //	      endrepeat;
 	      for(ParameterEval par:argumentEvaluation) {
 	    	  par.doCode();
-	    	  CTStack.dumpStack();
+//	    	  CTStack.dumpStack();
 	      }
 		  Util.IERR("NOT IMPLEMENTED");
 
@@ -338,7 +338,7 @@ public class CallInstruction extends Instruction {
 			case 1:  lead = "ASSCALL "; break;
 			default: lead = "REPCALL " + n + " "; break;
 		}
-		return lead + " ...";
+		return lead + Scode.edTag(profileTag) + " ...";
 	}
 	
 

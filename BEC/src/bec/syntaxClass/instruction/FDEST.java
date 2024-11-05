@@ -41,7 +41,7 @@ public class FDEST extends Instruction {
 		Global.DESTAB[destination] = null;
 		SVM_GOTO instr = (SVM_GOTO) Global.PSEG.instructions.get(addr.ofst);
 		instr.destination = Global.PSEG.nextAddress();
-		Global.PSEG.dump();
+//		Global.PSEG.dump();
 //		Util.IERR(""+this);
 	}
 	

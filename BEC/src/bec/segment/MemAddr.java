@@ -70,7 +70,7 @@ public class MemAddr {
 
 	public void write(AttributeOutputStream oupt) throws IOException {
 //		oupt.writeInstr(Scode.S_EXPORT);
-		oupt.writeString(seg.ident);
+		oupt.writeString((seg==null)?null:seg.ident);
 		oupt.writeInt(ofst);
 	}
 

@@ -24,7 +24,7 @@ public class REFER extends Instruction {
 
 	@Override
 	public void doCode() {
-		CTStack.dumpStack();
+//		CTStack.dumpStack();
 		CTStack.checkTosType(Scode.TAG_GADDR);
 		MemAddr a = new MemAddr(null, 0);
 		Address adr = new Address(type.tag, 0, a);

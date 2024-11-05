@@ -36,7 +36,7 @@ public class INDEX extends Instruction {
 
 	@Override
 	public void doCode() {
-		CTStack.dumpStack();
+//		CTStack.dumpStack();
 
 		CTStack.checkTosInt();
 		CTStack.checkSosRef();
@@ -66,9 +66,12 @@ public class INDEX extends Instruction {
 //%+E                  Qf2(qDYADR,qADDF,qEAX,cVAL,qEBX);
 //%+E             endif;
 //%+E             Qf1(qPUSHR,qEAX,cVAL); adr.AtrState:=Calculated;
+			CTStack.pop();
 			Global.PSEG.emit(new SVM_NOT_IMPL(), "INDEX-2");
 //        endif;
 		}
+		CTStack.checkTosRef();
+		
 		if(instr == Scode.S_INDEXV) Util.GQfetch();
 
 //		Global.PSEG.dump();
