@@ -1,9 +1,17 @@
 package bec.syntaxClass.instruction;
 
+import java.io.IOException;
+import java.util.Vector;
+
+import bec.AttributeInputStream;
+import bec.AttributeOutputStream;
 import bec.compileTimeStack.CTStack;
 import bec.compileTimeStack.StackItem;
+import bec.segment.ProgramSegment;
 import bec.util.Global;
+import bec.util.Scode;
 import bec.virtualMachine.SVM_ADD;
+import bec.virtualMachine.SVM_Instruction;
 
 public class ADD extends Instruction {
 	
@@ -51,5 +59,4 @@ public class ADD extends Instruction {
 		return "ADD";
 	}
 	
-
 }

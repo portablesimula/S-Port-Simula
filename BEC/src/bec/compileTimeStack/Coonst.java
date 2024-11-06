@@ -1,10 +1,7 @@
 package bec.compileTimeStack;
 
-import bec.segment.MemAddr;
 import bec.syntaxClass.value.Value;
-import bec.util.Global;
 import bec.util.Util;
-import bec.virtualMachine.SVM_STORE;
 
 //Record Coonst:Temp;               --- Value is also in 'itm'
 //begin infix(ValueItem) itm;
@@ -28,12 +25,6 @@ public class Coonst extends Temp {
 		this.value = value;
 		if(type == 0) Util.IERR("NEW Coonst: NO TYPE: "+value);
 	}
-	
-	@Override
-    public void storeInto(MemAddr addr) {
-	      Global.PSEG.emit(new SVM_STORE(value, addr), ""+value);
-//	      Global.PSEG.dump();
-    }
 
 	public String toString() {
 		return ""+value;

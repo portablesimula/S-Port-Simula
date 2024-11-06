@@ -4,9 +4,11 @@ import bec.segment.MemAddr;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
+import bec.virtualMachine.SVM_CALL;
 import bec.virtualMachine.SVM_GOTO;
 import bec.virtualMachine.SVM_NOT_IMPL;
 import bec.virtualMachine.SVM_PUSH;
+import bec.virtualMachine.SVM_POPtoREG;
 
 public class CTStack {
 	
@@ -83,8 +85,8 @@ public class CTStack {
 	
 	private static void STKERR(String msg) {
 		System.out.println("\nERROR: " + msg + " ================================================");
-		CTStack.dumpStack("STKERR");
-		Global.PSEG.dump("STKERR");
+		CTStack.dumpStack("STKERR: ");
+		Global.PSEG.dump("STKERR: ");
 		Util.IERR("FORCED EXIT");
 	}
 
@@ -211,7 +213,7 @@ public class CTStack {
 	
 	public static void getTosAdjustedIn86(int reg) {
 //	begin range(0:255) nbyte; infix(ValueItem) itm; range(0:MaxByte) type,cTYP;
-		if(TOS == null)Util.IERR("CODER.GetTosAdjusted-1");
+		if(TOS == null) Util.IERR("CODER.GetTosAdjusted-1");
 //	      type:=TOS.type; nbyte:=TTAB(type).nbyte;
 //	      if type<=T_MAX then cTYP:=cTYPE(type) else cTYP:=cANY endif;
 //	%+C   if nbyte=0 then IERR("CODER.GetTosAdjustedIn86-1") endif;
@@ -258,6 +260,37 @@ public class CTStack {
 //	%+C        otherwise IERR("CODER.GetTosAdjusted-5")
 //	           endcase;
 //	      endif;
+		
+		getTosValueIn86(reg);
+		Util.IERR("");
+	}
+
+	public static void getTosValueIn86(int reg) { // import range(0:255) reg;
+//	--     /* M} ikke bruke qDI p.g.a. RUPDATE. */
+//	begin infix(MemAddr) opr; range(0:MaxType) type; range(0:MaxByte) cTYP;
+//	      type:=TOS.type;
+//	      if type<=T_MAX then cTYP:=cTYPE(type) else cTYP:=cANY endif;
+//	      case 0:K_Max (TOS.kind)
+//	      when K_Temp,K_Result,K_Coonst: Qf1(qPOPR,reg,cTYP)
+//	      when K_Address:
+//	           opr:=GetTosSrcAdr;
+//	           Qf4c(qLOAD,0,reg,cTYP,0,opr,0);
+//	           Pop; pushTemp(type);
+//	      endcase;
+		StackItem tos = CTStack.TOS;
+		if(tos instanceof Address) {
+			Util.getTosSrcAdr();
+			Global.PSEG.emit(new SVM_POPtoREG(reg), "getTosValueIn86'Address: ");
+			Global.PSEG.dump("getTosValueIn86'Address: ");
+			Util.IERR("NOT IMPL");
+		} else if(tos instanceof Temp) {
+			Global.PSEG.emit(new SVM_POPtoREG(reg), "getTosValueIn86'Temp: ");
+			Global.PSEG.dump("getTosValueIn86'Temp: ");
+			Util.IERR("NOT IMPL");			
+		} else if(tos instanceof Coonst) {
+			Global.PSEG.dump("getTosValueIn86: ");
+			Util.IERR("NOT IMPL");			
+		}
 	}
 
 	public static void dumpStack(String title) {

@@ -11,17 +11,13 @@ public class PUSH extends Instruction {
 	int instr;
 	int tag;
 	
-	public PUSH(int instr) {
-		this.instr = instr;
-		parse();
-	}
-
 	/**
 	 * stack_instruction ::= push obj:tag | pushv obj:tag
 	 * 
 	 * End-Condition: Scode'nextByte = First byte after the tag
 	 */
-	public void parse() {
+	public PUSH(int instr) {
+		this.instr = instr;
 		tag = Scode.inTag();
 	}
 	
@@ -33,7 +29,8 @@ public class PUSH extends Instruction {
 		CTStack.push(new Address(var.quant.type.tag,0,var.address));
 //        if v.kind=K_Parameter
 //        then TOS.repdist:= - wAllign(%TOS.repdist%) endif;
-        if(instr == Scode.S_PUSHV) Util.GQfetch();
+        if(instr == Scode.S_PUSHV) Util.GQfetch("PUSHV: ");
+//      CTStack.dumpStack("PUSH: "+Scode.edInstr(instr));
 	}
 
 	@Override

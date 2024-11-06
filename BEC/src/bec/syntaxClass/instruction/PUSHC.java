@@ -17,16 +17,15 @@ import bec.syntaxClass.value.RoutineAddress;
 import bec.syntaxClass.value.SizeValue;
 import bec.syntaxClass.value.TextValue;
 import bec.syntaxClass.value.Value;
+import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
+import bec.virtualMachine.SVM_PUSHC;
+import bec.virtualMachine.SVM_NOT_IMPL;
 
 public class PUSHC extends Instruction {
 	Value value;
 	
-	public PUSHC() {
-		parse();
-	}
-
 	/**
 	 * stack_instruction ::= pushc value
 	 * 
@@ -66,8 +65,13 @@ public class PUSHC extends Instruction {
 	 * 			<attribute_value>+ endrecord
 	 * 
 	 * End-Condition: Scode'nextByte = First byte after the value
+	 * 
+	 * pushc constant:value
+	 * push( VAL, constant.TYPE, "value" );
+	 * 
+	 * A descriptor of the given value is pushed onto the stack.
 	 */
-	public void parse() {
+	public PUSHC() {
 		Scode.inputInstr();
 		switch(Scode.curinstr) {
 		    case Scode.S_TEXT:     value = new TextValue(); break;
@@ -99,6 +103,10 @@ public class PUSHC extends Instruction {
 	public void doCode() {
 		Coonst cns = new Coonst(value);
 		CTStack.push(cns);
+		Global.PSEG.emit(new SVM_PUSHC(value), "");
+//		CTStack.dumpStack("PUSHC: "+value);
+//		Global.PSEG.dump("PUSHC: "+value);
+//		Util.IERR(""+this);
 	}
 
 	@Override

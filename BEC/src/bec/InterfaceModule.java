@@ -98,8 +98,8 @@ public class InterfaceModule extends S_Module {
 			e.printStackTrace();
 		}
   		if(Global.SEGMENT_OUTPUT_DUMP) {
-  			Global.DSEG.dump();
-  			Global.CSEG.dump();
+  			Global.DSEG.dump("Final: ");
+  			Global.CSEG.dump("Final: ");
   		}
   	}
 

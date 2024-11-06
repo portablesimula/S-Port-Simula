@@ -13,8 +13,8 @@ import bec.compileTimeStack.Temp;
 import bec.segment.MemAddr;
 import bec.virtualMachine.SVM_CALL;
 import bec.virtualMachine.SVM_NOT_IMPL;
-import bec.virtualMachine.SVM_POP;
-import bec.virtualMachine.SVM_POPR;
+import bec.virtualMachine.SVM_POPtoMEM;
+import bec.virtualMachine.SVM_POPtoREG;
 import bec.virtualMachine.SVM_PUSH;
 
 public class Util {
@@ -109,11 +109,11 @@ public class Util {
 	// *** GQ-Utilities
 	// ***************************************************************
 	public static void GQconvert(int toType) {
-		GQfetch();
+		GQfetch("GQconvert " + Scode.edTag(toType));
 		if(CTStack.TOS.type != toType) doConvert(toType);
 	}
 
-	public static void GQfetch() { //  ; --  M} ikke bruke qDI(se rupdate) --
+	public static void GQfetch(String comment) { //  ; --  M} ikke bruke qDI(se rupdate) --
 //	%-D Visible Routine GQfetchxx; --  M} ikke bruke qDI(se rupdate) --
 //	begin infix(MemAddr) opr; range(0:MaxType) type;
 //	      range(0:MaxWord) nbyte; range(0:MaxByte) cTYP;
@@ -122,9 +122,10 @@ public class Util {
 			MemAddr addr = getTosSrcAdr();
 			int type = CTStack.TOS.type;
 			int size = DataType.typeSize(type);
-			Global.PSEG.emit(new SVM_PUSH(addr, size), Scode.edTag(type));
+			Global.PSEG.emit(new SVM_PUSH(addr, size), comment + " " +Scode.edTag(type));
 			CTStack.pop(); CTStack.pushTemp(type);
-//			CTStack.dumpStack();
+//			CTStack.dumpStack("GQfetch: "+comment);
+//			Global.PSEG.dump("GQfetch: "+comment);
 //			Util.IERR("NOT IMPL");
 		}
 	}
@@ -182,7 +183,7 @@ public class Util {
 		case Calculated:
 //	        Qf1(qPOPR,qEBX,cOBJ);
 //	        a.sibreg:=bOR(bAND(a.sibreg,IndxREG),bEBX);
-			Global.PSEG.emit(new SVM_POPR(1), ""+tos);
+			Global.PSEG.emit(new SVM_POPtoREG(1), ""+tos);
 
 //			Util.IERR("NOT IMPL");
 		}
@@ -221,7 +222,7 @@ public class Util {
 		case Calculated:
 //	        Qf1(qPOPR,qEBX,cOBJ);
 //	        a.sibreg:=bOR(bAND(a.sibreg,IndxREG),bEBX);
-			Global.PSEG.emit(new SVM_POPR(1), ""+tos);
+			Global.PSEG.emit(new SVM_POPtoREG(1), ""+tos);
 
 //			Util.IERR("NOT IMPL");
 		}

@@ -3,6 +3,7 @@ package bec.syntaxClass.instruction;
 import bec.compileTimeStack.CTStack;
 import bec.compileTimeStack.StackItem;
 import bec.util.Global;
+import bec.util.Util;
 import bec.virtualMachine.SVM_MULT;
 
 public class MULT extends Instruction {
@@ -37,8 +38,8 @@ public class MULT extends Instruction {
 		CTStack.pop();
 		CTStack.pop();
 	    CTStack.pushTemp(at);
-//		CTStack.dumpStack();
-//		Global.PSEG.dump();
+//		CTStack.dumpStack("MULT.doCode: ");
+//		Global.PSEG.dump("MULT.doCode: ");
 //		Util.IERR(""+this);
 	}
 

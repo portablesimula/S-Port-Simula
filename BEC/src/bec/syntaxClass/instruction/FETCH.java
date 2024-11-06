@@ -26,7 +26,7 @@ public class FETCH extends Instruction {
 	@Override
 	public void doCode() {
 //		CTStack.dumpStack();
-		Util.GQfetch();
+		Util.GQfetch("FETCH");
 //		Global.PSEG.dump();
 //		Util.IERR(""+this);
 	}

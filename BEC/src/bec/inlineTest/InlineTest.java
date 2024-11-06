@@ -12,6 +12,7 @@ public class InlineTest {
 //		String scodeSource = Pick_FEC_Source();
 		String scodeSource = Pick_RTS_Source();		
 		
+		Global.verbose = true;
 //		Global.SCODE_INPUT_TRACE = true;
 //		Global.PRINT_SYNTAX_TREE = true;
 //		Global.ATTR_INPUT_TRACE = true;
@@ -19,15 +20,15 @@ public class InlineTest {
 //		Global.ATTR_INPUT_DUMP = true;
 //		Global.ATTR_OUTPUT_DUMP = true;
 //		Global.SEGMENT_INPUT_DUMP = true;
-		Global.SEGMENT_OUTPUT_DUMP = true;
+//		Global.SEGMENT_OUTPUT_DUMP = true;
 
 		new BecCompiler(scodeSource);
 	}
 
 	private static String Pick_RTS_Source() {
 //		return "C:/Simuletta/SCode/simulaRTS/RT.scd";
-		return "C:/Simuletta/SCode/simulaRTS/SYSR.scd";
-//		return "C:/Simuletta/SCode/simulaRTS/KNWN.scd";
+//		return "C:/Simuletta/SCode/simulaRTS/SYSR.scd";
+		return "C:/Simuletta/SCode/simulaRTS/KNWN.scd";
 //		return "C:/Simuletta/SCode/simulaRTS/UTIL.scd";		
 //		return "C:/Simuletta/SCode/simulaRTS/STRG.scd";
 //		return "C:/Simuletta/SCode/simulaRTS/CENT.scd";

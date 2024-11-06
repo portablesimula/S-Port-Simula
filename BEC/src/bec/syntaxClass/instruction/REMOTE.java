@@ -44,7 +44,7 @@ public class REMOTE extends Instruction {
 		CTStack.checkTosRef();
 		CTStack.checkTosType(Scode.TAG_OADDR); // CheckTosType(T_OADDR);
 		Address adr = (Address) CTStack.TOS;
-		Util.GQfetch();
+		Util.GQfetch("REMOTE-1 " + Scode.edTag(tag) + ": ");
 		AttributeDefinition attr = (AttributeDefinition) Global.getMeaning(tag);
 		CTStack.pop();
 		MemAddr memAddr = new MemAddr(null,0); // a
@@ -52,7 +52,8 @@ public class REMOTE extends Instruction {
         adr.objState = Address.State.Calculated;
 //        System.out.println("REMOTE.doCode: adr="+adr);
 		CTStack.push(adr);
-        if(instr == Scode.S_REMOTEV) Util.GQfetch();
+        if(instr == Scode.S_REMOTEV)
+        	Util.GQfetch("REMOTE-2 " + Scode.edTag(tag) + ": ");
 //		CTStack.dumpStack();
 //		Global.PSEG.dump();
 	}

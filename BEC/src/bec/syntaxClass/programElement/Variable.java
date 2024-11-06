@@ -48,7 +48,7 @@ public class Variable extends ProgramElement {
 		var.address = seg.nextAddress();
 		if(var.address.seg == null) Util.IERR("");
 		var.quant.type.emitDefaultValue(seg, "IMPORT " + var.quant);
-		System.out.println("Variable ofIMPORT: "+var);
+//		System.out.println("Variable ofIMPORT: "+var);
 		return var;
 	}
 	

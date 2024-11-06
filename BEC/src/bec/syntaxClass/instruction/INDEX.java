@@ -72,7 +72,7 @@ public class INDEX extends Instruction {
 		}
 		CTStack.checkTosRef();
 		
-		if(instr == Scode.S_INDEXV) Util.GQfetch();
+		if(instr == Scode.S_INDEXV) Util.GQfetch("INDEXV");
 
 //		Global.PSEG.dump();
 //		CTStack.dumpStack();

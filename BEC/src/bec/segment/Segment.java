@@ -4,7 +4,7 @@ import java.util.HashMap;
 import bec.syntaxClass.SyntaxClass;
 
 public class Segment extends SyntaxClass {
-	String ident;
+	public String ident;
 	int segmentKind; // SEG_DATA, SEG_CONST, SEG_CODE
 
 	public final static int SEG_DATA  = 1;

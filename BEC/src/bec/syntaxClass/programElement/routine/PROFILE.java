@@ -120,6 +120,7 @@ public class PROFILE extends ProgramElement {
 		for(Variable imprt:imports) sLIST(indent + 1, imprt.toString());
 		if(exit != null)   sLIST(indent + 1, exit.toString());
 		if(export != null) sLIST(indent + 1, export.toString());
+		DSEG.dump("");
 		sLIST(indent, "ENDPROFILE");		
 	}
 	
@@ -145,6 +146,11 @@ public class PROFILE extends ProgramElement {
 	public PROFILE(AttributeInputStream inpt) throws IOException {
 		imports = new Vector<Variable>();
 		profileTag = inpt.readTag(this);
+		
+		String ident = inpt.readString();
+		DSEG = (DataSegment) Segment.lookup(ident);
+		if(DSEG == null) Util.IERR("NEW PROFILE: Unknown segment " + ident);
+
 		inpt.readInstr();
 //		System.out.println("NEW PROFILE(1): inpt.curinstr="+Scode.edInstr(inpt.curinstr));
 		switch(inpt.curinstr) {
@@ -170,8 +176,15 @@ public class PROFILE extends ProgramElement {
 
 	public void write(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("BEGIN Write PROFILE: " + Scode.edTag(profileTag)); // + ", Declared in: " + declaredIn);
+		// Write Segments
+		DSEG.write(oupt);
+		//CSEG.write(oupt);
+
 		oupt.writeKind(Scode.S_PROFILE); // Mark: This is a ClassDeclaration
 		oupt.writeTag(profileTag);
+		
+		oupt.writeString((DSEG==null)?null:DSEG.ident);
+
 		switch(kind) {
 			case Scode.S_KNOWN ->     { oupt.writeInstr(Scode.S_KNOWN); oupt.writeTag(bodyTag); oupt.writeString(ident); }
 			case Scode.S_SYSTEM ->    { oupt.writeInstr(Scode.S_SYSTEM); oupt.writeTag(bodyTag); oupt.writeString(ident); }

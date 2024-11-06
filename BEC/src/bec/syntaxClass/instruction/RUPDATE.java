@@ -4,7 +4,7 @@ import bec.compileTimeStack.CTStack;
 import bec.segment.MemAddr;
 import bec.util.Global;
 import bec.util.Util;
-import bec.virtualMachine.SVM_POP;
+import bec.virtualMachine.SVM_POPtoMEM;
 
 public class RUPDATE extends Instruction {
 	
@@ -34,7 +34,7 @@ public class RUPDATE extends Instruction {
 		CTStack.checkTosRef(); CTStack.checkSosValue(); CTStack.checkTypesEqual();
 		MemAddr adr = Util.getTosDstAdr();
 		CTStack.pop();
-		Global.PSEG.emit(new SVM_POP(adr, 1), ""+this); // Store into adr
+		Global.PSEG.emit(new SVM_POPtoMEM(adr, 1), ""+this); // Store into adr
 //		Global.PSEG.dump();
 	}
 	

@@ -15,6 +15,9 @@ import bec.util.QuantityDescriptor;
 import bec.util.Scode;
 import bec.util.Util;
 import bec.virtualMachine.SVM_CALL;
+import bec.virtualMachine.SVM_CALL_TOS;
+import bec.virtualMachine.SVM_POPtoMEM;
+import bec.virtualMachine.SVM_STOREC;
 import bec.virtualMachine.SVM_SYSCALL;
 
 public class CallInstruction extends Instruction {
@@ -76,14 +79,17 @@ public class CallInstruction extends Instruction {
 	public void doCode() {
 		// CODING ....
 		PROFILE spec = (PROFILE) Global.Display.get(profileTag);
-//		System.out.println("-------------------------------------------------- BEGIN PRINT CALL Instruction");
-//		printTree(2);
-//		spec.printTree(2);
-//		System.out.println("-------------------------------------------------- ENDOF PRINT CALL Instruction");
+		System.out.println("-------------------------------------------------- BEGIN PRINT CALL Instruction");
+		printTree(2);
+		spec.printTree(2);
+		System.out.println("-------------------------------------------------- ENDOF PRINT CALL Instruction");
 		int nstckval = 0;
 		if(spec.bodyTag > 0)
 			 callSYS(spec, nstckval);
-		else callDefault(spec, nstckval);
+		else {
+			System.out.println("CallInsruction.doCode: profileTag="+Scode.edTag(profileTag)+", routineTag="+routineTag);
+			callDefault(spec, nstckval);
+		}
 
 		// Routines return values on the RT-Stack
 		if(spec.export != null) {
@@ -154,17 +160,14 @@ public class CallInstruction extends Instruction {
 		else if(s instanceof Address) s.type = st;
 		else Util.GQconvert(pt);
 		
-		if(CTStack.TOS instanceof Address) Util.GQfetch();
-//		s = CTStack.TOS;
-		s = CTStack.takeTOS();
-		
-//		System.out.println("CallInstruction.putPar: "+s.getClass().getSimpleName());
-//		System.out.println("CallInstruction.putPar: "+s + " ===> " + param);
-		s.storeInto(param.address);
+		if(CTStack.TOS instanceof Address) Util.GQfetch("putPar: ");
+		CTStack.pop();
+		Global.PSEG.emit(new SVM_POPtoMEM(param.address, 1), "putPar: ");
 		
 //		pItm.spc.printTree(2);
-//		pItm.spc.DSEG.dump();
-//		CTStack.dumpStack();
+//		Global.PSEG.dump("putPar: ");
+//		pItm.spc.DSEG.dump("putPar: ");
+//		CTStack.dumpStack("putPar: ");
 //		Util.IERR("");
 		
 		if(nrep > 1) { // --- Then: Treat rest of rep-par ---
@@ -253,9 +256,13 @@ public class CallInstruction extends Instruction {
 //	      endrepeat;
 	      for(ParameterEval par:argumentEvaluation) {
 	    	  par.doCode();
-//	    	  CTStack.dumpStack();
+	    	  putPar(pitem,1);
 	      }
-		  Util.IERR("NOT IMPLEMENTED");
+	      Global.PSEG.dump("CallInstruction: After putpar: ");
+	      spec.DSEG.dump("CallInstruction: After putpar: ");
+//	      ---------  Final Actions  ---------
+	      if(pitem.nasspar != pitem.spc.imports.size()) Util.IERR("Wrong number of Parameters");
+//		  Util.IERR("NOT IMPLEMENTED");
 
 //		
 //		Scode.inputInstr();
@@ -271,8 +278,17 @@ public class CallInstruction extends Instruction {
 //			Scode.inputInstr();
 //		}
 //	      ---------  Call Routine  ---------
+	      if(CALL_TOS_Instructions != null) {
+	    	  for(Instruction instr:CALL_TOS_Instructions) instr.doCode();
+	    	  Global.PSEG.emit(new SVM_CALL_TOS(), "");
+	    	  CTStack.pop();
+//	    	  Global.PSEG.dump("");
+//	    	  Util.IERR("");
+	      } else {
+
 //	      InTag(%rtag%); rut:=DISPL(rtag.HI).elt(rtag.LO);
-	      ROUTINE rut = (ROUTINE) Global.Display.get(routineTag);
+		      ROUTINE rut = (ROUTINE) Global.Display.get(routineTag);
+		      if(rut == null) Util.IERR("Unknown Routine: " + Scode.edTag(routineTag));
 //		
 //	      if rut.kind=K_IntRoutine then entr:=rut qua IntDescr.adr
 //	      else entr.kind:=extadr;
@@ -283,7 +299,7 @@ public class CallInstruction extends Instruction {
 //	      endif;
 //	%+C   if entr=noadr then IERR("Undefined routine entry") endif;
 //	F:    ---------  Final Actions  ---------
-	      if(pitem.nasspar != pitem.spc.npar()) Util.IERR("Wrong number of Parameters");
+//	      if(pitem.nasspar != pitem.spc.npar()) Util.IERR("Wrong number of Parameters");
 //	%+D   if TraceMode > 1
 //	%+D   then setpos(sysout,54); outstring(".   CALL "); print(TOS) endif;
 //	      if rut=none
@@ -295,10 +311,13 @@ public class CallInstruction extends Instruction {
 //	%+E        entr.kind:=reladr; entr.rela.val:=0; entr.sibreg:=bEAX+iESP;
 //	      endif;
 //	      Qf5(qCALL,spec.WithExit,0,xlng+pitem.spc.nparbyte,entr);
-	      rut.PSEG.emit(new SVM_CALL(rut), ""+rut);
+	      	Global.PSEG.emit(new SVM_CALL(rut), ""+rut);
+	      }
 	      
 //	      repeat while npop<>0 do Pop; npop:=npop-1 endrepeat;
+//	      CTStack.dumpStack("CallInstruction.callDefault: ");
 	      if(CTStack.TOS != pitem) Util.IERR("SSTMT.Call");
+	      CTStack.pop();
 //	      Pop;
 //	      if xlng <> 0 then Qf2(qADJST,0,0,0,xlng) endif;
 //	      if xt <> 0 then result.kind:=K_Temp endif;
@@ -307,7 +326,8 @@ public class CallInstruction extends Instruction {
 //	%-E        then Qf5(qCALL,1,0,0,X_CHKSTK) endif;
 //	%-E   endif;
 
-	      Util.IERR("Parse.XXX: NOT IMPLEMENTED");
+	      Global.PSEG.dump("END CallDefault: ");
+//	      Util.IERR("Parse.XXX: NOT IMPLEMENTED");
 	}
 	
 	@Override

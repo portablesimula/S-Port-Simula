@@ -3,16 +3,15 @@ package bec;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import bec.segment.DataSegment;
 import bec.segment.Segment;
 import bec.syntaxClass.SyntaxClass;
 import bec.syntaxClass.instruction.RECORD;
 import bec.syntaxClass.programElement.Variable;
 import bec.syntaxClass.programElement.routine.PROFILE;
+import bec.syntaxClass.programElement.routine.ROUTINE;
 import bec.syntaxClass.value.CONST;
 import bec.util.Global;
 import bec.util.Scode;
-import bec.util.Util;
 
 public class S_Module extends SyntaxClass {
 	public static String modident;     // Module ident String
@@ -43,6 +42,7 @@ public class S_Module extends SyntaxClass {
 			if(elt instanceof Segment) doWrite = true;
 			else if(elt instanceof RECORD) doWrite = true;
 			else if(elt instanceof PROFILE) doWrite = true;
+			else if(elt instanceof ROUTINE)	doWrite = true;
 			else if(elt instanceof CONST) doWrite = true;
 			else if(elt instanceof Variable var) {
 				if(var.instr == Scode.S_GLOBAL) doWrite = true;

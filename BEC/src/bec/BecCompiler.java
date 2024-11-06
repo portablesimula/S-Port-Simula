@@ -66,11 +66,12 @@ public class BecCompiler {
 
 
 	public BecCompiler(String scodeSource) {
-		System.out.println("SportBEC: " + scodeSource);
+		if(Global.verbose) System.out.println("START: SportBEC: " + scodeSource);
 		Global.scodeSource = scodeSource;
 		Scode.initScode();
 		DataType.initDataTypes();
 		parse();
+		if(Global.verbose) System.out.println("DONE: SportBEC: " + scodeSource);
 	}
 
 	/**
