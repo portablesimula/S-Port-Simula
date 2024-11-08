@@ -6,8 +6,9 @@ import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
 import bec.virtualMachine.SVM_GOTO;
+import bec.virtualMachine.SVM_NOOP;
 
-public class FDEST extends Instruction {
+public class FDEST extends PREV_Instruction {
 	int destination;
 	
 	public FDEST() {
@@ -41,6 +42,7 @@ public class FDEST extends Instruction {
 		Global.DESTAB[destination] = null;
 		SVM_GOTO instr = (SVM_GOTO) Global.PSEG.instructions.get(addr.ofst);
 		instr.destination = Global.PSEG.nextAddress();
+      	Global.PSEG.emit(new SVM_NOOP(), "FDEST " + destination);
 //		Global.PSEG.dump();
 //		Util.IERR(""+this);
 	}

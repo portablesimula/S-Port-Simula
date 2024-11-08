@@ -1,11 +1,11 @@
 package bec.virtualMachine;
 
-import bec.syntaxClass.programElement.routine.ROUTINE;
+import bec.syntaxClass.programElement.routine.PREV_ROUTINE;
 
 public class SVM_CALL extends SVM_Instruction {
-	ROUTINE rut;
+	PREV_ROUTINE rut;
 
-	public SVM_CALL(ROUTINE rut) {
+	public SVM_CALL(PREV_ROUTINE rut) {
 		this.rut = rut;
 	}
 	

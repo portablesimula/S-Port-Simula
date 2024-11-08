@@ -6,7 +6,7 @@ import bec.util.Global;
 import bec.util.Util;
 import bec.virtualMachine.SVM_MULT;
 
-public class MULT extends Instruction {
+public class MULT extends PREV_Instruction {
 	
 	/**
 	 * arithmetic_instruction ::= mult

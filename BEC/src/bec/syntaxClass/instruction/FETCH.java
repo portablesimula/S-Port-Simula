@@ -2,7 +2,7 @@ package bec.syntaxClass.instruction;
 
 import bec.util.Util;
 
-public class FETCH extends Instruction {
+public class FETCH extends PREV_Instruction {
 	
 	/**
 	 * addressing_instruction ::= fetch

@@ -1,6 +1,6 @@
 package bec.syntaxClass.instruction;
 
-public class EVAL extends Instruction {
+public class EVAL extends PREV_Instruction {
 	
 	/**
 	 * eval_instruction ::= eval

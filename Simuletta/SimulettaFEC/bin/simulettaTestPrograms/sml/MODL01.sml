@@ -47,5 +47,12 @@ end;
  Visible body(PRF) BDY;
  begin
  end;
+
+   
+visible routine GET;
+    begin boolean cont;
+    	  cont:=true;
+--    	  obSML:=nobody;
+    end;
    
 end;

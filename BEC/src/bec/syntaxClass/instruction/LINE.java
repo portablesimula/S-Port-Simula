@@ -4,7 +4,7 @@ import bec.segment.ProgramSegment;
 import bec.syntaxClass.programElement.ProgramElement;
 import bec.util.Scode;
 
-public class LINE extends Instruction {
+public class LINE extends PREV_Instruction {
 	int kind;
 	int lineNo;
 	

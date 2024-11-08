@@ -23,7 +23,7 @@ import bec.util.Util;
 import bec.virtualMachine.SVM_PUSHC;
 import bec.virtualMachine.SVM_NOT_IMPL;
 
-public class PUSHC extends Instruction {
+public class PUSHC extends PREV_Instruction {
 	Value value;
 	
 	/**

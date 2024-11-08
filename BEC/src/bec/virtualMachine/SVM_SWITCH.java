@@ -16,7 +16,11 @@ public class SVM_SWITCH extends SVM_Instruction {
 	
 	@Override	
 	public String toString() {
-		return "SWITCH   " + DESTAB.length;
+		String s = "SWITCH   " + DESTAB.length;
+		for(int i=0;i<DESTAB.length;i++) {
+			s = s + " " + DESTAB[i];
+		}
+		return s;
 	}
 
 }

@@ -16,6 +16,7 @@ public class SVM_SYSCALL extends SVM_Instruction {
 		defName("INIMAG");
 		defName("INBYTE");
 		defName("OUTBYT");
+		defName("ERROR");
 	}
 	
 	int kind;

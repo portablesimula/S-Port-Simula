@@ -13,7 +13,7 @@ import bec.util.Scode;
 import bec.virtualMachine.SVM_ADD;
 import bec.virtualMachine.SVM_Instruction;
 
-public class ADD extends Instruction {
+public class ADD extends PREV_Instruction {
 	
 	/**
 	 * arithmetic_instruction ::= add

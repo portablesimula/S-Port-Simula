@@ -9,7 +9,7 @@ import bec.util.Util;
 import bec.virtualMachine.SVM_COMPARE;
 import bec.virtualMachine.SVM_CONVERT;
 
-public class COMPARE extends Instruction {
+public class COMPARE extends PREV_Instruction {
 	Relation relation;
 	
 	public COMPARE() {

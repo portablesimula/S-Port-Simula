@@ -1,6 +1,6 @@
 package bec.syntaxClass.instruction;
 
-public class SETO extends Instruction {
+public class SETO extends PREV_Instruction {
 	
 	/**
 	 * temp_control ::= t-seto

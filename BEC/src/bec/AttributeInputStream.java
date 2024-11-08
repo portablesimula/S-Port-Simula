@@ -8,7 +8,7 @@ import bec.segment.DataSegment;
 import bec.syntaxClass.SyntaxClass;
 import bec.syntaxClass.instruction.RECORD;
 import bec.syntaxClass.programElement.Variable;
-import bec.syntaxClass.programElement.routine.PROFILE;
+import bec.syntaxClass.programElement.routine.PREV_PROFILE;
 import bec.syntaxClass.value.CONST;
 import bec.util.Global;
 import bec.util.Scode;
@@ -167,7 +167,7 @@ public class AttributeInputStream {
 		switch(kind) {
 			case Scode.S_BSEG:	    return DataSegment.readObject(inpt);
 			case Scode.S_RECORD:    return RECORD.readObject(inpt);
-			case Scode.S_PROFILE:   return PROFILE.readObject(inpt);
+			case Scode.S_PROFILE:   return PREV_PROFILE.readObject(inpt);
 			case Scode.S_CONST:     return CONST.readObject(inpt);
 			case Scode.S_GLOBAL, Scode.S_LOCAL, Scode.S_IMPORT, Scode.S_EXPORT, Scode.S_EXIT:
 				return Variable.readObject(inpt,kind);

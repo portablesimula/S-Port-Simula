@@ -1,14 +1,12 @@
 package bec.syntaxClass.instruction;
 
 import bec.compileTimeStack.CTStack;
-import bec.segment.MemAddr;
 import bec.util.Global;
 import bec.util.Relation;
 import bec.util.Scode;
-import bec.util.Util;
 import bec.virtualMachine.SVM_GOTOIF;
 
-public class FJUMPIF extends Instruction {
+public class FJUMPIF extends PREV_Instruction {
 	Relation relation;
 	int destination;
 	
@@ -46,18 +44,6 @@ public class FJUMPIF extends Instruction {
 		CTStack.pop();
 		CTStack.pop();
 		
-//		%+D        b:=InputByte;
-//		%-D        InByte(%b%);
-//		%+C        if DESTAB(b) <> none then IERR("PARSE:FJUMPIF") endif;
-//		if(CTStack.TOS == CTStack.SAV) {
-////			DESTAB(b):=ForwJMP(cond)
-//			Util.IERR(""+this);
-//		} else {
-////			LL:=ForwJMP(NotQcond(cond));
-////		    ClearSTK;
-////		    DESTAB(b):=ForwJMP(0); DefFDEST(LL);
-//			Util.IERR(""+this);
-//		}
 		Global.DESTAB[destination] = Global.PSEG.nextAddress();
 		Global.PSEG.emit(new SVM_GOTOIF(relation, null), ""+this);
 //		Global.PSEG.dump();

@@ -2,7 +2,7 @@ package bec.syntaxClass.instruction;
 
 import bec.util.Scode;
 
-public class DSIZE extends Instruction {
+public class DSIZE extends PREV_Instruction {
 	int tag;
 	
 	/**

@@ -12,18 +12,6 @@
  begin insert envir0,modl01;
 --      sysinsert rt,sysr,knwn,util;
 
-
- Visible global profile PobSML;
- import short integer code;
- end;
-
- Visible entry(PobSML) obSML;
-
-    routine GET;
-    begin boolean cont;
-    	  cont:=true;
-    	  obSML:=nobody;
-    end;
     
     GET;
 end

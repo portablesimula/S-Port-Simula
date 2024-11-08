@@ -1,6 +1,6 @@
 package bec.syntaxClass.instruction;
 
-public class GOTO extends Instruction {
+public class GOTO extends PREV_Instruction {
 	
 	/**
 	 * goto_instruction ::= goto

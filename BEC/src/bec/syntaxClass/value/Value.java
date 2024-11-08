@@ -4,11 +4,11 @@ import java.io.IOException;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
-import bec.syntaxClass.instruction.Instruction;
+import bec.syntaxClass.instruction.PREV_Instruction;
 import bec.util.Scode;
 import bec.util.Util;
 
-public class Value extends Instruction {
+public class Value extends PREV_Instruction {
 	public int type;
 
 	// ***********************************************************************************************

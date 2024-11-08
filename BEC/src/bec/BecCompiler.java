@@ -1,6 +1,7 @@
 package bec;
 
 import bec.compileTimeStack.DataType;
+import bec.parse.MONITOR;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
@@ -70,7 +71,8 @@ public class BecCompiler {
 		Global.scodeSource = scodeSource;
 		Scode.initScode();
 		DataType.initDataTypes();
-		parse();
+//		parse();
+		MONITOR.parse();
 		if(Global.verbose) System.out.println("DONE: SportBEC: " + scodeSource);
 	}
 

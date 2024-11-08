@@ -2,12 +2,14 @@ package bec.syntaxClass.instruction;
 
 import bec.compileTimeStack.Address;
 import bec.compileTimeStack.CTStack;
+import bec.syntaxClass.SyntaxClass;
 import bec.syntaxClass.programElement.Variable;
+import bec.syntaxClass.value.CONST;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
 
-public class PUSH extends Instruction {
+public class PUSH extends PREV_Instruction {
 	int instr;
 	int tag;
 	
@@ -24,9 +26,13 @@ public class PUSH extends Instruction {
 	@Override
 	public void doCode() {
 //		System.out.println("PUSH.doCode: tag="+Scode.edTag(tag)+"  "+tag);
-		Variable var = (Variable) Global.getMeaning(tag);
-//		System.out.println("PUSH.doCode: var="+var);
-		CTStack.push(new Address(var.quant.type.tag,0,var.address));
+		SyntaxClass x = Global.getMeaning(tag);
+		if(x instanceof Variable var) {
+//			System.out.println("PUSH.doCode: var="+var);
+			CTStack.push(new Address(var.quant.type.tag,0,var.address));
+		} else if(x instanceof CONST cns) {
+			CTStack.push(new Address(cns.quant.type.tag,0,cns.address));
+		} else Util.IERR("");
 //        if v.kind=K_Parameter
 //        then TOS.repdist:= - wAllign(%TOS.repdist%) endif;
         if(instr == Scode.S_PUSHV) Util.GQfetch("PUSHV: ");

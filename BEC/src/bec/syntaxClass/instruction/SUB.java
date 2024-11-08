@@ -9,7 +9,7 @@ import bec.virtualMachine.SVM_SUB;
 /**
  * 
  */
-public class SUB extends Instruction {
+public class SUB extends PREV_Instruction {
 	
 	/**
 	 * arithmetic_instruction ::= sub

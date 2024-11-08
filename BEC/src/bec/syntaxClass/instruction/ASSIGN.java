@@ -1,6 +1,6 @@
 package bec.syntaxClass.instruction;
 
-public class ASSIGN extends Instruction {
+public class ASSIGN extends PREV_Instruction {
 	
 	/**
 	 * assign_instruction ::= assign | update | rupdate

@@ -1,6 +1,6 @@
 package bec.syntaxClass.instruction;
 
-public class LOCATE extends Instruction {
+public class LOCATE extends PREV_Instruction {
 	
 	/**
 	 * addressing_instruction ::= locate

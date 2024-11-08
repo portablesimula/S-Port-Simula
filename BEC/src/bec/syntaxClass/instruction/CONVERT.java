@@ -7,7 +7,7 @@ import bec.util.Scode;
 import bec.util.Util;
 import bec.virtualMachine.SVM_CONVERT;
 
-public class CONVERT extends Instruction {
+public class CONVERT extends PREV_Instruction {
 	int toType;
 	
 	/**

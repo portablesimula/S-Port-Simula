@@ -7,8 +7,8 @@ import bec.segment.Segment;
 import bec.syntaxClass.SyntaxClass;
 import bec.syntaxClass.instruction.RECORD;
 import bec.syntaxClass.programElement.Variable;
-import bec.syntaxClass.programElement.routine.PROFILE;
-import bec.syntaxClass.programElement.routine.ROUTINE;
+import bec.syntaxClass.programElement.routine.PREV_PROFILE;
+import bec.syntaxClass.programElement.routine.PREV_ROUTINE;
 import bec.syntaxClass.value.CONST;
 import bec.util.Global;
 import bec.util.Scode;
@@ -41,8 +41,8 @@ public class S_Module extends SyntaxClass {
 			boolean doWrite = false;
 			if(elt instanceof Segment) doWrite = true;
 			else if(elt instanceof RECORD) doWrite = true;
-			else if(elt instanceof PROFILE) doWrite = true;
-			else if(elt instanceof ROUTINE)	doWrite = true;
+			else if(elt instanceof PREV_PROFILE) doWrite = true;
+			else if(elt instanceof PREV_ROUTINE)	doWrite = true;
 			else if(elt instanceof CONST) doWrite = true;
 			else if(elt instanceof Variable var) {
 				if(var.instr == Scode.S_GLOBAL) doWrite = true;

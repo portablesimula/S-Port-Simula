@@ -11,7 +11,7 @@ import bec.util.Util;
 /**
  * 
  */
-public class REMOTE extends Instruction {
+public class REMOTE extends PREV_Instruction {
 	int instr;
 	int tag;
 	

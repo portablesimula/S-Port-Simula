@@ -5,7 +5,7 @@ import bec.compileTimeStack.StackItem;
 import bec.util.Global;
 import bec.virtualMachine.SVM_DIV;
 
-public class DIV extends Instruction {
+public class DIV extends PREV_Instruction {
 	
 	/**
 	 * arithmetic_instruction ::= div

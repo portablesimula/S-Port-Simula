@@ -4,7 +4,7 @@ import bec.compileTimeStack.CTStack;
 import bec.compileTimeStack.ProfileItem;
 import bec.util.Util;
 
-public class POP extends Instruction {
+public class POP extends PREV_Instruction {
 	
 	/**
 	 * stack_instruction ::= pop

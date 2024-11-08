@@ -14,7 +14,7 @@ import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
 
-public class PROFILE extends ProgramElement {
+public class PREV_PROFILE extends ProgramElement {
 	int profileTag;
 
 	int kind;      // peculiar
@@ -35,7 +35,7 @@ public class PROFILE extends ProgramElement {
 		return(imports.size());
 	}
 	
-	public PROFILE() {
+	public PREV_PROFILE() {
 		imports = new Vector<Variable>();
 		parse();
 	}
@@ -143,7 +143,7 @@ public class PROFILE extends ProgramElement {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 	
-	public PROFILE(AttributeInputStream inpt) throws IOException {
+	public PREV_PROFILE(AttributeInputStream inpt) throws IOException {
 		imports = new Vector<Variable>();
 		profileTag = inpt.readTag(this);
 		
@@ -180,7 +180,7 @@ public class PROFILE extends ProgramElement {
 		DSEG.write(oupt);
 		//CSEG.write(oupt);
 
-		oupt.writeKind(Scode.S_PROFILE); // Mark: This is a ClassDeclaration
+		oupt.writeKind(Scode.S_PROFILE); // Mark: This is a Profile
 		oupt.writeTag(profileTag);
 		
 		oupt.writeString((DSEG==null)?null:DSEG.ident);
@@ -194,11 +194,15 @@ public class PROFILE extends ProgramElement {
 		for(Variable imprt:imports) imprt.write(oupt);
 		if(exit != null)   exit.write(oupt);
 		if(export != null) export.write(oupt);
-		oupt.writeInstr(Scode.S_ENDPROFILE);		
+		oupt.writeInstr(Scode.S_ENDPROFILE);
+//		if("PUTSTR".equals(ident)) {
+//			printTree(2);
+//			Util.IERR("");
+//		}
 	}
 
 	public static SyntaxClass readObject(AttributeInputStream inpt) throws IOException {
-		return new PROFILE(inpt);
+		return new PREV_PROFILE(inpt);
 	}
 
 

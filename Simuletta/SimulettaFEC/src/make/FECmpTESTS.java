@@ -25,10 +25,11 @@ public final class FECmpTESTS {
 		Vector<String> names=new Vector<String>();
 		
 //		names.add("ENVIR0");
-//		names.add("MODL01");
-//		names.add("MODL02");
-//		names.add("TEST6");
-		names.add("TEST00");
+		names.add("MODL01");
+		names.add("MODL02");
+		names.add("TEST6");
+		
+//		names.add("TEST00");
 //		names.add("TEST01");
 //		names.add("TEST02");
 	
@@ -89,7 +90,8 @@ public final class FECmpTESTS {
 //		Option.TRACE_LOOM=false;//true;
 
 //		File userDir=new File("C:/WorkSpaces/SPort-Backend/SimulettaFEC");
-		File userDir=new File("C:/WorkSpaces/SimulettaFECinJava/SimulettaFEC");
+//		File userDir=new File("C:/WorkSpaces/SimulettaFECinJava/SimulettaFEC");
+		File userDir=new File("C:/GitHub/S-Port-Simula/Simuletta/SimulettaFEC/");
 		Global.packetName="simulettaTestPrograms";
 		
 		Global.simulaRtsLib=     "C:/Simuletta/Attrs/FEC/simulaRTS";

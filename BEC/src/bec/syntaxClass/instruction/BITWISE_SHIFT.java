@@ -2,7 +2,7 @@ package bec.syntaxClass.instruction;
 
 import bec.util.Scode;
 
-public class BITWISE_SHIFT extends Instruction {
+public class BITWISE_SHIFT extends PREV_Instruction {
 	int instr;
 	
 	public BITWISE_SHIFT(int instr) {

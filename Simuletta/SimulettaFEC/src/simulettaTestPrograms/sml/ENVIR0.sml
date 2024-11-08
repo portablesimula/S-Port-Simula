@@ -50,8 +50,10 @@ Visible define
 
  Visible       integer          maxint    system "MAXINT";
  Visible       integer          minint    system "MININT";
- Visible const size             maxlen    system "MAXLEN";
- Visible const integer          inplth    system "INPLTH";-- inptlinelng
+ -- Visible const size           maxlen    system "MAXLEN";                -- ØM
+ Visible       size             maxlen; -- system "MAXLEN";               -- ØM
+-- Visible const integer          inplth    system "INPLTH";-- inptlinelng
+ Visible integer          inplth    system "INPLTH";-- inptlinelng
  Visible infix(bioIns) bio;
  
  Visible const infix(string)

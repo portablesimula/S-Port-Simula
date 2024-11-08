@@ -1,6 +1,6 @@
 package bec.virtualMachine;
 
-import bec.syntaxClass.programElement.routine.ROUTINE;
+import bec.syntaxClass.programElement.routine.PREV_ROUTINE;
 
 public class SVM_NOT_IMPL extends SVM_Instruction {
 

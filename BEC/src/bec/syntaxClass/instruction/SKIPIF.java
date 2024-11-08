@@ -7,7 +7,7 @@ import bec.util.Relation;
 import bec.util.Scode;
 import bec.util.Util;
 
-public class SKIPIF extends Instruction {
+public class SKIPIF extends PREV_Instruction {
 	Relation relation;
 	Vector<ProgramElement> programElements;
 	

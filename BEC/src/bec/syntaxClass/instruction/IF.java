@@ -7,7 +7,7 @@ import bec.util.Relation;
 import bec.util.Scode;
 import bec.util.Util;
 
-public class IF extends Instruction {
+public class IF extends PREV_Instruction {
 	Relation relation;
 	Vector<ProgramElement> thenElements;
 	Vector<ProgramElement> elseElements;

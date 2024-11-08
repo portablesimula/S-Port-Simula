@@ -7,9 +7,9 @@ import bec.compileTimeStack.Address;
 import bec.compileTimeStack.CTStack;
 import bec.compileTimeStack.StackItem;
 import bec.syntaxClass.programElement.Variable;
-import bec.syntaxClass.programElement.routine.PROFILE;
+import bec.syntaxClass.programElement.routine.PREV_PROFILE;
 import bec.syntaxClass.programElement.routine.ParameterEval;
-import bec.syntaxClass.programElement.routine.ROUTINE;
+import bec.syntaxClass.programElement.routine.PREV_ROUTINE;
 import bec.util.Global;
 import bec.util.QuantityDescriptor;
 import bec.util.Scode;
@@ -20,12 +20,12 @@ import bec.virtualMachine.SVM_POPtoMEM;
 import bec.virtualMachine.SVM_STOREC;
 import bec.virtualMachine.SVM_SYSCALL;
 
-public class CallInstruction extends Instruction {
+public class CallInstruction extends PREV_Instruction {
 	int n; // Kind
 	int profileTag;
 	int routineTag;
 	Vector<ParameterEval> argumentEvaluation;
-	Vector<Instruction> CALL_TOS_Instructions;
+	Vector<PREV_Instruction> CALL_TOS_Instructions;
 	
 	/**
 	 * call_instruction
@@ -52,7 +52,7 @@ public class CallInstruction extends Instruction {
 //		if(Scode.inputTrace > 3) System.out.println("CallInstruction: n="+n+", Curinstr="+Scode.edInstr(Scode.curinstr));
 		
 		LOOP:while(Scode.curinstr != Scode.S_CALL) {
-			Vector<Instruction> instructions = Instruction.inInstructionSet();
+			Vector<PREV_Instruction> instructions = PREV_Instruction.inInstructionSet();
 			if(instructions.isEmpty()) break LOOP;
 			
 			if(Scode.curinstr == Scode.S_ASSPAR) {
@@ -78,7 +78,8 @@ public class CallInstruction extends Instruction {
 	
 	public void doCode() {
 		// CODING ....
-		PROFILE spec = (PROFILE) Global.Display.get(profileTag);
+		PREV_PROFILE spec = (PREV_PROFILE) Global.Display.get(profileTag);
+		if(spec == null) Util.IERR(""+Scode.edTag(profileTag));
 		System.out.println("-------------------------------------------------- BEGIN PRINT CALL Instruction");
 		printTree(2);
 		spec.printTree(2);
@@ -102,7 +103,7 @@ public class CallInstruction extends Instruction {
 //		Util.IERR("");
 	}
 	
-	private void callSYS(PROFILE spec, int nstckval) { //,Pkind;
+	private void callSYS(PREV_PROFILE spec, int nstckval) { //,Pkind;
 //		range(0:255) npop;
 //	    npop:=0;
 		
@@ -198,7 +199,7 @@ public class CallInstruction extends Instruction {
 		return npop;
 	}
 
-	private void callDefault(PROFILE spec, int nstckval) {
+	private void callDefault(PREV_PROFILE spec, int nstckval) {
 //	import ref(ProfileDescr) spec; range(0:MaxWord) nstckval;
 //	begin ref(ProfileItem) pitem; range(0:255) npop; infix(MemAddr) entr;
 //	      ref(StackItem) z; ref(Temp) result; ref(Descriptor) rut;
@@ -279,7 +280,7 @@ public class CallInstruction extends Instruction {
 //		}
 //	      ---------  Call Routine  ---------
 	      if(CALL_TOS_Instructions != null) {
-	    	  for(Instruction instr:CALL_TOS_Instructions) instr.doCode();
+	    	  for(PREV_Instruction instr:CALL_TOS_Instructions) instr.doCode();
 	    	  Global.PSEG.emit(new SVM_CALL_TOS(), "");
 	    	  CTStack.pop();
 //	    	  Global.PSEG.dump("");
@@ -287,7 +288,7 @@ public class CallInstruction extends Instruction {
 	      } else {
 
 //	      InTag(%rtag%); rut:=DISPL(rtag.HI).elt(rtag.LO);
-		      ROUTINE rut = (ROUTINE) Global.Display.get(routineTag);
+		      PREV_ROUTINE rut = (PREV_ROUTINE) Global.Display.get(routineTag);
 		      if(rut == null) Util.IERR("Unknown Routine: " + Scode.edTag(routineTag));
 //		
 //	      if rut.kind=K_IntRoutine then entr:=rut qua IntDescr.adr
@@ -342,7 +343,7 @@ public class CallInstruction extends Instruction {
 		sLIST(indent, lead + Scode.edTag(profileTag));
 		for(ParameterEval p:argumentEvaluation) p.printTree(indent + 1);
 		if(CALL_TOS_Instructions != null) {
-			for(Instruction instr:CALL_TOS_Instructions)
+			for(PREV_Instruction instr:CALL_TOS_Instructions)
 				sLIST(indent + 1, instr.toString());
 			sLIST(indent, "CALL-TOS");
 //			Util.IERR("SJEKK DETTE");

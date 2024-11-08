@@ -3,20 +3,19 @@ package bec.syntaxClass.programElement.routine;
 import bec.syntaxClass.programElement.ProgramElement;
 import bec.util.Scode;
 
-public class ROUTINESPEC extends ProgramElement {
+public class PREV_ROUTINESPEC extends ProgramElement {
 	int bodyTag;
 	int profileTag;
 	
-	public ROUTINESPEC() {
-		parse();
-	}
-
+	boolean inHead;
+	
 	/**
 	 * routine_specification ::= routinespec body:newtag profile:tag
 	 */
-	public void parse() {
+	private PREV_ROUTINESPEC(boolean inHead) {
 		bodyTag = Scode.inTag();
 		profileTag = Scode.inTag();
+		this.inHead = inHead;
 	}
 
 	@Override

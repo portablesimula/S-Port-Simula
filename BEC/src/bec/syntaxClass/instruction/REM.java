@@ -1,6 +1,6 @@
 package bec.syntaxClass.instruction;
 
-public class REM extends Instruction {
+public class REM extends PREV_Instruction {
 	
 	/**
 	 * arithmetic_instruction ::= rem

@@ -4,7 +4,7 @@ import bec.compileTimeStack.CTStack;
 import bec.util.Global;
 import bec.virtualMachine.SVM_NEG;
 
-public class NEG extends Instruction {
+public class NEG extends PREV_Instruction {
 	
 	/**
 	 * arithmetic_instruction ::= neg

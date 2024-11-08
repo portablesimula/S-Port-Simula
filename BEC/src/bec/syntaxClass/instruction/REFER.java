@@ -7,7 +7,7 @@ import bec.util.ResolvedType;
 import bec.util.Scode;
 import bec.util.Util;
 
-public class REFER extends Instruction {
+public class REFER extends PREV_Instruction {
 	ResolvedType type;
 	
 	/**

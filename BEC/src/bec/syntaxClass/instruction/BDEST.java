@@ -4,8 +4,9 @@ import bec.compileTimeStack.CTStack;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
+import bec.virtualMachine.SVM_NOOP;
 
-public class BDEST extends Instruction {
+public class BDEST extends PREV_Instruction {
 	int destination;
 	
 	public BDEST() {
@@ -32,6 +33,7 @@ public class BDEST extends Instruction {
 		if(Global.DESTAB[destination] != null) Util.IERR("BJUMP dest. dest == null");
 
 		Global.DESTAB[destination] = Global.PSEG.nextAddress();
+      	Global.PSEG.emit(new SVM_NOOP(), "BDEST " + destination);
 //		Global.PSEG.dump();
 //		Util.IERR(""+this);
 	}

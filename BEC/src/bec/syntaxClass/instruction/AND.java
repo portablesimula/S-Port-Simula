@@ -5,10 +5,9 @@ import bec.compileTimeStack.StackItem;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
-import bec.virtualMachine.SVM_ADD;
 import bec.virtualMachine.SVM_AND;
 
-public class AND extends Instruction {
+public class AND extends PREV_Instruction {
 	
 	/**
 	 * arithmetic_instruction ::= and

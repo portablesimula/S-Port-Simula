@@ -3,7 +3,7 @@ package bec.syntaxClass.instruction;
 import bec.util.Scode;
 import bec.util.Util;
 
-public class EMPTY extends Instruction {
+public class EMPTY extends PREV_Instruction {
 	
 	/**
 	 * stack_instruction ::= empty

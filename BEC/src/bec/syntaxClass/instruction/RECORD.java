@@ -13,7 +13,7 @@ import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
 
-public class RECORD extends Instruction {
+public class RECORD extends PREV_Instruction {
 	public int tag;
 	String info;
 	int prefixTag;

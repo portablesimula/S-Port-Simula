@@ -1,6 +1,6 @@
 package bec.syntaxClass.instruction;
 
-public class DIST extends Instruction {
+public class DIST extends PREV_Instruction {
 	
 	/**
 	 * addressing_instruction ::= dist

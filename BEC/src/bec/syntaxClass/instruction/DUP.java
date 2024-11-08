@@ -1,6 +1,6 @@
 package bec.syntaxClass.instruction;
 
-public class DUP extends Instruction {
+public class DUP extends PREV_Instruction {
 	
 	/**
 	 * stack_instruction ::= dup

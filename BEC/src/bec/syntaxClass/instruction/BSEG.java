@@ -6,7 +6,7 @@ import bec.syntaxClass.programElement.ProgramElement;
 import bec.util.Scode;
 import bec.util.Util;
 
-public class BSEG extends Instruction {
+public class BSEG extends PREV_Instruction {
 	Vector<ProgramElement> programElements;
 	
 	public BSEG() {

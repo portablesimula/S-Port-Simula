@@ -22,7 +22,7 @@ import bec.virtualMachine.SVM_NOT_IMPL;
  * component of that record. Note that no qualification check is implied, i.e. TOS.TYPE may be
  * different from 'REC'.
  */
-public class SELECT extends Instruction {
+public class SELECT extends PREV_Instruction {
 	int instr;
 	int tag;
 	

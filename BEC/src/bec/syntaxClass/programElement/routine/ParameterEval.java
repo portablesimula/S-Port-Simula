@@ -4,11 +4,11 @@ import java.util.Vector;
 
 import bec.segment.ProgramSegment;
 import bec.syntaxClass.SyntaxClass;
-import bec.syntaxClass.instruction.Instruction;
+import bec.syntaxClass.instruction.PREV_Instruction;
 import bec.syntaxClass.programElement.ProgramElement;
 
 public class ParameterEval extends SyntaxClass {
-	Vector<Instruction> instructions;
+	Vector<PREV_Instruction> instructions;
 	int nRep;
 	
 	/**
@@ -16,7 +16,7 @@ public class ParameterEval extends SyntaxClass {
 	 * 		::= <instruction>+ asspar
 	 * 		::= <instruction>+ assrep n:byte
 	 */
-	public ParameterEval(Vector<Instruction> instructions,int nRep) {
+	public ParameterEval(Vector<PREV_Instruction> instructions,int nRep) {
 		this.instructions = instructions;
 		this.nRep = nRep;
 //		System.out.println("NEW ParameterEvaluation: " + this);

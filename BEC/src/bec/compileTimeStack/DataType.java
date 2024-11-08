@@ -53,6 +53,11 @@ public class DataType {
 		TMAP.put(rec.tag, x);
 	}
 
+	public static void newRecType(int tag, int size) {
+		DataType x = new DataType(size, null);
+		TMAP.put(tag, x);
+	}
+
 	private static void newBasType(int type, int size, Kind kind) {
 		DataType x = new DataType(size, kind);
 		TMAP.put(type, x);

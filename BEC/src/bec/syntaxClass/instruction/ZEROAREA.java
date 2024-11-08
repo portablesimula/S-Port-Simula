@@ -1,6 +1,6 @@
 package bec.syntaxClass.instruction;
 
-public class ZEROAREA extends Instruction {
+public class ZEROAREA extends PREV_Instruction {
 	
 	/**
 	 * area_initialisation ::= zeroarea

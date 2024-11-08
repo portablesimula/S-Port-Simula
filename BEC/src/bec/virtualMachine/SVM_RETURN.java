@@ -1,12 +1,12 @@
 package bec.virtualMachine;
 
-import bec.syntaxClass.programElement.routine.PROFILE;
+import bec.descriptor.ProfileDescr;
 
 public class SVM_RETURN extends SVM_Instruction {
-	PROFILE prf;
+	ProfileDescr prf;
 
-	public SVM_RETURN(PROFILE prf) {
-		this.prf = prf;
+	public SVM_RETURN(ProfileDescr prf2) {
+		this.prf = prf2;
 	}
 	
 	@Override	

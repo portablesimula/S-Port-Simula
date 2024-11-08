@@ -6,7 +6,7 @@ import bec.syntaxClass.programElement.ProgramElement;
 import bec.util.Scode;
 import bec.util.Util;
 
-public class SAVE extends Instruction {
+public class SAVE extends PREV_Instruction {
 	Vector<ProgramElement> programElements;
 	
 	/**

@@ -1,6 +1,6 @@
 package bec.syntaxClass.instruction;
 
-public class PUSHLEN extends Instruction {
+public class PUSHLEN extends PREV_Instruction {
 	
 	/**
 	 * stack_instruction ::= pushlen

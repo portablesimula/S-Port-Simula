@@ -1,6 +1,6 @@
 package bec.syntaxClass.instruction;
 
-public class INITO extends Instruction {
+public class INITO extends PREV_Instruction {
 	
 	/**
 	 * temp_control ::= t-inito

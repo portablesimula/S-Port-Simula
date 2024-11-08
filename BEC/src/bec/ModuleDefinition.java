@@ -16,9 +16,9 @@ import bec.syntaxClass.programElement.Variable;
 import bec.syntaxClass.programElement.ProgramElement;
 import bec.syntaxClass.programElement.SETSWITCH;
 import bec.syntaxClass.programElement.TAGLIST;
-import bec.syntaxClass.programElement.routine.PROFILE;
-import bec.syntaxClass.programElement.routine.ROUTINE;
-import bec.syntaxClass.programElement.routine.ROUTINESPEC;
+import bec.syntaxClass.programElement.routine.PREV_PROFILE;
+import bec.syntaxClass.programElement.routine.PREV_ROUTINE;
+import bec.syntaxClass.programElement.routine.PREV_ROUTINESPEC;
 import bec.syntaxClass.value.CONST;
 import bec.util.Global;
 import bec.util.Scode;
@@ -118,8 +118,8 @@ public class ModuleDefinition extends S_Module {
 		for(ProgramElement elt:programElements) {
 			boolean ok = false;
 			if(elt instanceof CONST) ok = true;
-			else if(elt instanceof PROFILE) ok = true;
-			else if(elt instanceof ROUTINE) ok = true;
+			else if(elt instanceof PREV_PROFILE) ok = true;
+			else if(elt instanceof PREV_ROUTINE) ok = true;
 			
 			else if(elt instanceof TAGLIST) ; // Nothing
 			else if(elt instanceof BODY) ; // Nothing
@@ -144,8 +144,8 @@ public class ModuleDefinition extends S_Module {
 			case Scode.S_CONSTSPEC->    CONST.of(false);
 			case Scode.S_LABELSPEC->    new LABELSPEC();
 			case Scode.S_RECORD->       new RECORD();
-			case Scode.S_PROFILE->      new PROFILE(); // InProfile(P_VISIBLE);
-			case Scode.S_ROUTINESPEC->  new ROUTINESPEC(); // SpecRut(true);
+			case Scode.S_PROFILE->      new PREV_PROFILE(); // InProfile(P_VISIBLE);
+			case Scode.S_ROUTINESPEC->  PREV_ROUTINE.ofSpec(true); // SpecRut(true);
 			case Scode.S_INSERT->       new INSERT(false);
 			case Scode.S_SYSINSERT->    new INSERT(true);
 			case Scode.S_DECL->			new LINE(1);

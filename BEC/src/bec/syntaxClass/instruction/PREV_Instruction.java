@@ -4,17 +4,19 @@ import java.util.Vector;
 
 import bec.segment.ProgramSegment;
 import bec.syntaxClass.programElement.ProgramElement;
+import bec.syntaxClass.programElement.routine.PREV_ROUTINE;
+import bec.syntaxClass.programElement.routine.PREV_ROUTINESPEC;
 import bec.syntaxClass.value.CONST;
 import bec.util.Scode;
 import bec.util.Util;
 
-public class Instruction extends ProgramElement {
+public class PREV_Instruction extends ProgramElement {
 	
 //	%title ***   I n s t r u c t i o n   ***
-	public static Vector<Instruction> inInstructionSet(){
-		Vector<Instruction> instructionSet = new Vector<Instruction>();
+	public static Vector<PREV_Instruction> inInstructionSet(){
+		Vector<PREV_Instruction> instructionSet = new Vector<PREV_Instruction>();
 		LOOP:while(true) {
-			Instruction instr = inInstruction();
+			PREV_Instruction instr = inInstruction();
 			if(instr == null) break LOOP;
 			instructionSet.add(instr);
 			Scode.inputInstr();
@@ -28,13 +30,13 @@ public class Instruction extends ProgramElement {
 		return instructionSet;
 	}
 
-	public static Instruction inInstruction() {
+	public static PREV_Instruction inInstruction() {
 //		System.out.println("Parse.instruction: "+Scode.edInstr(Scode.curinstr));
 		switch(Scode.curinstr) {
 			case Scode.S_CONSTSPEC:   return CONST.of(false);
 			case Scode.S_CONST:       return CONST.of(true);
 			case Scode.S_RECORD:      return new RECORD();
-			case Scode.S_ROUTINESPEC: Util.IERR("NOT IMPLEMENTED: " + Scode.edInstr(Scode.curinstr)); // SpecRut(false)
+			case Scode.S_ROUTINESPEC: return PREV_ROUTINE.ofSpec(false); // SpecRut(false)
 			case Scode.S_SETOBJ:      Util.IERR("SSTMT.SETOBJ is not implemented");
 			case Scode.S_GETOBJ:      Util.IERR("SSTMT.GETOBJ is not implemented");
 			case Scode.S_ACCESS, Scode.S_ACCESSV: Util.IERR("SSTMT.ACCESS is not implemented");

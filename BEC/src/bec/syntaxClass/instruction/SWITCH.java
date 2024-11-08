@@ -8,7 +8,7 @@ import bec.util.Global;
 import bec.util.Scode;
 import bec.virtualMachine.SVM_SWITCH;
 
-public class SWITCH extends Instruction {
+public class SWITCH extends PREV_Instruction {
 	int tag;
 	int size;
 	MemAddr[] DESTAB;
@@ -23,7 +23,6 @@ public class SWITCH extends Instruction {
 		DESTAB = new MemAddr[size];
 	}
 
-	
 	@Override
 	public void doCode() {
 //        InTag(%tag%);
@@ -52,7 +51,8 @@ public class SWITCH extends Instruction {
 //
 //%+E        a.sibreg:=bOR(bOR(128,bEBX),iEBX); -- swtab+[4*EBX] 
 //        Qf3(qJMPM,0,0,0,a);
-      	Global.PSEG.emit(new SVM_SWITCH(DESTAB), "SWITCH("+size+')');
+      	Global.PSEG.emit(new SVM_SWITCH(DESTAB), "");
+      	Global.PSEG.dump("SWITCH: ");
 	}
 	
 	@Override

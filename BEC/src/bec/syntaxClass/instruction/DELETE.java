@@ -2,7 +2,7 @@ package bec.syntaxClass.instruction;
 
 import bec.util.Scode;
 
-public class DELETE extends Instruction {
+public class DELETE extends PREV_Instruction {
 	int tag;
 	
 	public DELETE() {

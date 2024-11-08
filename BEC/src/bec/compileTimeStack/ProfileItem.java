@@ -1,13 +1,13 @@
 package bec.compileTimeStack;
 
-import bec.syntaxClass.programElement.routine.PROFILE;
+import bec.syntaxClass.programElement.routine.PREV_PROFILE;
 
 public class ProfileItem extends StackItem {
 	int type;
-	public PROFILE spc;
+	public PREV_PROFILE spc;
 	public int nasspar;
 	
-	public ProfileItem(int tagVoid, PROFILE spc) {
+	public ProfileItem(int tagVoid, PREV_PROFILE spc) {
 //	      prf.kind:=K_ProfileItem;
 		this.type = tagVoid;
 //	      prf qua StackItem.repdist:=TTAB(type).nbyte;

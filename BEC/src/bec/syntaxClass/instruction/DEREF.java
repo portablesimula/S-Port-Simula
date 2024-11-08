@@ -3,7 +3,7 @@ package bec.syntaxClass.instruction;
 import bec.compileTimeStack.CTStack;
 import bec.util.Scode;
 
-public class DEREF extends Instruction {
+public class DEREF extends PREV_Instruction {
 	
 	/**
 	 * addressing_instruction ::= deref

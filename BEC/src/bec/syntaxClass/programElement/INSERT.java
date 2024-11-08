@@ -54,6 +54,8 @@ public class INSERT extends ProgramElement {
 			
 		}
 		System.out.println("**************   End of  -  Input-module  " + modident + "  " + modcheck + "   **************");
+		Global.dumpDisplay("END INSERT: ");
+//		Util.IERR("");
 	}
 
 	@Override

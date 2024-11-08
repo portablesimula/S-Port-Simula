@@ -6,7 +6,7 @@ import bec.util.Global;
 import bec.util.Util;
 import bec.virtualMachine.SVM_POPtoMEM;
 
-public class RUPDATE extends Instruction {
+public class RUPDATE extends PREV_Instruction {
 	
 	/**
 	 * assign_instruction ::= assign | update | rupdate

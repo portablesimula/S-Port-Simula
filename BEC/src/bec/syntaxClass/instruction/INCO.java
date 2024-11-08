@@ -1,6 +1,6 @@
 package bec.syntaxClass.instruction;
 
-public class INCO extends Instruction {
+public class INCO extends PREV_Instruction {
 	
 	/**
 	 * addressing_instruction ::= inco

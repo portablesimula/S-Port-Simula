@@ -197,7 +197,7 @@ public class CTStack {
 		if(tos.atrState == Address.State.NotStacked) {
 //	           TOS qua Address.AtrState:=FromConst;
 //	           Qf2(qPUSHC,0,FreePartReg,cVAL,TOS qua Address.Offset);
-			Util.IERR("NOT IMPL");
+			Global.PSEG.emit(new SVM_NOT_IMPL(), "assertAtrStacked-1: "+tos);
 		} else if(tos.atrState == Address.State.Calculated) {
 			if(tos.offset != 0) {
 //	%+E             Qf2(qLOADC,0,qEAX,cVAL,TOS qua Address.Offset);
@@ -206,7 +206,7 @@ public class CTStack {
 //	                TOS qua Address.Offset:=0;
 				
 //				CTStack.dumpStack("assertAtrStacked");
-				Global.PSEG.emit(new SVM_NOT_IMPL(), "assertAtrStacked: "+tos);
+				Global.PSEG.emit(new SVM_NOT_IMPL(), "assertAtrStacked-2: "+tos);
 			}
 		}	      
 	}
@@ -262,7 +262,7 @@ public class CTStack {
 //	      endif;
 		
 		getTosValueIn86(reg);
-		Util.IERR("");
+//		Util.IERR("");
 	}
 
 	public static void getTosValueIn86(int reg) { // import range(0:255) reg;
@@ -286,7 +286,7 @@ public class CTStack {
 		} else if(tos instanceof Temp) {
 			Global.PSEG.emit(new SVM_POPtoREG(reg), "getTosValueIn86'Temp: ");
 			Global.PSEG.dump("getTosValueIn86'Temp: ");
-			Util.IERR("NOT IMPL");			
+//			Util.IERR("NOT IMPL");			
 		} else if(tos instanceof Coonst) {
 			Global.PSEG.dump("getTosValueIn86: ");
 			Util.IERR("NOT IMPL");			

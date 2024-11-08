@@ -7,7 +7,7 @@ import bec.util.Scode;
 import bec.util.Util;
 import bec.virtualMachine.SVM_GOTO;
 
-public class BJUMP extends Instruction {
+public class BJUMP extends PREV_Instruction {
 	int destination;
 	
 	public BJUMP() {

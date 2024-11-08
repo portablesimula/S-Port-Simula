@@ -11,7 +11,7 @@ import bec.util.Util;
 import bec.virtualMachine.SVM_NEG;
 import bec.virtualMachine.SVM_NOT_IMPL;
 
-public class INDEX extends Instruction {
+public class INDEX extends PREV_Instruction {
 	int instr;
 	
 	/**

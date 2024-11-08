@@ -1,6 +1,6 @@
 package bec.syntaxClass.instruction;
 
-public class POPALL extends Instruction {
+public class POPALL extends PREV_Instruction {
 	
 	/**
 	 * stack_instruction ::= pop

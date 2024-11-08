@@ -7,17 +7,17 @@ import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.segment.MemAddr;
 import bec.syntaxClass.SyntaxClass;
-import bec.syntaxClass.instruction.Instruction;
+import bec.syntaxClass.instruction.PREV_Instruction;
 import bec.util.Global;
 import bec.util.QuantityDescriptor;
 import bec.util.Scode;
 import bec.util.Util;
 
-public class CONST extends Instruction {
+public class CONST extends PREV_Instruction {
 	int tag;
-	QuantityDescriptor quant;
+	public QuantityDescriptor quant;
 	RepetitionValue value;
-	MemAddr address;
+	public MemAddr address;
 	
 	private CONST(int tag) {
 		this.tag = tag;
@@ -86,7 +86,7 @@ public class CONST extends Instruction {
 	// ***********************************************************************************************
 	
 	public CONST(AttributeInputStream inpt) throws IOException {
-		tag = inpt.readTag();
+		tag = inpt.readTag(this);
 		quant = QuantityDescriptor.read(inpt);
 //		value = RepetitionValue.read(inpt);
 		address = MemAddr.read(inpt);
