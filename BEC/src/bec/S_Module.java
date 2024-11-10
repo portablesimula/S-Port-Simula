@@ -3,13 +3,13 @@ package bec;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import PREV.syntaxClass.SyntaxClass;
+import PREV.syntaxClass.instruction.RECORD;
+import PREV.syntaxClass.programElement.PREV_Variable;
+import PREV.syntaxClass.programElement.routine.PREV_PROFILE;
+import PREV.syntaxClass.programElement.routine.PREV_ROUTINE;
+import PREV.syntaxClass.value.PREV_CONST;
 import bec.segment.Segment;
-import bec.syntaxClass.SyntaxClass;
-import bec.syntaxClass.instruction.RECORD;
-import bec.syntaxClass.programElement.Variable;
-import bec.syntaxClass.programElement.routine.PREV_PROFILE;
-import bec.syntaxClass.programElement.routine.PREV_ROUTINE;
-import bec.syntaxClass.value.CONST;
 import bec.util.Global;
 import bec.util.Scode;
 
@@ -27,7 +27,7 @@ public class S_Module extends SyntaxClass {
 	public void write() throws IOException {
 		if(Global.ATTR_OUTPUT_TRACE)
 			System.out.println("**************   Begin  -  Output-module  " + modident + "  " + modcheck + "   **************");
-		AttributeOutputStream modoupt = new AttributeOutputStream(new FileOutputStream(Global.getAttrFileName(modident)));
+		AttributeOutputStream modoupt = new AttributeOutputStream(new FileOutputStream(Global.getAttrFileName(modident, ".AT2")));
 		modoupt.writeKind(Scode.S_MODULE);
 		modoupt.writeString(modident);
 		modoupt.writeString(modcheck);
@@ -43,8 +43,8 @@ public class S_Module extends SyntaxClass {
 			else if(elt instanceof RECORD) doWrite = true;
 			else if(elt instanceof PREV_PROFILE) doWrite = true;
 			else if(elt instanceof PREV_ROUTINE)	doWrite = true;
-			else if(elt instanceof CONST) doWrite = true;
-			else if(elt instanceof Variable var) {
+			else if(elt instanceof PREV_CONST) doWrite = true;
+			else if(elt instanceof PREV_Variable var) {
 				if(var.instr == Scode.S_GLOBAL) doWrite = true;
 				if(var.instr == Scode.S_LOCAL) doWrite = true;
 			}

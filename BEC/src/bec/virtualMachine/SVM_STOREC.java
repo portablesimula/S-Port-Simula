@@ -1,7 +1,7 @@
 package bec.virtualMachine;
 
+import PREV.syntaxClass.value.Value;
 import bec.segment.MemAddr;
-import bec.syntaxClass.value.Value;
 
 //The value is stored at addr...
 public class SVM_STOREC extends SVM_Instruction {

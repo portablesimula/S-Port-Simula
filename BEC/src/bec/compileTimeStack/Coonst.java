@@ -1,6 +1,6 @@
 package bec.compileTimeStack;
 
-import bec.syntaxClass.value.Value;
+import PREV.syntaxClass.value.Value;
 import bec.util.Util;
 
 //Record Coonst:Temp;               --- Value is also in 'itm'

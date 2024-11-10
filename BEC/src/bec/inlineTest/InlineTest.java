@@ -13,10 +13,11 @@ public class InlineTest {
 		String scodeSource = Pick_RTS_Source();		
 		
 		Global.verbose = true;
+		Global.traceMode = 4;
 		Global.SCODE_INPUT_TRACE = true;
 		Global.PRINT_SYNTAX_TREE = true;
 //		Global.ATTR_INPUT_TRACE = true;
-//		Global.ATTR_OUTPUT_TRACE = true;
+		Global.ATTR_OUTPUT_TRACE = true;
 //		Global.ATTR_INPUT_DUMP = true;
 		Global.ATTR_OUTPUT_DUMP = true;
 //		Global.SEGMENT_INPUT_DUMP = true;
@@ -26,9 +27,9 @@ public class InlineTest {
 	}
 
 	private static String Pick_RTS_Source() {
-//		return "C:/Simuletta/SCode/simulaRTS/RT.scd";
+		return "C:/Simuletta/SCode/simulaRTS/RT.scd";
 //		return "C:/Simuletta/SCode/simulaRTS/SYSR.scd";
-		return "C:/Simuletta/SCode/simulaRTS/KNWN.scd";
+//		return "C:/Simuletta/SCode/simulaRTS/KNWN.scd";
 //		return "C:/Simuletta/SCode/simulaRTS/UTIL.scd";		
 //		return "C:/Simuletta/SCode/simulaRTS/STRG.scd";
 //		return "C:/Simuletta/SCode/simulaRTS/CENT.scd";

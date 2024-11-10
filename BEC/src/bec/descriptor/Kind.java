@@ -16,11 +16,13 @@ public class Kind {
 	public static final int K_ProfileItem=24,K_Address=25,K_Temp=26,K_Coonst=27;
 	public static final int K_Result=28;
 //	 --- Arrays etc. ---
-	public static final int K_RefBlock=29,K_WordBlock=30,K_AddrBlock=31;
+//	public static final int K_RefBlock=29,K_WordBlock=30,K_AddrBlock=31;
 //	 --- Others ---
 	public static final int K_BSEG=32;
+	public static final int K_Exit=33;
+	public static final int K_Retur=34;
 //
-	public static final int K_Max=33;  // Max value of object kind codes  + 1
+	public static final int K_Max=35;  // Max value of object kind codes  + 1
 
 
 //	---------     P r o f i l e    K i n d    C o d e s      ---------

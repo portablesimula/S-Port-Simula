@@ -2,11 +2,11 @@ package bec.util;
 
 import java.io.File;
 
+import PREV.syntaxClass.SyntaxClass;
 import bec.descriptor.Descriptor;
 import bec.segment.DataSegment;
 import bec.segment.MemAddr;
 import bec.segment.ProgramSegment;
-import bec.syntaxClass.SyntaxClass;
 
 public class Global {
 	public static boolean INLINE_TESTING = false;
@@ -41,15 +41,19 @@ public class Global {
 			DISPL.set(tag, d);
 			if(Global.traceMode != 0) System.out.println("Display(" + Scode.edTag(tag) + ") = " +d);
 		}
+		if(d == null) Util.IERR("");
+//		if(tag == 313) {
+//			System.out.println("Global.intoDisplay: "+Scode.edTag(tag) + "  " + d);
+//		}
 	}
 
 	public static void dumpDISPL(String title) {
-		System.out.println("============ "+title+" BEGIN Dump Display ================");
+		System.out.println("============ "+title+" BEGIN Dump DISPL ================");
 		for(int i=32;i<DISPL.size();i++) {
 			Descriptor elt =DISPL.get(i);
 			System.out.println("  " + i + ": " + elt);
 		}
-		System.out.println("============ "+title+"ENDOF Dump Display ================");
+		System.out.println("============ "+title+"ENDOF Dump DISPL ================");
 	}
 
 	public static void dumpDisplay(String title) {
@@ -71,6 +75,8 @@ public class Global {
 	public static int curline;		// Current source line number
 	public static int nTags; // See: INSERT
 
+	public static Array<Integer> TAGTAB; // Tag Table (during Module I/O)
+
 	public static boolean insideRoutine;  // Inside Routine Body indicator
 
 	public static DataSegment CSEG; // Constant Segment
@@ -87,14 +93,14 @@ public class Global {
 		return s;
 	}
 
-	public static String getAttrFileName(String modident) {
+	public static String getAttrFileName(String modident, String suffix) {
 		if(modident == null) {
 			int p = scodeSource.indexOf('.');
 			String s = scodeSource.substring(0, p);
 //			Util.IERR(s + ".AT2");
-			return s + ".AT2";
+			return s + suffix;
 		} else {
-			return rtsDir + modident + ".AT2";
+			return rtsDir + modident + suffix;
 		}
 	}
 }

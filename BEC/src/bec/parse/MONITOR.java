@@ -1,10 +1,18 @@
 package bec.parse;
 
+import java.io.IOException;
+
+import bec.ModuleIO;
+import bec.descriptor.CONST;
+import bec.descriptor.Kind;
+import bec.descriptor.ProfileDescr;
 import bec.descriptor.ROUTINE;
 import bec.descriptor.RecordDescr;
+import bec.descriptor.Variable;
 import bec.segment.DataSegment;
 import bec.segment.ProgramSegment;
 import bec.segment.Segment;
+import bec.util.Array;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
@@ -102,23 +110,21 @@ public class MONITOR {
 			switch(Scode.curinstr) {
 			case Scode.S_GLOBAL:
 //				inGlobal
-				Util.IERR("NOT IMPL");
+				Variable.ofGlobal(Global.DSEG);
+//				Util.IERR("NOT IMPL");
 				break;
 			case Scode.S_CONSTSPEC:
-//				inConstant(false)
-				Util.IERR("NOT IMPL");
+				CONST.inConstant(false);
 				break;
 			case Scode.S_CONST:
-//				inConstant(true)
-				Util.IERR("NOT IMPL");
+				CONST.inConstant(true);
 				break;
 			case Scode.S_RECORD:
 //				RecordDescr.InRecord();
-				new RecordDescr();
+				RecordDescr.of();
 				break;
            case Scode.S_PROFILE:
-//        	    InProfile(P_VISIBLE)
-				Util.IERR("NOT IMPL");
+        	   ProfileDescr.inProfile(Kind.P_VISIBLE);
 				break;
            case Scode.S_ROUTINE:
         	   ROUTINE.inRoutine();
@@ -154,31 +160,33 @@ public class MONITOR {
 		}
 //
 //	%+S E:  repeat while CurInstr=S_TAG
-//	%+S     do InTag(%itag%); xtag:=InputNumber;
-//	%+SD       if xtag.HI >= MxpXtag then CAPERR(CapTags) endif;
-//	%+S        if   TAGTAB(xtag.HI)=none
-//	%+S        then TAGTAB(xtag.HI):=
-//	%+S             NEWOBJ(K_WordBlock,size(WordBlock)) endif;
-//	%+S        TAGTAB(xtag.HI).elt(xtag.LO):=itag;
-//	%+S        InputInstr;
-//	%+S        if xtag.val>nXtag then nXtag:=xtag.val endif;
-//	%+S     endrepeat;
-//	%+S     OutputModule(nXtag);
-//
-//	%+S     if CurInstr <> S_BODY then
-//	%+S     IERR("Illegal termination of module head") endif;
-//
+		Global.TAGTAB = new Array<Integer>();
+		int nXtag = 0;
+		while(Scode.curinstr == Scode.S_TAG) {
+			int itag = Scode.inTag();
+			int xtag = Scode.inNumber();
+			Global.TAGTAB.set(xtag, itag);
+			Scode.inputInstr();
+			if(xtag > nXtag) nXtag = xtag;
+		}
+			
+			
+		try {
+			ModuleIO.outputModule(nXtag);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		Global.dumpDISPL("MONITOR'END: ");
+		if(Scode.curinstr != Scode.S_BODY) Util.IERR("Illegal termination of module head");
+		Scode.inputInstr();
 //	%+SC    repeat InputInstr while CurInstr=S_INIT
 //	%+SC    do IERR("InterfaceModule: Init values is not supported");
 //	%+SC       InTag(%wrd%); intype; SkipRepValue;
 //	%+SC    endrepeat;
-//
-//	%+S     if CurInstr <> S_ENDMODULE then
-//	%+S     IERR("Improper termination of module") endif;
-//
-//	---     peepExhaust(); --- nothing to work on
-//	%+S     ENDASM;
-		Util.IERR("NOT IMPL");
+
+		if(Scode.curinstr != Scode.S_ENDMODULE) Util.IERR("Improper termination of module");
 	}
 
 	public static void setLine(int type) {

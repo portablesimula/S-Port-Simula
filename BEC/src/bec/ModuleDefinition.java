@@ -3,23 +3,23 @@ package bec;
 import java.io.IOException;
 import java.util.Vector;
 
+import PREV.syntaxClass.instruction.LINE;
+import PREV.syntaxClass.instruction.RECORD;
+import PREV.syntaxClass.programElement.BODY;
+import PREV.syntaxClass.programElement.INFO;
+import PREV.syntaxClass.programElement.INSERT;
+import PREV.syntaxClass.programElement.LABELSPEC;
+import PREV.syntaxClass.programElement.PREV_Variable;
+import PREV.syntaxClass.programElement.ProgramElement;
+import PREV.syntaxClass.programElement.SETSWITCH;
+import PREV.syntaxClass.programElement.TAGLIST;
+import PREV.syntaxClass.programElement.routine.PREV_PROFILE;
+import PREV.syntaxClass.programElement.routine.PREV_ROUTINE;
+import PREV.syntaxClass.programElement.routine.PREV_ROUTINESPEC;
+import PREV.syntaxClass.value.PREV_CONST;
 import bec.segment.DataSegment;
 import bec.segment.ProgramSegment;
 import bec.segment.Segment;
-import bec.syntaxClass.instruction.LINE;
-import bec.syntaxClass.instruction.RECORD;
-import bec.syntaxClass.programElement.BODY;
-import bec.syntaxClass.programElement.INFO;
-import bec.syntaxClass.programElement.INSERT;
-import bec.syntaxClass.programElement.LABELSPEC;
-import bec.syntaxClass.programElement.Variable;
-import bec.syntaxClass.programElement.ProgramElement;
-import bec.syntaxClass.programElement.SETSWITCH;
-import bec.syntaxClass.programElement.TAGLIST;
-import bec.syntaxClass.programElement.routine.PREV_PROFILE;
-import bec.syntaxClass.programElement.routine.PREV_ROUTINE;
-import bec.syntaxClass.programElement.routine.PREV_ROUTINESPEC;
-import bec.syntaxClass.value.CONST;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
@@ -96,8 +96,8 @@ public class ModuleDefinition extends S_Module {
 
 		LOOP:while(true) {
 			switch(Scode.nextByte()) {
-				case Scode.S_LOCAL: Scode.inputInstr(); localQuantities.add(new Variable(Scode.S_LOCAL)); break;
-				case Scode.S_CONST: Scode.inputInstr(); localQuantities.add(CONST.of(true)); break;
+				case Scode.S_LOCAL: Scode.inputInstr(); localQuantities.add(new PREV_Variable(Scode.S_LOCAL)); break;
+				case Scode.S_CONST: Scode.inputInstr(); localQuantities.add(PREV_CONST.of(true)); break;
 				default: break LOOP;
 			}
 		}
@@ -117,7 +117,7 @@ public class ModuleDefinition extends S_Module {
 		
 		for(ProgramElement elt:programElements) {
 			boolean ok = false;
-			if(elt instanceof CONST) ok = true;
+			if(elt instanceof PREV_CONST) ok = true;
 			else if(elt instanceof PREV_PROFILE) ok = true;
 			else if(elt instanceof PREV_ROUTINE) ok = true;
 			
@@ -140,8 +140,8 @@ public class ModuleDefinition extends S_Module {
 //		System.out.println("ModuleDefinition.visible: curinstr = " + Scode.edInstr(Scode.curinstr));
 		boolean result = true;
 		switch(Scode.curinstr) {
-			case Scode.S_CONST->   		CONST.of(true);
-			case Scode.S_CONSTSPEC->    CONST.of(false);
+			case Scode.S_CONST->   		PREV_CONST.of(true);
+			case Scode.S_CONSTSPEC->    PREV_CONST.of(false);
 			case Scode.S_LABELSPEC->    new LABELSPEC();
 			case Scode.S_RECORD->       new RECORD();
 			case Scode.S_PROFILE->      new PREV_PROFILE(); // InProfile(P_VISIBLE);

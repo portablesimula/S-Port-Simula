@@ -3,7 +3,7 @@ package bec.compileTimeStack;
 import java.util.HashMap;
 import java.util.Vector;
 
-import bec.syntaxClass.instruction.RECORD;
+import PREV.syntaxClass.instruction.RECORD;
 import bec.util.Scode;
 
 public class DataType {
@@ -22,6 +22,11 @@ public class DataType {
 	private DataType(int size, Kind kind) {
 		this.size = size;
 		this.kind = kind;
+	}
+
+	public static DataType dataType(int type) {
+		DataType dt = TMAP.get(type);
+		return dt;
 	}
 
 	public static int typeSize(int type) {
@@ -56,6 +61,7 @@ public class DataType {
 	public static void newRecType(int tag, int size) {
 		DataType x = new DataType(size, null);
 		TMAP.put(tag, x);
+		System.out.println("DataType.newRecType: " + Scode.edTag(tag) + ", size="+size);
 	}
 
 	private static void newBasType(int type, int size, Kind kind) {

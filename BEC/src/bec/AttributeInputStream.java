@@ -4,12 +4,12 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import PREV.syntaxClass.SyntaxClass;
+import PREV.syntaxClass.instruction.RECORD;
+import PREV.syntaxClass.programElement.PREV_Variable;
+import PREV.syntaxClass.programElement.routine.PREV_PROFILE;
+import PREV.syntaxClass.value.PREV_CONST;
 import bec.segment.DataSegment;
-import bec.syntaxClass.SyntaxClass;
-import bec.syntaxClass.instruction.RECORD;
-import bec.syntaxClass.programElement.Variable;
-import bec.syntaxClass.programElement.routine.PREV_PROFILE;
-import bec.syntaxClass.value.CONST;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
@@ -168,9 +168,9 @@ public class AttributeInputStream {
 			case Scode.S_BSEG:	    return DataSegment.readObject(inpt);
 			case Scode.S_RECORD:    return RECORD.readObject(inpt);
 			case Scode.S_PROFILE:   return PREV_PROFILE.readObject(inpt);
-			case Scode.S_CONST:     return CONST.readObject(inpt);
+			case Scode.S_CONST:     return PREV_CONST.readObject(inpt);
 			case Scode.S_GLOBAL, Scode.S_LOCAL, Scode.S_IMPORT, Scode.S_EXPORT, Scode.S_EXIT:
-				return Variable.readObject(inpt,kind);
+				return PREV_Variable.readObject(inpt,kind);
 			case Scode.S_ENDMODULE: return null;
 			
 			default: Util.IERR("IMPOSSIBLE "+Scode.edInstr(kind));

@@ -2,22 +2,23 @@ package bec.util;
 
 import java.io.IOException;
 
+import PREV.syntaxClass.instruction.RECORD;
+import PREV.syntaxClass.value.AttributeAddress;
+import PREV.syntaxClass.value.BooleanValue;
+import PREV.syntaxClass.value.CharacterValue;
+import PREV.syntaxClass.value.GeneralAddress;
+import PREV.syntaxClass.value.IntegerValue;
+import PREV.syntaxClass.value.LongRealValue;
+import PREV.syntaxClass.value.ObjectAddress;
+import PREV.syntaxClass.value.ProgramAddress;
+import PREV.syntaxClass.value.RealValue;
+import PREV.syntaxClass.value.RoutineAddress;
+import PREV.syntaxClass.value.SizeValue;
+import PREV.syntaxClass.value.Value;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
+import bec.descriptor.RecordDescr;
 import bec.segment.DataSegment;
-import bec.syntaxClass.instruction.RECORD;
-import bec.syntaxClass.value.AttributeAddress;
-import bec.syntaxClass.value.BooleanValue;
-import bec.syntaxClass.value.CharacterValue;
-import bec.syntaxClass.value.GeneralAddress;
-import bec.syntaxClass.value.IntegerValue;
-import bec.syntaxClass.value.LongRealValue;
-import bec.syntaxClass.value.ObjectAddress;
-import bec.syntaxClass.value.ProgramAddress;
-import bec.syntaxClass.value.RealValue;
-import bec.syntaxClass.value.RoutineAddress;
-import bec.syntaxClass.value.SizeValue;
-import bec.syntaxClass.value.Value;
 
 public class Type {
 	public int tag;
@@ -68,9 +69,9 @@ public class Type {
 		if(this.isSimple()) {
 			dseg.emit(defaultValue(), comment);
 		} else {
-			Object obj = Global.Display.get(tag);
-//			System.out.println("Type.emitDefaultValue: tag="+tag);
-			if(obj instanceof RECORD rec) {
+			Object obj = Global.DISPL.get(tag);
+			System.out.println("Type.emitDefaultValue: tag="+tag+", obj="+obj.getClass().getSimpleName());
+			if(obj instanceof RecordDescr rec) {
 				rec.emitDefaultValues(dseg, 1, comment);
 			} else Util.IERR(""+obj);
 			
@@ -79,9 +80,12 @@ public class Type {
 	
 	public int size() {
 		if(this.isSimple()) return(1);
-		Object obj = Global.Display.get(tag);
-		if(obj instanceof RECORD rec) {
-			return rec.size();
+		Object obj = Global.DISPL.get(tag);
+//		if(obj instanceof RECORD rec) {
+//			return rec.size();
+		if(obj instanceof RecordDescr rec) {
+			return rec.nbyte;
+//		} else Util.IERR("IMPOSSIBLE: " + Scode.edTag(tag) + "  " + obj.getClass().getSimpleName());
 		} else Util.IERR("IMPOSSIBLE: " + Scode.edTag(tag));
 		return 0;
 	}

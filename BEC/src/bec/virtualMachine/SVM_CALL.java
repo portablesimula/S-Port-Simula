@@ -1,6 +1,6 @@
 package bec.virtualMachine;
 
-import bec.syntaxClass.programElement.routine.PREV_ROUTINE;
+import PREV.syntaxClass.programElement.routine.PREV_ROUTINE;
 
 public class SVM_CALL extends SVM_Instruction {
 	PREV_ROUTINE rut;

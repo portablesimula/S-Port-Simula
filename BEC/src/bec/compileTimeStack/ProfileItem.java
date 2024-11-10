@@ -1,6 +1,6 @@
 package bec.compileTimeStack;
 
-import bec.syntaxClass.programElement.routine.PREV_PROFILE;
+import PREV.syntaxClass.programElement.routine.PREV_PROFILE;
 
 public class ProfileItem extends StackItem {
 	int type;

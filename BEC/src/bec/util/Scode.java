@@ -3,7 +3,7 @@ package bec.util;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import bec.syntaxClass.SyntaxClass;
+import PREV.syntaxClass.SyntaxClass;
 import removed.java.Scomn;
 
 public class Scode {
@@ -458,6 +458,7 @@ public class Scode {
 	public final static int TAG_PADDR = 10;
 	public final static int TAG_RADDR = 11;
 	public final static int TAG_SIZE  = 12;
+	public final static int T_max=12; // Max value of predefined type
 	
 //    ------   S  -  I  N  S  T  R  U  C  T  I  O  N  S   ------
 

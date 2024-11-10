@@ -5,21 +5,21 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Vector;
 
+import PREV.syntaxClass.SyntaxClass;
+import PREV.syntaxClass.instruction.LINE;
+import PREV.syntaxClass.instruction.RECORD;
+import PREV.syntaxClass.programElement.INFO;
+import PREV.syntaxClass.programElement.INSERT;
+import PREV.syntaxClass.programElement.PREV_Variable;
+import PREV.syntaxClass.programElement.ProgramElement;
+import PREV.syntaxClass.programElement.SETSWITCH;
+import PREV.syntaxClass.programElement.TAG;
+import PREV.syntaxClass.programElement.TAGLIST;
+import PREV.syntaxClass.programElement.routine.PREV_PROFILE;
+import PREV.syntaxClass.programElement.routine.PREV_ROUTINE;
+import PREV.syntaxClass.value.PREV_CONST;
 import bec.segment.DataSegment;
 import bec.segment.Segment;
-import bec.syntaxClass.SyntaxClass;
-import bec.syntaxClass.instruction.LINE;
-import bec.syntaxClass.instruction.RECORD;
-import bec.syntaxClass.programElement.INFO;
-import bec.syntaxClass.programElement.INSERT;
-import bec.syntaxClass.programElement.Variable;
-import bec.syntaxClass.programElement.ProgramElement;
-import bec.syntaxClass.programElement.SETSWITCH;
-import bec.syntaxClass.programElement.TAG;
-import bec.syntaxClass.programElement.TAGLIST;
-import bec.syntaxClass.programElement.routine.PREV_PROFILE;
-import bec.syntaxClass.programElement.routine.PREV_ROUTINE;
-import bec.syntaxClass.value.CONST;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
@@ -89,7 +89,7 @@ public class InterfaceModule extends S_Module {
 			this.write();
 			
 			if(Global.ATTR_OUTPUT_DUMP) {
-				INSERT.insertModule(Global.getAttrFileName(modident));  // TODO: TESTING
+				INSERT.insertModule(Global.getAttrFileName(modident, ".AT2"));  // TODO: TESTING
 	  			System.out.println("InterfaceModule.parse: END TESTING");
 			}
 			
@@ -106,9 +106,9 @@ public class InterfaceModule extends S_Module {
 	private ProgramElement inGlobalElement() {
 		Scode.inputInstr();
 		switch(Scode.curinstr) {
-			case Scode.S_GLOBAL:	    return new Variable(Scode.S_GLOBAL);
-			case Scode.S_CONSTSPEC:		return CONST.of(false);
-			case Scode.S_CONST:			return CONST.of(true);
+			case Scode.S_GLOBAL:	    return new PREV_Variable(Scode.S_GLOBAL);
+			case Scode.S_CONSTSPEC:		return PREV_CONST.of(false);
+			case Scode.S_CONST:			return PREV_CONST.of(true);
 			case Scode.S_RECORD:		return new RECORD();
 			case Scode.S_PROFILE:		return new PREV_PROFILE(); // InProfile(P_VISIBLE);
 //			case Scode.S_ROUTINE:		return new ROUTINE();

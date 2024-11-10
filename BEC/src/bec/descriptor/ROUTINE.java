@@ -1,13 +1,13 @@
 package bec.descriptor;
 
+import PREV.syntaxClass.instruction.PREV_Instruction;
+import PREV.syntaxClass.programElement.PREV_Variable;
+import PREV.syntaxClass.programElement.routine.PREV_PROFILE;
 import bec.compileTimeStack.CTStack;
 import bec.parse.Instruction;
 import bec.segment.MemAddr;
 import bec.segment.ProgramSegment;
 import bec.segment.Segment;
-import bec.syntaxClass.instruction.PREV_Instruction;
-import bec.syntaxClass.programElement.Variable;
-import bec.syntaxClass.programElement.routine.PREV_PROFILE;
 import bec.util.Global;
 import bec.util.ResolvedType;
 import bec.util.Scode;
@@ -32,9 +32,7 @@ public class ROUTINE {
 //	%+S       else smb.val:=0 endif;
 //	%+S       v:=NEWOBJ(K_IntRoutine,size(IntDescr));
 //	%+S       v.adr:=NewFixAdr(CSEGID,smb);
-		IntDescr v = new IntDescr();
-		v.kind = Kind.K_IntRoutine;
-		Global.intoDisplay(v,tag);
+		IntDescr v = new IntDescr(Kind.K_IntRoutine, tag);
 	}
 
 //	%title ***   R o u t i n e    B o d y   ***
@@ -57,12 +55,12 @@ public class ROUTINE {
 		ProgramSegment PSEG = new ProgramSegment("PSEG_" + id, Segment.SEG_CODE);
 		ProgramSegment prevPSEG = Global.PSEG; Global.PSEG = PSEG;
 		IntDescr rut = (IntDescr) Global.DISPL.get(tag);
-		if(rut == null) rut = new IntDescr();
+		if(rut == null) rut = new IntDescr(Kind.K_IntRoutine, tag);
 		rut.adr = new MemAddr(PSEG,0);
 
 		ProfileDescr prf = (ProfileDescr) Global.DISPL.get(tag);
 		boolean visflag = prf.kind == Kind.P_ROUTINE;
-		rut.type = prf.type;
+		rut.tag = prf.tag;
 		int nlocbyte = 0;
 		Global.insideRoutine = true;
 
@@ -124,8 +122,7 @@ public class ROUTINE {
 		
 //	%+S      locvar:=NEWOBJ(K_LocalVar,size(LocDescr));
 //	%+S      locvar.type:=type; IntoDisplay(locvar,tag);
-		LocDescr locvar = new LocDescr();
-		locvar.type = type; Global.intoDisplay(locvar,tag);
+		LocDescr locvar = new LocDescr(Kind.K_LocalVar, tag);
 		
 		nlocbyte = nlocbyte + (nbyte*count);
 		locvar.rela = nlocbyte;

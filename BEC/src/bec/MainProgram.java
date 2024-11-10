@@ -2,17 +2,17 @@ package bec;
 
 import java.util.Vector;
 
-import bec.syntaxClass.programElement.Variable;
-import bec.syntaxClass.programElement.routine.PREV_PROFILE;
-import bec.syntaxClass.programElement.routine.PREV_ROUTINE;
-import bec.syntaxClass.value.CONST;
+import PREV.syntaxClass.instruction.CallInstruction;
+import PREV.syntaxClass.programElement.BODY;
+import PREV.syntaxClass.programElement.INSERT;
+import PREV.syntaxClass.programElement.PREV_Variable;
+import PREV.syntaxClass.programElement.ProgramElement;
+import PREV.syntaxClass.programElement.TAGLIST;
+import PREV.syntaxClass.programElement.routine.PREV_PROFILE;
+import PREV.syntaxClass.programElement.routine.PREV_ROUTINE;
+import PREV.syntaxClass.value.PREV_CONST;
 import bec.segment.DataSegment;
 import bec.segment.Segment;
-import bec.syntaxClass.instruction.CallInstruction;
-import bec.syntaxClass.programElement.BODY;
-import bec.syntaxClass.programElement.INSERT;
-import bec.syntaxClass.programElement.ProgramElement;
-import bec.syntaxClass.programElement.TAGLIST;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
@@ -47,7 +47,7 @@ public class MainProgram extends S_Module {
 		Global.CSEG = new DataSegment("CSEG_" + modident, Segment.SEG_CONST);
 		Global.DSEG = new DataSegment("DSEG_" + modident, Segment.SEG_DATA);
 		Scode.expect(Scode.S_MAIN);
-		while(Scode.accept(Scode.S_LOCAL)) programElements.add(new Variable(Scode.S_LOCAL));
+		while(Scode.accept(Scode.S_LOCAL)) programElements.add(new PREV_Variable(Scode.S_LOCAL));
 		
 		LOOP: while(true) {
 			ProgramElement elt = ProgramElement.inProgramElement();

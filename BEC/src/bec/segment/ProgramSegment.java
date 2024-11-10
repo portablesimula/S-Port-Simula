@@ -3,9 +3,9 @@ package bec.segment;
 import java.io.IOException;
 import java.util.Vector;
 
+import PREV.syntaxClass.value.Value;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
-import bec.syntaxClass.value.Value;
 import bec.util.Scode;
 import bec.virtualMachine.SVM_Instruction;
 

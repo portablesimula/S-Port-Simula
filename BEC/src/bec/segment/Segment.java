@@ -1,7 +1,8 @@
 package bec.segment;
 
 import java.util.HashMap;
-import bec.syntaxClass.SyntaxClass;
+
+import PREV.syntaxClass.SyntaxClass;
 
 public class Segment extends SyntaxClass {
 	public String ident;

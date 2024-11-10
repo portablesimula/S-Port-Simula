@@ -7,4 +7,9 @@ import bec.segment.MemAddr;
 //end;                             -- K_IntRoutine   Local Routine
 public class IntDescr extends Descriptor {
 	MemAddr adr;
+
+	public IntDescr(int kind, int tag) {
+		super(kind, tag);
+		// TODO Auto-generated constructor stub
+	}
 }
