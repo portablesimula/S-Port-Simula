@@ -3,16 +3,14 @@ package bec.descriptor;
 import java.io.IOException;
 import java.util.Vector;
 
-import PREV.syntaxClass.SyntaxClass;
-import PREV.syntaxClass.programElement.PREV_Variable;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
+import bec.InsertStatement;
 import bec.ModuleIO;
 import bec.compileTimeStack.DataType;
 import bec.segment.DataSegment;
-import bec.segment.Segment;
 import bec.util.Global;
-import bec.util.QuantityDescriptor;
+import bec.util.ResolvedType;
 import bec.util.Scode;
 import bec.util.Util;
 
@@ -56,7 +54,7 @@ public class ProfileDescr extends Descriptor {
 	
 	private ProfileDescr(int kind, int tag) {
 		super(kind, tag);
-		System.out.println("NEW ProfileDescr: " + Scode.edTag(tag));
+//		System.out.println("NEW ProfileDescr: " + Scode.edTag(tag));
 	}
 
 //	%title ***   I n p u t   P r o f i l e   ***
@@ -88,12 +86,9 @@ public class ProfileDescr extends Descriptor {
 
 		int kind = defkind;
 		int ptag = Scode.inTag();
-		System.out.println("ProfileDescr.inProfile: " + Scode.edTag(ptag));
+//		System.out.println("ProfileDescr.inProfile: " + Scode.edTag(ptag));
 //		pr.ptag = ptag;
 		ProfileDescr pr = new ProfileDescr(Kind.K_ProfileDescr, ptag);
-//		Global.intoDisplay(pr,ptag);
-		System.out.println("ProfileDescr.inProfile: curinstr="+Scode.edInstr(Scode.curinstr));
-		System.out.println("ProfileDescr.inProfile: nextByte="+Scode.edInstr(Scode.nextByte()));
 		if(Scode.nextByte() == Scode.S_EXTERNAL) {
 			 // peculiar ::= external body:newtag nature:string xid:string
 			Scode.inputInstr();
@@ -175,7 +170,7 @@ public class ProfileDescr extends Descriptor {
 			
 //			String pID = "Name";//Scode.TAGTABLE[profileTag];
 			String pID = Scode.edTag(ptag);
-			pr.DSEG = new DataSegment("DSEG_" + Global.moduleID + '_' + pID, Segment.SEG_DATA);
+			pr.DSEG = new DataSegment("DSEG_" + Global.moduleID + '_' + pID, Kind.K_SEG_DATA);
 
 		}
 		int npar = 0;
@@ -184,26 +179,33 @@ public class ProfileDescr extends Descriptor {
 //	      repeat InputInstr while CurInstr=S_IMPORT
 //	      do InTag(%ptag%); type:=intype;
 		Scode.inputInstr();
-		System.out.println("ProfileDescr.inProfile: BEFORE IMPORT: " + Scode.edInstr(Scode.curinstr));
+//		System.out.println("ProfileDescr.inProfile: BEFORE IMPORT: " + Scode.edInstr(Scode.curinstr));
 		LocDescr w = null;
 		while(Scode.curinstr == Scode.S_IMPORT) {
 			 // import_definition ::= import parm:newtag quantity_descriptor
+			 //   quantity_descriptor ::= resolved_type < Rep count:number >?
+			 //		 * 
+			 //		  resolved_type
+			 //		  		::= resolved_structure | simple_type
+			 //		  		::= INT range lower:number upper:number
+			 //		  		::= SINT
 			if(USE_RTStack) {
 //				int ptag = Scode.inTag();
-				QuantityDescriptor quant = new QuantityDescriptor();
-				System.out.println("ProfileDescr'IMPORT: " + Scode.edTag(ptag) + " " + quant);
-				int type = quant.type.tag;
-				int lng = DataType.typeSize(type);
+//				QuantityDescriptor quant = new QuantityDescriptor();
+				ResolvedType type = new ResolvedType();
+				int repCount = (Scode.accept(Scode.S_REP)) ? Scode.inNumber() : 1;
+				System.out.println("ProfileDescr'IMPORT: " + Scode.edTag(ptag) + " " + type);
+				int lng = DataType.typeSize(type.tag);
 	
 				if(lng == 0) Util.IERR("Illegal Type on Parameter");
 				nbyte = nbyte + lng;
 //				v.rela = nbyte;
-				LocDescr v = LocDescr.ofParameter(ptag, quant, nbyte);
+				LocDescr v = LocDescr.ofParameter(ptag, type, nbyte);
 				if(npar == 0) fpar = v; else w.nextag = ptag;
 				System.out.println("ProfileDescr'IMPORT-2: " + Scode.edTag(ptag) + " " + v);
 				Util.IERR("");
-				if(quant.repCount > 1) {
-					nbyte = nbyte + (quant.repCount * lng)-lng;
+				if(repCount > 1) {
+					nbyte = nbyte + (repCount * lng)-lng;
 //	%+C           	if nCnt >= 4
 //	%+C           	then IERR("MINUT: Too many rep-params"); nCnt:=3 endif;
 //	%+C           	if count.val>255 then IERR("MINUT: too large count") endif;
@@ -224,7 +226,7 @@ public class ProfileDescr extends Descriptor {
 //	      wxt:=0;
 		if(Scode.curinstr == Scode.S_EXIT) {
 			if(USE_RTStack) {
-//	      then v:=NEWOBJ(K_Parameter,size(LocDescr)); v.type:=T_PADDR;
+//	      then v:=NEWOBJ(K_Import,size(LocDescr)); v.type:=T_PADDR;
 //	           v.rela:=AllignFac; -- Offset of return address in stack head
 //	           InTag(%ptag%); wxt:=qEXIT; IntoDisplay(v,ptag);
 //	           InputInstr;
@@ -286,10 +288,10 @@ public class ProfileDescr extends Descriptor {
 		case Scode.S_INTERFACE -> profile += " INTERFACE " + ident;
 		}
 		System.out.println(indent + profile);
-		for(Variable imprt:imports) System.out.println(indent + "   " + imprt.toString());
+		if(imports != null) for(Variable imprt:imports) System.out.println(indent + "   " + imprt.toString());
 		if(exit != null)   System.out.println(indent + "   " + exit.toString());
 		if(export != null) System.out.println(indent + "   " + export.toString());
-		DSEG.dump("");
+		if(DSEG != null) DSEG.dump("");
 		System.out.println(indent + "ENDPROFILE");		
 	}
 	
@@ -432,19 +434,27 @@ public class ProfileDescr extends Descriptor {
 	// ***********************************************************************************************
 
 	public void write(AttributeOutputStream oupt) throws IOException {
+		if(Global.ATTR_OUTPUT_TRACE) System.out.println("ProfileDescr.Write: " + this);
 		oupt.writeKind(kind);
 		oupt.writeShort(ModuleIO.chgType(tag));
 //		oupt.writeKind(Pkind);
 		oupt.writeShort(nparbyte);
-		for(Variable imprt:imports) imprt.write(oupt);
-		if(exit   != null) exit.write(oupt);
-		if(export != null) export.write(oupt);
+//		oupt.writeShort(imports.size()); // npar
+//		for(Variable imprt:imports) imprt.write(oupt);
+//		if(exit   != null) exit.write(oupt);
+//		if(export != null) export.write(oupt);
 //		Util.IERR("");
 	}
 
-	public static SyntaxClass read(AttributeInputStream inpt) throws IOException {
-		Util.IERR("Static Method 'readObject' needs a redefiniton");
-		return(null);
+	public static ProfileDescr read(AttributeInputStream inpt) throws IOException {
+		int tag = inpt.readShort();
+		tag = InsertStatement.current.chgInType(tag);
+		ProfileDescr prf = new ProfileDescr(Kind.K_RecordDescr, tag);
+		prf.nparbyte = inpt.readShort();
+		if(Global.ATTR_OUTPUT_TRACE) System.out.println("ProfileDescr.Read: " + prf);
+		prf.print("   ");
+//		Util.IERR("");
+		return prf;
 	}
 
 

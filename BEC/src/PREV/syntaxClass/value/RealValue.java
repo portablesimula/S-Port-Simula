@@ -6,7 +6,7 @@ import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Scode;
 
-public class RealValue extends Value {
+public class RealValue extends PREV_Value {
 	float value;
 	
 	public RealValue(float value) {

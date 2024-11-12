@@ -162,7 +162,7 @@ public class Scomn {
 //	 Define K_Qfrm4=5,K_Qfrm4b=6,K_Qfrm4c=7,K_Qfrm5=8,K_Qfrm6=9;
 //	 --- Descriptors ---
 //	 Define K_RecordDescr=10,K_TypeRecord=11,K_Attribute=12;
-//	 Define K_Parameter=13,K_Export=14,K_LocalVar=15;
+//	 Define K_Import=13,K_Export=14,K_LocalVar=15;
 //	 Define K_GlobalVar=16,K_ExternVar=17;
 //	 Define K_ProfileDescr=18,K_IntRoutine=19,K_ExtRoutine=20;
 //	 Define K_IntLabel=21,K_ExtLabel=22,K_SwitchDescr=23;
@@ -1232,7 +1232,7 @@ public class Scomn {
 //	end;                             -- else: Reladdr of pointers
 //
 //	Record LocDescr:Descriptor;      -- K_Attribute  Offset = rela    SIZE = 8 bytes
-//	                                 -- K_Parameter  Address = [BP] + rela
+//	                                 -- K_Import  Address = [BP] + rela
 //	                                 -- K_Export     Address = [BP] + rela
 //	                                 -- K_LocalVar   Address = [BP] - rela
 //	begin range(0:MaxWord) rela;

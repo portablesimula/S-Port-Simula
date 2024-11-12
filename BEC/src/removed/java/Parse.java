@@ -345,7 +345,7 @@ public class Parse {
 //	                d.loca:=v qua LocDescr.rela;
 //	%-E             d.sbireg:=bOR(oSS,rmBP);
 //	%+E             d.sibreg:=bEBP+NoIREG;
-//	           when K_Parameter:
+//	           when K_Import:
 //	                d.kind:=reladr; d.segmid.val:=0;
 //	                d.rela.val:=v qua LocDescr.rela;
 //	%-E             d.sbireg:=bOR(oSS,rmBP);
@@ -360,7 +360,7 @@ public class Parse {
 //	                     IERR("Illegal push of: ")
 //	           endcase;
 //	           Push(NewAddress(v.type,0,d));
-//	           if v.kind=K_Parameter
+//	           if v.kind=K_Import
 //	           then TOS.repdist:= - wAllign(%TOS.repdist%) endif;
 //	           if CurInstr=S_PUSHV then GQfetch endif;
 //

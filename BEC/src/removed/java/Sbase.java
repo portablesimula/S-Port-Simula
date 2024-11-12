@@ -1704,7 +1704,7 @@ public class Sbase {
 //	%+D    when K_ExternVar:
 //	%+D         ed(F,"Extern "); edtype(F,x.type); ed(F," Address = ");
 //	%+D         edadr(F,Ext2MemAddr(x qua ExtDescr.adr));
-//	%+D    when K_Parameter,K_Export:
+//	%+D    when K_Import,K_Export:
 //	%+D         edtype(F,x.type); ed(F,"  rela = ");
 //	%+D         EdWrd(F,x qua LocDescr.rela);
 //	%+D    when K_LocalVar:
@@ -1804,7 +1804,7 @@ public class Sbase {
 //	%+D         K_ExtLabel,
 //	%+D         K_ExtRoutine:    s:=size(ExtDescr);
 //	%+D    when K_Attribute,
-//	%+D         K_Parameter,
+//	%+D         K_Import,
 //	%+D         K_Export,
 //	%+D         K_LocalVar:      s:=size(LocDescr);
 //	%+D    when K_TypeRecord:    s:=size(TypeRecord);
@@ -1847,7 +1847,7 @@ public class Sbase {
 //	%+D    when K_ExtLabel:      s:="ExtLabel";
 //	%+D    when K_ExtRoutine:    s:="ExtRoutine";
 //	%+D    when K_Attribute:     s:="Attribute";
-//	%+D    when K_Parameter:     s:="Parameter";
+//	%+D    when K_Import:     s:="Parameter";
 //	%+D    when K_Export:        s:="Export";
 //	%+D    when K_LocalVar:      s:="LocDescr";
 //	%+D    when K_TypeRecord:    s:="TypeRecord";

@@ -9,6 +9,7 @@ import PREV.syntaxClass.instruction.RECORD;
 import PREV.syntaxClass.programElement.PREV_Variable;
 import PREV.syntaxClass.programElement.routine.PREV_PROFILE;
 import PREV.syntaxClass.value.PREV_CONST;
+import bec.descriptor.Kind;
 import bec.segment.DataSegment;
 import bec.util.Global;
 import bec.util.Scode;
@@ -26,7 +27,7 @@ public class AttributeInputStream {
 //	 */
 //	public ObjectReferenceMap objectReference;
 	
-	private boolean TRACE = false; //true;
+	private boolean TRACE = true;//false; //true;
 
     public AttributeInputStream(InputStream inpt) throws IOException {
     	this.inpt = new DataInputStream(inpt);
@@ -42,7 +43,7 @@ public class AttributeInputStream {
     
     public int readKind() throws IOException {
     	int kind = inpt.readByte() & 0xFF;
-    	if(TRACE) System.out.println("AttributeInputStream.readKind: "+kind+':'+Scode.edInstr(kind));
+    	if(TRACE) System.out.println("AttributeInputStream.readKind: "+kind+':'+Kind.edKind(kind));
     	return kind;
 	}
     
@@ -132,11 +133,14 @@ public class AttributeInputStream {
 //	}
 
     public String readString() throws IOException {
+//    	int test = inpt.readShort(); if(test != 9999) Util.IERR(""+test);
     	int lng = inpt.readShort()-1;
+//    	test = inpt.readShort(); if(test != 8888) Util.IERR(""+test);
     	if(lng < 0) {
         	if(TRACE) System.out.println("AttributeInputStream.readString: null");
     		return null;
     	}
+    	if(TRACE) System.out.println("AttributeInputStream.readString: lng="+(char)lng+" "+lng);
     	StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < lng; i++) sb.append(inpt.readChar());
     	String s = sb.toString();
@@ -164,17 +168,18 @@ public class AttributeInputStream {
 		int kind = inpt.readKind();
 	
 //		System.out.println("AttributeInputStream.readObj: "+Scode.edInstr(kind));
-		switch(kind) {
-			case Scode.S_BSEG:	    return DataSegment.readObject(inpt);
-			case Scode.S_RECORD:    return RECORD.readObject(inpt);
-			case Scode.S_PROFILE:   return PREV_PROFILE.readObject(inpt);
-			case Scode.S_CONST:     return PREV_CONST.readObject(inpt);
-			case Scode.S_GLOBAL, Scode.S_LOCAL, Scode.S_IMPORT, Scode.S_EXPORT, Scode.S_EXIT:
-				return PREV_Variable.readObject(inpt,kind);
-			case Scode.S_ENDMODULE: return null;
-			
-			default: Util.IERR("IMPOSSIBLE "+Scode.edInstr(kind));
-		}
+//		switch(kind) {
+//			case Scode.S_BSEG:	    return DataSegment.readObject(inpt);
+//			case Scode.S_RECORD:    return RECORD.readObject(inpt);
+//			case Scode.S_PROFILE:   return PREV_PROFILE.readObject(inpt);
+//			case Scode.S_CONST:     return PREV_CONST.readObject(inpt);
+//			case Scode.S_GLOBAL, Scode.S_LOCAL, Scode.S_IMPORT, Scode.S_EXPORT, Scode.S_EXIT:
+//				return PREV_Variable.readObject(inpt,kind);
+//			case Scode.S_ENDMODULE: return null;
+//			
+//			default: Util.IERR("IMPOSSIBLE "+Scode.edInstr(kind));
+//		}
+		Util.IERR("");
 		return null;
 	}
 //		case ObjectKind.NULL:

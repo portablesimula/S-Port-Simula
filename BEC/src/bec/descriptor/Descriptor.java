@@ -2,8 +2,6 @@ package bec.descriptor;
 
 import java.io.IOException;
 
-import PREV.syntaxClass.SyntaxClass;
-import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Global;
 import bec.util.Util;
@@ -40,10 +38,10 @@ public class Descriptor {
 		Util.IERR("Method 'write' needs a redefinition in "+this.getClass().getSimpleName());
 	}
 
-	public static SyntaxClass read(AttributeInputStream inpt) throws IOException {
-		Util.IERR("Static Method 'readObject' needs a redefiniton");
-		return(null);
-	}
+//	public static Descriptor read(AttributeInputStream inpt, int kind) throws IOException {
+//		Util.IERR("Static Method 'readObject' needs a redefiniton");
+//		return(null);
+//	}
 
 
 }

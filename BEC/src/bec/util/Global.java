@@ -5,8 +5,8 @@ import java.io.File;
 import PREV.syntaxClass.SyntaxClass;
 import bec.descriptor.Descriptor;
 import bec.segment.DataSegment;
-import bec.segment.MemAddr;
 import bec.segment.ProgramSegment;
+import bec.value.MemAddr;
 
 public class Global {
 	public static boolean INLINE_TESTING = false;

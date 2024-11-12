@@ -7,7 +7,7 @@ import bec.AttributeOutputStream;
 import bec.util.ResolvedType;
 import bec.util.Scode;
 
-public class AttributeValue extends Value {
+public class AttributeValue extends PREV_Value {
 	int tag;
 	ResolvedType type;
 	RepetitionValue value;

@@ -165,6 +165,7 @@ public class Scode {
 	}	
 
 	public static int inTag(SyntaxClass displayEntry) {
+		Util.IERR("DO NOT USE THIS METHOD");
 		int tag = inTag();
 		Global.Display.set(tag, displayEntry);
 		return tag;

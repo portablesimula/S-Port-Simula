@@ -1,7 +1,7 @@
 package bec.compileTimeStack;
 
-import bec.segment.MemAddr;
 import bec.util.Scode;
+import bec.value.MemAddr;
 
 //Record Address:StackItem;
 //begin infix(MemAddr) Objadr;   -- Object Address

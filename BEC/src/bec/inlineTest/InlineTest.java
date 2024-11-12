@@ -2,11 +2,10 @@ package bec.inlineTest;
 
 import bec.util.Global;
 import bec.BecCompiler;
-import bec.S_Module;
 
 public class InlineTest {
 	String programHead;
-	S_Module module;
+//	PREV_S_Module module;
 	
 	public static void main(String[] argv) {
 //		String scodeSource = Pick_FEC_Source();

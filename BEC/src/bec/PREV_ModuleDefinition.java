@@ -15,21 +15,20 @@ import PREV.syntaxClass.programElement.SETSWITCH;
 import PREV.syntaxClass.programElement.TAGLIST;
 import PREV.syntaxClass.programElement.routine.PREV_PROFILE;
 import PREV.syntaxClass.programElement.routine.PREV_ROUTINE;
-import PREV.syntaxClass.programElement.routine.PREV_ROUTINESPEC;
 import PREV.syntaxClass.value.PREV_CONST;
+import bec.descriptor.Kind;
 import bec.segment.DataSegment;
 import bec.segment.ProgramSegment;
-import bec.segment.Segment;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
 
-public class ModuleDefinition extends S_Module {
+public class PREV_ModuleDefinition extends PREV_S_Module {
 	Vector<ProgramElement> localQuantities;
 	Vector<ProgramElement> programElements;
 	boolean withEndProgram;
 
-	public ModuleDefinition() {
+	public PREV_ModuleDefinition() {
 		localQuantities = new Vector<ProgramElement>();
 		programElements = new Vector<ProgramElement>();
 		parse();
@@ -81,9 +80,9 @@ public class ModuleDefinition extends S_Module {
 		modcheck = Scode.inString();
 		Global.moduleID = modident;
 		String sourceID = Global.getSourceID();
-		Global.CSEG = new DataSegment("CSEG_" + sourceID, Segment.SEG_CONST);
-		Global.DSEG = new DataSegment("DSEG_" + sourceID, Segment.SEG_DATA);
-		Global.PSEG = new ProgramSegment("PSEG_" + sourceID, Segment.SEG_CODE);
+		Global.CSEG = new DataSegment("CSEG_" + sourceID, Kind.K_SEG_CONST);
+		Global.DSEG = new DataSegment("DSEG_" + sourceID, Kind.K_SEG_DATA);
+		Global.PSEG = new ProgramSegment("PSEG_" + sourceID, Kind.K_SEG_CODE);
 
 		Scode.inputInstr();
 		while(visible()) Scode.inputInstr();

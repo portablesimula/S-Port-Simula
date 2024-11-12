@@ -7,11 +7,11 @@ import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Scode;
 
-public class RepetitionValue extends Value {
-	public Vector<Value> values;
+public class RepetitionValue extends PREV_Value {
+	public Vector<PREV_Value> values;
 	
 	public RepetitionValue() {
-		values = new Vector<Value>();
+		values = new Vector<PREV_Value>();
 		parse();
 	}
 
@@ -90,7 +90,7 @@ public class RepetitionValue extends Value {
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		for(Value value:values) {
+		for(PREV_Value value:values) {
 			sb.append(value).append(" ");
 		}
 		return sb.toString();
@@ -103,10 +103,10 @@ public class RepetitionValue extends Value {
 //		tag = inpt.readTag();
 //		type = ResolvedType.read(inpt);
 //		System.out.println("NEW IMPORT: " + this);
-		values = new Vector<Value>();
+		values = new Vector<PREV_Value>();
 		int n = inpt.readShort();
 		for(int i=0;i<n;i++) {
-			Value value = Value.read(inpt);
+			PREV_Value value = PREV_Value.read(inpt);
 			values.add(value);
 		}
 	}
@@ -116,7 +116,7 @@ public class RepetitionValue extends Value {
 //		oupt.writeTag(tag);
 //		type.write(oupt);
 		oupt.writeShort(values.size());
-		for(Value value:values) {
+		for(PREV_Value value:values) {
 			value.write(oupt);
 		}
 	}

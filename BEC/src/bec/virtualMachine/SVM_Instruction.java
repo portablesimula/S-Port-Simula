@@ -7,6 +7,7 @@ import bec.AttributeOutputStream;
 import bec.util.Util;
 
 public class SVM_Instruction {
+	public int opcode;
 
 	public final static int iADD = 1;
 	public final static int iAND = 2;
@@ -28,8 +29,12 @@ public class SVM_Instruction {
 	public final static int iSUB = 18;
 	public final static int iSWITCH = 19;
 	public final static int iSYSCALL = 20;
+	public final static int iLINE = 21;
 	public final static int iNOT_IMPL = 99;
 	
+	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
 
 	public void write(AttributeOutputStream oupt) throws IOException {
 		Util.IERR("Method 'write' need a redefinition in " + this.getClass().getSimpleName());
@@ -63,6 +68,7 @@ public class SVM_Instruction {
 			case iSTOREC:	return SVM_STOREC.read(inpt);
 			case iSUB:		return SVM_SUB.read(inpt);
 			case iSWITCH:	return SVM_SWITCH.read(inpt);
+			case iLINE:		return SVM_LINE.read(inpt);
 			case iSYSCALL:	return SVM_SYSCALL.read(inpt);
 			case iNOT_IMPL:	return SVM_NOT_IMPL.read(inpt);
 			default: Util.IERR("MISSING: " + edOpcode(opcode));

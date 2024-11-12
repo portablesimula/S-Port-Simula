@@ -6,7 +6,7 @@ import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Scode;
 
-public class ObjectAddress extends Value {
+public class ObjectAddress extends PREV_Value {
 	boolean isONONE;
 	int tag;
 	

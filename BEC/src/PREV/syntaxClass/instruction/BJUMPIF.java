@@ -1,11 +1,11 @@
 package PREV.syntaxClass.instruction;
 
 import bec.compileTimeStack.CTStack;
-import bec.segment.MemAddr;
 import bec.util.Global;
 import bec.util.Relation;
 import bec.util.Scode;
 import bec.util.Util;
+import bec.value.MemAddr;
 import bec.virtualMachine.SVM_GOTOIF;
 
 public class BJUMPIF extends PREV_Instruction {

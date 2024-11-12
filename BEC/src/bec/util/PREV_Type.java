@@ -14,7 +14,7 @@ import PREV.syntaxClass.value.ProgramAddress;
 import PREV.syntaxClass.value.RealValue;
 import PREV.syntaxClass.value.RoutineAddress;
 import PREV.syntaxClass.value.SizeValue;
-import PREV.syntaxClass.value.Value;
+import PREV.syntaxClass.value.PREV_Value;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.descriptor.RecordDescr;
@@ -47,7 +47,7 @@ public class PREV_Type {
 		return tag <= Scode.TAG_SIZE;
 	}
 	
-	public Value defaultValue() {
+	public PREV_Value defaultValue() {
 		switch(tag) {
 			case Scode.TAG_BOOL:  return new BooleanValue(true);
 			case Scode.TAG_CHAR:  return new CharacterValue(0);

@@ -1,9 +1,11 @@
-package bec.segment;
+package bec.value;
 
 import java.io.IOException;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
+import bec.segment.Segment;
+import bec.util.Util;
 
 //%title ***   M e m o r y   A d d r e s s e s   ***
 //Define reladr=1,locadr=2,segadr=3,extadr=4,fixadr=5,knladr=6;
@@ -16,14 +18,6 @@ import bec.AttributeOutputStream;
 //--       E.g.  'opr1' and 'opr2'  are equal iff  'opr1=opr2'.
 //begin
 //      infix(wWORD) rela;       -- Relative byte address
-//%-E   range(0:MaxByte) sbireg; -- <m>1<sreg>3<m>1<bireg>3
-//%-E                            -- m: 1:following field is significant
-//%-E                            --    0:following field=0
-//%-E                            -- sreg:   000:ES, 001:CS, 010:SS, 011:DS
-//%-E                            -- bireg:  0=000:[BX]+[SI]   4=100:[SI]
-//%-E                            --         1=001:[BX]+[DI]   5=101:[DI]
-//%-E                            --         2=010:[BP]+[SI]   6=110:[BP]
-//%-E                            --         3=011:[BP]+[DI]   7=111:[BX]
 //%+E   range(0:MaxByte) sibreg; -- <ss>2<ireg>3<breg>3
 //%+E                            -- ss: Scale Factor 00=1,01=2,10=4,11=8
 //%+E                            -- ireg,breg: 000:[EAX]   001:[ECX]
@@ -43,13 +37,14 @@ import bec.AttributeOutputStream;
 //      variant infix(WORD) knlx;        -- knladr: KERNEL(knlx)
 //end;
 
-public class MemAddr {
+public class MemAddr extends Value {
 	public Segment seg;
 	public int ofst;
 	
 	public MemAddr(Segment seg,	int ofst) {
 		this.seg = seg;
 		this.ofst = ofst;
+		if(ofst > 9000 || ofst < 0) Util.IERR("");
 	}
 	
 	public String toString() {
@@ -62,16 +57,24 @@ public class MemAddr {
 	// ***********************************************************************************************
 	private MemAddr(AttributeInputStream inpt) throws IOException {
 		String ident = inpt.readString();
-		ofst = inpt.readInt();
-		seg = Segment.lookup(ident);
+//		ofst = inpt.readInt();
+		ofst = inpt.readShort();
+		if(ident != null) {
+			seg = Segment.lookup(ident);
+			if(seg == null) Util.IERR("Can't find Segment " + ident);
+		}
+		System.out.println("=============================================================================================================== " + this);
+		if(ofst > 9000 || ofst < 0) Util.IERR(""+ofst);
 //		Util.IERR(""+seg);
 //		System.out.println("NEW IMPORT: " + this);
 	}
 
 	public void write(AttributeOutputStream oupt) throws IOException {
-//		oupt.writeInstr(Scode.S_EXPORT);
 		oupt.writeString((seg==null)?null:seg.ident);
-		oupt.writeInt(ofst);
+//		oupt.writeInt(ofst);
+		oupt.writeShort(ofst);
+		if(ofst > 9000 || ofst < 0) Util.IERR("");
+		System.out.println("=============================================================================================================== " + this);
 	}
 
 	public static MemAddr read(AttributeInputStream inpt) throws IOException {

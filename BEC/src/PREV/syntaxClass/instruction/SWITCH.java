@@ -3,9 +3,9 @@ package PREV.syntaxClass.instruction;
 import java.util.Vector;
 
 import bec.compileTimeStack.CTStack;
-import bec.segment.MemAddr;
 import bec.util.Global;
 import bec.util.Scode;
+import bec.value.MemAddr;
 import bec.virtualMachine.SVM_SWITCH;
 
 public class SWITCH extends PREV_Instruction {

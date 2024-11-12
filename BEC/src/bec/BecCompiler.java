@@ -6,11 +6,9 @@ import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
 
-import java.util.Vector;
-
 public class BecCompiler {
 	String programHead;
-	S_Module module;
+//	PREV_S_Module module;
 	
 	public static void main(String[] argv) {
 		String scodeSource = null;
@@ -86,34 +84,34 @@ public class BecCompiler {
 	 * 		::= <module_definition>*
 	 * 		::= main <local_quantity>* <program_element>*
 	 */
-	private void parse() {
-		Scode.expect(Scode.S_PROGRAM);
-  		Global.progIdent = Scode.inString();
-  		
-  		switch(Scode.nextByte()) {
-	  		case Scode.S_GLOBAL -> new InterfaceModule();
-//	  		case Scode.S_MACRO  -> new MacroDefinition();
-	  		case Scode.S_MODULE -> inModules();
-	  		case Scode.S_MAIN ->   new MainProgram();
-  		}
-  		
-  		if(Scode.accept(Scode.S_GLOBAL)) {
-			new InterfaceModule();
-			Scode.inputInstr();
-		}
-	}
+//	private void parse() {
+//		Scode.expect(Scode.S_PROGRAM);
+//  		Global.progIdent = Scode.inString();
+//  		
+//  		switch(Scode.nextByte()) {
+//	  		case Scode.S_GLOBAL -> new InterfaceModule();
+////	  		case Scode.S_MACRO  -> new MacroDefinition();
+//	  		case Scode.S_MODULE -> inModules();
+//	  		case Scode.S_MAIN ->   new MainProgram();
+//  		}
+//  		
+//  		if(Scode.accept(Scode.S_GLOBAL)) {
+//			new InterfaceModule();
+//			Scode.inputInstr();
+//		}
+//	}
 	
 	
-	public static Vector<S_Module> inModules() {
-		Vector<S_Module> result = new Vector<S_Module>();
-  		S_Module module;
-  		do {
-  			module = new ModuleDefinition();
-  			result.add(module);
-//			System.out.println("SportBEC.parse: curinstr="+Scode.edInstr(Scode.curinstr));
-  		} while(Scode.accept(Scode.S_MODULE));
-  		return result;
-	}
+//	private static Vector<PREV_S_Module> inModules() {
+//		Vector<PREV_S_Module> result = new Vector<PREV_S_Module>();
+//  		PREV_S_Module module;
+//  		do {
+//  			module = new ModuleDefinition();
+//  			result.add(module);
+////			System.out.println("SportBEC.parse: curinstr="+Scode.edInstr(Scode.curinstr));
+//  		} while(Scode.accept(Scode.S_MODULE));
+//  		return result;
+//	}
 
 	public void print() {
 		

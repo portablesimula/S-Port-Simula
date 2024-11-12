@@ -7,15 +7,15 @@ import PREV.syntaxClass.SyntaxClass;
 import PREV.syntaxClass.instruction.PREV_Instruction;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
-import bec.segment.MemAddr;
 import bec.util.Global;
-import bec.util.QuantityDescriptor;
+import bec.util.PREV_QuantityDescriptor;
 import bec.util.Scode;
 import bec.util.Util;
+import bec.value.MemAddr;
 
 public class PREV_CONST extends PREV_Instruction {
 	int tag;
-	public QuantityDescriptor quant;
+	public PREV_QuantityDescriptor quant;
 	RepetitionValue value;
 	public MemAddr address;
 	
@@ -39,7 +39,7 @@ public class PREV_CONST extends PREV_Instruction {
 			if(constDef) Util.IERR("New CONSPEC but constDef="+constDef);
 			cnst = new PREV_CONST(tag);
 		}
-		cnst.quant = new QuantityDescriptor();
+		cnst.quant = new PREV_QuantityDescriptor();
 //		if(constDef) cnst.value = new RepetitionValue();
 		if(constDef) {
 			String comment = Scode.edTag(tag) + " Quant=" + cnst.quant;
@@ -59,13 +59,13 @@ public class PREV_CONST extends PREV_Instruction {
 	public void printTree(final int indent) {
 		if(value != null) {
 			boolean done = false;
-			if(value.values instanceof Vector<Value> vector) {
+			if(value.values instanceof Vector<PREV_Value> vector) {
 				if(vector instanceof Vector<?> elts) {
 					boolean first = true;
 					for(Object rVal:elts) {
 						if(first) sLIST(indent, "CONST " + Scode.edTag(tag) + " " + quant);
 						first = false;
-						((Value)rVal).printTree(indent + 1);							
+						((PREV_Value)rVal).printTree(indent + 1);							
 					} done = true;
 				}
 			}
@@ -87,7 +87,7 @@ public class PREV_CONST extends PREV_Instruction {
 	
 	public PREV_CONST(AttributeInputStream inpt) throws IOException {
 		tag = inpt.readTag(this);
-		quant = QuantityDescriptor.read(inpt);
+		quant = PREV_QuantityDescriptor.read(inpt);
 //		value = RepetitionValue.read(inpt);
 		address = MemAddr.read(inpt);
 

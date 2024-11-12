@@ -1,7 +1,7 @@
 package bec.virtualMachine;
 
-import bec.segment.MemAddr;
 import bec.util.Relation;
+import bec.value.MemAddr;
 
 public class SVM_GOTOIF extends SVM_GOTO {
 	Relation relation;

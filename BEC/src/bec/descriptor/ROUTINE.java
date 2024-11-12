@@ -5,13 +5,13 @@ import PREV.syntaxClass.programElement.PREV_Variable;
 import PREV.syntaxClass.programElement.routine.PREV_PROFILE;
 import bec.compileTimeStack.CTStack;
 import bec.parse.Instruction;
-import bec.segment.MemAddr;
 import bec.segment.ProgramSegment;
 import bec.segment.Segment;
 import bec.util.Global;
 import bec.util.ResolvedType;
 import bec.util.Scode;
 import bec.util.Util;
+import bec.value.MemAddr;
 import bec.virtualMachine.SVM_RETURN;
 
 public class ROUTINE {

@@ -45,6 +45,7 @@ public class ResolvedType extends Type {
 //		tag = inpt.readTag();
 		super(inpt);
 		inpt.readInstr();
+		System.out.println("NEW ResolvedType(inpt): " + Scode.edInstr(Scode.curinstr));
 		if(inpt.curinstr == Scode.S_RANGE) { range = Range.read(inpt); inpt.readInstr(); }
 		else if(inpt.curinstr == Scode.S_FIXREP) { fixrep = Fixrep.read(inpt); inpt.readInstr(); }
 		

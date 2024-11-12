@@ -2,10 +2,10 @@ package PREV.syntaxClass.instruction;
 
 import bec.compileTimeStack.Address;
 import bec.compileTimeStack.CTStack;
-import bec.segment.MemAddr;
 import bec.util.ResolvedType;
 import bec.util.Scode;
 import bec.util.Util;
+import bec.value.MemAddr;
 
 public class REFER extends PREV_Instruction {
 	ResolvedType type;

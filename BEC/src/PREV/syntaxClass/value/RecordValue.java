@@ -7,7 +7,7 @@ import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Scode;
 
-public class RecordValue extends Value {
+public class RecordValue extends PREV_Value {
 	int tag;
 	Vector<AttributeValue> attrValues;
 	

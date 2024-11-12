@@ -1,9 +1,9 @@
 package PREV.syntaxClass.instruction;
 
 import bec.compileTimeStack.CTStack;
-import bec.segment.MemAddr;
 import bec.util.Global;
 import bec.util.Util;
+import bec.value.MemAddr;
 import bec.virtualMachine.SVM_POPtoMEM;
 
 public class RUPDATE extends PREV_Instruction {

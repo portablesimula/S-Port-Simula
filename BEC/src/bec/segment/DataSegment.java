@@ -3,26 +3,37 @@ package bec.segment;
 import java.io.IOException;
 import java.util.Vector;
 
-import PREV.syntaxClass.value.AttributeAddress;
-import PREV.syntaxClass.value.BooleanValue;
-import PREV.syntaxClass.value.CharacterValue;
-import PREV.syntaxClass.value.DotAddress;
-import PREV.syntaxClass.value.GeneralAddress;
-import PREV.syntaxClass.value.IntegerValue;
-import PREV.syntaxClass.value.LongRealValue;
-import PREV.syntaxClass.value.ObjectAddress;
-import PREV.syntaxClass.value.ProgramAddress;
-import PREV.syntaxClass.value.RealValue;
-import PREV.syntaxClass.value.RoutineAddress;
-import PREV.syntaxClass.value.SizeValue;
-import PREV.syntaxClass.value.TextValue;
-import PREV.syntaxClass.value.Value;
+//import PREV.syntaxClass.value.AttributeAddress;
+//import PREV.syntaxClass.value.BooleanValue;
+//import PREV.syntaxClass.value.CharacterValue;
+//import PREV.syntaxClass.value.DotAddress;
+//import PREV.syntaxClass.value.GeneralAddress;
+//import PREV.syntaxClass.value.IntegerValue;
+//import PREV.syntaxClass.value.LongRealValue;
+//import PREV.syntaxClass.value.ObjectAddress;
+//import PREV.syntaxClass.value.ProgramAddress;
+//import PREV.syntaxClass.value.RealValue;
+//import PREV.syntaxClass.value.RoutineAddress;
+//import PREV.syntaxClass.value.SizeValue;
+//import PREV.syntaxClass.value.TextValue;
+//import PREV.syntaxClass.value.PREV_Value;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Global;
 import bec.util.ResolvedType;
 import bec.util.Scode;
 import bec.util.Util;
+import bec.value.AddressValue;
+import bec.value.BooleanValue;
+import bec.value.CharacterValue;
+import bec.value.DotAddress;
+import bec.value.IntegerValue;
+import bec.value.LongRealValue;
+import bec.value.MemAddr;
+import bec.value.RealValue;
+import bec.value.SizeValue;
+import bec.value.TextValue;
+import bec.value.Value;
 
 public class DataSegment extends Segment {
 	Vector<Value> values;
@@ -47,10 +58,11 @@ public class DataSegment extends Segment {
 	}
 
 	public MemAddr emitValue(String comment) {
-		MemAddr addr = Global.DSEG.nextAddress();
+//		MemAddr addr = Global.DSEG.nextAddress();
+		MemAddr addr = nextAddress();
 	LOOP:while(true) {
-			if(Global.ATTR_OUTPUT_TRACE)
-				System.out.println("DataSegment.emitValue: "+Scode.edInstr(Scode.nextByte())+"  Comment="+comment);
+//			if(Global.ATTR_OUTPUT_TRACE)
+//				System.out.println("DataSegment.emitValue: "+Scode.edInstr(Scode.nextByte())+"  Comment="+comment);
 			switch(Scode.nextByte()) {
 				case Scode.S_TEXT:     Scode.inputInstr(); emit(new TextValue(), comment); break;
 			    case Scode.S_C_INT:    Scode.inputInstr(); emit(new IntegerValue(), comment); break;
@@ -60,17 +72,17 @@ public class DataSegment extends Segment {
 			    case Scode.S_C_SIZE:   Scode.inputInstr(); emit(new SizeValue(false), comment); break;
 			    case Scode.S_TRUE:     Scode.inputInstr(); emit(new BooleanValue(true), comment); break;
 			    case Scode.S_FALSE:    Scode.inputInstr(); emit(new BooleanValue(false), comment); break;
-			    case Scode.S_C_AADDR:  Scode.inputInstr(); emit(new AttributeAddress(false), comment); break;
-			    case Scode.S_C_PADDR:  Scode.inputInstr(); emit(new ProgramAddress(false), comment); break;
-			    case Scode.S_C_RADDR:  Scode.inputInstr(); emit(new RoutineAddress(false), comment); break;
-			    case Scode.S_NOSIZE:   Scode.inputInstr(); emit(new SizeValue(true), comment); break;
-			    case Scode.S_ANONE:    Scode.inputInstr(); emit(new AttributeAddress(true), comment); break;
-			    case Scode.S_NOWHERE:  Scode.inputInstr(); emit(new ProgramAddress(true), comment); break;
-			    case Scode.S_NOBODY:   Scode.inputInstr(); emit(new RoutineAddress(true), comment); break;
-			    case Scode.S_ONONE:    Scode.inputInstr(); emit(new ObjectAddress(true), comment); break;
-			    case Scode.S_GNONE:    Scode.inputInstr(); emit(new GeneralAddress(true), comment); break;
-			    case Scode.S_C_OADDR:  Scode.inputInstr(); emit(new ObjectAddress(false), comment); break;
-			    case Scode.S_C_GADDR:  Scode.inputInstr(); emit(new GeneralAddress(false), comment); break;
+			    case Scode.S_NOSIZE:   Scode.inputInstr(); emit(null, comment); break;
+			    case Scode.S_ANONE:    Scode.inputInstr(); emit(null, comment); break;
+			    case Scode.S_NOWHERE:  Scode.inputInstr(); emit(null, comment); break;
+			    case Scode.S_NOBODY:   Scode.inputInstr(); emit(null, comment); break;
+			    case Scode.S_ONONE:    Scode.inputInstr(); emit(null, comment); break;
+			    case Scode.S_GNONE:    Scode.inputInstr(); emit(null, comment); break;
+			    case Scode.S_C_AADDR:  Scode.inputInstr(); emit(AddressValue.ofAADDR(), comment); break;
+			    case Scode.S_C_PADDR:  Scode.inputInstr(); emit(AddressValue.ofPADDR(), comment); break;
+			    case Scode.S_C_RADDR:  Scode.inputInstr(); emit(AddressValue.ofRADDR(), comment); break;
+			    case Scode.S_C_OADDR:  Scode.inputInstr(); emit(AddressValue.ofOADDR(), comment); break;
+			    case Scode.S_C_GADDR:  Scode.inputInstr(); emit(AddressValue.ofGADDR(), comment); break;
 			    case Scode.S_C_DOT:    Scode.inputInstr(); emit(new DotAddress(), comment); break;
 			    case Scode.S_C_RECORD: Scode.inputInstr(); emitRecordValue(comment); break;
 				default: break LOOP;
@@ -140,8 +152,10 @@ public class DataSegment extends Segment {
 //		System.out.println("NEW IMPORT: " + this);
 	}
 
+	@Override
 	public void write(AttributeOutputStream oupt) throws IOException {
-		oupt.writeInstr(Scode.S_BSEG);
+		if(Global.ATTR_OUTPUT_TRACE) System.out.println("DataSegment.Write: " + this);
+//		oupt.writeInstr(Scode.S_BSEG);
 		oupt.writeKind(segmentKind);
 		oupt.writeString(ident);
 		oupt.writeShort(values.size());
@@ -154,12 +168,12 @@ public class DataSegment extends Segment {
 		}
 	}
 
-	public static DataSegment readObject(AttributeInputStream inpt) throws IOException {
-		int segmentKind = inpt.readKind();
+	public static DataSegment readObject(AttributeInputStream inpt, int segmentKind) throws IOException {
+//		int segmentKind = inpt.readKind();
 		String ident = inpt.readString();
 		System.out.println("DataSegment.readObject: ident="+ident+", segmentKind="+segmentKind);
 		DataSegment seg = new DataSegment(ident, segmentKind, inpt);
-//		seg.dump();
+		if(Global.ATTR_INPUT_DUMP) seg.dump("DataSegment.readObject: ");
 //		Util.IERR("");
 		return seg;
 	}

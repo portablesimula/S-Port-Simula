@@ -4,7 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 import bec.AttributeInputStream;
-import bec.S_Module;
+import bec.PREV_S_Module;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;

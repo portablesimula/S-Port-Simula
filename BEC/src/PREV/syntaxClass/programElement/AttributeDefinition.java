@@ -4,15 +4,15 @@ import java.io.IOException;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
-import bec.util.QuantityDescriptor;
+import bec.util.PREV_QuantityDescriptor;
 import bec.util.Scode;
 
 public class AttributeDefinition extends ProgramElement {
 	public int tag;
-	public QuantityDescriptor quant;
+	public PREV_QuantityDescriptor quant;
 	public int rela;
 	
-	public AttributeDefinition(int tag, QuantityDescriptor quant, int rela) {
+	public AttributeDefinition(int tag, PREV_QuantityDescriptor quant, int rela) {
 		this.tag = tag;
 		this.quant = quant;
 		this.rela = rela;
@@ -25,7 +25,7 @@ public class AttributeDefinition extends ProgramElement {
 		this.rela = rela;
 		tag = Scode.inTag(this);
 //		System.out.println("NEW AttributeDefinition: tag="+tag);
-		quant = new QuantityDescriptor();
+		quant = new PREV_QuantityDescriptor();
 //		System.out.println("NEW AttributeDefinition: " + this);
 	}
 	
@@ -45,7 +45,7 @@ public class AttributeDefinition extends ProgramElement {
 	public AttributeDefinition(AttributeInputStream inpt) throws IOException {
 		tag = inpt.readTag(this);
 		rela = inpt.readShort();
-		quant = QuantityDescriptor.read(inpt);
+		quant = PREV_QuantityDescriptor.read(inpt);
 	}
 
 	public void write(AttributeOutputStream oupt) throws IOException {

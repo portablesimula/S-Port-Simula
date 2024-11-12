@@ -3,10 +3,10 @@ package PREV.syntaxClass.instruction;
 import PREV.syntaxClass.programElement.AttributeDefinition;
 import bec.compileTimeStack.Address;
 import bec.compileTimeStack.CTStack;
-import bec.segment.MemAddr;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
+import bec.value.MemAddr;
 
 /**
  * 

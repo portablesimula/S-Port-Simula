@@ -6,7 +6,7 @@ import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Scode;
 
-public class BooleanValue extends Value {
+public class BooleanValue extends PREV_Value {
 	boolean value;
 	
 	/**

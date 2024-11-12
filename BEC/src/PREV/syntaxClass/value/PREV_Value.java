@@ -8,7 +8,7 @@ import bec.AttributeOutputStream;
 import bec.util.Scode;
 import bec.util.Util;
 
-public class Value extends PREV_Instruction {
+public class PREV_Value extends PREV_Instruction {
 	public int type;
 
 	// ***********************************************************************************************
@@ -19,7 +19,7 @@ public class Value extends PREV_Instruction {
 		Util.IERR("Method 'write' needs a redefinition in "+this.getClass().getSimpleName());
 	}
 
-	public static Value read(AttributeInputStream inpt) throws IOException {
+	public static PREV_Value read(AttributeInputStream inpt) throws IOException {
 		int kind = inpt.readKind();
 //		System.out.println("Value.read: kind="+Scode.edInstr(kind));
 		switch(kind) {

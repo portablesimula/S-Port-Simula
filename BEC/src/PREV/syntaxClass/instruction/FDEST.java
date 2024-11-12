@@ -1,10 +1,10 @@
 package PREV.syntaxClass.instruction;
 
 import bec.compileTimeStack.CTStack;
-import bec.segment.MemAddr;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
+import bec.value.MemAddr;
 import bec.virtualMachine.SVM_GOTO;
 import bec.virtualMachine.SVM_NOOP;
 

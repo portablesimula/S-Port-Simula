@@ -3,9 +3,9 @@ package bec.descriptor;
 import java.io.IOException;
 import java.util.Vector;
 
-import PREV.syntaxClass.SyntaxClass;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
+import bec.InsertStatement;
 import bec.ModuleIO;
 import bec.compileTimeStack.DataType;
 import bec.segment.DataSegment;
@@ -24,7 +24,7 @@ public class RecordDescr extends Descriptor {
 	Vector<Integer> pntmap; // Only used by TypeRecord
 
 //	public RECORD RECORD_OBJECT;
-	public int tag;
+//	public int tag;
 	String info;
 	int prefixTag;
 //	Vector<AttributeDefinition> attributes;
@@ -41,7 +41,8 @@ public class RecordDescr extends Descriptor {
 		rec.parse();
 //		Global.intoDisplay(this, tag);
 		rec.nbyte = rec.size();
-		Global.dumpDISPL("NEW RecordDescr: ");
+//		Global.dumpDISPL("NEW RecordDescr: ");
+//		Util.IERR("");
 		return rec;
 	}
 	
@@ -103,7 +104,7 @@ public class RecordDescr extends Descriptor {
 			}
 			maxAlt = Math.max(maxAlt, altSize);
 		}
-		printTree("   ");
+//		print("   ");
 		if(maxAlt != size()) Util.IERR("maxAlt="+maxAlt+", size="+size());
 			
 //			curAttrs = attributes;
@@ -125,12 +126,12 @@ public class RecordDescr extends Descriptor {
 //				}
 //			} while(Scode.accept(Scode.S_ALT));
 
-//		if(Scode.inputTrace > 3) printTree(2);
+//		if(Scode.inputTrace > 3) print(2);
 		Scode.expect(Scode.S_ENDRECORD);
 			
 		if("TYPE".equalsIgnoreCase(info)) {
 			buildPointerMap();
-			printTree("   ");
+//			print("   ");
 			DataType.newRecType(tag, size());
 //			Util.IERR("");
 		}
@@ -170,7 +171,7 @@ public class RecordDescr extends Descriptor {
 
 	public void emitDefaultValues(DataSegment dseg, int repCount, String comment) {
 //		System.out.println("RECORD.emitDefaultValue: " + dseg + "  " + this);
-//		printTree(2);
+//		print(2);
 			
 		int rep = (repCount > 0) ? repCount : 1;
 		for(int i=0;i<rep;i++) {
@@ -181,15 +182,15 @@ public class RecordDescr extends Descriptor {
 //		Util.IERR("");
 	}
 		
-//	@Override
-	public void printTree(final String indent) {
+	@Override
+	public void print(final String indent) {
 		String head = "RECORD " + Scode.edTag(tag);
 		if(info != null)  head = head + " INFO " + info;
 		if(prefixTag > 0) head = head + " PREFIX " + Scode.edTag(prefixTag);
 //		sLIST(indent, head);
 		System.out.println(indent + head);
 //		for(AttributeDefinition attr:attributes) {
-		for(LocDescr attr:attributes) {
+		if(attributes != null) for(LocDescr attr:attributes) {
 //			sLIST(indent + 1, attr.toString());
 			System.out.println(indent + "   " + attr.toString());
 		}
@@ -269,6 +270,7 @@ public class RecordDescr extends Descriptor {
 //%+D            if buf.nchr <> 8 then IERR("OUTMOD:Dsize-3") endif;
 //             buf.chradr:=@rd; EnvOutBytes(modoupt,buf);
 //             if status<>0 then FILERR(modoupt,"Wdescr-3") endif;
+		if(Global.ATTR_OUTPUT_TRACE) System.out.println("RecordDescr.Write: " + this);
 		oupt.writeKind(kind);
 		oupt.writeShort(ModuleIO.chgType(tag));
 		oupt.writeShort(nbyte);
@@ -276,9 +278,16 @@ public class RecordDescr extends Descriptor {
 //		Util.IERR("Method 'write' needs a redefinition in "+this.getClass().getSimpleName());
 	}
 
-	public static SyntaxClass read(AttributeInputStream inpt) throws IOException {
-		Util.IERR("Static Method 'readObject' needs a redefiniton");
-		return(null);
+	public static RecordDescr read(AttributeInputStream inpt) throws IOException {
+		int tag = inpt.readShort();
+		tag = InsertStatement.current.chgInType(tag);
+		RecordDescr rec = new RecordDescr(Kind.K_RecordDescr, tag);
+		rec.nbyte = inpt.readShort();
+		rec.nbrep = inpt.readShort();
+		if(Global.ATTR_OUTPUT_TRACE) System.out.println("RecordDescr.Read: " + rec);
+		rec.print("   ");
+//		Util.IERR("");
+		return rec;
 	}
 
 

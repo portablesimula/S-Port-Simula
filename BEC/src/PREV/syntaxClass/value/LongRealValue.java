@@ -6,7 +6,7 @@ import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Scode;
 
-public class LongRealValue extends Value {
+public class LongRealValue extends PREV_Value {
 	double value;
 	
 	public LongRealValue(double value) {

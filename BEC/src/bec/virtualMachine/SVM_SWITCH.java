@@ -1,6 +1,6 @@
 package bec.virtualMachine;
 
-import bec.segment.MemAddr;
+import bec.value.MemAddr;
 
 /**
  * 

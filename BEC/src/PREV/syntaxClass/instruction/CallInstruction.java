@@ -11,7 +11,7 @@ import bec.compileTimeStack.Address;
 import bec.compileTimeStack.CTStack;
 import bec.compileTimeStack.StackItem;
 import bec.util.Global;
-import bec.util.QuantityDescriptor;
+import bec.util.PREV_QuantityDescriptor;
 import bec.util.Scode;
 import bec.util.Util;
 import bec.virtualMachine.SVM_CALL;
@@ -147,7 +147,7 @@ public class CallInstruction extends PREV_Instruction {
 //	      int c = pItm.spc.imports.get(pItm.nasspar).count;
 //		QuantityDescriptor pt = pItm.spc.imports.get(pItm.nasspar).quant;
 		PREV_Variable param = pItm.spc.imports.get(pItm.nasspar);
-		QuantityDescriptor quant = pItm.spc.imports.get(pItm.nasspar).quant;
+		PREV_QuantityDescriptor quant = pItm.spc.imports.get(pItm.nasspar).quant;
 		int pt = quant.type.tag;
 		int c = quant.repCount;
 //	      n:=TTAB(pt).nbyte; i:=nrep;

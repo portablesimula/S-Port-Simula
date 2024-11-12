@@ -8,7 +8,7 @@ import bec.AttributeOutputStream;
 import bec.util.Scode;
 import bec.util.Util;
 
-public class DotAddress extends Value {
+public class DotAddress extends PREV_Value {
 	Vector<Integer> attrTags;
 	int globalOrConstTag;
 	int terminator;

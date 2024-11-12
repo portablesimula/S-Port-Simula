@@ -6,7 +6,7 @@ import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Scode;
 
-public class ProgramAddress extends Value {
+public class ProgramAddress extends PREV_Value {
 	boolean isNOWHERE;
 	int tag;
 	

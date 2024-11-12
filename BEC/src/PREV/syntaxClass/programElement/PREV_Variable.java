@@ -8,21 +8,21 @@ import PREV.syntaxClass.value.ObjectAddress;
 import PREV.syntaxClass.value.RealValue;
 import PREV.syntaxClass.value.RoutineAddress;
 import PREV.syntaxClass.value.SizeValue;
-import PREV.syntaxClass.value.Value;
+import PREV.syntaxClass.value.PREV_Value;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
-import bec.segment.MemAddr;
 import bec.segment.DataSegment;
 import bec.util.Global;
-import bec.util.QuantityDescriptor;
+import bec.util.PREV_QuantityDescriptor;
 import bec.util.Scode;
 import bec.util.Util;
+import bec.value.MemAddr;
 
 public class PREV_Variable extends ProgramElement {
 	public int instr; // S_GLOBAL, S_LOCAL, S_IMPORT, S_EXPORT, S_EXIT
 	int tag;
 	public MemAddr address;
-	public QuantityDescriptor quant;
+	public PREV_QuantityDescriptor quant;
 //	String system;
 
 	/**
@@ -45,7 +45,7 @@ public class PREV_Variable extends ProgramElement {
 		PREV_Variable var = new PREV_Variable();
 		var.instr = Scode.S_IMPORT;
 		var.tag = Scode.inTag(var);
-		var.quant = new QuantityDescriptor();
+		var.quant = new PREV_QuantityDescriptor();
 		var.address = seg.nextAddress();
 		if(var.address.seg == null) Util.IERR("");
 		var.quant.type.emitDefaultValue(seg, "IMPORT " + var.quant);
@@ -57,7 +57,7 @@ public class PREV_Variable extends ProgramElement {
 		PREV_Variable var = new PREV_Variable();
 		var.instr = Scode.S_EXPORT;
 		var.tag = Scode.inTag(var);
-		var.quant = new QuantityDescriptor();
+		var.quant = new PREV_QuantityDescriptor();
 		var.address = seg.nextAddress();
 		var.quant.type.emitDefaultValue(seg, "EXPORT " + var.quant);
 		return var;
@@ -85,13 +85,13 @@ public class PREV_Variable extends ProgramElement {
 		this.instr = instr;
 		tag = Scode.inTag(this);
 		if(instr != Scode.S_EXIT)
-			quant = new QuantityDescriptor();
+			quant = new PREV_QuantityDescriptor();
 
 		address = Global.DSEG.nextAddress();
 		if(Scode.accept(Scode.S_SYSTEM)) {
 			String system = Scode.inString();
 //			System.out.println("NEW Variable: " + Scode.edInstr(instr) + " " + Scode.edTag(tag) + " " + quant + " SYSTEM " + system);
-			Value value = null;
+			PREV_Value value = null;
 			if(system.equalsIgnoreCase("CURINS")) value = new ObjectAddress(true);
 			else if(system.equalsIgnoreCase("STATUS")) value = new IntegerValue(0);
 			else if(system.equalsIgnoreCase("ITSIZE")) value = new IntegerValue(0);
@@ -154,7 +154,7 @@ public class PREV_Variable extends ProgramElement {
 		this.instr = instr;
 //		System.out.println("NEW Variable: instr="+Scode.edInstr(instr));
 		this.tag = inpt.readTag(this);
-		this.quant = QuantityDescriptor.read(inpt);
+		this.quant = PREV_QuantityDescriptor.read(inpt);
 		this.address = MemAddr.read(inpt);
 		
 //		this.printTree(2);

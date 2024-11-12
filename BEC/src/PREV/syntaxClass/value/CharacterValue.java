@@ -6,7 +6,7 @@ import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Scode;
 
-public class CharacterValue extends Value {
+public class CharacterValue extends PREV_Value {
 	int value;
 	
 	public CharacterValue(int value) {

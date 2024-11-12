@@ -33,7 +33,7 @@ public class PUSH extends PREV_Instruction {
 		} else if(x instanceof PREV_CONST cns) {
 			CTStack.push(new Address(cns.quant.type.tag,0,cns.address));
 		} else Util.IERR("");
-//        if v.kind=K_Parameter
+//        if v.kind=K_Import
 //        then TOS.repdist:= - wAllign(%TOS.repdist%) endif;
         if(instr == Scode.S_PUSHV) Util.GQfetch("PUSHV: ");
 //      CTStack.dumpStack("PUSH: "+Scode.edInstr(instr));

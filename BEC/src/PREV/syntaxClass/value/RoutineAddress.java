@@ -6,7 +6,7 @@ import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Scode;
 
-public class RoutineAddress extends Value {
+public class RoutineAddress extends PREV_Value {
 	boolean isNOBODY;
 	int tag;
 	

@@ -15,7 +15,7 @@ import PREV.syntaxClass.value.RecordValue;
 import PREV.syntaxClass.value.RoutineAddress;
 import PREV.syntaxClass.value.SizeValue;
 import PREV.syntaxClass.value.TextValue;
-import PREV.syntaxClass.value.Value;
+import PREV.syntaxClass.value.PREV_Value;
 import bec.compileTimeStack.CTStack;
 import bec.util.Global;
 import bec.util.Scode;
@@ -24,7 +24,7 @@ import bec.virtualMachine.SVM_PUSHC;
 import bec.virtualMachine.SVM_NOT_IMPL;
 
 public class PUSHC extends PREV_Instruction {
-	Value value;
+	PREV_Value value;
 	
 	/**
 	 * stack_instruction ::= pushc value

@@ -7,7 +7,7 @@ import bec.AttributeOutputStream;
 import bec.util.Scode;
 import bec.util.PREV_Type;
 
-public class SizeValue extends Value {
+public class SizeValue extends PREV_Value {
 	int size;
 	
 	public SizeValue(int size) {

@@ -18,17 +18,18 @@ import PREV.syntaxClass.programElement.TAGLIST;
 import PREV.syntaxClass.programElement.routine.PREV_PROFILE;
 import PREV.syntaxClass.programElement.routine.PREV_ROUTINE;
 import PREV.syntaxClass.value.PREV_CONST;
+import bec.descriptor.Kind;
 import bec.segment.DataSegment;
 import bec.segment.Segment;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
 
-public class InterfaceModule extends S_Module {
+public class PREV_InterfaceModule extends PREV_S_Module {
 	Vector<ProgramElement> programElements;
 	Vector<TAG> tagList;
 
-	public InterfaceModule() {
+	public PREV_InterfaceModule() {
 		programElements = new Vector<ProgramElement>();
 		tagList = new Vector<TAG>();
 
@@ -60,8 +61,8 @@ public class InterfaceModule extends S_Module {
 		modident = Scode.inString();
 		modcheck = Scode.inString();
 		Global.moduleID = modident;
-		Global.CSEG = new DataSegment("CSEG_" + modident, Segment.SEG_CONST);
-		Global.DSEG = new DataSegment("DSEG_" + modident, Segment.SEG_DATA);
+		Global.CSEG = new DataSegment("CSEG_" + modident, Kind.K_SEG_CONST);
+		Global.DSEG = new DataSegment("DSEG_" + modident, Kind.K_SEG_DATA);
 		
 		ProgramElement elt = inGlobalElement();
 		while(elt != null) {

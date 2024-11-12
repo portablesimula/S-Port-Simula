@@ -61,7 +61,7 @@ public class DataType {
 	public static void newRecType(int tag, int size) {
 		DataType x = new DataType(size, null);
 		TMAP.put(tag, x);
-		System.out.println("DataType.newRecType: " + Scode.edTag(tag) + ", size="+size);
+//		System.out.println("DataType.newRecType: " + Scode.edTag(tag) + ", size="+size);
 	}
 
 	private static void newBasType(int type, int size, Kind kind) {

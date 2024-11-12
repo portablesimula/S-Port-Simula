@@ -13,11 +13,11 @@ import bec.segment.Segment;
 import bec.util.Global;
 import bec.util.Scode;
 
-public class S_Module extends SyntaxClass {
+public class PREV_S_Module extends SyntaxClass {
 	public static String modident;     // Module ident String
 	public static String modcheck;     // Module check String
 	
-	public S_Module() {
+	public PREV_S_Module() {
 	}
 
 	// ***********************************************************************************************
@@ -39,8 +39,9 @@ public class S_Module extends SyntaxClass {
 		for(SyntaxClass elt:Global.Display) {
 //			if(elt != null) elt.write(modoupt);
 			boolean doWrite = false;
-			if(elt instanceof Segment) doWrite = true;
-			else if(elt instanceof RECORD) doWrite = true;
+//			if(elt instanceof Segment) doWrite = true;
+//			else
+				if(elt instanceof RECORD) doWrite = true;
 			else if(elt instanceof PREV_PROFILE) doWrite = true;
 			else if(elt instanceof PREV_ROUTINE)	doWrite = true;
 			else if(elt instanceof PREV_CONST) doWrite = true;

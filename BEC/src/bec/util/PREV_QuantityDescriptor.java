@@ -5,11 +5,11 @@ import java.io.IOException;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 
-public class QuantityDescriptor {
+public class PREV_QuantityDescriptor {
 	public ResolvedType type;
 	public int repCount;
 	
-	public QuantityDescriptor() {
+	public PREV_QuantityDescriptor() {
 		repCount = 1;
 		parse();
 	}
@@ -46,7 +46,7 @@ public class QuantityDescriptor {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 	
-	private QuantityDescriptor(AttributeInputStream inpt) throws IOException {
+	private PREV_QuantityDescriptor(AttributeInputStream inpt) throws IOException {
 		type = ResolvedType.read(inpt);
 		repCount = inpt.readShort();
 	}
@@ -56,8 +56,8 @@ public class QuantityDescriptor {
 		oupt.writeShort(repCount);
 	}
 
-	public static QuantityDescriptor read(AttributeInputStream inpt) throws IOException {
-		return new QuantityDescriptor(inpt);
+	public static PREV_QuantityDescriptor read(AttributeInputStream inpt) throws IOException {
+		return new PREV_QuantityDescriptor(inpt);
 	}
 
 

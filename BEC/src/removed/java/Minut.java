@@ -451,7 +451,7 @@ public class Minut {
 //	%+C           if count.val=0
 //	%+C           then IERR("Illegal 'REP 0'"); count.val:=1 endif;
 //	         else count.val:=1 endif;
-//	         v:=NEWOBJ(K_Parameter,size(LocDescr)); v.type:=type;
+//	         v:=NEWOBJ(K_Import,size(LocDescr)); v.type:=type;
 //	         if npar=0 then fpar:=v else w.nextag:=ptag endif;
 //	         ----  PREPARE GADDR PARAM TO C-routine  ----           -- pje
 //	         if (kind=P_C) or (kind=P_PASCAL) then if type=T_GADDR  -- pje
@@ -473,7 +473,7 @@ public class Minut {
 //
 //	      wxt:=0;
 //	      if CurInstr=S_EXIT
-//	      then v:=NEWOBJ(K_Parameter,size(LocDescr)); v.type:=T_PADDR;
+//	      then v:=NEWOBJ(K_Import,size(LocDescr)); v.type:=T_PADDR;
 //	           v.rela:=AllignFac; -- Offset of return address in stack head
 //	           InTag(%ptag%); wxt:=qEXIT; IntoDisplay(v,ptag);
 //	           InputInstr;
@@ -755,11 +755,11 @@ public class Minut {
 //	               endrepeat;
 //	%+D            if ModuleTrace <> 0 then
 //	%+D            outstring("ProfileDescr: "); Print(d) endif;
-//	          when K_Attribute,K_Parameter,K_Export:
+//	          when K_Attribute,K_Import,K_Export:
 //	               dlng:=Size2Word(size(LocDescr))
 //	%+D            if ModuleTrace <> 0
 //	%+D            then if d.kind=K_Attribute then S:="Attribute: "
-//	%+D              elsif d.kind=K_Parameter then S:="Parameter: "
+//	%+D              elsif d.kind=K_Import then S:="Parameter: "
 //	%+D              else S:="Export: " endif; outstring(S); Print(d);
 //	%+D            endif;
 //	          otherwise ERROR("Unknown Descriptor in AttrFile");
@@ -982,10 +982,10 @@ public class Minut {
 //	                    EnvOutByte(modoupt,0);
 //	                    if status<>0 then FILERR(modoupt,"Wdescr-7x") endif
 //	               endif;
-//	          when K_Attribute,K_Parameter,K_Export:
+//	          when K_Attribute,K_Import,K_Export:
 //	%+D            if ModuleTrace <> 0
 //	%+D            then if d.kind=K_Attribute then S:="Attribute: "
-//	%+D              elsif d.kind=K_Parameter then S:="Parameter: "
+//	%+D              elsif d.kind=K_Import then S:="Parameter: "
 //	%+D              else S:="Export: " endif; outstring(S); Print(d);
 //	%+D            endif;
 //	               -- Modify: d qua IntDescr.type

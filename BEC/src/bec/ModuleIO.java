@@ -6,6 +6,8 @@ import java.io.IOException;
 
 import bec.compileTimeStack.DataType;
 import bec.descriptor.Descriptor;
+import bec.descriptor.Kind;
+import bec.segment.Segment;
 import bec.util.Array;
 import bec.util.Global;
 import bec.util.Scode;
@@ -15,11 +17,7 @@ public class ModuleIO {
 
 //	%title ***   O u t p u t    M o d u l e   ***
 	
-	private static void writeDescriptors(int nXtag) throws IOException {
-		AttributeOutputStream modoupt = new AttributeOutputStream(new FileOutputStream(Global.getAttrFileName(Global.modident, ".AT2")));
-		modoupt.writeKind(Scode.S_MODULE);
-		modoupt.writeString(Global.modident);
-		modoupt.writeString(Global.modcheck);
+	private static void writeDescriptors(AttributeOutputStream modoupt, int nXtag) throws IOException {
 
 //	       ------ Prepare Dependent Module info ------
 //	       i.val:=0;
@@ -113,10 +111,10 @@ public class ModuleIO {
 //	                    EnvOutByte(modoupt,0);
 //	                    if status<>0 then FILERR(modoupt,"Wdescr-7x") endif
 //	               endif;
-//	          when K_Attribute,K_Parameter,K_Export:
+//	          when K_Attribute,K_Import,K_Export:
 //	%+D            if ModuleTrace <> 0
 //	%+D            then if d.kind=K_Attribute then S:="Attribute: "
-//	%+D              elsif d.kind=K_Parameter then S:="Parameter: "
+//	%+D              elsif d.kind=K_Import then S:="Parameter: "
 //	%+D              else S:="Export: " endif; outstring(S); Print(d);
 //	%+D            endif;
 //	               -- Modify: d qua IntDescr.type
@@ -142,10 +140,17 @@ public class ModuleIO {
 	public static void outputModule(int nXtag) throws IOException {
 		if(Global.ATTR_OUTPUT_TRACE)
 			System.out.println("**************   Begin  -  Output-module  " + Global.modident + "  " + Global.modcheck + "   **************");
+		AttributeOutputStream modoupt = new AttributeOutputStream(new FileOutputStream(Global.getAttrFileName(Global.modident, ".AT2")));
+		modoupt.writeKind(Kind.K_Module);
+		modoupt.writeString(Global.modident);
+		modoupt.writeString(Global.modcheck);
 
-		writeDescriptors(nXtag);
+		Segment.writeSegments(modoupt);
+		
+		writeDescriptors(modoupt, nXtag);
 		
 //		writePreamble();
+		modoupt.writeKind(Kind.K_EndModule);
 		
 		if(Global.ATTR_OUTPUT_TRACE)
 			System.out.println("**************   Endof  -  Output-module  " + Global.modident + "  " + Global.modcheck + "   **************");
@@ -300,13 +305,12 @@ public class ModuleIO {
 
 		Util.IERR("");
 	}
-
 	
 	private static Array<Integer> TYPMAP = new Array<Integer>();
 	public static int chgType(int t) { // export range(0:MaxType) tx;
+		int n = 0;
 		int tx = 0;
 		if(t <= Scode.T_max) tx = t; else {
-			int n = 0;
 			LOOP:for(int tt:TYPMAP) {
 				if(tt == t) {
 					n = tt;
@@ -320,7 +324,7 @@ public class ModuleIO {
 			tx = n + Scode.T_max + 1;
 		}
 		if(Global.ATTR_OUTPUT_TRACE)
-			System.out.println("CHGTYP " + Scode.edTag(t) + " ==> " + tx);
+			System.out.println("CHGTYP " + Scode.edTag(t) + " ==> " + tx + "  TYPMAP["+(n-1)+"]=" + TYPMAP.get(n-1));
 //		Util.IERR("SJEKK DETTE");
 		return tx;
 	}

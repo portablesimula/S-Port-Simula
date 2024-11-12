@@ -6,14 +6,11 @@ import java.util.HashMap;
 
 import bec.compileTimeStack.Address;
 import bec.compileTimeStack.CTStack;
-import bec.compileTimeStack.Coonst;
 import bec.compileTimeStack.DataType;
 import bec.compileTimeStack.StackItem;
 import bec.compileTimeStack.Temp;
-import bec.segment.MemAddr;
-import bec.virtualMachine.SVM_CALL;
+import bec.value.MemAddr;
 import bec.virtualMachine.SVM_NOT_IMPL;
-import bec.virtualMachine.SVM_POPtoMEM;
 import bec.virtualMachine.SVM_POPtoREG;
 import bec.virtualMachine.SVM_PUSH;
 
@@ -29,6 +26,12 @@ public class Util {
 		}
 	}
 
+	public static void WARNING(String msg) {
+		if(Global.SCODE_INPUT_TRACE) {
+			System.out.println(Scode.traceBuff);
+		}
+		System.out.println("ERROR: " + msg);
+	}
 
 	public static void ERROR(String msg) {
 		if(Global.SCODE_INPUT_TRACE) {

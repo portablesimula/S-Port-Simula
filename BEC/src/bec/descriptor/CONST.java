@@ -3,23 +3,25 @@ package bec.descriptor;
 import java.io.IOException;
 import java.util.Vector;
 
-import PREV.syntaxClass.SyntaxClass;
-import PREV.syntaxClass.value.RepetitionValue;
-import PREV.syntaxClass.value.Value;
+//import PREV.syntaxClass.value.RepetitionValue;
+//import PREV.syntaxClass.value.Value;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
+import bec.InsertStatement;
 import bec.ModuleIO;
-import bec.segment.MemAddr;
 import bec.util.Global;
-import bec.util.QuantityDescriptor;
+import bec.util.ResolvedType;
 import bec.util.Scode;
 import bec.util.Util;
+import bec.value.MemAddr;
+import bec.value.RepetitionValue;
+import bec.value.Value;
 import removed.java.Coasm;
 
 public class CONST extends Descriptor {
 //	int tag;
 	public MemAddr address;
-	public QuantityDescriptor quant;
+//	public QuantityDescriptor quant;
 	RepetitionValue value;
 	
 	private CONST(int kind, int tag) {
@@ -44,19 +46,21 @@ public class CONST extends Descriptor {
 			if(constDef) Util.IERR("New CONSPEC but constDef="+constDef);
 			cnst = new CONST(Kind.K_Coonst, tag);
 		}
-		cnst.quant = new QuantityDescriptor();
+//		cnst.quant = new QuantityDescriptor();
+		ResolvedType type = new ResolvedType();
+		int repCount = (Scode.accept(Scode.S_REP)) ? Scode.inNumber() : 1;
+
 //		if(constDef) cnst.value = new RepetitionValue();
 		if(constDef) {
-			String comment = Scode.edTag(tag) + " Quant=" + cnst.quant;
+			String comment = Scode.edTag(tag) + " type=" + type;
 //			System.out.println("NEW CONST: "+comment);
 			cnst.address = Global.CSEG.emitValue(comment);
-			Global.CSEG.dump("CONST.inConstant: ");
+//			Global.CSEG.dump("CONST.inConstant: ");
 //			Util.IERR("");
 		}
 		
 //		System.out.println("CONST.inConstant: " + cnst);
-//		if(Scode.inputTrace > 3)
-			cnst.printTree("   ");
+		if(Global.traceMode > 3) cnst.print("   ");
 //		Util.IERR("");
 //		return cnst;
 	}
@@ -108,16 +112,17 @@ public class CONST extends Descriptor {
     	  System.out.println("Minut.inConstant FINISH");
 	}
 
-	public void printTree(final String indent) {
+	@Override
+	public void print(final String indent) {
 		if(value != null) {
 			boolean done = false;
 			if(value.values instanceof Vector<Value> vector) {
 				if(vector instanceof Vector<?> elts) {
 					boolean first = true;
 					for(Object rVal:elts) {
-						if(first) System.out.println(indent + "CONST " + Scode.edTag(tag) + " " + quant);
+						if(first) System.out.println(indent + "CONST " + Scode.edTag(tag));
 						first = false;
-						((Value)rVal).printTree(2 + 1);							
+						((Value)rVal).print(indent + "   ");							
 					} done = true;
 				}
 			}
@@ -127,10 +132,10 @@ public class CONST extends Descriptor {
 	
 	public String toString() {
 		if(address != null) {
-			 return "CONST " + Scode.edTag(tag) + " " + quant + " " + address;
+			 return "CONST " + Scode.edTag(tag) + " " + address;
 		} else if(value != null) {
-			 return "CONST " + Scode.edTag(tag) + " " + quant + " " + value;
-		} else return "CONSTSPEC " + Scode.edTag(tag) + " " + quant;
+			 return "CONST " + Scode.edTag(tag) + " " + value;
+		} else return "CONSTSPEC " + Scode.edTag(tag);
 	}
 
 	// ***********************************************************************************************
@@ -138,15 +143,23 @@ public class CONST extends Descriptor {
 	// ***********************************************************************************************
 
 	public void write(AttributeOutputStream oupt) throws IOException {
+		if(Global.ATTR_OUTPUT_TRACE) System.out.println("CONST.Write: " + this);
 		oupt.writeKind(kind);
 		oupt.writeShort(ModuleIO.chgType(tag));
 		address.write(oupt);
-		quant.write(oupt);
+//		quant.write(oupt);
 	}
 
-	public static SyntaxClass read(AttributeInputStream inpt) throws IOException {
-		Util.IERR("Static Method 'readObject' needs a redefiniton");
-		return(null);
+	public static CONST read(AttributeInputStream inpt) throws IOException {
+		System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  BEGIN CONST.Read");
+		int tag = inpt.readShort();
+		tag = InsertStatement.current.chgInType(tag);
+		CONST cns = new CONST(Kind.K_Coonst, tag);
+		System.out.println("AFTER NEW CONST: "+cns);
+		cns.address = MemAddr.read(inpt);
+		System.out.println("AFTER NEW MEMADDR: "+cns);
+//		Util.IERR("Static Method 'readObject' needs a redefiniton");
+		return(cns);
 	}
 
 

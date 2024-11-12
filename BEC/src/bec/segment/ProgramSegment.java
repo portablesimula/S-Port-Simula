@@ -3,10 +3,12 @@ package bec.segment;
 import java.io.IOException;
 import java.util.Vector;
 
-import PREV.syntaxClass.value.Value;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
+import bec.descriptor.Kind;
+import bec.util.Global;
 import bec.util.Scode;
+import bec.value.MemAddr;
 import bec.virtualMachine.SVM_Instruction;
 
 public class ProgramSegment extends Segment {
@@ -61,8 +63,10 @@ public class ProgramSegment extends Segment {
 //		System.out.println("NEW IMPORT: " + this);
 	}
 
+	@Override
 	public void write(AttributeOutputStream oupt) throws IOException {
-		oupt.writeInstr(Scode.S_BSEG);
+		if(Global.ATTR_OUTPUT_TRACE) System.out.println("ProgramSegment.Write: " + this);
+//		oupt.writeInstr(Scode.S_BSEG);
 		oupt.writeKind(segmentKind);
 		oupt.writeString(ident);
 		oupt.writeShort(instructions.size());
@@ -76,11 +80,12 @@ public class ProgramSegment extends Segment {
 	}
 
 	public static ProgramSegment readObject(AttributeInputStream inpt) throws IOException {
-		int segmentKind = inpt.readKind();
+//		int segmentKind = inpt.readKind();
+		int segmentKind = Kind.K_SEG_CODE;
 		String ident = inpt.readString();
 		System.out.println("DataSegment.readObject: ident="+ident+", segmentKind="+segmentKind);
 		ProgramSegment seg = new ProgramSegment(ident, segmentKind, inpt);
-//		seg.dump();
+		if(Global.ATTR_INPUT_DUMP) seg.dump("ProgramSegment.readObject: ");
 //		Util.IERR("");
 		return seg;
 	}
