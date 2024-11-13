@@ -10,7 +10,7 @@ import bec.ModuleIO;
 import bec.compileTimeStack.DataType;
 import bec.segment.DataSegment;
 import bec.util.Global;
-import bec.util.ResolvedType;
+import bec.util.Type;
 import bec.util.Scode;
 import bec.util.Util;
 
@@ -192,7 +192,7 @@ public class ProfileDescr extends Descriptor {
 			if(USE_RTStack) {
 //				int ptag = Scode.inTag();
 //				QuantityDescriptor quant = new QuantityDescriptor();
-				ResolvedType type = new ResolvedType();
+				Type type = new Type();
 				int repCount = (Scode.accept(Scode.S_REP)) ? Scode.inNumber() : 1;
 				System.out.println("ProfileDescr'IMPORT: " + Scode.edTag(ptag) + " " + type);
 				int lng = DataType.typeSize(type.tag);

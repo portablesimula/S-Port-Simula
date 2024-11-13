@@ -2,9 +2,9 @@ package PREV.syntaxClass.programElement;
 
 import java.io.IOException;
 
+import PREV.util.PREV_QuantityDescriptor;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
-import bec.util.PREV_QuantityDescriptor;
 import bec.util.Scode;
 
 public class AttributeDefinition extends ProgramElement {
@@ -23,7 +23,7 @@ public class AttributeDefinition extends ProgramElement {
 	 */
 	public AttributeDefinition(int rela) {
 		this.rela = rela;
-		tag = Scode.inTag(this);
+		tag = Scode.inTag();
 //		System.out.println("NEW AttributeDefinition: tag="+tag);
 		quant = new PREV_QuantityDescriptor();
 //		System.out.println("NEW AttributeDefinition: " + this);
@@ -43,7 +43,7 @@ public class AttributeDefinition extends ProgramElement {
 	// ***********************************************************************************************
 	
 	public AttributeDefinition(AttributeInputStream inpt) throws IOException {
-		tag = inpt.readTag(this);
+		tag = inpt.readTag();
 		rela = inpt.readShort();
 		quant = PREV_QuantityDescriptor.read(inpt);
 	}

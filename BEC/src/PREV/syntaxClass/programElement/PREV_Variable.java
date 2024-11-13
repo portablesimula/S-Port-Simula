@@ -8,12 +8,12 @@ import PREV.syntaxClass.value.ObjectAddress;
 import PREV.syntaxClass.value.RealValue;
 import PREV.syntaxClass.value.RoutineAddress;
 import PREV.syntaxClass.value.SizeValue;
+import PREV.util.PREV_QuantityDescriptor;
 import PREV.syntaxClass.value.PREV_Value;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.segment.DataSegment;
 import bec.util.Global;
-import bec.util.PREV_QuantityDescriptor;
 import bec.util.Scode;
 import bec.util.Util;
 import bec.value.MemAddr;
@@ -44,7 +44,7 @@ public class PREV_Variable extends ProgramElement {
 		if(seg == null) Util.IERR("");
 		PREV_Variable var = new PREV_Variable();
 		var.instr = Scode.S_IMPORT;
-		var.tag = Scode.inTag(var);
+		var.tag = Scode.inTag();
 		var.quant = new PREV_QuantityDescriptor();
 		var.address = seg.nextAddress();
 		if(var.address.seg == null) Util.IERR("");
@@ -56,7 +56,7 @@ public class PREV_Variable extends ProgramElement {
 	public static PREV_Variable ofEXPORT(DataSegment seg) {
 		PREV_Variable var = new PREV_Variable();
 		var.instr = Scode.S_EXPORT;
-		var.tag = Scode.inTag(var);
+		var.tag = Scode.inTag();
 		var.quant = new PREV_QuantityDescriptor();
 		var.address = seg.nextAddress();
 		var.quant.type.emitDefaultValue(seg, "EXPORT " + var.quant);
@@ -66,7 +66,7 @@ public class PREV_Variable extends ProgramElement {
 	public static PREV_Variable ofEXIT(DataSegment seg) {
 		PREV_Variable var = new PREV_Variable();
 		var.instr = Scode.S_EXIT;
-		var.tag = Scode.inTag(var);
+		var.tag = Scode.inTag();
 		var.address = seg.nextAddress();
 		var.quant.type.emitDefaultValue(seg, "EXIT " + var.quant);
 		return var;
@@ -83,7 +83,7 @@ public class PREV_Variable extends ProgramElement {
 	
 	public PREV_Variable(int instr) {
 		this.instr = instr;
-		tag = Scode.inTag(this);
+		tag = Scode.inTag();
 		if(instr != Scode.S_EXIT)
 			quant = new PREV_QuantityDescriptor();
 
@@ -110,7 +110,8 @@ public class PREV_Variable extends ProgramElement {
 			else if(system.equalsIgnoreCase("ALLOCO")) value = new RoutineAddress(true);
 			else if(system.equalsIgnoreCase("FREEOB")) value = new RoutineAddress(true);
 			else Util.IERR("MISSING: " + system);
-			Global.DSEG.emit(value, this.toString());
+//			Global.DSEG.emit(value, this.toString());
+			Util.IERR("DON'T USE THIS METHOD");
 		} else {
 			quant.type.emitDefaultValue(Global.DSEG, this.toString());			
 			if(quant.repCount > 1) {
@@ -153,7 +154,7 @@ public class PREV_Variable extends ProgramElement {
 //		System.out.println("NEW Variable: inpt.curinstr="+Scode.edInstr(inpt.curinstr));
 		this.instr = instr;
 //		System.out.println("NEW Variable: instr="+Scode.edInstr(instr));
-		this.tag = inpt.readTag(this);
+		this.tag = inpt.readTag();
 		this.quant = PREV_QuantityDescriptor.read(inpt);
 		this.address = MemAddr.read(inpt);
 		

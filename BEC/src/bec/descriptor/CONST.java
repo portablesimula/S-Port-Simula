@@ -3,14 +3,12 @@ package bec.descriptor;
 import java.io.IOException;
 import java.util.Vector;
 
-//import PREV.syntaxClass.value.RepetitionValue;
-//import PREV.syntaxClass.value.Value;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.InsertStatement;
 import bec.ModuleIO;
 import bec.util.Global;
-import bec.util.ResolvedType;
+import bec.util.Type;
 import bec.util.Scode;
 import bec.util.Util;
 import bec.value.MemAddr;
@@ -47,7 +45,7 @@ public class CONST extends Descriptor {
 			cnst = new CONST(Kind.K_Coonst, tag);
 		}
 //		cnst.quant = new QuantityDescriptor();
-		ResolvedType type = new ResolvedType();
+		Type type = new Type();
 		int repCount = (Scode.accept(Scode.S_REP)) ? Scode.inNumber() : 1;
 
 //		if(constDef) cnst.value = new RepetitionValue();

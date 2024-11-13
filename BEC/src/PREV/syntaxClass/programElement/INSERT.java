@@ -50,12 +50,12 @@ public class INSERT extends ProgramElement {
 		String modident = inpt.readString();
 		String modcheck = inpt.readString();
 		System.out.println("**************   Begin  -  Input-module  " + modident + "  " + modcheck + "   **************");
-		while(inpt.readObj(inpt) != null) {
-			
-		}
+//		while(inpt.readObj(inpt) != null) {
+//			
+//		}
 		System.out.println("**************   End of  -  Input-module  " + modident + "  " + modcheck + "   **************");
 		Global.dumpDisplay("END INSERT: ");
-//		Util.IERR("");
+		Util.IERR("");
 	}
 
 	@Override

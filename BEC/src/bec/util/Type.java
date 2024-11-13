@@ -9,7 +9,7 @@ import bec.segment.DataSegment;
 
 public class Type {
 	public int tag;
-	Range range;
+//	Range range;
 	
 	/**
 	 *	 type ::= structured_type | simple_type | range_type
@@ -26,8 +26,13 @@ public class Type {
 	public Type() {
 		tag = Scode.inTag();
 		if(tag == Scode.TAG_INT) {
-			if(Scode.accept(Scode.S_RANGE)) range = new Range();
+			if(Scode.accept(Scode.S_RANGE)) {
+				//range = new Range();
+				Scode.inNumber(); // low
+				Scode.inNumber(); // high
+			}
 		}
+		if(Scode.accept(Scode.S_FIXREP)) Util.IERR("DETTE ER EN 'ResolvedType' - HVA NÅ ?");
 	}
 	
 	public boolean isSimple() {

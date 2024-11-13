@@ -119,7 +119,7 @@ public class PREV_ROUTINE extends PREV_Instruction {
 	// ***********************************************************************************************
 	
 	public PREV_ROUTINE(AttributeInputStream inpt) throws IOException {
-		bodyTag = inpt.readTag(this);
+		bodyTag = inpt.readTag();
 		profileTag = inpt.readTag();
 		
 		String ident = inpt.readString();

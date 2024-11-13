@@ -326,7 +326,16 @@ public class ModuleIO {
 		if(Global.ATTR_OUTPUT_TRACE)
 			System.out.println("CHGTYP " + Scode.edTag(t) + " ==> " + tx + "  TYPMAP["+(n-1)+"]=" + TYPMAP.get(n-1));
 //		Util.IERR("SJEKK DETTE");
+		dumpTYPMAP("chgType: ");
 		return tx;
+	}
+	
+	public static void dumpTYPMAP(String title) {
+		System.out.println("============ "+title+" BEGIN Dump TYPMAP ================");
+		for(int i=0;i<TYPMAP.size();i++) {
+			System.out.println("TYPMAP["+i+"] = " + Scode.edTag(TYPMAP.get(i)) + "  ==> " + (32+i));
+		}
+		System.out.println("============ "+title+" ENDOF Dump TYPMAP ================");
 	}
 
 }

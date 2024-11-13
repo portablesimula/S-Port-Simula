@@ -2,14 +2,12 @@ package bec.descriptor;
 
 import java.io.IOException;
 
-import PREV.syntaxClass.programElement.AttributeDefinition;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.InsertStatement;
 import bec.ModuleIO;
 import bec.util.Global;
-import bec.util.PREV_QuantityDescriptor;
-import bec.util.ResolvedType;
+import bec.util.Type;
 import bec.util.Scode;
 import bec.util.Util;
 
@@ -38,8 +36,7 @@ public class LocDescr extends Descriptor {
 //		AttributeDefinition attr = new AttributeDefinition(comnSize);
 		int tag = Scode.inTag();
 //		System.out.println("NEW AttributeDefinition: tag="+tag);
-//		quant = new PREV_QuantityDescriptor();
-		ResolvedType type = new ResolvedType();
+		Type type = new Type();
 		int repCount = (Scode.accept(Scode.S_REP)) ? Scode.inNumber() : 1;
 //		System.out.println("NEW AttributeDefinition: " + this);
 		
@@ -51,8 +48,11 @@ public class LocDescr extends Descriptor {
 		return loc;
 	}
 	
-//	public static LocDescr ofParameter(int tag, QuantityDescriptor quant, int rela) {
-	public static LocDescr ofParameter(int tag, ResolvedType type, int rela) {
+	public static LocDescr ofLocalVariable(int tag, int type) {
+		return new LocDescr(tag, type);
+	}
+	
+	public static LocDescr ofParameter(int tag, Type type, int rela) {
 ////		AttributeDefinition attr = new AttributeDefinition(tag, quant, rela);
 //		LocDescr loc = new LocDescr(Kind.K_Import, attr.tag);
 //		loc.rela = rela;

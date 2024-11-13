@@ -1,14 +1,14 @@
 package PREV.syntaxClass.instruction;
 
+import PREV.util.PREV_ResolvedType;
 import bec.compileTimeStack.Address;
 import bec.compileTimeStack.CTStack;
-import bec.util.ResolvedType;
 import bec.util.Scode;
 import bec.util.Util;
 import bec.value.MemAddr;
 
 public class REFER extends PREV_Instruction {
-	ResolvedType type;
+	PREV_ResolvedType type;
 	
 	/**
 	 * addressing_instruction ::= refer resolved_type
@@ -19,7 +19,7 @@ public class REFER extends PREV_Instruction {
 	 * TOS is modified to describe a quantity of the given type, at the address described by TOS.
 	 */
 	public REFER() {
-		type = new ResolvedType();
+		type = new PREV_ResolvedType();
 	}
 
 	@Override

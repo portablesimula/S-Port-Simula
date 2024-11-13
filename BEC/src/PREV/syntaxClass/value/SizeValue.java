@@ -2,10 +2,10 @@ package PREV.syntaxClass.value;
 
 import java.io.IOException;
 
+import PREV.util.PREV_Type;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Scode;
-import bec.util.PREV_Type;
 
 public class SizeValue extends PREV_Value {
 	int size;

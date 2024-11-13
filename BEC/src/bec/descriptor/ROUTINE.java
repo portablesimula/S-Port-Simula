@@ -1,14 +1,9 @@
 package bec.descriptor;
 
-import PREV.syntaxClass.instruction.PREV_Instruction;
-import PREV.syntaxClass.programElement.PREV_Variable;
-import PREV.syntaxClass.programElement.routine.PREV_PROFILE;
 import bec.compileTimeStack.CTStack;
 import bec.parse.Instruction;
 import bec.segment.ProgramSegment;
-import bec.segment.Segment;
 import bec.util.Global;
-import bec.util.ResolvedType;
 import bec.util.Scode;
 import bec.util.Util;
 import bec.value.MemAddr;
@@ -52,7 +47,7 @@ public class ROUTINE {
 		int prftag = Scode.inTag();
 		
 		String id = Global.moduleID + '_' + Scode.TAGTABLE[prftag];
-		ProgramSegment PSEG = new ProgramSegment("PSEG_" + id, Segment.SEG_CODE);
+		ProgramSegment PSEG = new ProgramSegment("PSEG_" + id, Kind.K_SEG_CODE);
 		ProgramSegment prevPSEG = Global.PSEG; Global.PSEG = PSEG;
 		IntDescr rut = (IntDescr) Global.DISPL.get(tag);
 		if(rut == null) rut = new IntDescr(Kind.K_IntRoutine, tag);
@@ -101,32 +96,35 @@ public class ROUTINE {
 	 */
 	private static int InLocal(int nlocbyte) {
 		//--- Input Local Variable in Routine Body ---
-		int tag = Scode.inTag();
-		
-//		TypeLength = 0;
-//		type = intype;
-//		nbyte = TypeLength;
-		ResolvedType resolvedType = new ResolvedType();
-		int type = resolvedType.tag;
-		int nbyte = 0; // ?????
+//		int tag = Scode.inTag();
+//		
+////		TypeLength = 0;
+////		type = intype;
+////		nbyte = TypeLength;
+//		Type Type = new Type();
+//		int type = Type.tag;
+//		int nbyte = 0; // ?????
+//		Util.IERR("SJEKK DETTE");
+//
+//		int count = 1;
+//		if(Scode.nextByte() == Scode.S_REP) {
+//			Scode.inputInstr(); count = Scode.inNumber();
+//			if(count == 0) {
+//				Util.IERR("Illegal 'REP 0'"); count = 1;
+//			}
+//		}
+////	%+S      if type < T_Max then nbyte:=TTAB(type).nbyte endif;
+//		
+////	%+S      locvar:=NEWOBJ(K_LocalVar,size(LocDescr));
+////	%+S      locvar.type:=type; IntoDisplay(locvar,tag);
+////		LocDescr locvar = new LocDescr(Kind.K_LocalVar, tag);
+		Variable locvar = Variable.ofLocal(Global.DSEG);
+//		int nbyte = locvar.size();
+//		nlocbyte = nlocbyte + (nbyte*count);
+//		locvar.rela = nlocbyte;
+//		return nlocbyte;
 		Util.IERR("SJEKK DETTE");
-
-		int count = 1;
-		if(Scode.nextByte() == Scode.S_REP) {
-			Scode.inputInstr(); count = Scode.inNumber();
-			if(count == 0) {
-				Util.IERR("Illegal 'REP 0'"); count = 1;
-			}
-		}
-//	%+S      if type < T_Max then nbyte:=TTAB(type).nbyte endif;
-		
-//	%+S      locvar:=NEWOBJ(K_LocalVar,size(LocDescr));
-//	%+S      locvar.type:=type; IntoDisplay(locvar,tag);
-		LocDescr locvar = new LocDescr(Kind.K_LocalVar, tag);
-		
-		nlocbyte = nlocbyte + (nbyte*count);
-		locvar.rela = nlocbyte;
-		return nlocbyte;
+		return 0;
 	}
 
 

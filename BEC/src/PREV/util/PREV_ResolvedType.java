@@ -1,11 +1,15 @@
-package bec.util;
+package PREV.util;
 
 import java.io.IOException;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
+import bec.util.Fixrep;
+import bec.util.Scode;
+import bec.util.Type;
+import bec.util.Util;
 
-public class ResolvedType extends Type {
+public class PREV_ResolvedType extends Type {
 //	int tag;
 //	Range range;
 	Fixrep fixrep;
@@ -24,7 +28,7 @@ public class ResolvedType extends Type {
 	 *
 	 *	 resolved_structure ::= structured_type < fixrep count:ordinal >?
 	 */
-	public ResolvedType() {
+	public PREV_ResolvedType() {
 		super();
 		if(tag > Scode.TAG_SIZE) {
 			if(Scode.accept(Scode.S_FIXREP)) fixrep = new Fixrep();
@@ -32,7 +36,7 @@ public class ResolvedType extends Type {
 	}
 	
 	public String toString() {
-		if(range != null) return "INT " + range;
+//		if(range != null) return "INT " + range;
 		if(fixrep != null) return Scode.edTag(tag) + " " + fixrep;
 		return Scode.edTag(tag);
 	}
@@ -41,26 +45,27 @@ public class ResolvedType extends Type {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 	
-	private ResolvedType(AttributeInputStream inpt) throws IOException {
+	private PREV_ResolvedType(AttributeInputStream inpt) throws IOException {
 //		tag = inpt.readTag();
 		super(inpt);
 		inpt.readInstr();
 		System.out.println("NEW ResolvedType(inpt): " + Scode.edInstr(Scode.curinstr));
-		if(inpt.curinstr == Scode.S_RANGE) { range = Range.read(inpt); inpt.readInstr(); }
-		else if(inpt.curinstr == Scode.S_FIXREP) { fixrep = Fixrep.read(inpt); inpt.readInstr(); }
+//		if(inpt.curinstr == Scode.S_RANGE) { range = Range.read(inpt); inpt.readInstr(); }
+//		else
+			if(inpt.curinstr == Scode.S_FIXREP) { fixrep = Fixrep.read(inpt); inpt.readInstr(); }
 		
 		if(inpt.curinstr != Scode.S_ENDIF) Util.IERR("IMPOSSIBLE: "+Scode.edInstr(inpt.curinstr));
 	}
 
 	public void write(AttributeOutputStream oupt) throws IOException {
 		oupt.writeTag(tag);
-		if(range != null) range.write(oupt);
+//		if(range != null) range.write(oupt);
 		if(fixrep != null) fixrep.write(oupt);
 		oupt.writeInstr(Scode.S_ENDIF);
 	}
 
-	public static ResolvedType read(AttributeInputStream inpt) throws IOException {
-		return new ResolvedType(inpt);
+	public static PREV_ResolvedType read(AttributeInputStream inpt) throws IOException {
+		return new PREV_ResolvedType(inpt);
 	}
 
 

@@ -50,7 +50,7 @@ public class RECORD extends PREV_Instruction {
 //		Vector<AttributeDefinition> curAttrs;
 //		Vector<AlternatePart> alternateParts = null;
 
-		tag = Scode.inTag(this);	
+		tag = Scode.inTag();	
 //		Global.Display.set(tag, this);
 		int comnSize = 0;
 		
@@ -182,7 +182,7 @@ public class RECORD extends PREV_Instruction {
 	// ***********************************************************************************************
 	
 	private RECORD(AttributeInputStream inpt) throws IOException {
-		this.tag = inpt.readTag(this);
+		this.tag = inpt.readTag();
 		inpt.readInstr();
 		if(inpt.curinstr == Scode.S_INFO) { info = inpt.readString(); inpt.readInstr(); }
 		if(inpt.curinstr == Scode.S_PREFIX) { prefixTag = inpt.readTag(); inpt.readInstr(); }

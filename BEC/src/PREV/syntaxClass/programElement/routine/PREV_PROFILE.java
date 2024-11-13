@@ -8,6 +8,7 @@ import PREV.syntaxClass.programElement.PREV_Variable;
 import PREV.syntaxClass.programElement.ProgramElement;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
+import bec.descriptor.Kind;
 import bec.segment.DataSegment;
 import bec.segment.Segment;
 import bec.util.Global;
@@ -59,7 +60,7 @@ public class PREV_PROFILE extends ProgramElement {
 	 * 			::= exit return:newtag
 	 */
 	public void parse() {
-		profileTag = Scode.inTag(this);
+		profileTag = Scode.inTag();
 		
 //		Global.Display.set(profileTag, this);
 		
@@ -88,7 +89,7 @@ public class PREV_PROFILE extends ProgramElement {
 		
 //		String pID = "Name";//Scode.TAGTABLE[profileTag];
 		String pID = Scode.edTag(profileTag);
-		DSEG = new DataSegment("DSEG_" + Global.moduleID + '_' + pID, Segment.SEG_DATA);
+		DSEG = new DataSegment("DSEG_" + Global.moduleID + '_' + pID, Kind.K_SEG_DATA);
 		while(Scode.accept(Scode.S_IMPORT)) {
 			imports.add(PREV_Variable.ofIMPORT(DSEG));
 		}
@@ -145,7 +146,7 @@ public class PREV_PROFILE extends ProgramElement {
 	
 	public PREV_PROFILE(AttributeInputStream inpt) throws IOException {
 		imports = new Vector<PREV_Variable>();
-		profileTag = inpt.readTag(this);
+		profileTag = inpt.readTag();
 		
 		String ident = inpt.readString();
 		DSEG = (DataSegment) Segment.lookup(ident);

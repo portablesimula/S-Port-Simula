@@ -17,7 +17,7 @@ public class SWITCH extends PREV_Instruction {
 	 * forward_jump ::= switch switch:newtag size:number
 	 */
 	public SWITCH() {
-		tag = Scode.inTag(this);
+		tag = Scode.inTag();
 		size = Scode.inNumber();
 //		if(size >= MxpSdest) Util.ERROR("Too large Case-Statement");
 		DESTAB = new MemAddr[size];

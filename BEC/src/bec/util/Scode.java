@@ -3,7 +3,6 @@ package bec.util;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import PREV.syntaxClass.SyntaxClass;
 import removed.java.Scomn;
 
 public class Scode {
@@ -164,12 +163,12 @@ public class Scode {
 		return n;
 	}	
 
-	public static int inTag(SyntaxClass displayEntry) {
-		Util.IERR("DO NOT USE THIS METHOD");
-		int tag = inTag();
-		Global.Display.set(tag, displayEntry);
-		return tag;
-	}
+//	public static int inTag(SyntaxClass displayEntry) {
+//		Util.IERR("DO NOT USE THIS METHOD");
+//		int tag = inTag();
+//		Global.Display.set(tag, displayEntry);
+//		return tag;
+//	}
 	
 	public static int inTag() {
 		int t = get2Bytes();
@@ -190,7 +189,7 @@ public class Scode {
 	}
 	
 	public static void inType() {
-		Util.IERR("'inType' SKAL IKKE BRUKES - BRUK  type = new ResolvedType();");
+		Util.IERR("'inType' SKAL IKKE BRUKES - BRUK  type = new Type();");
 		// export range(0:MaxType) type;
 //	begin infix(WORD) tag,lb,ub,fixrep; ref(RecordDescr) r;
 //	      InTag(%tag%);

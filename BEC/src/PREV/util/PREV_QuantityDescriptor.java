@@ -1,12 +1,13 @@
-package bec.util;
+package PREV.util;
 
 import java.io.IOException;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
+import bec.util.Scode;
 
 public class PREV_QuantityDescriptor {
-	public ResolvedType type;
+	public PREV_ResolvedType type;
 	public int repCount;
 	
 	public PREV_QuantityDescriptor() {
@@ -23,7 +24,7 @@ public class PREV_QuantityDescriptor {
 	 * 		::= SINT
 	 */
 	public void parse() {
-		type = new ResolvedType();
+		type = new PREV_ResolvedType();
 		if(Scode.accept(Scode.S_REP))
 			repCount = Scode.inNumber();
 //		System.out.println("NEW QuantityDescriptor: " + this);
@@ -47,7 +48,7 @@ public class PREV_QuantityDescriptor {
 	// ***********************************************************************************************
 	
 	private PREV_QuantityDescriptor(AttributeInputStream inpt) throws IOException {
-		type = ResolvedType.read(inpt);
+		type = PREV_ResolvedType.read(inpt);
 		repCount = inpt.readShort();
 	}
 

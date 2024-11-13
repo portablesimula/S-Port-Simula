@@ -4,8 +4,6 @@ import bec.util.Global;
 import bec.BecCompiler;
 
 public class InlineTest {
-	String programHead;
-//	PREV_S_Module module;
 	
 	public static void main(String[] argv) {
 //		String scodeSource = Pick_FEC_Source();

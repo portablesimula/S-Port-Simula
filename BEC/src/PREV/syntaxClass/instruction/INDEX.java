@@ -1,6 +1,5 @@
 package PREV.syntaxClass.instruction;
 
-import PREV.syntaxClass.value.IntegerValue;
 import bec.compileTimeStack.Address;
 import bec.compileTimeStack.CTStack;
 import bec.compileTimeStack.Coonst;
@@ -8,6 +7,7 @@ import bec.compileTimeStack.StackItem;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
+import bec.value.IntegerValue;
 import bec.virtualMachine.SVM_NEG;
 import bec.virtualMachine.SVM_NOT_IMPL;
 

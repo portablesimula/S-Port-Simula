@@ -4,12 +4,12 @@ import java.io.IOException;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
-import bec.util.ResolvedType;
 import bec.util.Scode;
+import bec.util.Type;
 
 public class AttributeValue extends Value {
 	int tag;
-	ResolvedType type;
+	int type;
 	RepetitionValue value;
 	
 	public AttributeValue() {
@@ -22,7 +22,8 @@ public class AttributeValue extends Value {
 	 */
 	public void parse() {
 		tag = Scode.inTag();
-		type = new ResolvedType();
+		Type tp = new Type();
+		type = tp.tag;
 		value = new RepetitionValue();
 //		System.out.println("AttributeValue.parse: value=" + value);
 	}
@@ -33,7 +34,7 @@ public class AttributeValue extends Value {
 //	}
 	
 	public String toString() {
-		return "ATTR " + Scode.edTag(tag) + " "+ value;
+		return "ATTR " + Scode.edTag(tag) + Scode.edTag(type) + " "+ value;
 	}
 
 	// ***********************************************************************************************
@@ -41,7 +42,7 @@ public class AttributeValue extends Value {
 	// ***********************************************************************************************
 	private AttributeValue(AttributeInputStream inpt) throws IOException {
 		tag = inpt.readTag();
-		type = ResolvedType.read(inpt);
+		type = inpt.readTag();
 		value = RepetitionValue.read(inpt);
 		System.out.println("NEW ATTR-VALUE: " + this);
 	}
@@ -49,7 +50,7 @@ public class AttributeValue extends Value {
 	public void write(AttributeOutputStream oupt) throws IOException {
 		oupt.writeInstr(Scode.S_ATTR);
 		oupt.writeTag(tag);
-		type.write(oupt);
+		oupt.writeTag(type);
 		value.write(oupt);
 		
 //		this.printTree(2);

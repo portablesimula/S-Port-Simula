@@ -3,25 +3,11 @@ package bec.segment;
 import java.io.IOException;
 import java.util.Vector;
 
-//import PREV.syntaxClass.value.AttributeAddress;
-//import PREV.syntaxClass.value.BooleanValue;
-//import PREV.syntaxClass.value.CharacterValue;
-//import PREV.syntaxClass.value.DotAddress;
-//import PREV.syntaxClass.value.GeneralAddress;
-//import PREV.syntaxClass.value.IntegerValue;
-//import PREV.syntaxClass.value.LongRealValue;
-//import PREV.syntaxClass.value.ObjectAddress;
-//import PREV.syntaxClass.value.ProgramAddress;
-//import PREV.syntaxClass.value.RealValue;
-//import PREV.syntaxClass.value.RoutineAddress;
-//import PREV.syntaxClass.value.SizeValue;
-//import PREV.syntaxClass.value.TextValue;
-//import PREV.syntaxClass.value.PREV_Value;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Global;
-import bec.util.ResolvedType;
 import bec.util.Scode;
+import bec.util.Type;
 import bec.util.Util;
 import bec.value.AddressValue;
 import bec.value.BooleanValue;
@@ -69,7 +55,7 @@ public class DataSegment extends Segment {
 			    case Scode.S_C_REAL:   Scode.inputInstr(); emit(new RealValue(), comment); break;
 			    case Scode.S_C_LREAL:  Scode.inputInstr(); emit(new LongRealValue(), comment); break;
 			    case Scode.S_C_CHAR:   Scode.inputInstr(); emit(new CharacterValue(), comment); break;
-			    case Scode.S_C_SIZE:   Scode.inputInstr(); emit(new SizeValue(false), comment); break;
+			    case Scode.S_C_SIZE:   Scode.inputInstr(); emit(new SizeValue(), comment); break;
 			    case Scode.S_TRUE:     Scode.inputInstr(); emit(new BooleanValue(true), comment); break;
 			    case Scode.S_FALSE:    Scode.inputInstr(); emit(new BooleanValue(false), comment); break;
 			    case Scode.S_NOSIZE:   Scode.inputInstr(); emit(null, comment); break;
@@ -105,10 +91,10 @@ public class DataSegment extends Segment {
 		Scode.inputInstr();
 		while(Scode.curinstr == Scode.S_ATTR) {
 			int atag = Scode.inTag();
-			ResolvedType type = new ResolvedType();
+			Type type = new Type();
 //			System.out.println("DataSegment.emitRecordValue'S_ATTR: "+Scode.edTag(atag)+"  "+type);
 
-			emitValue(comment + "  " + Scode.edTag(atag));
+			emitValue(comment + "  " + Scode.edTag(atag) + "  " + Scode.edTag(type.tag));
 			Scode.inputInstr();
 //			System.out.println("DataSegment.emitRecordValue: Curinstr="+Scode.edInstr(Scode.curinstr));
 		}

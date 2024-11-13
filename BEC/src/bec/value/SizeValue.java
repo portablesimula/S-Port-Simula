@@ -5,7 +5,7 @@ import java.io.IOException;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Scode;
-import bec.util.PREV_Type;
+import bec.util.Type;
 
 public class SizeValue extends Value {
 	int size;
@@ -20,12 +20,10 @@ public class SizeValue extends Value {
 	 * 		::= c-size type
 	 * 		::= NOSIZE
 	 */
-	public SizeValue(boolean isNOSIZE) {
+	public SizeValue() {
 		this.type = Scode.TAG_SIZE;
-		if(! isNOSIZE) {
-			PREV_Type type = new PREV_Type();
-			size = type.size();
-		}
+		Type type = new Type();
+		size = type.size();
 	}
 
 //	@Override

@@ -2,19 +2,12 @@ package bec.descriptor;
 
 import java.io.IOException;
 
-//import PREV.syntaxClass.value.IntegerValue;
-//import PREV.syntaxClass.value.LongRealValue;
-//import PREV.syntaxClass.value.ObjectAddress;
-//import PREV.syntaxClass.value.RealValue;
-//import PREV.syntaxClass.value.RoutineAddress;
-//import PREV.syntaxClass.value.SizeValue;
-//import PREV.syntaxClass.value.PREV_Value;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.InsertStatement;
 import bec.segment.DataSegment;
 import bec.util.Global;
-import bec.util.ResolvedType;
+import bec.util.Type;
 import bec.util.Scode;
 import bec.util.Util;
 import bec.value.IntegerValue;
@@ -50,7 +43,7 @@ public class Variable extends Descriptor {
 		if(seg == null) Util.IERR("");
 		int tag = Scode.inTag();
 		Variable var = new Variable(Kind.K_Import, tag);
-		ResolvedType type = new ResolvedType();
+		Type type = new Type();
 		var.repCount = (Scode.accept(Scode.S_REP)) ? Scode.inNumber() : 1;
 		var.address = seg.nextAddress();
 		if(var.address.seg == null) Util.IERR("");
@@ -62,7 +55,7 @@ public class Variable extends Descriptor {
 		if(seg == null) Util.IERR("");
 		int tag = Scode.inTag();
 		Variable var = new Variable(Kind.K_Export, tag);
-		ResolvedType type = new ResolvedType();
+		Type type = new Type();
 		var.repCount = (Scode.accept(Scode.S_REP)) ? Scode.inNumber() : 1;
 		var.address = seg.nextAddress();
 		type.emitDefaultValue(seg, "EXPORT " + type);
@@ -85,10 +78,26 @@ public class Variable extends Descriptor {
 		return var;
 	}
 	
+	public static Variable ofLocal(DataSegment seg) {
+		int tag = Scode.inTag();
+		Variable var = new Variable(Kind.K_LocalVar, tag);
+		Type type = new Type();
+		var.repCount = (Scode.accept(Scode.S_REP)) ? Scode.inNumber() : 1;
+		var.address = seg.nextAddress();
+		type.emitDefaultValue(Global.DSEG, var.toString());			
+		if(var.repCount > 1) {
+			Util.IERR("");
+		}
+//		Global.dumpDISPL("Variable.ofGlobal: ");
+//		seg.dump("Variable.ofGlobal: ");
+//		Util.IERR("");
+		return var;
+	}
+	
 	public static Variable ofGlobal(DataSegment seg) {
 		int tag = Scode.inTag();
 		Variable var = new Variable(Kind.K_GlobalVar, tag);
-		ResolvedType type = new ResolvedType();
+		Type type = new Type();
 		var.repCount = (Scode.accept(Scode.S_REP)) ? Scode.inNumber() : 1;
 		var.address = seg.nextAddress();
 		if(Scode.accept(Scode.S_SYSTEM)) {

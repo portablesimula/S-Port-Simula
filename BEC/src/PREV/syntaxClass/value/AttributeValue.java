@@ -2,14 +2,14 @@ package PREV.syntaxClass.value;
 
 import java.io.IOException;
 
+import PREV.util.PREV_ResolvedType;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
-import bec.util.ResolvedType;
 import bec.util.Scode;
 
 public class AttributeValue extends PREV_Value {
 	int tag;
-	ResolvedType type;
+	PREV_ResolvedType type;
 	RepetitionValue value;
 	
 	public AttributeValue() {
@@ -22,7 +22,7 @@ public class AttributeValue extends PREV_Value {
 	 */
 	public void parse() {
 		tag = Scode.inTag();
-		type = new ResolvedType();
+		type = new PREV_ResolvedType();
 		value = new RepetitionValue();
 //		System.out.println("AttributeValue.parse: value=" + value);
 	}
@@ -41,7 +41,7 @@ public class AttributeValue extends PREV_Value {
 	// ***********************************************************************************************
 	private AttributeValue(AttributeInputStream inpt) throws IOException {
 		tag = inpt.readTag();
-		type = ResolvedType.read(inpt);
+		type = PREV_ResolvedType.read(inpt);
 		value = RepetitionValue.read(inpt);
 		System.out.println("NEW ATTR-VALUE: " + this);
 	}

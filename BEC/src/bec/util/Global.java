@@ -35,9 +35,15 @@ public class Global {
 	public static Array<Descriptor> DISPL = new Array<Descriptor>();
 	public static void intoDisplay(Descriptor d, int tag) {
 		if(tag != 0) {
+			
+//			if(tag == 54) Util.IERR("");
+			
 			Descriptor prev = DISPL.get(tag);
 			if(prev == null) ; // OK
-			else if(prev != d) Util.IERR("Display-entry is already defined: " + Scode.edTag(tag) + "  " + prev);
+			else if(prev != d) {
+				dumpDISPL("Global.intoDisplay");
+				Util.IERR("Display-entry is already defined: " + Scode.edTag(tag) + "  " + prev);
+			}
 			DISPL.set(tag, d);
 			if(Global.traceMode != 0) System.out.println("Display(" + Scode.edTag(tag) + ") = " +d);
 		}

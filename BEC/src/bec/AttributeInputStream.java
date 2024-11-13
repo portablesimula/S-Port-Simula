@@ -4,13 +4,8 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import PREV.syntaxClass.SyntaxClass;
-import PREV.syntaxClass.instruction.RECORD;
-import PREV.syntaxClass.programElement.PREV_Variable;
-import PREV.syntaxClass.programElement.routine.PREV_PROFILE;
-import PREV.syntaxClass.value.PREV_CONST;
+//import PREV.syntaxClass.SyntaxClass;
 import bec.descriptor.Kind;
-import bec.segment.DataSegment;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
@@ -54,11 +49,11 @@ public class AttributeInputStream {
 	}
 
 
-	public int readTag(SyntaxClass displayEntry) throws IOException {
-		int tag = readTag();
-		Global.Display.set(tag, displayEntry);
-		return tag;
-	}
+//	public int readTag(SyntaxClass displayEntry) throws IOException {
+//		int tag = readTag();
+//		Global.Display.set(tag, displayEntry);
+//		return tag;
+//	}
 
     public int readTag() throws IOException {
     	int tag = inpt.readShort();
@@ -164,9 +159,6 @@ public class AttributeInputStream {
 //	public SyntaxClass readObj() throws IOException {
 //		int kind = readKind();
 //		switch(kind) {
-	public SyntaxClass readObj(AttributeInputStream inpt) throws IOException {
-		int kind = inpt.readKind();
-	
 //		System.out.println("AttributeInputStream.readObj: "+Scode.edInstr(kind));
 //		switch(kind) {
 //			case Scode.S_BSEG:	    return DataSegment.readObject(inpt);
@@ -179,9 +171,6 @@ public class AttributeInputStream {
 //			
 //			default: Util.IERR("IMPOSSIBLE "+Scode.edInstr(kind));
 //		}
-		Util.IERR("");
-		return null;
-	}
 //		case ObjectKind.NULL:
 //			if(TRACE) System.out.println("AttributeInputStream.readObj: null");
 //			return null;

@@ -1,4 +1,4 @@
-package bec.util;
+package PREV.util;
 
 import java.io.IOException;
 
@@ -19,6 +19,10 @@ import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.descriptor.RecordDescr;
 import bec.segment.DataSegment;
+import bec.util.Global;
+import bec.util.Range;
+import bec.util.Scode;
+import bec.util.Util;
 
 public class PREV_Type {
 	public int tag;
@@ -66,16 +70,17 @@ public class PREV_Type {
 	}
 	
 	public void emitDefaultValue(DataSegment dseg, String comment) {
-		if(this.isSimple()) {
-			dseg.emit(defaultValue(), comment);
-		} else {
-			Object obj = Global.Display.get(tag);
-//			System.out.println("Type.emitDefaultValue: tag="+tag);
-			if(obj instanceof RECORD rec) {
-				rec.emitDefaultValues(dseg, 1, comment);
-			} else Util.IERR(""+obj);
-			
-		}
+//		if(this.isSimple()) {
+//			dseg.emit(defaultValue(), comment);
+//		} else {
+//			Object obj = Global.Display.get(tag);
+////			System.out.println("Type.emitDefaultValue: tag="+tag);
+//			if(obj instanceof RECORD rec) {
+//				rec.emitDefaultValues(dseg, 1, comment);
+//			} else Util.IERR(""+obj);
+//			
+//		}
+		Util.IERR("DON'T USE THISD METHOD");
 	}
 	
 	public int size() {

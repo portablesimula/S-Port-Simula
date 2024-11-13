@@ -101,8 +101,10 @@ public class PUSHC extends PREV_Instruction {
 	
 	@Override
 	public void doCode() {
-		Coonst cns = new Coonst(value);
-		CTStack.push(cns);
+//		Coonst cns = new Coonst(value);
+//		CTStack.push(cns);
+		Util.IERR("DETTE MÅ RETTES");
+		
 		Global.PSEG.emit(new SVM_PUSHC(value), "");
 //		CTStack.dumpStack("PUSHC: "+value);
 //		Global.PSEG.dump("PUSHC: "+value);

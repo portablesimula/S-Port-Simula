@@ -5,10 +5,10 @@ import java.util.Vector;
 
 import PREV.syntaxClass.SyntaxClass;
 import PREV.syntaxClass.instruction.PREV_Instruction;
+import PREV.util.PREV_QuantityDescriptor;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Global;
-import bec.util.PREV_QuantityDescriptor;
 import bec.util.Scode;
 import bec.util.Util;
 import bec.value.MemAddr;
@@ -86,7 +86,7 @@ public class PREV_CONST extends PREV_Instruction {
 	// ***********************************************************************************************
 	
 	public PREV_CONST(AttributeInputStream inpt) throws IOException {
-		tag = inpt.readTag(this);
+		tag = inpt.readTag();
 		quant = PREV_QuantityDescriptor.read(inpt);
 //		value = RepetitionValue.read(inpt);
 		address = MemAddr.read(inpt);
