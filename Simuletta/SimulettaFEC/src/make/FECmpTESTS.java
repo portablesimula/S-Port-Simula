@@ -26,8 +26,8 @@ public final class FECmpTESTS {
 		
 //		names.add("ENVIR0");
 		names.add("MODL01");
-		names.add("MODL02");
-		names.add("TEST6");
+//		names.add("MODL02");
+//		names.add("TEST6");
 		
 //		names.add("TEST00");
 //		names.add("TEST01");

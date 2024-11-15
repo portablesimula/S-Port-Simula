@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
+import bec.compileTimeStack.DataType;
 import bec.descriptor.RecordDescr;
 import bec.segment.DataSegment;
 
@@ -57,30 +58,31 @@ public class Type {
 //		}
 //	}
 	
-	public void emitDefaultValue(DataSegment dseg, String comment) {
-		if(this.isSimple()) {
-//			dseg.emit(defaultValue(), comment);
-			dseg.emit(null, comment);
-		} else {
-			Object obj = Global.DISPL.get(tag);
-//			System.out.println("Type.emitDefaultValue: tag="+tag+", obj="+obj.getClass().getSimpleName());
-			if(obj instanceof RecordDescr rec) {
-				rec.emitDefaultValues(dseg, 1, comment);
-			} else Util.IERR(""+obj);
-			
-		}
-	}
+//	public void emitDefaultValue(DataSegment dseg, String comment) {
+//		if(this.isSimple()) {
+////			dseg.emit(defaultValue(), comment);
+//			dseg.emit(null, comment);
+//		} else {
+//			Object obj = Global.DISPL.get(tag);
+////			System.out.println("Type.emitDefaultValue: tag="+tag+", obj="+obj.getClass().getSimpleName());
+//			if(obj instanceof RecordDescr rec) {
+//				rec.emitDefaultValues(dseg, 1, comment);
+//			} else Util.IERR(""+obj.getClass().getSimpleName()+" "+obj);
+//			
+//		}
+//	}
 	
 	public int size() {
-		if(this.isSimple()) return(1);
-		Object obj = Global.DISPL.get(tag);
-//		if(obj instanceof RECORD rec) {
-//			return rec.size();
-		if(obj instanceof RecordDescr rec) {
-			return rec.nbyte;
-//		} else Util.IERR("IMPOSSIBLE: " + Scode.edTag(tag) + "  " + obj.getClass().getSimpleName());
-		} else Util.IERR("IMPOSSIBLE: " + Scode.edTag(tag));
-		return 0;
+//		if(this.isSimple()) return(1);
+//		Object obj = Global.DISPL.get(tag);
+////		if(obj instanceof RECORD rec) {
+////			return rec.size();
+//		if(obj instanceof RecordDescr rec) {
+//			return rec.size;
+////		} else Util.IERR("IMPOSSIBLE: " + Scode.edTag(tag) + "  " + obj.getClass().getSimpleName());
+//		} else Util.IERR("IMPOSSIBLE: " + Scode.edTag(tag));
+//		return 0;
+		return DataType.typeSize(tag);
 	}
 	
 	public String toString() {

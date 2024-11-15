@@ -33,7 +33,7 @@ public class PREV_CONST extends PREV_Instruction {
 	 *		::= const const:spectag quantity_descriptor repetition_value
 	 */
 	public static PREV_CONST of(boolean constDef) {
-		int tag = Scode.inTag();
+		Tag tag = Tag.inTag();
 		PREV_CONST cnst = (PREV_CONST) Global.Display.get(tag);
 		if(cnst == null) {
 			if(constDef) Util.IERR("New CONSPEC but constDef="+constDef);

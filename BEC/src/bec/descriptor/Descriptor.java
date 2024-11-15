@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import bec.AttributeOutputStream;
 import bec.util.Global;
+import bec.util.Tag;
 import bec.util.Util;
 
 //Record Object;
@@ -12,12 +13,12 @@ import bec.util.Util;
 //end;
 public class Descriptor {
 	int kind;  // Object kind code
-	int tag; 
+	public Tag tag; 
 
-	public  Descriptor(int kind, int tag) {
+	public  Descriptor(int kind, Tag tag) {
 		this.kind = kind;
-		this.tag =tag;
-		Global.intoDisplay(this, tag);
+		this.tag = tag;
+		Global.intoDisplay(this, tag.val);
 	}
 	
 

@@ -1,27 +1,42 @@
 package bec.compileTimeStack;
 
+import java.io.IOException;
+import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Vector;
 
 import PREV.syntaxClass.instruction.RECORD;
+import bec.AttributeInputStream;
+import bec.AttributeOutputStream;
+import bec.InsertStatement;
+import bec.ModuleIO;
+import bec.descriptor.Attribute;
+import bec.descriptor.RecordDescr;
+import bec.util.Array;
+import bec.util.Global;
 import bec.util.Scode;
+import bec.util.Tag;
 
 public class DataType {
 //	Define tUnsigned=0,tSigned=1,tFloat=2;
 	enum Kind { tUnsigned , tSigned , tFloat }
 	
-//	int nbyte;  // Size of type in bytes
-	int size;  // Size of type in basic cellec
-	Kind kind;  // tUnsigned,tSigned,tFloat
-	Vector<Integer> pntmap; // NULL:no pointers, else: Reladdr of pointers
+//	int nbyte; // Size of type in bytes
+	int size;  // Size of type in basic cells
+	Kind kind; // tUnsigned,tSigned,tFloat
+//	Vector<Integer> pntmap; // NULL:no pointers, else: Reladdr of pointers
+	public BitSet pntmap; // NULL:no pointers, else: Reladdr of pointers
+	String comment;
 
 //    Infix(DataType) TTAB(MaxType); -- Type specification table
 //	public static DataType[] TTAB = new DataType[32];
 	private static HashMap<Integer, DataType> TMAP = new HashMap<Integer, DataType>();
+//	private static Array<DataType> TTAB = new Array<DataType>();
 	
-	private DataType(int size, Kind kind) {
+	private DataType(int size, Kind kind, String comment) {
 		this.size = size;
 		this.kind = kind;
+		this.comment=comment;
 	}
 
 	public static DataType dataType(int type) {
@@ -47,32 +62,49 @@ public class DataType {
 		newPntType( Scode.TAG_OADDR   ,1     ,Kind.tUnsigned ,0    );
 		newBasType( Scode.TAG_AADDR   ,1     ,Kind.tUnsigned       );
 		newPntType( Scode.TAG_GADDR   ,2     ,Kind.tUnsigned ,1    );
-		newBasType( Scode.TAG_PADDR   ,4     ,Kind.tUnsigned       );
-		newBasType( Scode.TAG_RADDR   ,4     ,Kind.tUnsigned       );
+		newBasType( Scode.TAG_PADDR   ,1     ,Kind.tUnsigned       );
+		newBasType( Scode.TAG_RADDR   ,1     ,Kind.tUnsigned       );
 //		newBasType( Scode.TAG_NOINF   ,0     ,Kind.tUnsigned       );
 
 	}
 
-	public static void newRecType(RECORD rec) {
-		DataType x = new DataType(rec.size(), null);
-		TMAP.put(rec.tag, x);
-	}
+//	public static void newRecType(RECORD rec) {
+//		DataType x = new DataType(rec.size(), null, rec.toString());
+//		TMAP.put(rec.tag, x);
+//	}
 
-	public static void newRecType(int tag, int size) {
-		DataType x = new DataType(size, null);
-		TMAP.put(tag, x);
+	public static void newRecType(RecordDescr rec) {
+		DataType x = new DataType(rec.size, null, rec.tag.toString());
+		x.pntmap = rec.pntmap;
+		TMAP.put(rec.tag.val, x);
 //		System.out.println("DataType.newRecType: " + Scode.edTag(tag) + ", size="+size);
 	}
 
 	private static void newBasType(int type, int size, Kind kind) {
-		DataType x = new DataType(size, kind);
+		DataType x = new DataType(size, kind, Scode.edTag(type));
 		TMAP.put(type, x);
 	}
 
 	private static void newPntType(int type, int size, Kind kind, int rela) {
-		DataType x = new DataType(size, kind);
-	      x.pntmap = new Vector<Integer>();
-	      x.pntmap.add(rela);
+		DataType x = new DataType(size, kind, Scode.edTag(type));
+//		x.pntmap = new Vector<Integer>();
+//		x.pntmap.add(rela);
+		x.pntmap = new BitSet(32);
+		x.pntmap.set(rela);
+		TMAP.put(type, x);
+	}
+
+	public static void dumpDataTypes(String title) {
+		System.out.println("============ "+title+" BEGIN Dump DataTypes ================");
+//		for(int i=0;i<TTAB.size();i++) {
+		for(Integer type:TMAP.keySet()) {
+			System.out.println("TTAB["+Scode.edTag(type)+"] = " + TMAP.get(type));
+		}
+		System.out.println("============ "+title+" ENDOF Dump DataTypes ================");
+	}
+	
+	public String toString() {
+		return "DataType: size="+size + " " + kind;
 	}
 
 }

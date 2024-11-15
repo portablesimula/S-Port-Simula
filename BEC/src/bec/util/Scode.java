@@ -16,13 +16,29 @@ public class Scode {
 //	public static int inputTrace;	// Input trace switch
 //	public static boolean listing = false;
 	
-	public static String[] TAGTABLE;
+//	public static String[] TAGTABLE;
+	public static Array<String> TAGIDENT;
 
 
 	public static void initScode() {
 //		initTagTable();
-		Scode.TAGTABLE = new String[10000];
-		INIT_TAGTABLE.INIT();
+//		Scode.TAGIDENT = new String[10000];
+		Scode.TAGIDENT = new Array<String>();
+
+//		INIT_TAGTABLE.INIT();
+        Scode.TAGIDENT.set(1, "BOOL");
+        Scode.TAGIDENT.set(2, "CHAR");
+        Scode.TAGIDENT.set(3, "INT");
+        Scode.TAGIDENT.set(4, "SINT");
+        Scode.TAGIDENT.set(5, "REAL");
+        Scode.TAGIDENT.set(6, "LREAL");
+        Scode.TAGIDENT.set(7, "AADDR");
+        Scode.TAGIDENT.set(8, "OADDR");
+        Scode.TAGIDENT.set(9, "GADDR");
+        Scode.TAGIDENT.set(10, "PADDR");
+        Scode.TAGIDENT.set(11, "RADDR");
+        Scode.TAGIDENT.set(12, "SIZE");
+
 		String fileName = Global.scodeSource;
 		System.out.println("Open SCode file: " + fileName);
 		try (FileInputStream scode = new FileInputStream(fileName)) {
@@ -35,7 +51,16 @@ public class Scode {
 			e.printStackTrace();
 		}
 	}
-	
+
+	public static void dumpTAGIDENTS(String title) {
+		System.out.println("============ "+title+" BEGIN Dump TAGIDENT ================");
+		for(int i=32;i<TAGIDENT.size();i++) {
+			String elt =TAGIDENT.get(i);
+			System.out.println("  " + i + ": " + elt);
+		}
+		System.out.println("============ "+title+"ENDOF Dump TAGIDENT ================");
+	}
+
 	public static void close() {
 		if(Global.SCODE_INPUT_TRACE) System.out.println(traceBuff);		
 	}
@@ -175,7 +200,8 @@ public class Scode {
 		if(t == 0) {
 			t = get2Bytes();
 			String id = getString();
-			TAGTABLE[t] = id;
+//			TAGIDENT[t] = id;
+			TAGIDENT.set(t, id);
 		}
 		if(Global.SCODE_INPUT_TRACE) {
 			traceBuff.append(" "+edTag(t));
@@ -184,8 +210,9 @@ public class Scode {
 	}
 	
 	public static String edTag(int t) {
-//		return "T:" + t + ':' + TAGTABLE[t];		
-		return "T[" + t + ':' + TAGTABLE[t] + ']';		
+//		return "T:" + t + ':' + TAGIDENT[t];		
+//		return "T[" + t + ':' + TAGIDENT[t] + ']';		
+		return "T[" + t + ':' + TAGIDENT.get(t) + ']';		
 	}
 	
 	public static void inType() {
@@ -386,7 +413,7 @@ public class Scode {
 //	%+E   v.sibreg:=NoIBREG;
 //	end;
 //
-	// *** INIT TAGTABLE ***
+	// *** INIT TAGIDENT ***
 //	private static void initTagTable() {
 //		String fileName = "C:/GitHub/S-Port-Simula/FEC/src/fec/source/RTS-FEC-TAGTABLE.def";
 //		try {

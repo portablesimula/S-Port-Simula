@@ -12,6 +12,7 @@ import bec.segment.DataSegment;
 import bec.util.Global;
 import bec.util.Type;
 import bec.util.Scode;
+import bec.util.Tag;
 import bec.util.Util;
 
 //Record ProfileDescr:Descriptor;  -- K_ProfileDescr     SIZE = (6+npar*2) align 4
@@ -31,11 +32,10 @@ public class ProfileDescr extends Descriptor {
 	public Variable exit;
 	public Variable export;
 	
-	public static boolean USE_RTStack = false; // Allocate Parameters on the Runtime Stack; Otherwise on the Profile DSEG Segment
 //	public int ptag;
-	public int bodyTag;   // peculiar
-	String nature; // peculiar
-	public String ident;  // peculiar
+	public int bodyTag;    // peculiar
+	private String nature; // peculiar
+	public String ident;   // peculiar
 	public DataSegment DSEG;
 
 	
@@ -52,7 +52,7 @@ public class ProfileDescr extends Descriptor {
 		}
 	}
 	
-	private ProfileDescr(int kind, int tag) {
+	private ProfileDescr(int kind, Tag tag) {
 		super(kind, tag);
 //		System.out.println("NEW ProfileDescr: " + Scode.edTag(tag));
 	}
@@ -76,211 +76,71 @@ public class ProfileDescr extends Descriptor {
 	 * 			::= export parm:newtag resolved_type
 	 * 			::= exit return:newtag
 	 */
-	public static ProfileDescr inProfile(int defkind) { // export ref(ProfileDescr) pr;
-//	begin infix(WORD) tag,rtag,ptag,ExpTag,segid,count;
-//	      range(0:MaxType) type,ExpType; infix(string) s,xs;
-//	      range(0:MaxWord) i,npar,kind,nbyte,lng,nlocbyte;
-//	      ref(LocDescr) v,w,fpar; ref(IntDescr) rut;
-//	      infix(WORD) eid,xid,nid; range(0:1) wxt;
-//	      range(0:MaxByte) nCnt,Pno(4),Cnt(4);
-
-		int kind = defkind;
-		int ptag = Scode.inTag();
+	public static ProfileDescr inProfile(int defkind) { // export ref(ProfileDescr) prf;
+		Tag ptag = Tag.inTag();
 //		System.out.println("ProfileDescr.inProfile: " + Scode.edTag(ptag));
-//		pr.ptag = ptag;
-		ProfileDescr pr = new ProfileDescr(Kind.K_ProfileDescr, ptag);
+//		prf.ptag = ptag;
+		ProfileDescr prf = new ProfileDescr(Kind.K_ProfileDescr, ptag);
+//		int kind = defkind;
+		prf.Pkind = defkind;
 		if(Scode.nextByte() == Scode.S_EXTERNAL) {
 			 // peculiar ::= external body:newtag nature:string xid:string
 			Scode.inputInstr();
-			Util.IERR("");
-//	            kind:=P_EXTERNAL;
-//	            InXtag(%rtag%);     -- Body'Tag
-//	            nid:=inSymb;        -- Nature'String
-//	            xs:=InString;       -- xid'String
-//	            Ed(sysedit,xs); -- Deault EntryPoint
-//	            rut:=NEWOBJ(K_IntRoutine,size(IntDescr));
-//	            rut.adr:=noadr;
-//	            --- Search for NATURE index ---
-//	            s:=DICSMB(nid);
-//	               if STEQ(s,"simuletta")  then kind:=P_SIMULETTA
-//	--- pje                                     segid:=EnvCSEG;
-//	--- pje     elsif STEQ(s,"library")    then kind:=P_SIMULETTA
-//	--- pje                                     segid:=EnvCSEG;
-//	            elsif STEQ(s,"assembly")   then kind:=P_ASM
-//	            elsif STEQ(s,"assembler")  then kind:=P_ASM
-//	            elsif STEQ(s,"cc")         then kind:=P_C
-//	            elsif STEQ(s,"c")          then kind:=P_C
-//	                  if OSID<>oUNIX386 then if OSID<>oUNIX386W
-//	                  then pickup(sysedit); -- Remove Deault EntryPoint
-//	                       edchar(sysedit,'_'); Ed(sysedit,xs);
-//	                  endif endif;
-//	            elsif STEQ(s,"fortran")    then kind:=P_FTN
-//	            elsif STEQ(s,"pascal")     then kind:=P_PASCAL
-//	            endif;
-//	            --- set segid (and kind?) for interface to envir  --- pje
-//	            if sysedit.nchr>2                                 --- pje
-//	            then s.chradr:=@sysedit.chr; s.nchr:=2;           --- pje
-//	                 if STEQ(s,"E@")                              --- pje
-//	                 then segid:=EnvCSEG; -- kind:=P_SIMULETTA ?  --- pje
-//	            endif endif                                       --- pje
-//	            
-//	            eid:=DefExtr(pickup(sysedit),segid);
-//	%+D         if InputTrace <> 0
-//	%+D         then ed(inptrace,"ENT="); edsymb(inptrace,eid); ITRC("*BEC") endif;
-//	            rut.adr.kind:=extadr; rut.adr.rela.val:=0; rut.adr.smbx:=eid
-//	%-E         rut.adr.sbireg:=0;
-//	%+E         rut.adr.sibreg:=NoIBREG;
+			Tag.inTag();
+			Scode.inString();
+			// kind = Kind.P_EXTERNAL;
+			// IntDescr rut = new IntDescr(Kind.K_IntRoutine, rtag);
+			Util.IERR("External Routines is not part of this implementation");
 		} else if(Scode.nextByte() == Scode.S_INTERFACE) {
 			 // peculiar ::= interface pid:string
 			Scode.inputInstr();
-			Scode.inString();
-			kind = Kind.P_INTERFACE;
+			String xid = Scode.inString();
+//			prf.Pkind = Kind.P_INTERFACE;
+			prf.Pkind = getSysKind(xid);
 		} else if(Scode.nextByte() == Scode.S_KNOWN) {
 			// peculiar	::= known body:newtag kid:string
 			Scode.inputInstr();
-			kind = Kind.P_KNOWN;
-			int rtag = Scode.inTag();
+			Tag rtag = Tag.inTag();
 			String xid = Scode.inString();
+			IntDescr rut = new IntDescr(Kind.K_IntRoutine, rtag);
 			Util.IERR("");
-			kind = getKnownKind(xid);
+//			prf.Pkind = Kind.P_KNOWN;
+			prf.Pkind = getKnownKind(xid);
 		} else if(Scode.nextByte() == Scode.S_SYSTEM) {
 			 //	peculiar ::= system body:newtag sid:string
 			Scode.inputInstr();
-			Util.IERR("");
-			kind = Kind.P_SYSTEM;
-			int rtag = Scode.inTag();
-//	%+S         xid:=InExtr('E',EnvCSEG);
+			Tag rtag = Tag.inTag();
 			String xid = Scode.inString();
-//	%+S         rut:=NEWOBJ(K_IntRoutine,size(IntDescr));
-//	%+S         if PsysKind=P_KNL
-//	%+S         then rut.adr.kind:=knladr; rut.adr.knlx:=xid
-//	%+S         else rut.adr.kind:=extadr; rut.adr.smbx:=xid endif;
-//	%+S         rut.adr.rela.val:=0;
-//	%+S %-E     rut.adr.sbireg:=0;
-//	%+SE        rut.adr.sibreg:=NoIBREG;
-//	%+S         if PsysKind <> 0 then kind:=PsysKind
-//	%+S -- ????????  rut.adr.segid.val:=0  ?????????????????
-//	%+S         else --- Search for inline index ---
-			kind = getSysKind(xid);
-//	%+S         endif;
+			IntDescr rut = new IntDescr(Kind.K_IntRoutine, rtag);
+//			prf.Pkind = Kind.P_SYSTEM;
+			prf.Pkind = getSysKind(xid);
 		}
-		
-		if(! USE_RTStack) {
-			pr.imports = new Vector<Variable>();
-			
-//			String pID = "Name";//Scode.TAGTABLE[profileTag];
-			String pID = Scode.edTag(ptag);
-			pr.DSEG = new DataSegment("DSEG_" + Global.moduleID + '_' + pID, Kind.K_SEG_DATA);
-
-		}
-		int npar = 0;
-		int nbyte = 0;
-		LocDescr fpar = null;
-//	      repeat InputInstr while CurInstr=S_IMPORT
-//	      do InTag(%ptag%); type:=intype;
+		prf.imports = new Vector<Variable>();
+		prf.DSEG = new DataSegment("DSEG_" + Global.moduleID + '_' + ptag, Kind.K_SEG_DATA);
 		Scode.inputInstr();
-//		System.out.println("ProfileDescr.inProfile: BEFORE IMPORT: " + Scode.edInstr(Scode.curinstr));
-		LocDescr w = null;
 		while(Scode.curinstr == Scode.S_IMPORT) {
-			 // import_definition ::= import parm:newtag quantity_descriptor
-			 //   quantity_descriptor ::= resolved_type < Rep count:number >?
-			 //		 * 
-			 //		  resolved_type
-			 //		  		::= resolved_structure | simple_type
-			 //		  		::= INT range lower:number upper:number
-			 //		  		::= SINT
-			if(USE_RTStack) {
-//				int ptag = Scode.inTag();
-//				QuantityDescriptor quant = new QuantityDescriptor();
-				Type type = new Type();
-				int repCount = (Scode.accept(Scode.S_REP)) ? Scode.inNumber() : 1;
-				System.out.println("ProfileDescr'IMPORT: " + Scode.edTag(ptag) + " " + type);
-				int lng = DataType.typeSize(type.tag);
-	
-				if(lng == 0) Util.IERR("Illegal Type on Parameter");
-				nbyte = nbyte + lng;
-//				v.rela = nbyte;
-				LocDescr v = LocDescr.ofParameter(ptag, type, nbyte);
-				if(npar == 0) fpar = v; else w.nextag = ptag;
-				System.out.println("ProfileDescr'IMPORT-2: " + Scode.edTag(ptag) + " " + v);
-				Util.IERR("");
-				if(repCount > 1) {
-					nbyte = nbyte + (repCount * lng)-lng;
-//	%+C           	if nCnt >= 4
-//	%+C           	then IERR("MINUT: Too many rep-params"); nCnt:=3 endif;
-//	%+C           	if count.val>255 then IERR("MINUT: too large count") endif;
-//	              	Pno(nCnt):=npar; Cnt(nCnt):=count.val; nCnt:=nCnt+1;
-					Util.IERR("SJEKK DETTE");
-				}
-				npar = npar + 1;
-				w = v;
-				Global.intoDisplay(v,ptag);
-			} else {
-				pr.imports.add(Variable.ofIMPORT(pr.DSEG));
-				
-			}
-			
+			prf.imports.add(Variable.ofIMPORT(prf.DSEG));
 			Scode.inputInstr();
 		}
-
-//	      wxt:=0;
 		if(Scode.curinstr == Scode.S_EXIT) {
-			if(USE_RTStack) {
-//	      then v:=NEWOBJ(K_Import,size(LocDescr)); v.type:=T_PADDR;
-//	           v.rela:=AllignFac; -- Offset of return address in stack head
-//	           InTag(%ptag%); wxt:=qEXIT; IntoDisplay(v,ptag);
-//	           InputInstr;
-				Util.IERR("NOT IMPL");
-			} else {
-				pr.exit = Variable.ofEXIT(pr.DSEG);
-				Scode.inputInstr();
-			}
+			prf.exit = Variable.ofEXIT(prf.DSEG);
+			Scode.inputInstr();
 		} else if(Scode.curinstr == Scode.S_EXPORT) {
-			if(USE_RTStack) {
-//	      then InTag(%ExpTag%); ExpType:=intype;
-//	%+E        if    ExpType=T_BYT1 then ExpType:=T_WRD4 --- NY: FOR TEST ?????
-//	%+E        elsif ExpType=T_BYT2 then ExpType:=T_WRD4
-//	%+E        elsif ExpType=T_WRD2 then ExpType:=T_WRD4 endif;
-//	           v:=NEWOBJ(K_Export,size(LocDescr)); v.type:=ExpType;
-//	           v.rela:=(4+AllignFac)+nbyte; IntoDisplay(v,ExpTag);
-//	           InputInstr;
-				Util.IERR("NOT IMPL");
-			} else {
-				pr.export = Variable.ofEXPORT(pr.DSEG);				
-				Scode.inputInstr();
-			}
+			prf.export = Variable.ofEXPORT(prf.DSEG);				
+			Scode.inputInstr();
 		}
 		if(Scode.curinstr != Scode.S_ENDPROFILE)
 			Util.IERR("Missing ENDPROFILE. Got " + Scode.edInstr(Scode.curinstr));
-
-		if(USE_RTStack) {
-//	      pr:=NEWOBJ(K_ProfileDescr,size(ProfileDescr:npar));
-//	      pr.npar:=npar; pr.Pkind:=kind; pr.type:=ExpType;
-//	      pr.nparbyte:=nbyte; pr.WithExit:=wxt;
-//	      --- Increment relative addresses by size of import block ---
-//	      --- and fill Profile's Parameter - Specifications        ---
-//	      v:=fpar; i:=0;
-//	      repeat while i < npar
-//	      do v.rela:=((4+AllignFac)+nbyte)-v.rela; pr.par(i).type:=v.type;
-//	         pr.par(i).count:=1;
-//	         v:=DISPL(v.nextag.HI).elt(v.nextag.LO); i:=i+1;
-//	      endrepeat;
-//	      repeat while nCnt <> 0
-//	      do nCnt:=nCnt-1; pr.par(Pno(nCnt)).count:=Cnt(nCnt) endrepeat;
-//	      IntoDisplay(pr,tag);
-//	      if rut<>none then rut.type:=ExpType; IntoDisplay(rut,rtag) endif;
-			Util.IERR("NOT IMPL");
-		}
 		
 //		Global.dumpDISPL("END PROFILE: ");
-//		pr.print("   ");
+//		prf.print("   ");
 //		Util.IERR("");
-		return pr;
+		return prf;
 	}
 
 	@Override
 	public void print(final String indent) {
-		String profile = "PROFILE " + Scode.edTag(tag);
+		String profile = "PROFILE " + tag;
 		switch(kind) {
 		case Scode.S_KNOWN ->     profile += " KNOWN "     + Scode.edTag(bodyTag) + " \"" + ident + '"';
 		case Scode.S_SYSTEM ->    profile += " SYSTEM "    + Scode.edTag(bodyTag) + " " + ident;
@@ -296,7 +156,7 @@ public class ProfileDescr extends Descriptor {
 	}
 	
 	public String toString() {
-		String profile = "PROFILE " + Scode.edTag(tag);
+		String profile = "PROFILE " + tag;
 		switch(kind) {
 			case Scode.S_KNOWN ->     profile += " KNOWN " + Scode.edTag(bodyTag) + " \"" + ident + '"';
 			case Scode.S_SYSTEM ->    profile += " SYSTEM " + Scode.edTag(bodyTag) + " " + ident;
@@ -356,9 +216,10 @@ public class ProfileDescr extends Descriptor {
 	}
 
 	private static int getSysKind(String s) {
-		Util.IERR("");
 		//--- Search for inline index ---
-//		if(s.equalsIgnoreCase("GTOUTM")) return Kind.P_GTOUTM;
+		if(s.equalsIgnoreCase("INTRHA")) return Kind.P_INTRHA;
+		if(s.equalsIgnoreCase("STREQL")) return Kind.P_STREQL;
+		if(s.equalsIgnoreCase("PRINTO")) return Kind.P_PRINTO;
 //		if(s.equalsIgnoreCase("MOVEIN")) return Kind.P_MOVEIN;
 //		if(s.equalsIgnoreCase("RSQROO")) return Kind.P_RSQROO;
 //		if(s.equalsIgnoreCase("SQROOT")) return Kind.P_SQROOT;
@@ -426,6 +287,7 @@ public class ProfileDescr extends Descriptor {
 //		if(s.equalsIgnoreCase("M?SPAL")) return Kind.P_DOS_SETPAL;
 //		if(s.equalsIgnoreCase("M?RCHK")) return Kind.P_DOS_RDCHK;
 //		if(s.equalsIgnoreCase("M?KEYI")) return Kind.P_DOS_KEYIN;
+		Util.IERR(""+s);
 		return 0;
 	}
 
@@ -436,8 +298,9 @@ public class ProfileDescr extends Descriptor {
 	public void write(AttributeOutputStream oupt) throws IOException {
 		if(Global.ATTR_OUTPUT_TRACE) System.out.println("ProfileDescr.Write: " + this);
 		oupt.writeKind(kind);
-		oupt.writeShort(ModuleIO.chgType(tag));
-//		oupt.writeKind(Pkind);
+//		oupt.writeShort(ModuleIO.chgType(tag));
+		tag.write(oupt);
+		oupt.writeKind(Pkind);
 		oupt.writeShort(nparbyte);
 //		oupt.writeShort(imports.size()); // npar
 //		for(Variable imprt:imports) imprt.write(oupt);
@@ -447,9 +310,11 @@ public class ProfileDescr extends Descriptor {
 	}
 
 	public static ProfileDescr read(AttributeInputStream inpt) throws IOException {
-		int tag = inpt.readShort();
-		tag = InsertStatement.current.chgInType(tag);
+//		int tag = inpt.readShort();
+//		tag = InsertStatement.current.chgInType(tag);
+		Tag tag = Tag.read(inpt);
 		ProfileDescr prf = new ProfileDescr(Kind.K_RecordDescr, tag);
+		prf.Pkind = inpt.readKind();
 		prf.nparbyte = inpt.readShort();
 		if(Global.ATTR_OUTPUT_TRACE) System.out.println("ProfileDescr.Read: " + prf);
 		prf.print("   ");

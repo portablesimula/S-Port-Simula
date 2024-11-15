@@ -36,21 +36,23 @@ public class Kind {
 
 	public static String edKind(int kind) {
 		switch(kind) {
-		case K_Module:			return "Module";
-		case K_SEG_DATA:		return "SEG_DATA";
-		case K_SEG_CONST:		return "SEG_CONST";
-		case K_SEG_CODE:		return "SEG_CODE";
-		case K_Coonst:			return "Coonst";
-		case K_RecordDescr:		return "RecordDescr";
-		case K_Attribute:		return "Attribute";
-		case K_GlobalVar:		return "GlobalVar";
-		case K_LocalVar:		return "LocalVar";
-		case K_ProfileDescr:	return "ProfileDescr";
-		case K_Import:			return "Import";
-		case K_Export:			return "Export";
-		case K_Exit:			return "Exit";
-		case K_Retur:			return "Retur";
-		case K_EndModule:		return "EndModule";
+			case K_Module:			return "Module";
+			case K_SEG_DATA:		return "SEG_DATA";
+			case K_SEG_CONST:		return "SEG_CONST";
+			case K_SEG_CODE:		return "SEG_CODE";
+			case K_Coonst:			return "Coonst";
+			case K_RecordDescr:		return "RecordDescr";
+			case K_Attribute:		return "Attribute";
+			case K_GlobalVar:		return "GlobalVar";
+			case K_LocalVar:		return "LocalVar";
+			case K_ProfileDescr:	return "ProfileDescr";
+			case K_Import:			return "Import";
+			case K_Export:			return "Export";
+			case K_Exit:			return "Exit";
+			case K_Retur:			return "Retur";
+			case K_IntRoutine:		return "IntRoutine";
+			case K_IntLabel:		return "IntLabel";
+			case K_EndModule:		return "EndModule";
 		}
 		return "Kind:" + kind;
 	}
@@ -74,6 +76,9 @@ public class Kind {
 //	 Define P_PASCAL=13      -- External PASCAL routine
 //	 --     14 .. 19         -- Reserved
 //
+	public static final int P_INTRHA=20; // System profile
+	public static final int P_STREQL=21; // System routine
+	public static final int P_PRINTO=22; // System routine
 //	 Define P_GTOUTM=20      -- Sysroutine("GTOUTM")
 //	 Define P_MOVEIN=21      -- Sysroutine("MOVEIN")
 //

@@ -1,13 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
+	<item key="hasShownOverlayPopupBefore" value="true"/>
+	<item key="replaceBarOpen" value="true"/>
+	<list key="replacehistory">
+		<item value="/"/>
+		<item value="Scode.TAGTABLE["/>
+		<item value="        Scode.TAGTABLE"/>
+		<item value="\n"/>
+		<item value="oupt.write(&quot;\n"/>
+		<item value="&quot;;&quot;);"/>
+		<item value="] = "/>
+		<item value="&#x09;Scode.TAGTABLE["/>
+		<item value="GitHub/S-Port-Simula/Simuletta"/>
+	</list>
+	<list key="searchhistory">
+		<item value="PUTSTR"/>
+		<item value="\"/>
+		<item value="Scode.TAGTABLE"/>
+		<item value="&#x09;Scode.TAGTABLE["/>
+		<item value="ø"/>
+		<item value="oupt.write(&quot;"/>
+		<item value="&quot;);&quot;);"/>
+		<item value="):-copy("/>
+		<item value="\n&#x09;&#x09;ident("/>
+		<item value="SimulettaFECinJava"/>
+	</list>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="SYSINSERT"/>
+		<item key="selection" value="PUTSTR"/>
 		<item key="wrap" value="true"/>
-		<item key="casesensitive" value="true"/>
-		<item key="wholeword" value="true"/>
+		<item key="casesensitive" value="false"/>
+		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="PUTSTR"/>
+			<item value="MAXINT"/>
+			<item value="MAXLEN"/>
 			<item value="SYSINSERT"/>
 			<item value="BODY"/>
 			<item value="ROUTINE"/>
@@ -20,9 +48,6 @@
 			<item value="CALL-TOS"/>
 			<item value="verbose"/>
 			<item value="trace"/>
-			<item value="gettextinfo"/>
-			<item value="intinfo"/>
-			<item value="EDOADDR"/>
 		</list>
 		<list key="replacehistory">
 			<item value="%   "/>

@@ -89,7 +89,7 @@ public class PREV_Type {
 //		if(obj instanceof RECORD rec) {
 //			return rec.size();
 		if(obj instanceof RecordDescr rec) {
-			return rec.nbyte;
+			return rec.size;
 //		} else Util.IERR("IMPOSSIBLE: " + Scode.edTag(tag) + "  " + obj.getClass().getSimpleName());
 		} else Util.IERR("IMPOSSIBLE: " + Scode.edTag(tag));
 		return 0;

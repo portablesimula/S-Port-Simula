@@ -43,6 +43,12 @@ public class DataSegment extends Segment {
 		comment.add(cmnt);
 	}
 
+	public void emitDefaultValue(int size, String cmnt) {
+		for(int i=0;i<size;i++) {
+			emit(null, cmnt);
+		}
+	}
+
 	public MemAddr emitValue(String comment) {
 //		MemAddr addr = Global.DSEG.nextAddress();
 		MemAddr addr = nextAddress();

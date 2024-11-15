@@ -108,7 +108,7 @@ public class RECORD extends PREV_Instruction {
 		if("TYPE".equalsIgnoreCase(info)) {
 			buildPointerMap();
 			printTree(2);
-			DataType.newRecType(this);
+//			DataType.newRecType(this);
 //			Util.IERR("");
 		}
 	}
@@ -200,7 +200,7 @@ public class RECORD extends PREV_Instruction {
 		
 		if(Global.ATTR_INPUT_TRACE) printTree(2);
 		if("TYPE".equalsIgnoreCase(info)) {
-			DataType.newRecType(this);
+//			DataType.newRecType(this);
 		}
 	}
 

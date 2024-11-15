@@ -1,6 +1,7 @@
 package bec.util;
 
 import java.io.File;
+import java.util.HashMap;
 
 import PREV.syntaxClass.SyntaxClass;
 import bec.descriptor.Descriptor;
@@ -81,7 +82,8 @@ public class Global {
 	public static int curline;		// Current source line number
 	public static int nTags; // See: INSERT
 
-	public static Array<Integer> TAGTAB; // Tag Table (during Module I/O)
+	public static Array<Integer> iTAGTAB; // Index xTag --> value iTag (during Module I/O)
+	public static Array<Integer> xTAGTAB; // Index iTag --> value xTag (during Module I/O)
 
 	public static boolean insideRoutine;  // Inside Routine Body indicator
 
