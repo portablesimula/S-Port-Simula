@@ -44,10 +44,10 @@ import simuletta.utilities.Util;
  * S-Code:
  * 
  *		RoutineSpecification ::= ROUTINESPEC body:newtag profile:tag
- *Â  
+ *  
  *		RoutineDefinition ::= ROUTINE body:spectag profile:tag
  *								<local_quantity>* <instruction>* ENDROUTINE
-Â * 
+ * 
  *			local_quantity ::= local var:newtag quantity_descriptor
  *
  * </pre>

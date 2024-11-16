@@ -206,6 +206,7 @@ public class Scode {
 		if(Global.SCODE_INPUT_TRACE) {
 			traceBuff.append(" "+edTag(t));
 		}
+		System.out.println("Scode.inTag: " + t);
 		return t;
 	}
 	

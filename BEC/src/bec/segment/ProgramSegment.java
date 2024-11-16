@@ -8,6 +8,7 @@ import bec.AttributeOutputStream;
 import bec.descriptor.Kind;
 import bec.util.Global;
 import bec.util.Scode;
+import bec.util.Util;
 import bec.value.MemAddr;
 import bec.virtualMachine.SVM_Instruction;
 
@@ -66,6 +67,7 @@ public class ProgramSegment extends Segment {
 	@Override
 	public void write(AttributeOutputStream oupt) throws IOException {
 		if(Global.ATTR_OUTPUT_TRACE) System.out.println("ProgramSegment.Write: " + this);
+		this.dump("ProgramSegment.Write: ");
 //		oupt.writeInstr(Scode.S_BSEG);
 		oupt.writeKind(segmentKind);
 		oupt.writeString(ident);
@@ -77,6 +79,7 @@ public class ProgramSegment extends Segment {
 				 oupt.writeInstr(Scode.S_NULL);
 			else val.write(oupt);
 		}
+//		Util.IERR("");
 	}
 
 	public static ProgramSegment readObject(AttributeInputStream inpt) throws IOException {

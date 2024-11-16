@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
-import bec.InsertStatement;
+import bec.statement.InsertStatement;
 
 public class Tag {
 	public int val;
@@ -15,6 +15,10 @@ public class Tag {
 	
 	public static Tag inTag() {
 		return new Tag(Scode.inTag());
+	}
+	
+	public String ident() {
+		return Scode.TAGIDENT.get(val);
 	}
 	
 	private static int xTag(int t) { // export range(0:MaxType) tx;
@@ -44,9 +48,10 @@ public class Tag {
 	private static int chgInType(int tx) { // Used by Tag.read
 		int t = 0;
 		if(tx <= Scode.T_max) t = tx; else {
-			t = tx - Scode.T_max + InsertStatement.current.bias - 2;
+//			t = tx - Scode.T_max + InsertStatement.current.bias - 2;
+			t = tx - Scode.T_max + InsertStatement.current.bias - 1;
 		}
-		if(Global.ATTR_OUTPUT_TRACE)
+		if(Global.ATTR_INPUT_TRACE)
 			System.out.println("chgInType xTag:" + tx + " ==> " + Scode.edTag(t));
 //		Util.IERR("SJEKK DETTE");
 		return t;

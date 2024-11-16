@@ -3,12 +3,8 @@ package bec.instruction;
 import java.util.Vector;
 
 import PREV.syntaxClass.programElement.ProgramElement;
-import PREV.syntaxClass.programElement.routine.PREV_ROUTINE;
-import PREV.syntaxClass.programElement.routine.PREV_ROUTINESPEC;
-import PREV.syntaxClass.value.PREV_CONST;
 import bec.descriptor.ConstDescr;
-import bec.descriptor.IntDescr;
-import bec.segment.ProgramSegment;
+import bec.descriptor.RoutineDescr;
 import bec.util.Scode;
 import bec.util.Util;
 
@@ -18,9 +14,11 @@ public class Instruction extends ProgramElement {
 	public static Vector<Instruction> inInstructionSet(){
 		Vector<Instruction> instructionSet = new Vector<Instruction>();
 		LOOP:while(true) {
-			Instruction instr = inInstruction();
-			if(instr == null) break LOOP;
-			instructionSet.add(instr);
+//			Instruction instr = inInstruction();
+			Object obj = inInstruction();
+			if(obj == null) break LOOP;
+			if(obj instanceof Instruction instr)
+				instructionSet.add(instr);
 			Scode.inputInstr();
 		}
 		
@@ -32,20 +30,13 @@ public class Instruction extends ProgramElement {
 		return instructionSet;
 	}
 
-	public static boolean inInstruction() {
+
+	public static Object inInstruction() {
 //		System.out.println("Parse.instruction: "+Scode.edInstr(Scode.curinstr));
 		switch(Scode.curinstr) {
-		case Scode.S_CONSTSPEC:		ConstDescr.inConstant(false); return true;
-		case Scode.S_CONST:			ConstDescr.inConstant(true); return true;
-		case Scode.S_ROUTINESPEC:	IntDescr.ofRoutineSpec(); return true;
-		default: return inxInstruction() != null;
-		}
-	}
-
-
-		private static Instruction inxInstruction() {
-//			System.out.println("Parse.instruction: "+Scode.edInstr(Scode.curinstr));
-			switch(Scode.curinstr) {
+			case Scode.S_CONSTSPEC:	  return ConstDescr.inConstant(false);
+			case Scode.S_CONST:		  return ConstDescr.inConstant(true);
+			case Scode.S_ROUTINESPEC: return RoutineDescr.ofRoutineSpec();
 			case Scode.S_RECORD:      return new RECORD();
 			case Scode.S_SETOBJ:      Util.IERR("SSTMT.SETOBJ is not implemented");
 			case Scode.S_GETOBJ:      Util.IERR("SSTMT.GETOBJ is not implemented");

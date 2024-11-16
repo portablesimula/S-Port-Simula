@@ -111,9 +111,9 @@ public class Kind {
 //
 //	 Define P_CBLNK=46       -- Known("CBLNK")
 //	 Define P_CMOVE=47       -- Known("CMOVE")
-//	 Define P_STRIP=48       -- Known("STRIP")
+	public static final int P_STRIP=48;  // Known("STRIP")
 //	 Define P_TXTREL=49      -- Known("TXTREL")
-//	 Define P_TRFREL=50      -- Known("TRFREL")
+	public static final int P_TRFREL=50; // Known("TRFREL")
 //
 //	 Define P_AR1IND=51      -- Known("AR1IND")
 //	 Define P_AR2IND=52      -- Known("AR2IND")

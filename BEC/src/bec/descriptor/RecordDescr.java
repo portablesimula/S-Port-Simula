@@ -6,13 +6,14 @@ import java.util.Vector;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
-import bec.InsertStatement;
 import bec.ModuleIO;
 import bec.compileTimeStack.DataType;
 import bec.segment.DataSegment;
+import bec.statement.InsertStatement;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Tag;
+import bec.util.Util;
 
 public class RecordDescr extends Descriptor {
 	public int size;      // Record size information
@@ -201,7 +202,7 @@ public class RecordDescr extends Descriptor {
 		rec.size = inpt.readShort();
 		rec.nbrep = inpt.readShort();
 		rec.infoType = inpt.readBoolean();
-		if(Global.ATTR_OUTPUT_TRACE) System.out.println("RecordDescr.Read: " + rec);
+		if(Global.ATTR_INPUT_TRACE) System.out.println("RecordDescr.Read: " + rec);
 		if(rec.infoType) {
 			rec.buildPointerMap();
 			DataType.newRecType(rec);

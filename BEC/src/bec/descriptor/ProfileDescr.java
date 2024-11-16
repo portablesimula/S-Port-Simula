@@ -5,10 +5,10 @@ import java.util.Vector;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
-import bec.InsertStatement;
 import bec.ModuleIO;
 import bec.compileTimeStack.DataType;
 import bec.segment.DataSegment;
+import bec.statement.InsertStatement;
 import bec.util.Global;
 import bec.util.Type;
 import bec.util.Scode;
@@ -102,8 +102,8 @@ public class ProfileDescr extends Descriptor {
 			Scode.inputInstr();
 			Tag rtag = Tag.inTag();
 			String xid = Scode.inString();
-			IntDescr rut = new IntDescr(Kind.K_IntRoutine, rtag);
-			Util.IERR("");
+			RoutineDescr rut = new RoutineDescr(Kind.K_IntRoutine, rtag);
+//			Util.IERR("");
 //			prf.Pkind = Kind.P_KNOWN;
 			prf.Pkind = getKnownKind(xid);
 		} else if(Scode.nextByte() == Scode.S_SYSTEM) {
@@ -111,7 +111,7 @@ public class ProfileDescr extends Descriptor {
 			Scode.inputInstr();
 			Tag rtag = Tag.inTag();
 			String xid = Scode.inString();
-			IntDescr rut = new IntDescr(Kind.K_IntRoutine, rtag);
+			RoutineDescr rut = new RoutineDescr(Kind.K_IntRoutine, rtag);
 //			prf.Pkind = Kind.P_SYSTEM;
 			prf.Pkind = getSysKind(xid);
 		}
@@ -172,46 +172,46 @@ public class ProfileDescr extends Descriptor {
 
 	
 	private static int getKnownKind(String s) {
-		Util.IERR("");
-//%+S            if STEQ(s,"RLOG10")    then kind:=P_RLOG10
-//%+S         elsif STEQ(s,"DLOG10")    then kind:=P_DLOG10
-//%+S         elsif STEQ(s,"RCOSIN")    then kind:=P_RCOSIN
-//%+S         elsif STEQ(s,"COSINU")    then kind:=P_COSINU
-//%+S         elsif STEQ(s,"RTANGN")    then kind:=P_RTANGN
-//%+S         elsif STEQ(s,"TANGEN")    then kind:=P_TANGEN
-//%+S         elsif STEQ(s,"RARCOS")    then kind:=P_RARCOS
-//%+S         elsif STEQ(s,"ARCCOS")    then kind:=P_ARCCOS
-//%+S         elsif STEQ(s,"RARSIN")    then kind:=P_RARSIN
-//%+S         elsif STEQ(s,"ARCSIN")    then kind:=P_ARCSIN
-//%+S         elsif STEQ(s,"ERRNON")    then kind:=P_ERRNON
-//%+S         elsif STEQ(s,"ERRQUA")    then kind:=P_ERRQUA
-//%+S         elsif STEQ(s,"ERRSWT")    then kind:=P_ERRSWT
-//%+S         elsif STEQ(s,"ERROR")     then kind:=P_ERROR
-//%+S         elsif STEQ(s,"CBLNK")     then kind:=P_CBLNK
-//%+S         elsif STEQ(s,"CMOVE")     then kind:=P_CMOVE
-//%+S         elsif STEQ(s,"STRIP")     then kind:=P_STRIP
-//%+S         elsif STEQ(s,"TXTREL")    then kind:=P_TXTREL
-//%+S         elsif STEQ(s,"TRFREL")    then kind:=P_TRFREL
-//%+S         elsif STEQ(s,"AR1IND")    then kind:=P_AR1IND
-//%+S         elsif STEQ(s,"AR2IND")    then kind:=P_AR2IND
-//%+S         elsif STEQ(s,"ARGIND")    then kind:=P_ARGIND
-//%+S         elsif STEQ(s,"IABS")      then kind:=P_IABS
-//%+S         elsif STEQ(s,"RABS")      then kind:=P_RABS
-//%+S         elsif STEQ(s,"DABS")      then kind:=P_DABS
-//%+S         elsif STEQ(s,"RSIGN")     then kind:=P_RSIGN
-//%+S         elsif STEQ(s,"DSIGN")     then kind:=P_DSIGN
-//%+S         elsif STEQ(s,"MODULO")    then kind:=P_MODULO
-//%+S         elsif STEQ(s,"RENTI")     then kind:=P_RENTI
-//%+S         elsif STEQ(s,"DENTI")     then kind:=P_DENTI
-//%+S         elsif STEQ(s,"DIGIT")     then kind:=P_DIGIT
-//%+S         elsif STEQ(s,"LETTER")    then kind:=P_LETTER
-//%+S         elsif STEQ(s,"RIPOWR")    then kind:=P_RIPOWR
-//%+S         elsif STEQ(s,"RRPOWR")    then kind:=P_RRPOWR
-//%+S         elsif STEQ(s,"RDPOWR")    then kind:=P_RDPOWR
-//%+S         elsif STEQ(s,"DIPOWR")    then kind:=P_DIPOWR
-//%+S         elsif STEQ(s,"DRPOWR")    then kind:=P_DRPOWR
-//%+S         elsif STEQ(s,"DDPOWR")    then kind:=P_DDPOWR
-//%+S         endif;
+//		if(s.equalsIgnoreCase("RLOG10")) return Kind.P_RLOG10;
+//		if(s.equalsIgnoreCase("DLOG10")) return Kind.P_DLOG10;
+//		if(s.equalsIgnoreCase("RCOSIN")) return Kind.P_RCOSIN;
+//		if(s.equalsIgnoreCase("COSINU")) return Kind.P_COSINU;
+//		if(s.equalsIgnoreCase("RTANGN")) return Kind.P_RTANGN;
+//		if(s.equalsIgnoreCase("TANGEN")) return Kind.P_TANGEN;
+//		if(s.equalsIgnoreCase("RARCOS")) return Kind.P_RARCOS;
+//		if(s.equalsIgnoreCase("ARCCOS")) return Kind.P_ARCCOS;
+//		if(s.equalsIgnoreCase("RARSIN")) return Kind.P_RARSIN;
+//		if(s.equalsIgnoreCase("ARCSIN")) return Kind.P_ARCSIN;
+//		if(s.equalsIgnoreCase("ERRNON")) return Kind.P_ERRNON;
+//		if(s.equalsIgnoreCase("ERRQUA")) return Kind.P_ERRQUA;
+//		if(s.equalsIgnoreCase("ERRSWT")) return Kind.P_ERRSWT;
+//		if(s.equalsIgnoreCase("ERROR")) return Kind.P_ERROR;
+//		if(s.equalsIgnoreCase("CBLNK")) return Kind.P_CBLNK;
+//		if(s.equalsIgnoreCase("CMOVE")) return Kind.P_CMOVE;
+		if(s.equalsIgnoreCase("STRIP")) return Kind.P_STRIP;
+//		if(s.equalsIgnoreCase("TXTREL")) return Kind.P_TXTREL;
+		if(s.equalsIgnoreCase("TRFREL")) return Kind.P_TRFREL;
+		if(s.equalsIgnoreCase("TRFREL")) return Kind.P_TRFREL;
+//		if(s.equalsIgnoreCase("AR1IND")) return Kind.P_AR1IND;
+//		if(s.equalsIgnoreCase("AR2IND")) return Kind.P_AR2IND;
+//		if(s.equalsIgnoreCase("ARGIND")) return Kind.P_ARGIND;
+//		if(s.equalsIgnoreCase("IABS")) return Kind.P_IABS;
+//		if(s.equalsIgnoreCase("RABS")) return Kind.P_RABS;
+//		if(s.equalsIgnoreCase("DABS")) return Kind.P_DABS;
+//		if(s.equalsIgnoreCase("RSIGN")) return Kind.P_RSIGN;
+//		if(s.equalsIgnoreCase("DSIGN")) return Kind.P_DSIGN;
+//		if(s.equalsIgnoreCase("MODULO")) return Kind.P_MODULO;
+//		if(s.equalsIgnoreCase("RENTI")) return Kind.P_RENTI;
+//		if(s.equalsIgnoreCase("DENTI")) return Kind.P_DENTI;
+//		if(s.equalsIgnoreCase("DIGIT")) return Kind.P_DIGIT;
+//		if(s.equalsIgnoreCase("LETTER")) return Kind.P_LETTER;
+//		if(s.equalsIgnoreCase("RIPOWR")) return Kind.P_RIPOWR;
+//		if(s.equalsIgnoreCase("RRPOWR")) return Kind.P_RRPOWR;
+//		if(s.equalsIgnoreCase("RDPOWR")) return Kind.P_RDPOWR;
+//		if(s.equalsIgnoreCase("DIPOWR")) return Kind.P_DIPOWR;
+//		if(s.equalsIgnoreCase("DRPOWR")) return Kind.P_DRPOWR;
+//		if(s.equalsIgnoreCase("DDPOWR")) return Kind.P_DDPOWR;
+		Util.IERR(""+s);
 		return 0;
 	}
 

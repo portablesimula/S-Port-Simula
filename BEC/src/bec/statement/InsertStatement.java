@@ -1,11 +1,11 @@
-package bec;
+package bec.statement;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import bec.descriptor.ConstDescr;
 import bec.descriptor.Kind;
+import bec.AttributeInputStream;
 import bec.descriptor.Attribute;
 import bec.descriptor.ProfileDescr;
 import bec.descriptor.RecordDescr;

@@ -24,9 +24,9 @@ public class MiniInlineTest {
 
 	private static String Pick_Source() {
 //		return "C:/Simuletta/SCode/simulettaTestPrograms/ENVIR0.scd";
-		return "C:/Simuletta/SCode/simulettaTestPrograms/MODL01.scd";
+//		return "C:/Simuletta/SCode/simulettaTestPrograms/MODL01.scd";
 //		return "C:/Simuletta/SCode/simulettaTestPrograms/MODL02.scd";
-//		return "C:/Simuletta/SCode/simulettaTestPrograms/TEST6.scd";
+		return "C:/Simuletta/SCode/simulettaTestPrograms/TEST6.scd";
 	}
 
 

@@ -4,9 +4,9 @@ import java.io.IOException;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
-import bec.InsertStatement;
 import bec.ModuleIO;
 import bec.compileTimeStack.DataType;
+import bec.statement.InsertStatement;
 import bec.util.Global;
 import bec.util.Type;
 import bec.util.Util;

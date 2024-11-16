@@ -128,6 +128,7 @@ public class Tag {
 	
 	public void writeTag(ObjectOutput oupt) throws IOException {
 		Util.TRACE_OUTPUT("BEGIN Write Tag: "+this);
+//		Util.println("BEGIN Write Tag: "+this);
 		oupt.writeObject(ident);
 		oupt.writeShort(xtag);
 		//Util.TRACE_OUTPUT("END Write Tag: "+this);
@@ -140,7 +141,7 @@ public class Tag {
 		tag.sequ=tag.xtag+currentInsert.tagbase;
 		if(tag.sequ>lastTag) lastTag=tag.sequ;
 //		Util.BREAK("Tag.readExternal: tagbase="+currentInsert.tagbase+"   TAG="+this);
-//		Util.println("Tag.readExternal: tagbase="+currentInsert.tagbase+", xtag="+xtag+"   TAG="+this);
+		Util.println("Tag.readTag: tagbase="+currentInsert.tagbase+", xtag="+tag.xtag+"   TAG="+tag);
 		return(tag);
 	}
 

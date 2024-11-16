@@ -63,16 +63,6 @@ public class BecCompiler {
 	}
 
 
-	public BecCompiler(String scodeSource) {
-		if(Global.verbose) System.out.println("START: SportBEC: " + scodeSource);
-		Global.scodeSource = scodeSource;
-		Scode.initScode();
-		DataType.initDataTypes();
-//		parse();
-		MONITOR.parse();
-		if(Global.verbose) System.out.println("DONE: SportBEC: " + scodeSource);
-	}
-
 	/**
 	 * S-program ::= program program_head:string
 	 * 						 program_body endprogram
@@ -83,41 +73,31 @@ public class BecCompiler {
 	 * 		::= <module_definition>*
 	 * 		::= main <local_quantity>* <program_element>*
 	 */
-//	private void parse() {
-//		Scode.expect(Scode.S_PROGRAM);
-//  		Global.progIdent = Scode.inString();
-//  		
-//  		switch(Scode.nextByte()) {
-//	  		case Scode.S_GLOBAL -> new InterfaceModule();
-////	  		case Scode.S_MACRO  -> new MacroDefinition();
-//	  		case Scode.S_MODULE -> inModules();
-//	  		case Scode.S_MAIN ->   new MainProgram();
-//  		}
-//  		
-//  		if(Scode.accept(Scode.S_GLOBAL)) {
-//			new InterfaceModule();
-//			Scode.inputInstr();
-//		}
-//	}
-	
-	
-//	private static Vector<PREV_S_Module> inModules() {
-//		Vector<PREV_S_Module> result = new Vector<PREV_S_Module>();
-//  		PREV_S_Module module;
-//  		do {
-//  			module = new ModuleDefinition();
-//  			result.add(module);
-////			System.out.println("SportBEC.parse: curinstr="+Scode.edInstr(Scode.curinstr));
-//  		} while(Scode.accept(Scode.S_MODULE));
-//  		return result;
-//	}
+	public BecCompiler(String scodeSource) {
+		if(Global.verbose) System.out.println("START: SportBEC: " + scodeSource);
+		Global.scodeSource = scodeSource;
+		Scode.initScode();
+		DataType.initDataTypes();
 
-	public void print() {
+		Scode.inputInstr();
+		if(Scode.curinstr == Scode.S_PROGRAM) {
+//	  		System.out.println("Parse.MONITOR: S_PROGRAM");
+	  		Global.progIdent = Scode.inString();
+			Scode.inputInstr();
+			if(Scode.curinstr == Scode.S_GLOBAL) {
+				new InterfaceModule();
+				Scode.inputInstr();
+			}
+			while(Scode.curinstr == Scode.S_MODULE) {
+				new ModuleDefinition();
+				Scode.inputInstr();
+			}
+			if(Scode.curinstr == Scode.S_MAIN) {
+				new MainProgram();
+			}
+		} else Util.IERR("Illegal S-Program");
 		
-	}
-	
-	public String toString() {
-		return "MODULE " + programHead;
+		if(Global.verbose) System.out.println("DONE: SportBEC: " + scodeSource);
 	}
 
 }

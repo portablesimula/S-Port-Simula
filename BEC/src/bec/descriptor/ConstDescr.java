@@ -5,8 +5,8 @@ import java.util.Vector;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
-import bec.InsertStatement;
 import bec.ModuleIO;
+import bec.statement.InsertStatement;
 import bec.util.Global;
 import bec.util.Type;
 import bec.util.Scode;
@@ -38,7 +38,7 @@ public class ConstDescr extends Descriptor {
 	 *	constant_definition
 	 *		::= const const:spectag quantity_descriptor repetition_value
 	 */
-	public static void inConstant(boolean constDef) {
+	public static ConstDescr inConstant(boolean constDef) {
 //		Tag tag = Tag.inTag();
 		Tag tag = Tag.inTag();
 		ConstDescr cnst = (ConstDescr) Global.DISPL.get(tag.val);
@@ -62,7 +62,7 @@ public class ConstDescr extends Descriptor {
 //		System.out.println("CONST.inConstant: " + cnst);
 		if(Global.traceMode > 3) cnst.print("   ");
 //		Util.IERR("");
-//		return cnst;
+		return cnst;
 	}
 	
 	public static void XXXX_inConstant(boolean constDef) {

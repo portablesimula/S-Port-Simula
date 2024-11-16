@@ -3,13 +3,10 @@ package bec;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import bec.compileTimeStack.DataType;
 import bec.descriptor.Descriptor;
 import bec.descriptor.Kind;
 import bec.segment.Segment;
-import bec.util.Array;
 import bec.util.Global;
-import bec.util.Scode;
 import bec.util.Util;
 
 public class ModuleIO {
@@ -28,6 +25,8 @@ public class ModuleIO {
 			int tx = Global.iTAGTAB.get(i);
 			Descriptor d = Global.DISPL.get(tx);
 			if(d == null) Util.IERR("External tag " + i + " = Tag " + tx + " is not defined (OutModule)");
+//			if(Global.ATTR_OUTPUT_TRACE)
+//				System.out.println("iTAGTAB["+i+"] " + d);
 			d.write(modoupt);
 		}
 	}

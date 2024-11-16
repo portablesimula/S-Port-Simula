@@ -148,9 +148,7 @@ public class RoutineBody extends DeclarationScope implements Externalizable {
 	public void doSCodeStatement() {
 		enterScope(this);
 			sCode.outinst(S_ROUTINE); sCode.outtagid(this.getTag());
-//			sCode.outtagid(getRoutine().getTag());
 			sCode.outtagid(routine.getTag());
-
 			sCode.outcode(+1);
 			for(Declaration d:declarationList) d.doSCodeDeclaration();
 			for(Statement s:statements) s.doSCodeStatement();
