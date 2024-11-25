@@ -4,9 +4,6 @@ import java.io.IOException;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
-import bec.ModuleIO;
-import bec.compileTimeStack.DataType;
-import bec.statement.InsertStatement;
 import bec.util.Global;
 import bec.util.Type;
 import bec.util.Util;
@@ -14,20 +11,22 @@ import bec.util.Scode;
 import bec.util.Tag;
 
 public class Attribute extends Descriptor {
-	int rela;
-	int size;
+	public Type type;
+	public int rela;
+	public int size;
 	int repCount;
 	
-	private Attribute(int kind, Tag tag) {
+	private Attribute(int kind, Tag tag, Type type) {
 		super(kind, tag);
+		this.type = type;
+		if(type == null) Util.IERR("NEW Attribute: Missing type");
 	}
 	
 	public Attribute(int rela) {
 		super(Kind.K_Attribute, Tag.inTag());
 		this.rela = rela;
-		Type type = new Type();
-//		this.size = type.size();
-		this.size = DataType.typeSize(type.tag);
+		this.type = Type.ofScode();
+		this.size = type.size();
 		this.repCount = (Scode.accept(Scode.S_REP)) ? Scode.inNumber() : 1;
 	}
 	
@@ -36,9 +35,9 @@ public class Attribute extends Descriptor {
 //		return null;
 //	}
 
-	public static Attribute ofLocalVariable(Tag tag, Tag type) {
+	public static Attribute ofLocalVariable(Tag tag, Type type) {
 		Util.IERR("DETTE MÅ RETTES");
-		return new Attribute(Kind.K_LocalVar, type);
+		return new Attribute(Kind.K_LocalVar, tag, type);
 	}
 	
 	@Override
@@ -61,6 +60,13 @@ public class Attribute extends Descriptor {
 		oupt.writeKind(kind);
 //		oupt.writeShort(ModuleIO.chgType(tag));
 		tag.write(oupt);
+		
+//		if(type != null) {
+//			oupt.writeBoolean(true);
+//			type.write(oupt);
+//		} else oupt.writeBoolean(false);
+		type.write(oupt);
+		
 		oupt.writeShort(rela);
 		oupt.writeShort(repCount);
 		oupt.writeShort(size);
@@ -70,7 +76,12 @@ public class Attribute extends Descriptor {
 //		int tag = inpt.readShort();
 //		tag = InsertStatement.current.chgInType(tag);
 		Tag tag = Tag.read(inpt);
-		Attribute loc = new Attribute(kind, tag);
+		
+//		boolean present = inpt.readBoolean();
+//		Type type = (present)? type = Type.read(inpt) : null;
+		Type type = Type.read(inpt);
+		
+		Attribute loc = new Attribute(kind, tag, type);
 		loc.rela = inpt.readShort();
 		loc.repCount = inpt.readShort();
 		loc.size = inpt.readShort();

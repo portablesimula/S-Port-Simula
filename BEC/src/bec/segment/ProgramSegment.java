@@ -8,7 +8,6 @@ import bec.AttributeOutputStream;
 import bec.descriptor.Kind;
 import bec.util.Global;
 import bec.util.Scode;
-import bec.util.Util;
 import bec.value.MemAddr;
 import bec.virtualMachine.SVM_Instruction;
 
@@ -18,7 +17,6 @@ public class ProgramSegment extends Segment {
 
 	public ProgramSegment(String ident, int segmentKind) {
 		super(ident, segmentKind);
-		SEGMAP.put(ident, this);
 		this.ident = ident.toUpperCase();
 		this.segmentKind = segmentKind;
 		instructions = new Vector<SVM_Instruction>();
@@ -27,6 +25,10 @@ public class ProgramSegment extends Segment {
 	
 	public MemAddr nextAddress() {
 		return new MemAddr(this,instructions.size());
+	}
+	
+	public SVM_Instruction load(int index) {
+		return instructions.get(index);
 	}
 	
 	public void emit(SVM_Instruction value,String cmnt) {
@@ -46,14 +48,15 @@ public class ProgramSegment extends Segment {
 		System.out.println("========================== " + title + ident + " END  ==========================");
 	}
 
+	public String toString() {
+		return "ProgramSegment " + ident;
+	}
+
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 	private ProgramSegment(String ident, int segmentKind, AttributeInputStream inpt) throws IOException {
-//		this.ident = ident;
-//		this.segmentKind = segmentKind;
 		super(ident, segmentKind);
-		SEGMAP.put(ident, this);
 		instructions = new Vector<SVM_Instruction>();
 		comment = new Vector<String>();
 		int n = inpt.readShort();
@@ -61,7 +64,6 @@ public class ProgramSegment extends Segment {
 			comment.add(inpt.readString());
 			instructions.add(SVM_Instruction.readObject(inpt));
 		}
-//		System.out.println("NEW IMPORT: " + this);
 	}
 
 	@Override

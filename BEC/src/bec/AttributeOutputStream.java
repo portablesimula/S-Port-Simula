@@ -4,12 +4,13 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import bec.descriptor.Kind;
 import bec.util.Scode;
 
 public class AttributeOutputStream {
 	DataOutputStream oupt;
 
-	private boolean TRACE = false; //true;
+	private boolean TRACE = true;//false; //true;
 
     public AttributeOutputStream(OutputStream oupt) throws IOException {
     	this.oupt = new DataOutputStream(oupt);
@@ -20,8 +21,8 @@ public class AttributeOutputStream {
 	public void close() throws IOException { oupt.flush(); oupt.close(); }
 
     public void writeKind(int i) throws IOException {
-		if(TRACE) System.out.println("AttributeOutputStream.writeKind: "+i+':'+Scode.edInstr(i));
-		if(i > Scode.S_max || i < 0) throw new IllegalArgumentException("Argument = "+i);
+		if(TRACE) System.out.println("AttributeOutputStream.writeKind: "+i+':'+Kind.edKind(i));
+		if(i > Scode.S_max || i < 1) throw new IllegalArgumentException("Argument = "+i);
 		oupt.writeByte(i);
 	}
 
@@ -36,6 +37,12 @@ public class AttributeOutputStream {
 
     public void writeTag(int i) throws IOException {
 		if(TRACE) System.out.println("AttributeOutputStream.writeTag: "+Scode.edTag(i));
+		oupt.writeShort(i);
+	}
+
+    public void writeTagID(int i) throws IOException {
+		if(TRACE) System.out.println("AttributeOutputStream.writeTag: "+Scode.edTag(i));
+		writeString(Scode.TAGIDENT.get(i));
 		oupt.writeShort(i);
 	}
 

@@ -28,6 +28,33 @@ public abstract class S_Module {
 	 * 		::= goto_statement | insert_statement
 	 * 		::= delete_statement
 	 */
+//	public static boolean programElement() {
+//		System.out.println("S_Module.programElements: CurInstr="+Scode.edInstr(Scode.curinstr));
+//		Thread.dumpStack();
+//		switch(Scode.curinstr) {
+//			case Scode.S_LABELSPEC:		LabelDescr.ofLabelSpec(); break;
+//			case Scode.S_LABEL:			LabelDescr.ofLabel(Tag.inTag()); break;
+//			case Scode.S_PROFILE:		ProfileDescr.ofProfile(); break;
+//			case Scode.S_ROUTINE:		RoutineDescr.ofRoutine(); break;
+//			case Scode.S_IF:			new IfStatement(); break;
+//			case Scode.S_SKIPIF:		new SkipifStatement(); break;
+//			case Scode.S_SAVE:			new ProtectStatement(); break;
+//			case Scode.S_INSERT:		new InsertStatement(false); break;
+//			case Scode.S_SYSINSERT:		new InsertStatement(true); break;
+//			default:{
+//				Object obj = Instruction.inInstruction();
+//				if(obj == null) return false;
+//				if(obj instanceof Instruction instr)
+//					instr.doCode();
+//			}
+//		}
+//		return true;
+//	}
+//
+//	public static void programElements() {
+//		while(programElement()) ;
+//	}
+//	
 	public static void programElements() {
 		LOOP: while(true) {
 //			Scode.inputInstr();
@@ -35,14 +62,19 @@ public abstract class S_Module {
 			switch(Scode.curinstr) {
 				case Scode.S_LABELSPEC:		LabelDescr.ofLabelSpec(); break;
 				case Scode.S_LABEL:			LabelDescr.ofLabel(Tag.inTag()); break;
-				case Scode.S_PROFILE:		ProfileDescr.inProfile(Kind.P_ROUTINE); break;
+				case Scode.S_PROFILE:		ProfileDescr.ofProfile(); break;
 				case Scode.S_ROUTINE:		RoutineDescr.ofRoutine(); break;
 				case Scode.S_IF:			new IfStatement(); break;
 				case Scode.S_SKIPIF:		new SkipifStatement(); break;
 				case Scode.S_SAVE:			new ProtectStatement(); break;
 				case Scode.S_INSERT:		new InsertStatement(false); break;
 				case Scode.S_SYSINSERT:		new InsertStatement(true); break;
-				default: if(Instruction.inInstruction() == null) break LOOP;
+				default:{
+					Object obj = Instruction.inInstruction();
+					if(obj == null) break LOOP;
+					if(obj instanceof Instruction instr)
+						instr.doCode();
+				}
 			}
 			Scode.inputInstr();
 		}

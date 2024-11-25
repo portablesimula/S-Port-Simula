@@ -1,9 +1,8 @@
 package bec.instruction;
 
-import PREV.syntaxClass.programElement.AttributeDefinition;
-import bec.compileTimeStack.Address;
+import bec.compileTimeStack.AddressItem;
 import bec.compileTimeStack.CTStack;
-import bec.compileTimeStack.DataType;
+import bec.descriptor.Attribute;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
@@ -43,13 +42,16 @@ public class SELECT extends Instruction {
 	public void doCode() {
 //		CTStack.dumpStack();
 		CTStack.checkTosRef();
-		AttributeDefinition attr = (AttributeDefinition) Global.getMeaning(tag);
-		Address adr = (Address) CTStack.TOS;
+//		AttributeDefinition attr = (AttributeDefinition) Global.getMeaning(tag);
+		Attribute attr = (Attribute) Global.getMeaning(tag);
+		CTStack.TOS.type = attr.type;
+		AddressItem adr = (AddressItem) CTStack.TOS;
 		adr.offset = adr.offset + attr.rela;
-		adr.type = attr.quant.type.tag;
-		adr.repdist = DataType.typeSize(adr.type);
-		if(adr.atrState == Address.State.FromConst) {
-			adr.atrState = Address.State.NotStacked;
+		adr.type = attr.type;
+//		adr.size = DataType.typeSize(adr.type);
+		adr.size = attr.size;
+		if(adr.atrState == AddressItem.State.FromConst) {
+			adr.atrState = AddressItem.State.NotStacked;
 			Global.PSEG.emit(new SVM_NOT_IMPL(), ""+this);
 //             qPOPKill(AllignFac);
 		}
@@ -59,9 +61,9 @@ public class SELECT extends Instruction {
 	}
 	
 	@Override
-	public void printTree(final int indent) {
-//		sLIST(indent, toString() + Scode.edTag(tag));
-		sLIST(indent, toString());
+	public void print(final String indent) {
+//		System.out.println(indent + toString() + Scode.edTag(tag));
+		System.out.println(indent + toString());
 	}
 	
 	public String toString() {

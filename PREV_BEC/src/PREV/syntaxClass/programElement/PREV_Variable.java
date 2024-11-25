@@ -48,7 +48,7 @@ public class PREV_Variable extends ProgramElement {
 		var.quant = new PREV_QuantityDescriptor();
 		var.address = seg.nextAddress();
 		if(var.address.seg == null) Util.IERR("");
-		var.quant.type.emitDefaultValue(seg, "IMPORT " + var.quant);
+//		var.quant.type.emitDefaultValue(seg, "IMPORT " + var.quant);
 //		System.out.println("Variable ofIMPORT: "+var);
 		return var;
 	}
@@ -59,7 +59,7 @@ public class PREV_Variable extends ProgramElement {
 		var.tag = Scode.inTag();
 		var.quant = new PREV_QuantityDescriptor();
 		var.address = seg.nextAddress();
-		var.quant.type.emitDefaultValue(seg, "EXPORT " + var.quant);
+//		var.quant.type.emitDefaultValue(seg, "EXPORT " + var.quant);
 		return var;
 	}
 	
@@ -68,7 +68,7 @@ public class PREV_Variable extends ProgramElement {
 		var.instr = Scode.S_EXIT;
 		var.tag = Scode.inTag();
 		var.address = seg.nextAddress();
-		var.quant.type.emitDefaultValue(seg, "EXIT " + var.quant);
+//		var.quant.type.emitDefaultValue(seg, "EXIT " + var.quant);
 		return var;
 	}
 	
@@ -113,7 +113,7 @@ public class PREV_Variable extends ProgramElement {
 //			Global.DSEG.emit(value, this.toString());
 			Util.IERR("DON'T USE THIS METHOD");
 		} else {
-			quant.type.emitDefaultValue(Global.DSEG, this.toString());			
+//			quant.type.emitDefaultValue(Global.DSEG, this.toString());			
 			if(quant.repCount > 1) {
 				Util.IERR("");
 			}
@@ -132,7 +132,7 @@ public class PREV_Variable extends ProgramElement {
 		String comment = Scode.edTag(tag) + " Quant=" + quant + "  " + cmnt;
 //		dseg.emit(value, comment);
 		
-		quant.type.emitDefaultValue(dseg, comment);
+//		quant.type.emitDefaultValue(dseg, comment);
 	}
 
 	@Override

@@ -2,12 +2,11 @@ package bec.instruction;
 
 import java.util.Vector;
 
-import PREV.syntaxClass.programElement.ProgramElement;
 import bec.util.Scode;
 import bec.util.Util;
 
 public class BSEG extends Instruction {
-	Vector<ProgramElement> programElements;
+	Vector<Instruction> Instructions;
 	
 	public BSEG() {
 		parse();
@@ -20,11 +19,11 @@ public class BSEG extends Instruction {
 	 */
 	public void parse() {
 		// BSEGInstruction
-		programElements = new Vector<ProgramElement>();
+		Instructions = new Vector<Instruction>();
 		while(Scode.nextByte() != Scode.S_ESEG) {
-			ProgramElement elt = ProgramElement.inProgramElement();
+			Instruction elt = (Instruction) Instruction.inInstruction();
 			if(elt == null) Util.IERR("Inconsistent instruction in BSE-ESEG");
-			programElements.add(elt);
+			Instructions.add(elt);
 		}
 		Scode.inputInstr();
 		
@@ -32,17 +31,17 @@ public class BSEG extends Instruction {
 	}
 
 	@Override
-	public void printTree(final int indent) {
-		sLIST(indent, "BSEG");
-		for(ProgramElement elt:programElements) {
-			elt.printTree(indent + 1);
+	public void print(final String indent) {
+		System.out.println(indent + "BSEG");
+		for(Instruction elt:Instructions) {
+			elt.print(indent + "   ");
 		}
-		sLIST(indent, "ESEG");
+		System.out.println(indent + "ESEG");
 	}
 	
 	public void print() {
 		System.out.println("BSEG");
-		for(ProgramElement elt:programElements) {
+		for(Instruction elt:Instructions) {
 			System.out.println("   " + elt);
 		}
 		System.out.println("ESEG");

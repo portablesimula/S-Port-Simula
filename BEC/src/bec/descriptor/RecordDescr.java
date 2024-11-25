@@ -13,6 +13,7 @@ import bec.statement.InsertStatement;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Tag;
+import bec.util.Type;
 import bec.util.Util;
 
 public class RecordDescr extends Descriptor {
@@ -86,7 +87,7 @@ public class RecordDescr extends Descriptor {
 			
 		if(rec.infoType) {
 			rec.buildPointerMap();
-			DataType.newRecType(rec);
+			Type.newRecType(rec);
 		}
 //		if(Scode.inputTrace > 3)
 			rec.print("   ");
@@ -120,7 +121,7 @@ public class RecordDescr extends Descriptor {
 		String head = "RECORD " + tag + " Size=" + size;
 		if(infoType)  head = head + " INFO TYPE";
 		if(prefixTag > 0) head = head + " PREFIX " + Scode.edTag(prefixTag);
-//		sLIST(indent, head);
+//		System.out.println(indent + head);
 		System.out.println(indent + head);
 //		for(AttributeDefinition attr:attributes) {
 		if(attributes != null) for(Attribute attr:attributes) {
@@ -132,7 +133,7 @@ public class RecordDescr extends Descriptor {
 				alt.print(indent + "   ");
 			}
 		}
-//		sLIST(indent, "ENDRECORD");
+//		System.out.println(indent + "ENDRECORD");
 		System.out.println("   " + "ENDRECORD");
 	}
 		
@@ -203,10 +204,10 @@ public class RecordDescr extends Descriptor {
 		rec.nbrep = inpt.readShort();
 		rec.infoType = inpt.readBoolean();
 		if(Global.ATTR_INPUT_TRACE) System.out.println("RecordDescr.Read: " + rec);
-		if(rec.infoType) {
-			rec.buildPointerMap();
-			DataType.newRecType(rec);
-		}
+//		if(rec.infoType) {
+//			rec.buildPointerMap();
+//			Type.newRecType(rec);
+//		}
 		return rec;
 	}
 

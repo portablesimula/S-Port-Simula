@@ -1,6 +1,6 @@
 package bec.virtualMachine;
 
-import bec.util.Scode;
+import bec.util.Type;
 
 /**
  * SOS and TOS are replaced by a description of the value of the application of the operator. The
@@ -10,15 +10,15 @@ import bec.util.Scode;
  * Remove to items on the Runtime-Stack and push the value SOS imp TOS
  */
 public class SVM_IMP extends SVM_Instruction {
-	int type;
+	Type type;
 
-	public SVM_IMP(int type) {
+	public SVM_IMP(Type type) {
 		this.type = type;
 	}
 	
 	@Override	
 	public String toString() {
-		return "ADD      " + Scode.edTag(type);
+		return "ADD      " + type;
 	}
 
 }

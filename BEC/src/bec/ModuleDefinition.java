@@ -43,6 +43,7 @@ public class ModuleDefinition extends S_Module {
 	 *					::= const const:spectag quantity_descriptor repetition_value    // DETTE ER NYTT
 	 */
 	public ModuleDefinition() {
+		Global.currentModule = this;
 //	       range(0:MaxWord) nXtag; ref(ModElt) m;
 //	       infix(WORD) itag,xtag; infix(Fixup) Fx;
 //	       modident:=inMsymb; modcheck:=inSymb;
@@ -147,7 +148,7 @@ public class ModuleDefinition extends S_Module {
 		Global.dumpDISPL("MONITOR.moduleDefinition'END: ");
 //		Scode.dumpTAGIDENTS("MONITOR.moduleDefinition'END: ");
 		try { ModuleIO.outputModule(nXtag);
-		} catch (IOException e) { e.printStackTrace(); }
+		} catch (IOException e) { e.printStackTrace(); Util.IERR(""); }
 	}
 
 
@@ -161,10 +162,10 @@ public class ModuleDefinition extends S_Module {
 	private static boolean viisible() {
 		System.out.println("MONITOR.viisible: CurInstr="+Scode.edInstr(Scode.curinstr));
 		switch(Scode.curinstr) {
-			case Scode.S_CONSTSPEC:		ConstDescr.inConstant(false); break;
+			case Scode.S_CONSTSPEC:		ConstDescr.ofConstSpec(); break;
 			case Scode.S_LABELSPEC:		LabelDescr.ofLabelSpec(); break;
 			case Scode.S_RECORD:		RecordDescr.of(); break;
-			case Scode.S_PROFILE:		ProfileDescr.inProfile(Kind.P_VISIBLE); break;
+			case Scode.S_PROFILE:		ProfileDescr.ofProfile(); break;
 			case Scode.S_ROUTINESPEC:	RoutineDescr.ofRoutineSpec(); break;
 			case Scode.S_INSERT:		new InsertStatement(false); break;
 			case Scode.S_SYSINSERT:		new InsertStatement(true); break;

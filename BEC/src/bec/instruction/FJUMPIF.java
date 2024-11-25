@@ -28,7 +28,7 @@ public class FJUMPIF extends Instruction {
 	 */
 	public void parse() {
 //		Util.IERR("NOT IMPLEMENTED");
-		relation = new Relation();
+		relation = Relation.ofScode();
 		destination = Scode.inByte();
 //		Util.IERR(""+this);
 	}
@@ -52,8 +52,8 @@ public class FJUMPIF extends Instruction {
 	}
 	
 	@Override
-	public void printTree(final int indent) {
-		sLIST(indent, toString());
+	public void print(final String indent) {
+		System.out.println(indent + toString());
 	}
 	
 	public String toString() {

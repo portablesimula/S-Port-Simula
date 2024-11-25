@@ -10,6 +10,7 @@ import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Global;
 import bec.util.Scode;
+import bec.util.Tag;
 import bec.util.Util;
 import bec.value.MemAddr;
 
@@ -33,7 +34,8 @@ public class PREV_CONST extends PREV_Instruction {
 	 *		::= const const:spectag quantity_descriptor repetition_value
 	 */
 	public static PREV_CONST of(boolean constDef) {
-		Tag tag = Tag.inTag();
+//		Tag tag = Tag.inTag();
+		int tag=0;
 		PREV_CONST cnst = (PREV_CONST) Global.Display.get(tag);
 		if(cnst == null) {
 			if(constDef) Util.IERR("New CONSPEC but constDef="+constDef);

@@ -1,9 +1,13 @@
- begin sysinsert rt,sysr,knwn,util,strg,cent
+ begin sysinsert rt,sysr
 
 
----------   C l a s s    I n f i l e   ---------
+Visible routine REST; export infix(string) s;
+begin s.chradr:=@bio.utbuff(bio.utpos); s.nchr:=utlng-bio.utpos; end;
 
- Visible const infix(claptp:4) iflPtp=record:claptp
-       (plv=2,lng=size(filent));
+Visible routine ED_STR; import infix(string) str; begin
+--	infix(string) xstr;
+--	xstr := REST;
+	bio.utpos:=bio.utpos+PUTSTR(REST,str);
+end;
 
 end

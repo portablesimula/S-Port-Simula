@@ -17,14 +17,15 @@ public class POP extends Instruction {
 	}
 
 	@Override
-	public void printTree(final int indent) {
-		sLIST(indent, toString());
+	public void print(final String indent) {
+		System.out.println(indent + toString());
 	}
 
 	@Override
 	public void doCode() {
 //		CTStack.dumpStack();
 		CTStack.pop();
+		CTStack.dumpStack("POP: ");
 	}
 	
 	public String toString() {

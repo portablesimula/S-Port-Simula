@@ -141,7 +141,7 @@ public class Tag {
 		tag.sequ=tag.xtag+currentInsert.tagbase;
 		if(tag.sequ>lastTag) lastTag=tag.sequ;
 //		Util.BREAK("Tag.readExternal: tagbase="+currentInsert.tagbase+"   TAG="+this);
-		Util.println("Tag.readTag: tagbase="+currentInsert.tagbase+", xtag="+tag.xtag+"   TAG="+tag);
+//		Util.println("Tag.readTag: tagbase="+currentInsert.tagbase+", xtag="+tag.xtag+"   TAG="+tag);
 		return(tag);
 	}
 

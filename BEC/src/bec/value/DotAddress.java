@@ -6,6 +6,7 @@ import java.util.Vector;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Scode;
+import bec.util.Type;
 import bec.util.Util;
 
 public class DotAddress extends Value {
@@ -16,7 +17,7 @@ public class DotAddress extends Value {
 	public DotAddress() {
 		attrTags = new Vector<Integer>();
 		parse();
-		this.type = (terminator == Scode.S_C_AADDR) ? Scode.TAG_AADDR : Scode.S_C_GADDR;
+		this.type = (terminator == Scode.S_C_AADDR) ? Type.T_AADDR : Type.T_GADDR;
 	}
 
 	/**
@@ -41,8 +42,8 @@ public class DotAddress extends Value {
 	}
 
 //	@Override
-//	public void printTree(final int indent) {
-//		sLIST(indent, toString());
+//	public void print(final String indent) {
+//		System.out.println(indent + toString());
 //	}
 	
 	public String toString() {
@@ -66,7 +67,7 @@ public class DotAddress extends Value {
 		}
 		globalOrConstTag = inpt.readTag();
 		terminator = inpt.readKind();
-		this.type = (terminator == Scode.S_C_AADDR) ? Scode.TAG_AADDR : Scode.S_C_GADDR;
+		this.type = (terminator == Scode.S_C_AADDR) ? Type.T_AADDR : Type.T_GADDR;
 //		System.out.println("NEW IMPORT: " + this);
 	}
 

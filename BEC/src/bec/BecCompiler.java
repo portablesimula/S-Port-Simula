@@ -1,8 +1,14 @@
 package bec;
 
+import java.util.HashMap;
+
 import bec.compileTimeStack.DataType;
+import bec.descriptor.Descriptor;
+import bec.segment.Segment;
+import bec.util.Array;
 import bec.util.Global;
 import bec.util.Scode;
+import bec.util.Type;
 import bec.util.Util;
 
 public class BecCompiler {
@@ -76,8 +82,11 @@ public class BecCompiler {
 	public BecCompiler(String scodeSource) {
 		if(Global.verbose) System.out.println("START: SportBEC: " + scodeSource);
 		Global.scodeSource = scodeSource;
+		Global.DISPL = new Array<Descriptor>();
+		Global.SEGMAP = new HashMap<String, Segment>();
 		Scode.initScode();
-		DataType.initDataTypes();
+//		DataType.initDataTypes();
+		Type.init();
 
 		Scode.inputInstr();
 		if(Scode.curinstr == Scode.S_PROGRAM) {

@@ -1,4 +1,4 @@
-package bec;
+package PREV;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -9,6 +9,7 @@ import PREV.syntaxClass.programElement.PREV_Variable;
 import PREV.syntaxClass.programElement.routine.PREV_PROFILE;
 import PREV.syntaxClass.programElement.routine.PREV_ROUTINE;
 import PREV.syntaxClass.value.PREV_CONST;
+import bec.AttributeOutputStream;
 import bec.segment.Segment;
 import bec.util.Global;
 import bec.util.Scode;

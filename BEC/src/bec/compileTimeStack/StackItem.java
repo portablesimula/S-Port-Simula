@@ -1,5 +1,7 @@
 package bec.compileTimeStack;
 
+import bec.util.Type;
+
 //Record Object;
 //begin range(0:MaxByte) kind;   --- Object kind code
 //      range(0:MaxType) type; 
@@ -9,8 +11,8 @@ package bec.compileTimeStack;
 //Record StackItem:Object;
 public class StackItem {
 //	int kind;   // Object kind code
-	public int type;
-	public int repdist;
+	public Type type;
+	public int size;
 	public StackItem suc;
     StackItem pred;
 

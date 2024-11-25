@@ -23,8 +23,8 @@ public final class FECmpRTS {
 	public static void main(String[] args) {
 		long startTimeMs = System.currentTimeMillis( );
 		Vector<String> names=new Vector<String>();
-//		names.add("RT");
-//		names.add("SYSR");
+		names.add("RT");
+		names.add("SYSR");
 		names.add("KNWN");
 //		names.add("UTIL");
 //		

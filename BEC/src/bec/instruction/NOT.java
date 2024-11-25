@@ -4,6 +4,7 @@ import bec.compileTimeStack.CTStack;
 import bec.compileTimeStack.StackItem;
 import bec.util.Global;
 import bec.util.Scode;
+import bec.util.Type;
 import bec.util.Util;
 import bec.virtualMachine.SVM_NOT;
 
@@ -26,15 +27,15 @@ public class NOT extends Instruction {
 //		Global.PSEG.dump();
 		StackItem tos = CTStack.TOS;
 	    
-	    int at = tos.type;
-	    if(at != Scode.TAG_BOOL) {
-		    at = CTStack.arithType(at, Scode.TAG_INT);
+	    Type at = tos.type;
+	    if(at != Type.T_BOOL) {
+		    at = CTStack.arithType(at, Type.T_INT);
 		    CTStack.checkTosArith();
-		    if( at == Scode.TAG_REAL || at == Scode.TAG_LREAL) Util.IERR("CODER.GQnot-1");
+		    if( at == Type.T_REAL || at == Type.T_LREAL) Util.IERR("CODER.GQnot-1");
 	    }
 		Global.PSEG.emit(new SVM_NOT(at), "");
 		CTStack.pop();
-	    CTStack.pushTemp(at);
+	    CTStack.pushTemp(at, "NOT: ");
 	    
 //		CTStack.dumpStack("NOT: ");
 //		Global.PSEG.dump("NOT: ");
@@ -42,8 +43,8 @@ public class NOT extends Instruction {
 	}
 
 	@Override
-	public void printTree(final int indent) {
-		sLIST(indent, toString());
+	public void print(final String indent) {
+		System.out.println(indent + toString());
 	}
 	
 	public String toString() {

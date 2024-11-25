@@ -2,13 +2,14 @@ package bec.compileTimeStack;
 
 import bec.util.Global;
 import bec.util.Scode;
+import bec.util.Type;
 import bec.util.Util;
 import bec.value.MemAddr;
 import bec.virtualMachine.SVM_CALL;
 import bec.virtualMachine.SVM_GOTO;
 import bec.virtualMachine.SVM_NOT_IMPL;
 import bec.virtualMachine.SVM_PUSH;
-import bec.virtualMachine.SVM_POPtoREG;
+import bec.virtualMachine.SVM_POP2REG;
 
 public class CTStack {
 	
@@ -32,11 +33,11 @@ public class CTStack {
 //	%+D   if TraceMode > 1 then DumpStack endif;
 	} // endmacro;
 	
-	public static void pushTemp(int type) {
-		Temp tmp = new Temp(type);
+	public static void pushTemp(Type type, String comment) {
+		Temp tmp = new Temp(type, comment);
 //		Util.IERR("NOT IMPL");
 //	      tmp.kind:=K_Temp; tmp.type:=type;
-//	      tmp qua StackItem.repdist:=TTAB(type).nbyte;
+//	      tmp qua StackItem.size:=TTAB(type).nbyte;
 //	%+C   if TTAB(type).nbyte=0 then IERR("No info TYPE-3") endif;
 		push(tmp);
 	}
@@ -80,14 +81,14 @@ public class CTStack {
 //	--- end;
 
 	private static void checkRef(StackItem s) {
-		if(! (s instanceof Address)) STKERR("CheckRef fails");
+		if(! (s instanceof AddressItem)) STKERR("CheckRef fails");
 	}
 	
 	private static void STKERR(String msg) {
 		System.out.println("\nERROR: " + msg + " ================================================");
 		CTStack.dumpStack("STKERR: ");
 		Global.PSEG.dump("STKERR: ");
-		Util.IERR("FORCED EXIT");
+		Util.IERR("FORCED EXIT: " + msg);
 	}
 
 	public static void checkTosRef() {
@@ -99,42 +100,44 @@ public class CTStack {
 	}
 
 	public static void checkSosValue() {
-		if(TOS.suc instanceof Address) STKERR("CheckSosValue fails");
+		if(TOS.suc instanceof AddressItem) STKERR("CheckSosValue fails");
 	}
 
-	public static void checkTosType(int t) {
+	public static void checkTosType(Type t) {
 		if(TOS.type != t) STKERR("Illegal type of TOS");
 	}
 
-	public static void checkSosType(int t) {
+	public static void checkSosType(Type t) {
 		if(TOS.suc.type != t) STKERR("Illegal type of TOS");
 	}
 
 	public static void checkTosInt() {
-		switch(TOS.type) {
+		switch(TOS.type.tag) {
 			case Scode.TAG_INT, Scode.TAG_SINT: break; 
 			default: STKERR("Illegal type of TOS");
 		}
 	}
 
 	public static void checkTosArith() {
-		switch(TOS.type) {
+		System.out.println("CTStack.checkTosArith: " + TOS.type);
+		switch(TOS.type.tag) {
 			case Scode.TAG_INT, Scode.TAG_SINT, Scode.TAG_REAL, Scode.TAG_LREAL: break; 
 			default: STKERR("Illegal type of TOS");
 		}
 	}
 
 	public static void checkSosInt() {
-		switch(TOS.suc.type) {
+		switch(TOS.suc.type.tag) {
 			case Scode.TAG_INT, Scode.TAG_SINT: break; 
 			default: STKERR("Illegal type of TOS");
 		}
 	}
 
 	public static void checkSosArith() {
-		switch(TOS.suc.type) {
+		Type type = TOS.suc.type;
+		switch(type.tag) {
 			case Scode.TAG_INT, Scode.TAG_SINT, Scode.TAG_REAL, Scode.TAG_LREAL: break; 
-			default: STKERR("Illegal type of TOS");
+			default: STKERR("Illegal type of SOS: " + type);
 		}
 	}
 	
@@ -151,7 +154,7 @@ public class CTStack {
 //	public final static int TAG_RADDR = 11;
 //	public final static int TAG_SIZE  = 12;
 
-	public static void checkSosType2(int t1, int t2) {
+	public static void checkSosType2(Type t1, Type t2) {
 		if(TOS.suc.type == t1) ; // OK
 		else if(TOS.suc.type == t2) ; // OK
 		else STKERR("Illegal type of SOS");
@@ -159,15 +162,16 @@ public class CTStack {
 
 	public static void checkTypesEqual() {
 //	%+C begin range(0:MaxType) t1,t2;
-		int t1 = TOS.type;
-		int t2 = TOS.suc.type;
+		Type t1 = TOS.type;
+		Type t2 = TOS.suc.type;
 		if(t1 == t2) return;
-		if(t1 > Scode.TAG_SIZE) STKERR("CODER.CheckTypesEqual-1");
-		if(t2 > Scode.TAG_SIZE) STKERR("CODER.CheckTypesEqual-2");
+//		if(t1 > Scode.TAG_SIZE) STKERR("CODER.CheckTypesEqual-1: " + Scode.edTag(t1));
+//		if(t2 > Scode.TAG_SIZE) STKERR("CODER.CheckTypesEqual-2: " + Scode.edTag(t2));
 		t1 = arithType(t1,t1); t2 = arithType(t2,t2);
 		if(t1 == t2) return;
 //	%+C       if (t1>T_BYT1) or (t2>T_BYT1)
-		STKERR("Different types of TOS and SOS");
+		Type.dumpTypes("checkTypesEqual: ");
+		STKERR("Different types of TOS=" + t1 + " and SOS=" + t2);
 	}
 
 	public static void checkStackEmpty() {
@@ -176,9 +180,9 @@ public class CTStack {
 	}
 
 	public static void assertObjStacked() {
-		Address tos = (Address) CTStack.TOS;
-		if(tos.objState == Address.State.NotStacked) {
-			tos.objState = Address.State.FromConst;
+		AddressItem tos = (AddressItem) CTStack.TOS;
+		if(tos.objState == AddressItem.State.NotStacked) {
+			tos.objState = AddressItem.State.FromConst;
 			MemAddr adr = tos.objadr;
 //	           case 0:adrMax (adr.kind)
 //	           when reladr,locadr: 
@@ -193,12 +197,12 @@ public class CTStack {
 
 	public static void assertAtrStacked() {
 		assertObjStacked();
-		Address tos = (Address) CTStack.TOS;
-		if(tos.atrState == Address.State.NotStacked) {
+		AddressItem tos = (AddressItem) CTStack.TOS;
+		if(tos.atrState == AddressItem.State.NotStacked) {
 //	           TOS qua Address.AtrState:=FromConst;
 //	           Qf2(qPUSHC,0,FreePartReg,cVAL,TOS qua Address.Offset);
 			Global.PSEG.emit(new SVM_NOT_IMPL(), "assertAtrStacked-1: "+tos);
-		} else if(tos.atrState == Address.State.Calculated) {
+		} else if(tos.atrState == AddressItem.State.Calculated) {
 			if(tos.offset != 0) {
 //	%+E             Qf2(qLOADC,0,qEAX,cVAL,TOS qua Address.Offset);
 //	%+E             Qf1(qPOPR,qEBX,cVAL);
@@ -278,16 +282,16 @@ public class CTStack {
 //	           Pop; pushTemp(type);
 //	      endcase;
 		StackItem tos = CTStack.TOS;
-		if(tos instanceof Address) {
+		if(tos instanceof AddressItem) {
 			Util.getTosSrcAdr();
-			Global.PSEG.emit(new SVM_POPtoREG(reg), "getTosValueIn86'Address: ");
+			Global.PSEG.emit(new SVM_POP2REG(reg), "getTosValueIn86'Address: ");
 			Global.PSEG.dump("getTosValueIn86'Address: ");
 			Util.IERR("NOT IMPL");
 		} else if(tos instanceof Temp) {
-			Global.PSEG.emit(new SVM_POPtoREG(reg), "getTosValueIn86'Temp: ");
+			Global.PSEG.emit(new SVM_POP2REG(reg), "getTosValueIn86'Temp: ");
 			Global.PSEG.dump("getTosValueIn86'Temp: ");
 //			Util.IERR("NOT IMPL");			
-		} else if(tos instanceof Coonst) {
+		} else if(tos instanceof ConstItem) {
 			Global.PSEG.dump("getTosValueIn86: ");
 			Util.IERR("NOT IMPL");			
 		}
@@ -304,9 +308,9 @@ public class CTStack {
 			System.out.println(lead + ":"); item = TOS;
 			lead ="  TOS: ";
 			do {
-//				if(item.type != 0) System.out.print(Scode.edTag(item.type) + '(' + item.repdist + ")-");
+//				if(item.type != 0) System.out.print(Scode.edTag(item.type) + '(' + item.size + ")-");
 				if(item instanceof ProfileItem) System.out.println(lead+"PROFILE:  " + item);
-				else if(item instanceof Address) System.out.println(lead+"REF:      " + item);
+				else if(item instanceof AddressItem) System.out.println(lead+"REF:      " + item);
 				else System.out.println(lead+"VAL:      " + item.getClass().getSimpleName() + "  " + item);
 				lead ="       ";
 				item = item.suc;
@@ -315,27 +319,27 @@ public class CTStack {
 		}
 	}
 
-	public static int arithType(int t1, int t2) { // export range(0:MaxType) ct;
-	switch(t1) {
+	public static Type arithType(Type t1, Type t2) { // export range(0:MaxType) ct;
+	switch(t1.tag) {
 	      case Scode.TAG_LREAL:
-	    	  switch(t2) {
-		    	  case Scode.TAG_LREAL: return Scode.TAG_LREAL;
-		    	  case Scode.TAG_REAL:  return Scode.TAG_LREAL;
-		    	  case Scode.TAG_INT:   return Scode.TAG_LREAL;
+	    	  switch(t2.tag) {
+		    	  case Scode.TAG_LREAL: return Type.T_LREAL;
+		    	  case Scode.TAG_REAL:  return Type.T_LREAL;
+		    	  case Scode.TAG_INT:   return Type.T_LREAL;
 		    	  default: return t1;
 	    	  }
 	      case Scode.TAG_REAL:
-	    	  switch(t2) {
-		    	  case Scode.TAG_LREAL: return Scode.TAG_LREAL;
-		    	  case Scode.TAG_REAL:  return Scode.TAG_REAL;
-		    	  case Scode.TAG_INT:   return Scode.TAG_REAL;
+	    	  switch(t2.tag) {
+		    	  case Scode.TAG_LREAL: return Type.T_LREAL;
+		    	  case Scode.TAG_REAL:  return Type.T_REAL;
+		    	  case Scode.TAG_INT:   return Type.T_REAL;
 		    	  default: return t1;
 	    	  }
 	      case Scode.TAG_INT:
-	    	  switch(t2) {
-		    	  case Scode.TAG_LREAL: return Scode.TAG_LREAL;
-		    	  case Scode.TAG_REAL:  return Scode.TAG_REAL;
-		    	  case Scode.TAG_INT:   return Scode.TAG_INT;
+	    	  switch(t2.tag) {
+		    	  case Scode.TAG_LREAL: return Type.T_LREAL;
+		    	  case Scode.TAG_REAL:  return Type.T_REAL;
+		    	  case Scode.TAG_INT:   return Type.T_INT;
 		    	  default: return t1;
 	    	  }
 	      default: return t1;

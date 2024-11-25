@@ -1,21 +1,10 @@
 package bec.compileTimeStack;
 
-import java.io.IOException;
 import java.util.BitSet;
 import java.util.HashMap;
-import java.util.Vector;
-
-import PREV.syntaxClass.instruction.RECORD;
-import bec.AttributeInputStream;
-import bec.AttributeOutputStream;
-import bec.ModuleIO;
-import bec.descriptor.Attribute;
 import bec.descriptor.RecordDescr;
-import bec.statement.InsertStatement;
-import bec.util.Array;
-import bec.util.Global;
 import bec.util.Scode;
-import bec.util.Tag;
+import bec.util.Type;
 
 public class DataType {
 //	Define tUnsigned=0,tSigned=1,tFloat=2;
@@ -39,8 +28,8 @@ public class DataType {
 		this.comment=comment;
 	}
 
-	public static DataType dataType(int type) {
-		DataType dt = TMAP.get(type);
+	public static DataType dataType(Type type) {
+		DataType dt = TMAP.get(type.tag);
 		return dt;
 	}
 
@@ -73,7 +62,7 @@ public class DataType {
 //		TMAP.put(rec.tag, x);
 //	}
 
-	public static void newRecType(RecordDescr rec) {
+	private static void newRecType(RecordDescr rec) {
 		DataType x = new DataType(rec.size, null, rec.tag.toString());
 		x.pntmap = rec.pntmap;
 		TMAP.put(rec.tag.val, x);

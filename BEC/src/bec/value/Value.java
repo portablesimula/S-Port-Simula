@@ -5,10 +5,11 @@ import java.io.IOException;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Scode;
+import bec.util.Type;
 import bec.util.Util;
 
 public class Value {
-	public int type;
+	public Type type;
 
 	/**
 	 * Utility print method.
@@ -16,7 +17,32 @@ public class Value {
 	 * @param indent number of spaces leading the lines
 	 */
 	public void print(final String indent) {
-		Util.IERR("Method printTree need a redefinition in "+this.getClass().getSimpleName());
+		Util.IERR("Method print need a redefinition in "+this.getClass().getSimpleName());
+	}
+
+	public Value neg() {
+		Util.IERR("Method 'neg' need a redefinition in " + this.getClass().getSimpleName());
+		return null;
+	}
+
+	public Value add(Value other) {
+		Util.IERR("Method 'add' need a redefinition in " + this.getClass().getSimpleName());
+		return null;
+	}
+
+	public Value sub(Value other) {
+		Util.IERR("Method 'sub' need a redefinition in " + this.getClass().getSimpleName());
+		return null;
+	}
+
+	public Value mult(Value other) {
+		Util.IERR("Method 'mult' need a redefinition in " + this.getClass().getSimpleName());
+		return null;
+	}
+
+	public Value div(Value other) {
+		Util.IERR("Method 'div' need a redefinition in " + this.getClass().getSimpleName());
+		return null;
 	}
 
 	// ***********************************************************************************************

@@ -4,34 +4,50 @@ import java.io.IOException;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
-import bec.descriptor.ProfileDescr;
-import bec.util.Util;
+import bec.segment.DataSegment;
+import bec.util.Global;
+import bec.value.MemAddr;
 
 public class SVM_RETURN extends SVM_Instruction {
-	ProfileDescr prf;
+	public MemAddr returAddr;
 
-	public SVM_RETURN(ProfileDescr prf2) {
+	public SVM_RETURN(MemAddr returAddr) {
 		this.opcode = SVM_Instruction.iRETURN;
-		this.prf = prf2;
+		this.returAddr = returAddr;
 	}
 	
 	@Override	
 	public String toString() {
-		return "RETURN   " + prf;
+		return "RETURN   " + returAddr;
+	}
+	
+	@Override	
+	public void execute() {
+//		System.out.println("SVM_CALL.execute: ReturnAddress=" + retur);
+//		prf.DSEG.store(0, retur);
+//		prf.DSEG.dump("SVM_CALL.execute: ");
+		System.out.println("SVM_RETURN.execute: returAddr=" + returAddr);
+		DataSegment DSEG = (DataSegment) returAddr.segment();
+		DSEG.dump("SVM_RETURN.execute: ");
+		MemAddr padr = (MemAddr) DSEG.load(returAddr.ofst);
+		System.out.println("SVM_RETURN.execute: padr=" + padr);
+		Global.PSC = padr;
+//		Util.IERR("");
 	}
 
 	
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	public SVM_RETURN(AttributeInputStream inpt) throws IOException {
+	private SVM_RETURN(AttributeInputStream inpt) throws IOException {
 		this.opcode = SVM_Instruction.iRETURN;
-		this.prf = ProfileDescr.read(inpt);
+		this.returAddr = MemAddr.read(inpt);
 	}
 
+	@Override
 	public void write(AttributeOutputStream oupt) throws IOException {
 		oupt.writeKind(opcode);
-		prf.write(oupt);
+		returAddr.write(oupt);
 	}
 
 	public static SVM_Instruction read(AttributeInputStream inpt) throws IOException {

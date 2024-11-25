@@ -9,11 +9,13 @@ import bec.AttributeInputStream;
 import bec.descriptor.Attribute;
 import bec.descriptor.ProfileDescr;
 import bec.descriptor.RecordDescr;
+import bec.descriptor.RoutineDescr;
 import bec.descriptor.Variable;
 import bec.segment.DataSegment;
 import bec.segment.ProgramSegment;
 import bec.util.Global;
 import bec.util.Scode;
+import bec.util.Type;
 import bec.util.Util;
 
 public class InsertStatement {
@@ -52,6 +54,7 @@ public class InsertStatement {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			Util.IERR("ERROR READING: Input-module  " + modid + "  " + check);
 		}
 //		if(Global.ATTR_INPUT_TRACE)
 			System.out.println("**************   Endof  -  Input-module  " + modid + "  " + check + "   **************");
@@ -72,22 +75,26 @@ public class InsertStatement {
 		
 //	       ------ Read Descriptors ------
 		LOOP:while(true) {
+			int prevKind = kind;
 			kind = inpt.readKind();
+			System.out.println("InsertStatement.readDescriptors'LOOP: " + Kind.edKind(kind));
 			if(kind == Kind.K_EndModule) break LOOP;
 			switch(kind) {
-			case Kind.K_SEG_DATA:		DataSegment.readObject(inpt, kind); break;
-			case Kind.K_SEG_CONST:		DataSegment.readObject(inpt, kind); break;
-			case Kind.K_SEG_CODE:		ProgramSegment.readObject(inpt); break;
-			case Kind.K_Coonst:			ConstDescr.read(inpt); break;
-			case Kind.K_RecordDescr:	RecordDescr.read(inpt); break;
-			case Kind.K_Attribute:		Attribute.read(inpt, kind); break;
-			case Kind.K_GlobalVar:		Variable.read(inpt, kind); break;
-			case Kind.K_LocalVar:		Variable.read(inpt, kind); break;
-			case Kind.K_ProfileDescr:	ProfileDescr.read(inpt); break;
-			case Kind.K_Import:			Variable.read(inpt, kind); break;
-			case Kind.K_Export:			Variable.read(inpt, kind); break;
-			case Kind.K_Retur:			Variable.read(inpt, kind); break;
-			default: Util.IERR("MISSING: " + Kind.edKind(kind));
+				case Kind.K_RECTYPES:		Type.readRECTYPES(inpt); break;
+				case Kind.K_SEG_DATA:		DataSegment.readObject(inpt, kind); break;
+				case Kind.K_SEG_CONST:		DataSegment.readObject(inpt, kind); break;
+				case Kind.K_SEG_CODE:		ProgramSegment.readObject(inpt); break;
+				case Kind.K_Coonst:			ConstDescr.read(inpt); break;
+				case Kind.K_RecordDescr:	RecordDescr.read(inpt); break;
+				case Kind.K_Attribute:		Attribute.read(inpt, kind); break;
+				case Kind.K_GlobalVar:		Variable.read(inpt, kind); break;
+				case Kind.K_LocalVar:		Variable.read(inpt, kind); break;
+				case Kind.K_ProfileDescr:	ProfileDescr.read(inpt); break;
+				case Kind.K_Import:			Variable.read(inpt, kind); break;
+				case Kind.K_Export:			Variable.read(inpt, kind); break;
+				case Kind.K_Retur:			Variable.read(inpt, kind); break;
+				case Kind.K_IntRoutine:		RoutineDescr.read(inpt); break;
+				default: Util.IERR("MISSING: " + Kind.edKind(kind) + ", prevKind=" + Kind.edKind(prevKind));
 			}
 		}
 	}

@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
+import bec.descriptor.Descriptor;
 import bec.statement.InsertStatement;
 
 public class Tag {
@@ -19,6 +20,10 @@ public class Tag {
 	
 	public String ident() {
 		return Scode.TAGIDENT.get(val);
+	}
+	
+	public Descriptor getMeaning() {
+		return Global.getMeaning(val);
 	}
 	
 	private static int xTag(int t) { // export range(0:MaxType) tx;

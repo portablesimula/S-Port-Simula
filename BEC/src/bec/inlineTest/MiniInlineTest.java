@@ -1,13 +1,24 @@
 package bec.inlineTest;
 
 import bec.util.Global;
+
+import java.util.Vector;
+
 import bec.BecCompiler;
 
 public class MiniInlineTest {
 	
 	public static void main(String[] argv) {
-		String scodeSource = Pick_Source();		
+		Vector<String> names=new Vector<String>();
 		
+		names.add("ENVIR0");
+//		names.add("MODL001");
+		names.add("MODL01");
+		names.add("MODL02");
+		names.add("TEST6");
+
+//		names.add("TEST00");
+
 		Global.verbose = true;
 //		Global.traceMode = 4;
 //		Global.SCODE_INPUT_TRACE = true;
@@ -19,15 +30,10 @@ public class MiniInlineTest {
 //		Global.SEGMENT_INPUT_DUMP = true;
 //		Global.SEGMENT_OUTPUT_DUMP = true;
 
-		new BecCompiler(scodeSource);
+		for(String name:names) {
+			String fileName = "C:/Simuletta/SCode/simulettaTestPrograms/"+name+".scd";
+			new BecCompiler(fileName);
+		}
 	}
-
-	private static String Pick_Source() {
-//		return "C:/Simuletta/SCode/simulettaTestPrograms/ENVIR0.scd";
-//		return "C:/Simuletta/SCode/simulettaTestPrograms/MODL01.scd";
-//		return "C:/Simuletta/SCode/simulettaTestPrograms/MODL02.scd";
-		return "C:/Simuletta/SCode/simulettaTestPrograms/TEST6.scd";
-	}
-
 
 }

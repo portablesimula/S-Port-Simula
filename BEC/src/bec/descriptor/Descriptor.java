@@ -3,6 +3,7 @@ package bec.descriptor;
 import java.io.IOException;
 
 import bec.AttributeOutputStream;
+import bec.instruction.Instruction;
 import bec.util.Global;
 import bec.util.Tag;
 import bec.util.Util;
@@ -11,14 +12,14 @@ import bec.util.Util;
 //begin range(0:MaxByte) kind;   --- Object kind code
 //      range(0:MaxType) type; 
 //end;
-public class Descriptor {
+public class Descriptor extends Instruction {
 	int kind;  // Object kind code
 	public Tag tag; 
 
 	public  Descriptor(int kind, Tag tag) {
 		this.kind = kind;
 		this.tag = tag;
-		Global.intoDisplay(this, tag.val);
+		if(tag != null) Global.intoDisplay(this, tag.val);
 	}
 	
 

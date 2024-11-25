@@ -2,6 +2,7 @@ package bec.instruction;
 
 import bec.compileTimeStack.CTStack;
 import bec.util.Global;
+import bec.util.Type;
 import bec.virtualMachine.SVM_NEG;
 
 public class NEG extends Instruction {
@@ -22,15 +23,15 @@ public class NEG extends Instruction {
 //		CTStack.dumpStack();
 //		Global.PSEG.dump();
 		CTStack.checkTosArith();
-		int at = CTStack.TOS.type;
+		Type at = CTStack.TOS.type;
 		Global.PSEG.emit(new SVM_NEG(at), "");
 		CTStack.pop();
-	    CTStack.pushTemp(at);
+	    CTStack.pushTemp(at, "NEG: ");
 	}
 
 	@Override
-	public void printTree(final int indent) {
-		sLIST(indent, toString());
+	public void print(final String indent) {
+		System.out.println(indent + toString());
 	}
 	
 	public String toString() {

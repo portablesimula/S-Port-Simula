@@ -55,6 +55,14 @@ public class AttributeInputStream {
 //		return tag;
 //	}
 
+    public int readTagID() throws IOException {
+    	String ident = readString();
+    	int tag = inpt.readShort();
+    	Scode.TAGIDENT.set(tag, ident);
+		if(TRACE) System.out.println("AttributeInputStream.readTag: "+Scode.edTag(tag));
+		return tag;
+	}
+
     public int readTag() throws IOException {
     	int tag = inpt.readShort();
 		if(TRACE) System.out.println("AttributeInputStream.readTag: "+Scode.edTag(tag));

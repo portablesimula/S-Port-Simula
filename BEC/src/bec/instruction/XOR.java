@@ -3,9 +3,8 @@ package bec.instruction;
 import bec.compileTimeStack.CTStack;
 import bec.compileTimeStack.StackItem;
 import bec.util.Global;
-import bec.util.Scode;
+import bec.util.Type;
 import bec.util.Util;
-import bec.virtualMachine.SVM_AND;
 import bec.virtualMachine.SVM_XOR;
 
 public class XOR extends Instruction {
@@ -32,28 +31,28 @@ public class XOR extends Instruction {
 //		Global.PSEG.dump();
 		StackItem tos = CTStack.TOS;
 	    
-	    int at = tos.type;
-	    if(at != Scode.TAG_BOOL) {
+	    Type at = tos.type;
+	    if(at != Type.T_BOOL) {
 		    at = CTStack.arithType(at, tos.suc.type);
 		    CTStack.checkTosArith(); CTStack.checkSosArith();
 		    CTStack.checkSosValue(); CTStack.checkTypesEqual();
-		    if( at == Scode.TAG_REAL || at == Scode.TAG_LREAL) Util.IERR("CODER.GQandxor-1");
+		    if( at == Type.T_REAL || at == Type.T_LREAL) Util.IERR("CODER.GQandxor-1");
 	    } else {
-	    	CTStack.checkSosValue(); CTStack.checkSosType(Scode.TAG_BOOL);
+	    	CTStack.checkSosValue(); CTStack.checkSosType(Type.T_BOOL);
 	    }
 	    
-		Global.PSEG.emit(new SVM_XOR(at), "");
+		Global.PSEG.emit(new SVM_XOR(at), "XOR: ");
 		CTStack.pop();
 		CTStack.pop();
-	    CTStack.pushTemp(at);
+	    CTStack.pushTemp(at, "XOR: ");
 //		CTStack.dumpStack();
 //		Global.PSEG.dump();
 //		Util.IERR(""+this);
 	}
 
 	@Override
-	public void printTree(final int indent) {
-		sLIST(indent, toString());
+	public void print(final String indent) {
+		System.out.println(indent + toString());
 	}
 	
 	public String toString() {

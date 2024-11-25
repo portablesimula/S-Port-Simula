@@ -44,15 +44,68 @@ end;
 -- Visible known("SYSPRI") SYSPRI; import infix(string) img;
 -- begin PRINTO(0,img,1) end;
 
+ Visible sysroutine("TERMIN") TERMIN;
+ import range(0:3) code; infix(string) msg  end;
+
  Visible body(PRF) BDY;
  begin
  end;
 
    
-visible routine GET;
-    begin boolean cont;
-    	  cont:=true;
---    	  obSML:=nobody;
+visible routine TEST_ADD; begin
+		boolean cont;
+		integer i, j, k, n, m;
+		cont:=true;
+		i := i + 500;
+		j := 66 + j;
+		k := i + j;
+		n := 440;
+		m := n + n;
     end;
    
+visible routine TEST_SUB; begin
+		boolean cont;
+		integer i, j, k, n, m;
+		cont:=true;
+		i := i - 500;
+		j := 66 - j;
+		k := i - j;
+		n := 440;
+		m := n - n;
+    end;
+   
+visible routine TEST_DIV; begin
+		boolean cont;
+		integer i, j, k, n, m;
+		cont:=true;
+		i := i / 500;
+--		j := 66 / j;
+--		k := i / j;
+		n := 440;
+		m := n / 10;
+    end;
+
+   
+visible routine TEST_MULT; begin
+		boolean cont;
+		integer i, j, k, n, m;
+		cont:=true;
+		i := i * 500;
+		j := 66 * j;
+		k := i * j;
+		n := 44;
+		m := n * 10;
+    end;
+   
+visible routine TEST_SWITCH; begin
+	integer code,res;
+		case 1:3 (code)
+			when 1: res := 1001
+--			when 2: res := 1002
+			when 3: res := 1003
+			otherwise res := -999;
+      endcase;
+   end;
+   
 end;
+

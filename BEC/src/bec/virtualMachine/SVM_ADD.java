@@ -4,21 +4,36 @@ import java.io.IOException;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
-import bec.util.Scode;
+import bec.segment.RTStack;
+import bec.util.Global;
+import bec.util.Type;
+import bec.value.Value;
 
 /**
- * Remove to items on the Runtime-Stack and push the value (SOS and TOS)
+ * Remove two items on the Runtime-Stack and push the value (SOS + TOS)
  */
 public class SVM_ADD extends SVM_Instruction {
-	int type;
+	Type type;
 
-	public SVM_ADD(int type) {
+	public SVM_ADD(Type type) {
+		this.opcode = SVM_Instruction.iADD;
 		this.type = type;
 	}
-	
+
+	@Override
+	public void execute() {
+		Value tos = RTStack.pop();
+		Value sos = RTStack.pop();
+		Value res = (tos == null)? sos : tos.add(sos);
+		System.out.println("SVM_ADD: " + tos + " + " + sos + " = " + res);
+		RTStack.push(type, res);
+		Global.PSC.ofst++;
+//		Util.IERR("");
+	}
+
 	@Override	
 	public String toString() {
-		return "AND      " + Scode.edTag(type);
+		return "ADD      " + type;
 	}
 
 	// ***********************************************************************************************
@@ -26,13 +41,12 @@ public class SVM_ADD extends SVM_Instruction {
 	// ***********************************************************************************************
 
 	public void write(AttributeOutputStream oupt) throws IOException {
-		oupt.writeKind(SVM_Instruction.iADD);
-		oupt.writeTag(type);
+		oupt.writeKind(opcode);
+		type.write(oupt);;
 	}
 
 	public static SVM_ADD read(AttributeInputStream inpt) throws IOException {
-		int type = inpt.readTag();
-		return new SVM_ADD(type);
+		return new SVM_ADD(Type.read(inpt));
 	}
 
 }

@@ -1,6 +1,6 @@
 package bec.compileTimeStack;
 
-import bec.util.Scode;
+import bec.util.Type;
 import bec.value.MemAddr;
 
 //Record Address:StackItem;
@@ -9,7 +9,7 @@ import bec.value.MemAddr;
 //      range(0:2) ObjState;     -- NotStacked ! FromConst ! Calculated
 //      range(0:2) AtrState;     -- NotStacked ! FromConst ! Calculated
 //end;
-public class Address extends StackItem {
+public class AddressItem extends StackItem {
 //	Visible Define NotStacked=0,FromConst=1,Calculated=2;
 	public enum State { NotStacked , FromConst , Calculated }
 	public MemAddr objadr;
@@ -17,10 +17,10 @@ public class Address extends StackItem {
 	public State objState;
 	public State atrState;
 	
-	public Address(int type, int offset, MemAddr objadr) {
+	public AddressItem(Type type, int offset, MemAddr objadr) {
 		this.type = type;
-//		this.repdist = DataType.TTAB[type].nbyte;
-		this.repdist = DataType.typeSize(type);
+//		this.size = DataType.TTAB[type].nbyte;
+		this.size = type.size();
 		this.objadr = objadr;
 		this.offset = offset;
 		this.objState = State.NotStacked;
@@ -28,6 +28,6 @@ public class Address extends StackItem {
 	}
 
 	public String toString() {
-		return Scode.edTag(type) + " AT " + objadr + "[" + offset + "] objState="+objState + ", atrState="+atrState;
+		return "" + type + " AT " + objadr + "[" + offset + "] objState="+objState + ", atrState="+atrState;
 	}
 }

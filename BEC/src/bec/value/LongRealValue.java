@@ -5,12 +5,13 @@ import java.io.IOException;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Scode;
+import bec.util.Type;
 
 public class LongRealValue extends Value {
 	double value;
 	
 	public LongRealValue(double value) {
-		this.type = Scode.TAG_LREAL;
+		this.type = Type.T_LREAL;
 		this.value = value;
 	}
 
@@ -18,13 +19,13 @@ public class LongRealValue extends Value {
 	 * longreal_value ::= c-lreal real_literal:string
 	 */
 	public LongRealValue() {
-		this.type = Scode.TAG_LREAL;
+		this.type = Type.T_LREAL;
 		value = Double.valueOf(Scode.inString());
 	}
 
 //	@Override
-//	public void printTree(final int indent) {
-//		sLIST(indent, toString());
+//	public void print(final String indent) {
+//		System.out.println(indent + toString());
 //	}
 	
 	public String toString() {
@@ -36,7 +37,7 @@ public class LongRealValue extends Value {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 	private LongRealValue(AttributeInputStream inpt) throws IOException {
-		this.type = Scode.TAG_LREAL;
+		this.type = Type.T_LREAL;
 		value = inpt.readDouble();
 //		System.out.println("NEW IMPORT: " + this);
 	}

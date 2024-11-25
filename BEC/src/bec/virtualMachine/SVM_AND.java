@@ -1,6 +1,10 @@
 package bec.virtualMachine;
 
-import bec.util.Scode;
+import java.io.IOException;
+
+import bec.AttributeInputStream;
+import bec.AttributeOutputStream;
+import bec.util.Type;
 
 /**
  * SOS and TOS are replaced by a description of the value of the application of the operator. The
@@ -10,15 +14,31 @@ import bec.util.Scode;
  * Remove to items on the Runtime-Stack and push the value SOS + TOS
  */
 public class SVM_AND extends SVM_Instruction {
-	int type;
+	Type type;
 
-	public SVM_AND(int type) {
+	public SVM_AND(Type type) {
+		this.opcode = SVM_Instruction.iAND;
 		this.type = type;
 	}
 	
 	@Override	
 	public String toString() {
-		return "ADD      " + Scode.edTag(type);
+		return "ADD      " + type;
 	}
+
+	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+
+	@Override
+	public void write(AttributeOutputStream oupt) throws IOException {
+		oupt.writeKind(opcode);
+		type.write(oupt);;
+	}
+
+	public static SVM_Instruction read(AttributeInputStream inpt) throws IOException {
+		return new SVM_AND(Type.read(inpt));
+	}
+
 
 }

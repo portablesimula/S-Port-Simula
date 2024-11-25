@@ -1,7 +1,14 @@
 package bec;
 
+import bec.descriptor.Kind;
+import bec.segment.DataSegment;
+import bec.segment.ProgramSegment;
+import bec.segment.Segment;
+import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
+import bec.value.MemAddr;
+import bec.virtualMachine.SVM_Instruction;
 
 public class MainProgram extends S_Module {
 	
@@ -24,44 +31,43 @@ public class MainProgram extends S_Module {
 	 *			::= delete_statement
 	 */
 	public MainProgram() {
+		Global.currentModule = this;
 		//  M a i n   P r o g r a m  ---
 //        if PROGID.val=0 then PROGID:=DefSymb("MAIN") endif;
 //        BEGASM(CSEGNAM,DSEGNAM); ed(sysedit,"SIM_");
 //        EdSymb(sysedit,PROGID); entx:=DefPubl(pickup(sysedit));
 //        MainEntry:=NewFixAdr(CSEGID,entx);
 //        DefLABEL(qBPROC,MainEntry.fix.val,entx.val);
-	
+
+		String sourceID = Global.getSourceID();
+		Global.CSEG = new DataSegment("CSEG_" + sourceID, Kind.K_SEG_CONST);
+		Global.DSEG = new DataSegment("DSEG_" + sourceID, Kind.K_SEG_DATA);
+		Global.PSEG = new ProgramSegment("PSEG_" + sourceID, Kind.K_SEG_CODE);
+		MemAddr mainEntry = Global.PSEG.nextAddress();
+		if(Global.PROGID == null) Global.PROGID = Global.modident;
+
 		while(Scode.nextByte() == Scode.S_LOCAL) {
 			Scode.inputInstr(); 
 			Util.IERR("NOT IMPL");
 //			Minut.inGlobal();
 		}
-//        if LtabEntry.kind <> 0
-//        then Ltab.kind:=segadr; Ltab.rela.val:=0;
-//             Ltab.segmid:=LSEGID;
-//             opr.kind:=extadr; opr.rela.val:=0;
-//             opr.smbx:=DefExtr("G@PRGINF",DGROUP);
-//%-E                  Ltab.sbireg:=0;       opr.sbireg:=oSS;
-//%+E                  Ltab.sibreg:=NoIBREG; opr.sibreg:=NoIBREG;
-//%-E                  Qf2b(qLOADC,0,qAX,cOBJ,F_OFFSET,Ltab);
-//%-E                  Qf3(qSTORE,0,qAX,cOBJ,opr);
-//%-E                  opr.rela.val:=opr.rela.val+2;
-//%-E                  Qf2b(qLOADC,0,qAX,cOBJ,F_BASE,Ltab);
-//%-E                  Qf3(qSTORE,0,qAX,cOBJ,opr);
-//%+E                  Qf2b(qLOADC,0,qEAX,cOBJ,0,Ltab);
-//%+E                  Qf3(qSTORE,0,qEAX,cOBJ,opr);
-//        endif;
-
-//		Util.IERR("NOT IMPL");
 		Scode.inputInstr(); 
 		programElements();
 
 //        Qf2(qRET,0,0,0,0);
 //        DefLABEL(qEPROC,MainEntry.fix.val,entx.val);
 //        peepExhaust(true); ENDASM;
+		
+		Segment.dumpAll("MainProgram: ");
 	
 		if(Scode.curinstr != Scode.S_ENDPROGRAM)
 			Util.IERR("Illegal termination of program");
+		
+//		MemAddr PSC = mainEntry;
+		Global.PSC = mainEntry;
+		while(true) {
+			Global.PSC.execute();
+		}
 		
 	}
 	

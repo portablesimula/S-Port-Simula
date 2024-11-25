@@ -16,6 +16,7 @@ import bec.util.Array;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Tag;
+import bec.util.Type;
 import bec.util.Util;
 
 public class InterfaceModule extends S_Module {
@@ -40,6 +41,7 @@ public class InterfaceModule extends S_Module {
 	 * 
 	 */
 	public InterfaceModule() {
+		Global.currentModule = this;
 		Scode.inputInstr();
 		if(Scode.curinstr != Scode.S_MODULE) Util.IERR("Missing - MODULE");
 		Global.modident = Scode.inString();
@@ -52,12 +54,13 @@ public class InterfaceModule extends S_Module {
 		if(Global.PROGID == null) Global.PROGID = Global.modident;
 		LOOP: while(true) {
 			Scode.inputInstr();
+//			System.out.println("InterfaceModule'LOOP: Curinstr="+Scode.edInstr(Scode.curinstr));
 			switch(Scode.curinstr) {
 				case Scode.S_GLOBAL:	Variable.ofGlobal(Global.DSEG); break;
-				case Scode.S_CONSTSPEC: ConstDescr.inConstant(false); break;
-				case Scode.S_CONST:		ConstDescr.inConstant(true);	break;
+				case Scode.S_CONSTSPEC: ConstDescr.ofConstSpec(); break;
+				case Scode.S_CONST:		ConstDescr.ofConstDef(); break;
 				case Scode.S_RECORD:	RecordDescr.of(); break;
-				case Scode.S_PROFILE:   ProfileDescr.inProfile(Kind.P_VISIBLE); break;
+				case Scode.S_PROFILE:   ProfileDescr.ofProfile(); break;
 				case Scode.S_ROUTINE:	RoutineDescr.ofRoutine();	break;
 				case Scode.S_LINE:		setLine(0); break;
 				case Scode.S_DECL:		CTStack.checkStackEmpty(); setLine(Kind.qDCL); break;
@@ -88,6 +91,7 @@ public class InterfaceModule extends S_Module {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			Util.IERR("");
 		}
 
 		Tag.dumpITAGTABLE("MONITOR.interfaceModule'END: ");
@@ -97,6 +101,7 @@ public class InterfaceModule extends S_Module {
 		Global.CSEG.dump("MONITOR.interfaceModule'END: ");
 		Global.dumpDISPL("MONITOR.interfaceModule'END: ");
 		Scode.dumpTAGIDENTS("MONITOR.interfaceModule'END: ");
+		Type.dumpTypes("MONITOR.interfaceModule'END: ");
 		if(Scode.curinstr != Scode.S_BODY) Util.IERR("Illegal termination of module head");
 		Scode.inputInstr();
 //	%+SC    repeat InputInstr while CurInstr=S_INIT

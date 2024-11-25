@@ -3,8 +3,6 @@ package bec.util;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import removed.java.Scomn;
-
 public class Scode {
 //	%title ***  B A S I C    S - C O D E    I N P U T  ***
 	private static byte[] SBUF;
@@ -38,6 +36,7 @@ public class Scode {
         Scode.TAGIDENT.set(10, "PADDR");
         Scode.TAGIDENT.set(11, "RADDR");
         Scode.TAGIDENT.set(12, "SIZE");
+        Scode.TAGIDENT.set(13, "TEXT");
 
 		String fileName = Global.scodeSource;
 		System.out.println("Open SCode file: " + fileName);
@@ -218,56 +217,6 @@ public class Scode {
 	
 	public static void inType() {
 		Util.IERR("'inType' SKAL IKKE BRUKES - BRUK  type = new Type();");
-		// export range(0:MaxType) type;
-//	begin infix(WORD) tag,lb,ub,fixrep; ref(RecordDescr) r;
-//	      InTag(%tag%);
-		int tag = inTag();
-		if(tag <= Scomn.TAG_SIZE) {
-//			switch(tag) {
-//	           when TAG_BOOL:  type:=T_BOOL
-//	           when TAG_CHAR:  type:=T_CHAR
-//	           when TAG_SINT:  type:=T_SINT
-//	           when TAG_REAL:  type:=T_REAL
-//	           when TAG_LREAL: type:=T_LREAL
-//	           when TAG_AADDR: type:=T_AADDR
-//	           when TAG_OADDR: type:=T_OADDR
-//	           when TAG_GADDR: type:=T_GADDR
-//	           when TAG_PADDR: type:=T_PADDR
-//	           when TAG_RADDR: type:=T_RADDR
-//	           when TAG_SIZE:  type:=T_SIZE
-//	           when TAG_INT:
-//	                if NextByte <> S_RANGE then type:=T_INT
-//	                else inputInstr;
-//	%+D                  lb:=InputNumber; ub:=InputNumber;
-//	%-D                  InNumber(%lb%); InNumber(%ub%);
-//	%+C                  if lb.val > ub.val then IERR("SBASE:intype") endif;
-//	                     if    ub.val <= MaxByte then type:=T_BYT1;
-//	                     elsif ub.val <= MaxWord then type:=T_BYT2;
-//	                     else  type:=T_INT endif;
-//	                endif
-//			}
-			
-			if(accept(S_RANGE)) {
-				Scode.inNumber(); Scode.inNumber();
-			}
-
-		} else {
-//	%+C         if tag.val < MinTag then IERR("SBASE:Intype - 4") endif;
-//	            r:=DISPL(tag.HI).elt(tag.LO); type:=DefStructType(r);
-//	            if NextByte = S_FIXREP
-//	            then inputInstr;
-//	%+D              fixrep:=InputNumber;
-//	%-D              InNumber(%fixrep%);
-//	%+C              if r.nbrep = 0 then IERR("Misplaced FIXREP") endif;
-//	                 TypeLength:=r.nbyte+(r.nbrep*fixrep.val);
-//	            else TypeLength:=r.nbyte;
-//	%+C              if r.nbrep <> 0 then IERR("Missing FIXREP") endif;
-//	            endif;
-			if(Scode.nextByte() == Scode.S_FIXREP) {
-				Scode.inputInstr();
-				Scode.inNumber();
-			}
-		}
 	}
 
 //	Routine InSymbString; export infix(String) s;
@@ -486,7 +435,9 @@ public class Scode {
 	public final static int TAG_PADDR = 10;
 	public final static int TAG_RADDR = 11;
 	public final static int TAG_SIZE  = 12;
-	public final static int T_max=12; // Max value of predefined type
+	public final static int TAG_TEXT  = 13;
+	public final static int T_max=13; // Max value of predefined type
+	public final static int TAG_STRING  = 32;
 	
 //    ------   S  -  I  N  S  T  R  U  C  T  I  O  N  S   ------
 

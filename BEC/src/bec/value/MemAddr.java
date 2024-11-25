@@ -4,8 +4,11 @@ import java.io.IOException;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
+import bec.segment.DataSegment;
+import bec.segment.ProgramSegment;
 import bec.segment.Segment;
 import bec.util.Util;
+import bec.virtualMachine.SVM_Instruction;
 
 //%title ***   M e m o r y   A d d r e s s e s   ***
 //Define reladr=1,locadr=2,segadr=3,extadr=4,fixadr=5,knladr=6;
@@ -38,31 +41,70 @@ import bec.util.Util;
 //end;
 
 public class MemAddr extends Value {
-	public Segment seg;
+//	public Segment seg;
+	String segID;
 	public int ofst;
 	
-	public MemAddr(Segment seg,	int ofst) {
-		this.seg = seg;
+	private MemAddr(String segID,	int ofst) {
+		this.segID = segID;
 		this.ofst = ofst;
 		if(ofst > 9000 || ofst < 0) Util.IERR("");
 	}
 	
+	public MemAddr(Segment seg,	int ofst) {
+//		this.seg = seg;
+		if(seg != null)	this.segID = seg.ident;
+		this.ofst = ofst;
+		if(ofst > 9000 || ofst < 0) Util.IERR("");
+	}
+	
+	public MemAddr ofset(int ofst) {
+		return new MemAddr(segID, this.ofst + ofst);
+	}
+	
+	public Segment segment() {
+		if(segID == null) return null;
+		return Segment.lookup(segID);
+	}
+	
+	public void store(Value value) {
+		DataSegment dseg = (DataSegment) segment();
+		dseg.store(ofst, value);
+//		dseg.dump("MemAddr.store: ");
+//		Util.IERR("");
+	}
+	
+	public Value load() {
+		DataSegment dseg = (DataSegment) segment();
+		Value value =  dseg.load(ofst);
+//		dseg.dump("MemAddr.load: ");
+//		Util.IERR("");	
+		return value;
+	}
+	
+	public void execute() {
+		ProgramSegment seg = (ProgramSegment) segment();
+		SVM_Instruction cur = seg.instructions.get(ofst);
+		System.out.println("MemAddr.execute: " + cur);
+		cur.execute();
+//		Util.IERR("");
+	}
+	
 	public String toString() {
-		String segID = (seg == null) ? "RELADR" : seg.ident;
-		return segID + '[' + ofst + ']';
+		String s = (segID == null) ? "RELADR" : segID;
+		return s + '[' + ofst + ']';
 	}
 
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 	private MemAddr(AttributeInputStream inpt) throws IOException {
-		String ident = inpt.readString();
+//		String ident = inpt.readString();
+		segID = inpt.readString();
 //		ofst = inpt.readInt();
 		ofst = inpt.readShort();
-		if(ident != null) {
-			seg = Segment.lookup(ident);
-			if(seg == null) Util.IERR("Can't find Segment " + ident);
-		}
+//		if(ident != null) seg = Segment.lookup(ident);
+
 		System.out.println("=============================================================================================================== " + this);
 		if(ofst > 9000 || ofst < 0) Util.IERR(""+ofst);
 //		Util.IERR(""+seg);
@@ -70,7 +112,8 @@ public class MemAddr extends Value {
 	}
 
 	public void write(AttributeOutputStream oupt) throws IOException {
-		oupt.writeString((seg==null)?null:seg.ident);
+//		oupt.writeString((seg==null)?null:seg.ident);
+		oupt.writeString(segID);
 //		oupt.writeInt(ofst);
 		oupt.writeShort(ofst);
 		if(ofst > 9000 || ofst < 0) Util.IERR("");

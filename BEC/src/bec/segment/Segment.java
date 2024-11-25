@@ -1,41 +1,63 @@
 package bec.segment;
 
 import java.io.IOException;
-import java.util.HashMap;
-
 import bec.AttributeOutputStream;
 import bec.descriptor.Kind;
+import bec.util.Global;
 import bec.util.Util;
 
 public class Segment { // extends Descriptor {
 	public String ident;
 	int segmentKind; // K_SEG_DATA, K_SEG_CONST, K_SEG_CODE
 
-	static HashMap<String, Segment> SEGMAP = new HashMap<String, Segment>();
 
 	public Segment(String ident, int segmentKind) {
-		SEGMAP.put(ident, this);
+		if(Global.SEGMAP.get(ident) != null) Util.IERR("Segment allready defined: " + ident);
+		Global.SEGMAP.put(ident, this);
 		this.ident = ident.toUpperCase();
 		this.segmentKind = segmentKind;
 	}
 
 	public static Segment lookup(String ident) {
-		return SEGMAP.get(ident);
+		Segment seg = Global.SEGMAP.get(ident);
+		if(seg == null) {
+			Segment.listAll();
+			Util.IERR("Can't find Segment " + ident);
+		}
+		return seg;
 	}
 	
-	public static void writeSegments(AttributeOutputStream oupt) {
-		try {
-			for(Segment seg:SEGMAP.values()) {
-				seg.write(oupt);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+//	public static void writeSegments(AttributeOutputStream oupt) {
+//		listAll();
+//		try {
+//			for(Segment seg:SEGMAP.values()) {
+//				if(!seg.inserted)
+//					seg.write(oupt);
+//			}
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//			Util.IERR("");
+//		}
+////		Util.IERR("");
+//	}
+	
+	public static void listAll() {
+		for(Segment seg:Global.SEGMAP.values()) {
+			System.out.println("   " + seg);
 		}
-//		Util.IERR("");
+	}
+
+	public void dump(String title) {
+	}
+	
+	public static void dumpAll(String title) {
+		for(Segment seg:Global.SEGMAP.values()) {
+			seg.dump(title);
+		}
 	}
 	
 	public String toString() {
-		return Kind.edKind(segmentKind) + " " + ident;
+		return Kind.edKind(segmentKind) + ':' + segmentKind + " " + ident;
 	}
 
 

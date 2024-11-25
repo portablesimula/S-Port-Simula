@@ -1,10 +1,11 @@
 package bec.instruction;
 
 import bec.compileTimeStack.CTStack;
+import bec.compileTimeStack.StackItem;
 import bec.util.Global;
 import bec.util.Util;
 import bec.value.MemAddr;
-import bec.virtualMachine.SVM_POPtoMEM;
+import bec.virtualMachine.SVM_POP2MEM;
 
 public class RUPDATE extends Instruction {
 	
@@ -23,18 +24,18 @@ public class RUPDATE extends Instruction {
 	}
 
 	@Override
-	public void printTree(final int indent) {
-		sLIST(indent, toString());
+	public void print(final String indent) {
+		System.out.println(indent + toString());
 	}
 	
-
 	@Override
 	public void doCode() {
 //		CTStack.dumpStack();
 		CTStack.checkTosRef(); CTStack.checkSosValue(); CTStack.checkTypesEqual();
 		MemAddr adr = Util.getTosDstAdr();
-		CTStack.pop();
-		Global.PSEG.emit(new SVM_POPtoMEM(adr, 1), ""+this); // Store into adr
+		StackItem tos = CTStack.pop();
+		CTStack.dumpStack("RUPDATE: ");
+		Global.PSEG.emit(new SVM_POP2MEM(adr, tos.size), ""+this); // Store into adr
 //		Global.PSEG.dump();
 	}
 	

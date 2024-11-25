@@ -3,10 +3,11 @@ package bec.util;
 import java.io.File;
 import java.util.HashMap;
 
-import PREV.syntaxClass.SyntaxClass;
+import bec.S_Module;
 import bec.descriptor.Descriptor;
 import bec.segment.DataSegment;
 import bec.segment.ProgramSegment;
+import bec.segment.Segment;
 import bec.value.MemAddr;
 
 public class Global {
@@ -22,18 +23,28 @@ public class Global {
 	public static boolean SEGMENT_INPUT_DUMP = false;
 	public static boolean SEGMENT_OUTPUT_DUMP = false;
 	
+	public static MemAddr PSC; // ProgramSequenceControl during execute
+	public static HashMap<String, Segment> SEGMAP;
 
+	public static S_Module currentModule;
+	
 	// C:/Simuletta/SCode/simulaRTS/RT.AT2
 	public final static String rtsDir = "C:/Simuletta/SCode/simulaRTS/Attr/";
 
-	public static Array<SyntaxClass> Display = new Array<SyntaxClass>();
-	public static SyntaxClass getMeaning(int tag) {
-		SyntaxClass x = Display.get(tag);
+//	public static Array<SyntaxClass> Display = new Array<SyntaxClass>();
+//	public static SyntaxClass getMeaning(int tag) {
+//		SyntaxClass x = Display.get(tag);
+//		if(x == null) Util.IERR("Missing meaning: " + Scode.edTag(tag));
+//		return(x);
+//	}
+	
+	public static Array<Descriptor> DISPL;
+	public static Descriptor getMeaning(int tag) {
+		Descriptor x = DISPL.get(tag);
 		if(x == null) Util.IERR("Missing meaning: " + Scode.edTag(tag));
 		return(x);
 	}
 	
-	public static Array<Descriptor> DISPL = new Array<Descriptor>();
 	public static void intoDisplay(Descriptor d, int tag) {
 		if(tag != 0) {
 			
@@ -42,7 +53,7 @@ public class Global {
 			Descriptor prev = DISPL.get(tag);
 			if(prev == null) ; // OK
 			else if(prev != d) {
-				dumpDISPL("Global.intoDisplay");
+				dumpDISPL("Global.intoDisplay: ");
 				Util.IERR("Display-entry is already defined: " + Scode.edTag(tag) + "  " + prev);
 			}
 			DISPL.set(tag, d);
@@ -65,10 +76,11 @@ public class Global {
 
 	public static void dumpDisplay(String title) {
 		System.out.println("============ "+title+" BEGIN Dump Display ================");
-		for(int i=0;i<Display.size();i++) {
-			SyntaxClass elt =Display.get(i);
-			System.out.println("  " + i + ": " + elt);
-		}
+//		for(int i=0;i<Display.size();i++) {
+//			SyntaxClass elt =Display.get(i);
+//			System.out.println("  " + i + ": " + elt);
+//		}
+		Util.IERR("");
 		System.out.println("============ "+title+"ENDOF Dump Display ================");
 	}
 	
@@ -85,7 +97,7 @@ public class Global {
 	public static Array<Integer> iTAGTAB; // Index xTag --> value iTag (during Module I/O)
 	public static Array<Integer> xTAGTAB; // Index iTag --> value xTag (during Module I/O)
 
-	public static boolean insideRoutine;  // Inside Routine Body indicator
+//	public static boolean insideRoutine;  // Inside Routine Body indicator
 
 	public static DataSegment CSEG; // Constant Segment
 	public static DataSegment DSEG; 

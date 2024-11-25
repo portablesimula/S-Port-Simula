@@ -9,9 +9,18 @@
 --%TRACE 2 -- Output Trace
 
  -- MAIN Program:
- begin insert envir0,modl01;
+ begin insert envir0,modl01,modl02;
 --      sysinsert rt,sysr,knwn,util;
 
     
-    GET;
+    TEST_ADD;
+--    TEST_SUB;
+--    TEST_DIV;
+--    TEST_MULT;
+    
+--    TEST_SWITCH;
+    
+--    GET;
+
+	TERMIN(0, "END PROGRAM");
 end

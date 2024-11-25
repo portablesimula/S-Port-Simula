@@ -5,6 +5,7 @@ import java.io.IOException;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Scode;
+import bec.util.Type;
 
 public class BooleanValue extends Value {
 	boolean value;
@@ -13,13 +14,13 @@ public class BooleanValue extends Value {
 	 * boolean_value ::= true | false
 	 */
 	public BooleanValue(boolean value) {
-		this.type = Scode.TAG_BOOL;
+		this.type = Type.T_BOOL;
 		this.value = value;
 	}
 
 	@Override
-//	public void printTree(final int indent) {
-//		sLIST(indent, toString());
+//	public void print(final String indent) {
+//		System.out.println(indent + toString());
 //	}
 	
 	public String toString() {

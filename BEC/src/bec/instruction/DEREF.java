@@ -1,7 +1,7 @@
 package bec.instruction;
 
 import bec.compileTimeStack.CTStack;
-import bec.util.Scode;
+import bec.util.Type;
 
 public class DEREF extends Instruction {
 	
@@ -33,21 +33,21 @@ public class DEREF extends Instruction {
 		CTStack.checkTosRef();
 //        adr:=TOS;
 //%+S        if SYSGEN <> 0
-//%+S        then if adr.repdist <> (TTAB(adr.type).nbyte)
+//%+S        then if adr.size <> (TTAB(adr.type).nbyte)
 //%+S             then WARNING("DEREF on parameter") endif;
 //%+S        endif;
 
 		CTStack.assertAtrStacked();
 		CTStack.pop();
-		CTStack.pushTemp(Scode.TAG_GADDR);
+		CTStack.pushTemp(Type.T_GADDR, "DEREF: ");
 
 //		Global.PSEG.dump();
 //		Util.IERR(""+this);
 	}
 
 	@Override
-	public void printTree(final int indent) {
-		sLIST(indent, toString());
+	public void print(final String indent) {
+		System.out.println(indent + toString());
 	}
 	
 	public String toString() {

@@ -5,56 +5,65 @@ import java.util.Vector;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
-import bec.ModuleIO;
-import bec.compileTimeStack.DataType;
 import bec.segment.DataSegment;
-import bec.statement.InsertStatement;
+import bec.segment.Segment;
 import bec.util.Global;
-import bec.util.Type;
 import bec.util.Scode;
 import bec.util.Tag;
+import bec.util.Type;
 import bec.util.Util;
+import bec.value.MemAddr;
+import bec.virtualMachine.SVM_SYSCALL;
 
 //Record ProfileDescr:Descriptor;  -- K_ProfileDescr     SIZE = (6+npar*2) align 4
 //begin range(0:MaxByte) npar;     -- No.of parameters
 //      range(0:1) WithExit;
 //      range(0:MaxParByte) nparbyte;
-//      range(0:P_max) Pkind;
+//      range(0:P_max) pKind;
 //      infix(ParamSpec) Par(0);   -- Parameter Specifications
 //end;
 public class ProfileDescr extends Descriptor {
-//	int npar;     // No.of parameters
+	public int npar;     // No.of parameters
 //	boolean withExit;
-	int nparbyte;
-	int Pkind; // Profile Kind
-//	Vector<ParamSpec> params; // Parameter Specifications
-	public Vector<Variable> imports;
-	public Variable exit;
-	public Variable export;
+//	int nparbyte;
+	public int pKind; // Peculiar Profile Kind
+	public Vector<Tag> params;
+	private Tag exportTag;
+	MemAddr returAddr;
+	public DataSegment DSEG;
 	
-//	public int ptag;
+	//	NOT SAVED:
+	public Vector<Variable> imports;
+	public Variable export;
+	public Variable exit;
+	
 	public int bodyTag;    // peculiar
 	private String nature; // peculiar
 	public String ident;   // peculiar
-	public DataSegment DSEG;
 
 	
 //	Record ParamSpec; info "TYPE";
 //	begin range(0:MaxType) type;
 //	      range(0:MaxByte) count;
 //	end;
-	class ParamSpec {
-		int type;
-		int count;
-		public void write(AttributeOutputStream oupt) throws IOException {
-			oupt.writeShort(type);
-			oupt.writeShort(count);
-		}
-	}
+//	class ParamSpec {
+//		Type type;
+//		int count;
+//		public void write(AttributeOutputStream oupt) throws IOException {
+//			oupt.writeShort(type);
+//			oupt.writeShort(count);
+//		}
+//	}
 	
 	private ProfileDescr(int kind, Tag tag) {
 		super(kind, tag);
 //		System.out.println("NEW ProfileDescr: " + Scode.edTag(tag));
+	}
+	
+	public Variable getExport() {
+		if(exportTag == null) return null;
+		Variable export = (Variable) Global.getMeaning(exportTag.val);
+		return export;
 	}
 
 //	%title ***   I n p u t   P r o f i l e   ***
@@ -76,59 +85,61 @@ public class ProfileDescr extends Descriptor {
 	 * 			::= export parm:newtag resolved_type
 	 * 			::= exit return:newtag
 	 */
-	public static ProfileDescr inProfile(int defkind) { // export ref(ProfileDescr) prf;
+	public static ProfileDescr ofProfile() {
 		Tag ptag = Tag.inTag();
 //		System.out.println("ProfileDescr.inProfile: " + Scode.edTag(ptag));
-//		prf.ptag = ptag;
 		ProfileDescr prf = new ProfileDescr(Kind.K_ProfileDescr, ptag);
-//		int kind = defkind;
-		prf.Pkind = defkind;
 		if(Scode.nextByte() == Scode.S_EXTERNAL) {
 			 // peculiar ::= external body:newtag nature:string xid:string
 			Scode.inputInstr();
 			Tag.inTag();
 			Scode.inString();
-			// kind = Kind.P_EXTERNAL;
 			// IntDescr rut = new IntDescr(Kind.K_IntRoutine, rtag);
 			Util.IERR("External Routines is not part of this implementation");
 		} else if(Scode.nextByte() == Scode.S_INTERFACE) {
 			 // peculiar ::= interface pid:string
 			Scode.inputInstr();
 			String xid = Scode.inString();
-//			prf.Pkind = Kind.P_INTERFACE;
-			prf.Pkind = getSysKind(xid);
+			prf.pKind = getSysKind(xid);
 		} else if(Scode.nextByte() == Scode.S_KNOWN) {
 			// peculiar	::= known body:newtag kid:string
 			Scode.inputInstr();
 			Tag rtag = Tag.inTag();
 			String xid = Scode.inString();
 			RoutineDescr rut = new RoutineDescr(Kind.K_IntRoutine, rtag);
-//			Util.IERR("");
-//			prf.Pkind = Kind.P_KNOWN;
-			prf.Pkind = getKnownKind(xid);
+//			prf.pKind = getKnownKind(xid);
 		} else if(Scode.nextByte() == Scode.S_SYSTEM) {
 			 //	peculiar ::= system body:newtag sid:string
 			Scode.inputInstr();
 			Tag rtag = Tag.inTag();
 			String xid = Scode.inString();
 			RoutineDescr rut = new RoutineDescr(Kind.K_IntRoutine, rtag);
-//			prf.Pkind = Kind.P_SYSTEM;
-			prf.Pkind = getSysKind(xid);
+			prf.pKind = getSysKind(xid);
 		}
 		prf.imports = new Vector<Variable>();
-		prf.DSEG = new DataSegment("DSEG_" + Global.moduleID + '_' + ptag, Kind.K_SEG_DATA);
+		prf.params = new Vector<Tag>();
+		prf.DSEG = new DataSegment("DSEG_" + Global.moduleID + '_' + ptag.ident(), Kind.K_SEG_DATA);
+		prf.returAddr = prf.DSEG.nextAddress();
+		prf.DSEG.emit(null, "RETUR");
+
 		Scode.inputInstr();
 		while(Scode.curinstr == Scode.S_IMPORT) {
-			prf.imports.add(Variable.ofIMPORT(prf.DSEG));
+			Variable par = Variable.ofIMPORT(prf.DSEG);
+			prf.imports.add(par);
+			prf.params.add(par.tag);
 			Scode.inputInstr();
 		}
+		prf.npar = prf.imports.size();
 		if(Scode.curinstr == Scode.S_EXIT) {
-			prf.exit = Variable.ofEXIT(prf.DSEG);
+//			prf.exit = Variable.ofEXIT(prf.DSEG);
+			prf.exit = Variable.ofEXIT(prf.returAddr);
 			Scode.inputInstr();
 		} else if(Scode.curinstr == Scode.S_EXPORT) {
-			prf.export = Variable.ofEXPORT(prf.DSEG);				
+			prf.export = Variable.ofEXPORT(prf.DSEG);
+			prf.exportTag = prf.export.tag;
 			Scode.inputInstr();
 		}
+		if(prf.exit == null) prf.exit = Variable.ofRETUR(prf.returAddr);
 		if(Scode.curinstr != Scode.S_ENDPROFILE)
 			Util.IERR("Missing ENDPROFILE. Got " + Scode.edInstr(Scode.curinstr));
 		
@@ -167,126 +178,183 @@ public class ProfileDescr extends Descriptor {
 //		if(exit != null)   profile += " " + exit;
 //		if(export != null) profile += " " + export;
 		profile += " ...";
+		if(exportTag != null) profile += " exportTag=" + exportTag;
+		profile += " returAddr=" + returAddr;
 		return profile;
 	}
 
 	
 	private static int getKnownKind(String s) {
-//		if(s.equalsIgnoreCase("RLOG10")) return Kind.P_RLOG10;
-//		if(s.equalsIgnoreCase("DLOG10")) return Kind.P_DLOG10;
-//		if(s.equalsIgnoreCase("RCOSIN")) return Kind.P_RCOSIN;
-//		if(s.equalsIgnoreCase("COSINU")) return Kind.P_COSINU;
-//		if(s.equalsIgnoreCase("RTANGN")) return Kind.P_RTANGN;
-//		if(s.equalsIgnoreCase("TANGEN")) return Kind.P_TANGEN;
-//		if(s.equalsIgnoreCase("RARCOS")) return Kind.P_RARCOS;
-//		if(s.equalsIgnoreCase("ARCCOS")) return Kind.P_ARCCOS;
-//		if(s.equalsIgnoreCase("RARSIN")) return Kind.P_RARSIN;
-//		if(s.equalsIgnoreCase("ARCSIN")) return Kind.P_ARCSIN;
-//		if(s.equalsIgnoreCase("ERRNON")) return Kind.P_ERRNON;
-//		if(s.equalsIgnoreCase("ERRQUA")) return Kind.P_ERRQUA;
-//		if(s.equalsIgnoreCase("ERRSWT")) return Kind.P_ERRSWT;
-//		if(s.equalsIgnoreCase("ERROR")) return Kind.P_ERROR;
-//		if(s.equalsIgnoreCase("CBLNK")) return Kind.P_CBLNK;
-//		if(s.equalsIgnoreCase("CMOVE")) return Kind.P_CMOVE;
-		if(s.equalsIgnoreCase("STRIP")) return Kind.P_STRIP;
-//		if(s.equalsIgnoreCase("TXTREL")) return Kind.P_TXTREL;
-		if(s.equalsIgnoreCase("TRFREL")) return Kind.P_TRFREL;
-		if(s.equalsIgnoreCase("TRFREL")) return Kind.P_TRFREL;
-//		if(s.equalsIgnoreCase("AR1IND")) return Kind.P_AR1IND;
-//		if(s.equalsIgnoreCase("AR2IND")) return Kind.P_AR2IND;
-//		if(s.equalsIgnoreCase("ARGIND")) return Kind.P_ARGIND;
-//		if(s.equalsIgnoreCase("IABS")) return Kind.P_IABS;
-//		if(s.equalsIgnoreCase("RABS")) return Kind.P_RABS;
-//		if(s.equalsIgnoreCase("DABS")) return Kind.P_DABS;
-//		if(s.equalsIgnoreCase("RSIGN")) return Kind.P_RSIGN;
-//		if(s.equalsIgnoreCase("DSIGN")) return Kind.P_DSIGN;
-//		if(s.equalsIgnoreCase("MODULO")) return Kind.P_MODULO;
-//		if(s.equalsIgnoreCase("RENTI")) return Kind.P_RENTI;
-//		if(s.equalsIgnoreCase("DENTI")) return Kind.P_DENTI;
-//		if(s.equalsIgnoreCase("DIGIT")) return Kind.P_DIGIT;
-//		if(s.equalsIgnoreCase("LETTER")) return Kind.P_LETTER;
-//		if(s.equalsIgnoreCase("RIPOWR")) return Kind.P_RIPOWR;
-//		if(s.equalsIgnoreCase("RRPOWR")) return Kind.P_RRPOWR;
-//		if(s.equalsIgnoreCase("RDPOWR")) return Kind.P_RDPOWR;
-//		if(s.equalsIgnoreCase("DIPOWR")) return Kind.P_DIPOWR;
-//		if(s.equalsIgnoreCase("DRPOWR")) return Kind.P_DRPOWR;
-//		if(s.equalsIgnoreCase("DDPOWR")) return Kind.P_DDPOWR;
+//		if(s.equalsIgnoreCase("RLOG10")) return SVM_SYSCALL.P_RLOG10;
+//		if(s.equalsIgnoreCase("DLOG10")) return SVM_SYSCALL.P_DLOG10;
+//		if(s.equalsIgnoreCase("RCOSIN")) return SVM_SYSCALL.P_RCOSIN;
+//		if(s.equalsIgnoreCase("COSINU")) return SVM_SYSCALL.P_COSINU;
+//		if(s.equalsIgnoreCase("RTANGN")) return SVM_SYSCALL.P_RTANGN;
+//		if(s.equalsIgnoreCase("TANGEN")) return SVM_SYSCALL.P_TANGEN;
+//		if(s.equalsIgnoreCase("RARCOS")) return SVM_SYSCALL.P_RARCOS;
+//		if(s.equalsIgnoreCase("ARCCOS")) return SVM_SYSCALL.P_ARCCOS;
+//		if(s.equalsIgnoreCase("RARSIN")) return SVM_SYSCALL.P_RARSIN;
+//		if(s.equalsIgnoreCase("ARCSIN")) return SVM_SYSCALL.P_ARCSIN;
+//		if(s.equalsIgnoreCase("ERRNON")) return SVM_SYSCALL.P_ERRNON;
+//		if(s.equalsIgnoreCase("ERRQUA")) return SVM_SYSCALL.P_ERRQUA;
+//		if(s.equalsIgnoreCase("ERRSWT")) return SVM_SYSCALL.P_ERRSWT;
+//		if(s.equalsIgnoreCase("ERROR")) return SVM_SYSCALL.P_ERROR;
+//		if(s.equalsIgnoreCase("CBLNK")) return SVM_SYSCALL.P_CBLNK;
+//		if(s.equalsIgnoreCase("CMOVE")) return SVM_SYSCALL.P_CMOVE;
+		if(s.equalsIgnoreCase("STRIP")) return SVM_SYSCALL.P_STRIP;
+//		if(s.equalsIgnoreCase("TXTREL")) return SVM_SYSCALL.P_TXTREL;
+		if(s.equalsIgnoreCase("TRFREL")) return SVM_SYSCALL.P_TRFREL;
+		if(s.equalsIgnoreCase("TRFREL")) return SVM_SYSCALL.P_TRFREL;
+//		if(s.equalsIgnoreCase("AR1IND")) return SVM_SYSCALL.P_AR1IND;
+//		if(s.equalsIgnoreCase("AR2IND")) return SVM_SYSCALL.P_AR2IND;
+//		if(s.equalsIgnoreCase("ARGIND")) return SVM_SYSCALL.P_ARGIND;
+//		if(s.equalsIgnoreCase("IABS")) return SVM_SYSCALL.P_IABS;
+//		if(s.equalsIgnoreCase("RABS")) return SVM_SYSCALL.P_RABS;
+//		if(s.equalsIgnoreCase("DABS")) return SVM_SYSCALL.P_DABS;
+//		if(s.equalsIgnoreCase("RSIGN")) return SVM_SYSCALL.P_RSIGN;
+//		if(s.equalsIgnoreCase("DSIGN")) return SVM_SYSCALL.P_DSIGN;
+//		if(s.equalsIgnoreCase("MODULO")) return SVM_SYSCALL.P_MODULO;
+//		if(s.equalsIgnoreCase("RENTI")) return SVM_SYSCALL.P_RENTI;
+//		if(s.equalsIgnoreCase("DENTI")) return SVM_SYSCALL.P_DENTI;
+//		if(s.equalsIgnoreCase("DIGIT")) return SVM_SYSCALL.P_DIGIT;
+//		if(s.equalsIgnoreCase("LETTER")) return SVM_SYSCALL.P_LETTER;
+//		if(s.equalsIgnoreCase("RIPOWR")) return SVM_SYSCALL.P_RIPOWR;
+//		if(s.equalsIgnoreCase("RRPOWR")) return SVM_SYSCALL.P_RRPOWR;
+//		if(s.equalsIgnoreCase("RDPOWR")) return SVM_SYSCALL.P_RDPOWR;
+//		if(s.equalsIgnoreCase("DIPOWR")) return SVM_SYSCALL.P_DIPOWR;
+//		if(s.equalsIgnoreCase("DRPOWR")) return SVM_SYSCALL.P_DRPOWR;
+//		if(s.equalsIgnoreCase("DDPOWR")) return SVM_SYSCALL.P_DDPOWR;
 		Util.IERR(""+s);
 		return 0;
 	}
 
 	private static int getSysKind(String s) {
 		//--- Search for inline index ---
-		if(s.equalsIgnoreCase("INTRHA")) return Kind.P_INTRHA;
-		if(s.equalsIgnoreCase("STREQL")) return Kind.P_STREQL;
-		if(s.equalsIgnoreCase("PRINTO")) return Kind.P_PRINTO;
-//		if(s.equalsIgnoreCase("MOVEIN")) return Kind.P_MOVEIN;
-//		if(s.equalsIgnoreCase("RSQROO")) return Kind.P_RSQROO;
-//		if(s.equalsIgnoreCase("SQROOT")) return Kind.P_SQROOT;
-//		if(s.equalsIgnoreCase("RLOGAR")) return Kind.P_RLOGAR;
-//		if(s.equalsIgnoreCase("LOGARI")) return Kind.P_LOGARI;
-//		if(s.equalsIgnoreCase("REXPON")) return Kind.P_REXPON;
-//		if(s.equalsIgnoreCase("EXPONE")) return Kind.P_EXPONE;
-//		if(s.equalsIgnoreCase("RSINUS")) return Kind.P_RSINUS;
-//		if(s.equalsIgnoreCase("SINUSR")) return Kind.P_SINUSR;
-//		if(s.equalsIgnoreCase("RARTAN")) return Kind.P_RARTAN;
-//		if(s.equalsIgnoreCase("ARCTAN")) return Kind.P_ARCTAN;
-//		if(s.equalsIgnoreCase("M?CREF")) return Kind.P_DOS_CREF;
-//		if(s.equalsIgnoreCase("M?OPEN")) return Kind.P_DOS_OPEN;
-//		if(s.equalsIgnoreCase("M?CLOSE")) return Kind.P_DOS_CLOSE;
-//		if(s.equalsIgnoreCase("M?READ")) return Kind.P_DOS_READ;
-//		if(s.equalsIgnoreCase("M?WRITE")) return Kind.P_DOS_WRITE;
-//		if(s.equalsIgnoreCase("M?DELF")) return Kind.P_DOS_DELF;
-//		if(s.equalsIgnoreCase("M?FPTR")) return Kind.P_DOS_FPTR;
-//		if(s.equalsIgnoreCase("M?CDIR")) return Kind.P_DOS_CDIR;
-//		if(s.equalsIgnoreCase("M?ALOC")) return Kind.P_DOS_ALOC;
-//		if(s.equalsIgnoreCase("M?TERM")) return Kind.P_DOS_TERM;
-//		if(s.equalsIgnoreCase("M?TIME")) return Kind.P_DOS_TIME;
-//		if(s.equalsIgnoreCase("M?DATE")) return Kind.P_DOS_DATE;
-//		if(s.equalsIgnoreCase("M?VERS")) return Kind.P_DOS_VERS;
-//		if(s.equalsIgnoreCase("M?EXEC")) return Kind.P_DOS_EXEC;
-//		if(s.equalsIgnoreCase("M?IOCTL")) return Kind.P_DOS_IOCTL;
-//		if(s.equalsIgnoreCase("M?LOCK")) return Kind.P_DOS_LOCK;
-//		if(s.equalsIgnoreCase("M?GDRV")) return Kind.P_DOS_GDRV;
-//		if(s.equalsIgnoreCase("M?GDIR")) return Kind.P_DOS_GDIR;
-//		if(s.equalsIgnoreCase("S?SCMPEQ")) return Kind.P_APX_SCMPEQ;
-//		if(s.equalsIgnoreCase("S?SMOVEI")) return Kind.P_APX_SMOVEI;
-//		if(s.equalsIgnoreCase("S?SMOVED")) return Kind.P_APX_SMOVED;
-//		if(s.equalsIgnoreCase("S?SSKIP")) return Kind.P_APX_SSKIP;
-//		if(s.equalsIgnoreCase("S?STRIP")) return Kind.P_APX_STRIP;
-//		if(s.equalsIgnoreCase("S?SFINDI")) return Kind.P_APX_SFINDI;
-//		if(s.equalsIgnoreCase("S?SFINDD")) return Kind.P_APX_SFINDD;
-//		if(s.equalsIgnoreCase("S?SFILL")) return Kind.P_APX_SFILL;
-//		if(s.equalsIgnoreCase("S?BOBY")) return Kind.P_APX_BOBY;
-//		if(s.equalsIgnoreCase("S?BYBO")) return Kind.P_APX_BYBO;
-//		if(s.equalsIgnoreCase("S?SZ2W")) return Kind.P_APX_SZ2W;
-//		if(s.equalsIgnoreCase("S?W2SZ")) return Kind.P_APX_W2SZ;
-//		if(s.equalsIgnoreCase("S?RF2N")) return Kind.P_APX_RF2N;
-//		if(s.equalsIgnoreCase("S?N2RF")) return Kind.P_APX_N2RF;
-//		if(s.equalsIgnoreCase("S?BNOT")) return Kind.P_APX_BNOT;
-//		if(s.equalsIgnoreCase("S?BAND")) return Kind.P_APX_BAND;
-//		if(s.equalsIgnoreCase("S?BOR"))  return Kind.P_APX_BOR;
-//		if(s.equalsIgnoreCase("S?BXOR")) return Kind.P_APX_BXOR;
-//		if(s.equalsIgnoreCase("S?WNOT")) return Kind.P_APX_WNOT;
-//		if(s.equalsIgnoreCase("S?WAND")) return Kind.P_APX_WAND;
-//		if(s.equalsIgnoreCase("S?WOR"))  return Kind.P_APX_WOR;
-//		if(s.equalsIgnoreCase("S?WXOR")) return Kind.P_APX_WXOR;
-//		if(s.equalsIgnoreCase("S?BSHL")) return Kind.P_APX_BSHL;
-//		if(s.equalsIgnoreCase("S?WSHL")) return Kind.P_APX_WSHL;
-//		if(s.equalsIgnoreCase("S?BSHR")) return Kind.P_APX_BSHR;
-//		if(s.equalsIgnoreCase("S?WSHR")) return Kind.P_APX_WSHR;
-//		if(s.equalsIgnoreCase("M?SVDM")) return Kind.P_DOS_SDMODE;
-//		if(s.equalsIgnoreCase("M?UPOS")) return Kind.P_DOS_UPDPOS;
-//		if(s.equalsIgnoreCase("M?CURS")) return Kind.P_DOS_CURSOR;
-//		if(s.equalsIgnoreCase("M?SDPG")) return Kind.P_DOS_SDPAGE;
-//		if(s.equalsIgnoreCase("M?SRUP")) return Kind.P_DOS_SROLUP;
-//		if(s.equalsIgnoreCase("M?SRDW")) return Kind.P_DOS_SROLDW;
-//		if(s.equalsIgnoreCase("M?GETC")) return Kind.P_DOS_GETCEL;
-//		if(s.equalsIgnoreCase("M?PUTC")) return Kind.P_DOS_PUTCHR;
-//		if(s.equalsIgnoreCase("M?GVDM")) return Kind.P_DOS_GDMODE;
-//		if(s.equalsIgnoreCase("M?SPAL")) return Kind.P_DOS_SETPAL;
-//		if(s.equalsIgnoreCase("M?RCHK")) return Kind.P_DOS_RDCHK;
-//		if(s.equalsIgnoreCase("M?KEYI")) return Kind.P_DOS_KEYIN;
+		if(s.equalsIgnoreCase("TERMIN")) return SVM_SYSCALL.P_TERMIN;
+		if(s.equalsIgnoreCase("INTRHA")) return SVM_SYSCALL.P_INTRHA;
+		if(s.equalsIgnoreCase("STREQL")) return SVM_SYSCALL.P_STREQL;
+		if(s.equalsIgnoreCase("PRINTO")) return SVM_SYSCALL.P_PRINTO;
+		if(s.equalsIgnoreCase("INITIA")) return SVM_SYSCALL.P_INITIA;
+		if(s.equalsIgnoreCase("SETOPT")) return SVM_SYSCALL.P_SETOPT;
+		if(s.equalsIgnoreCase("DMPSEG")) return SVM_SYSCALL.P_DMPSEG;
+		if(s.equalsIgnoreCase("DMPENT")) return SVM_SYSCALL.P_DMPENT;
+		if(s.equalsIgnoreCase("DMPOOL")) return SVM_SYSCALL.P_DMPOOL;
+		if(s.equalsIgnoreCase("VERBOSE")) return SVM_SYSCALL.P_VERBOSE;
+		if(s.equalsIgnoreCase("GINTIN")) return SVM_SYSCALL.P_GINTIN;
+		if(s.equalsIgnoreCase("GTEXIN")) return SVM_SYSCALL.P_GTEXIN;
+		if(s.equalsIgnoreCase("SIZEIN")) return SVM_SYSCALL.P_SIZEIN;
+		if(s.equalsIgnoreCase("GVIINF")) return SVM_SYSCALL.P_GVIINF;
+		if(s.equalsIgnoreCase("GIVINF")) return SVM_SYSCALL.P_GIVINF;
+		if(s.equalsIgnoreCase("CPUTIM")) return SVM_SYSCALL.P_CPUTIM;
+		if(s.equalsIgnoreCase("DWAREA")) return SVM_SYSCALL.P_DWAREA;
+		if(s.equalsIgnoreCase("MOVEIN")) return SVM_SYSCALL.P_MOVEIN;
+		if(s.equalsIgnoreCase("OPFILE")) return SVM_SYSCALL.P_OPFILE;
+		if(s.equalsIgnoreCase("CLFILE")) return SVM_SYSCALL.P_CLFILE;
+		if(s.equalsIgnoreCase("LSTLOC")) return SVM_SYSCALL.P_LSTLOC;
+		if(s.equalsIgnoreCase("MAXLOC")) return SVM_SYSCALL.P_MAXLOC;
+		if(s.equalsIgnoreCase("CHKPNT")) return SVM_SYSCALL.P_CHKPNT;
+		if(s.equalsIgnoreCase("LOCKFI")) return SVM_SYSCALL.P_LOCKFI;
+		if(s.equalsIgnoreCase("UNLOCK")) return SVM_SYSCALL.P_UNLOCK;
+		if(s.equalsIgnoreCase("INIMAG")) return SVM_SYSCALL.P_INIMAG;
+		if(s.equalsIgnoreCase("OUTIMA")) return SVM_SYSCALL.P_OUTIMA;
+		if(s.equalsIgnoreCase("BREAKO")) return SVM_SYSCALL.P_BREAKO;
+		if(s.equalsIgnoreCase("LOCATE")) return SVM_SYSCALL.P_LOCATE;
+		if(s.equalsIgnoreCase("DELETE")) return SVM_SYSCALL.P_DELETE;
+		if(s.equalsIgnoreCase("GDSNAM")) return SVM_SYSCALL.P_GDSNAM;
+		if(s.equalsIgnoreCase("GDSPEC")) return SVM_SYSCALL.P_GDSPEC;
+		if(s.equalsIgnoreCase("GETLPP")) return SVM_SYSCALL.P_GETLPP;
+		if(s.equalsIgnoreCase("NEWPAG")) return SVM_SYSCALL.P_NEWPAG;
+		if(s.equalsIgnoreCase("PRINTO")) return SVM_SYSCALL.P_PRINTO;
+		if(s.equalsIgnoreCase("STREQL")) return SVM_SYSCALL.P_STREQL;
+		if(s.equalsIgnoreCase("INBYTE")) return SVM_SYSCALL.P_INBYTE;
+		if(s.equalsIgnoreCase("OUTBYT")) return SVM_SYSCALL.P_OUTBYT;
+		if(s.equalsIgnoreCase("GETINT")) return SVM_SYSCALL.P_GETINT;
+		if(s.equalsIgnoreCase("GTREAL")) return SVM_SYSCALL.P_GTREAL;
+		if(s.equalsIgnoreCase("GTFRAC")) return SVM_SYSCALL.P_GTFRAC;
+		if(s.equalsIgnoreCase("PUTSTR")) return SVM_SYSCALL.P_PUTSTR;
+		if(s.equalsIgnoreCase("PUTINT")) return SVM_SYSCALL.P_PUTINT;
+		if(s.equalsIgnoreCase("PUTINT2")) return SVM_SYSCALL.P_PUTINT2;
+		if(s.equalsIgnoreCase("PUTSIZE")) return SVM_SYSCALL.P_PUTSIZE;
+		if(s.equalsIgnoreCase("PUTHEX")) return SVM_SYSCALL.P_PUTHEX;
+		if(s.equalsIgnoreCase("PUTFIX")) return SVM_SYSCALL.P_PUTFIX;
+		if(s.equalsIgnoreCase("PUTFIX2")) return SVM_SYSCALL.P_PUTFIX2;
+		if(s.equalsIgnoreCase("PTLFIX")) return SVM_SYSCALL.P_PTLFIX;
+		if(s.equalsIgnoreCase("PTLFIX2")) return SVM_SYSCALL.P_PTLFIX2;
+		if(s.equalsIgnoreCase("PTREAL")) return SVM_SYSCALL.P_PTREAL;
+		if(s.equalsIgnoreCase("PTREAL2")) return SVM_SYSCALL.P_PTREAL2;
+		if(s.equalsIgnoreCase("PLREAL")) return SVM_SYSCALL.P_PLREAL;
+		if(s.equalsIgnoreCase("PLREAL2")) return SVM_SYSCALL.P_PLREAL2;
+		if(s.equalsIgnoreCase("PTFRAC")) return SVM_SYSCALL.P_PTFRAC;
+		if(s.equalsIgnoreCase("PTSIZE")) return SVM_SYSCALL.P_PTSIZE;
+		if(s.equalsIgnoreCase("PTOADR")) return SVM_SYSCALL.P_PTOADR;
+		if(s.equalsIgnoreCase("PTOADR2")) return SVM_SYSCALL.P_PTOADR2;
+		if(s.equalsIgnoreCase("PTAADR")) return SVM_SYSCALL.P_PTAADR;
+		if(s.equalsIgnoreCase("PTAADR2")) return SVM_SYSCALL.P_PTAADR2;
+		if(s.equalsIgnoreCase("PTGADR")) return SVM_SYSCALL.P_PTGADR;
+		if(s.equalsIgnoreCase("PTGADR2")) return SVM_SYSCALL.P_PTGADR2;
+		if(s.equalsIgnoreCase("PTPADR")) return SVM_SYSCALL.P_PTPADR;
+		if(s.equalsIgnoreCase("PTPADR2")) return SVM_SYSCALL.P_PTPADR2;
+		if(s.equalsIgnoreCase("PTRADR")) return SVM_SYSCALL.P_PTRADR;
+		if(s.equalsIgnoreCase("PTRADR2")) return SVM_SYSCALL.P_PTRADR2;
+		if(s.equalsIgnoreCase("DRAWRP")) return SVM_SYSCALL.P_DRAWRP;
+		if(s.equalsIgnoreCase("DATTIM")) return SVM_SYSCALL.P_DATTIM;
+		if(s.equalsIgnoreCase("LOWTEN")) return SVM_SYSCALL.P_LOWTEN;
+		if(s.equalsIgnoreCase("DCMARK")) return SVM_SYSCALL.P_DCMARK;
+		if(s.equalsIgnoreCase("RSQROO")) return SVM_SYSCALL.P_RSQROO;
+		if(s.equalsIgnoreCase("SQROOT")) return SVM_SYSCALL.P_SQROOT;
+		if(s.equalsIgnoreCase("RLOGAR")) return SVM_SYSCALL.P_RLOGAR;
+		if(s.equalsIgnoreCase("LOGARI")) return SVM_SYSCALL.P_LOGARI;
+		if(s.equalsIgnoreCase("RLOG10")) return SVM_SYSCALL.P_RLOG10;
+		if(s.equalsIgnoreCase("DLOG10")) return SVM_SYSCALL.P_DLOG10;
+		if(s.equalsIgnoreCase("REXPON")) return SVM_SYSCALL.P_REXPON;
+		if(s.equalsIgnoreCase("EXPONE")) return SVM_SYSCALL.P_EXPONE;
+		if(s.equalsIgnoreCase("RSINUS")) return SVM_SYSCALL.P_RSINUS;
+		if(s.equalsIgnoreCase("SINUSR")) return SVM_SYSCALL.P_SINUSR;
+		if(s.equalsIgnoreCase("RCOSIN")) return SVM_SYSCALL.P_RCOSIN;
+		if(s.equalsIgnoreCase("COSINU")) return SVM_SYSCALL.P_COSINU;
+		if(s.equalsIgnoreCase("RTANGN")) return SVM_SYSCALL.P_RTANGN;
+		if(s.equalsIgnoreCase("TANGEN")) return SVM_SYSCALL.P_TANGEN;
+		if(s.equalsIgnoreCase("RCOTAN")) return SVM_SYSCALL.P_RCOTAN;
+		if(s.equalsIgnoreCase("COTANG")) return SVM_SYSCALL.P_COTANG;
+		if(s.equalsIgnoreCase("RARTAN")) return SVM_SYSCALL.P_RARTAN;
+		if(s.equalsIgnoreCase("ARCTAN")) return SVM_SYSCALL.P_ARCTAN;
+		if(s.equalsIgnoreCase("RARCOS")) return SVM_SYSCALL.P_RARCOS;
+		if(s.equalsIgnoreCase("ARCCOS")) return SVM_SYSCALL.P_ARCCOS;
+		if(s.equalsIgnoreCase("RARSIN")) return SVM_SYSCALL.P_RARSIN;
+		if(s.equalsIgnoreCase("ARCSIN")) return SVM_SYSCALL.P_ARCSIN;
+		if(s.equalsIgnoreCase("RATAN2")) return SVM_SYSCALL.P_RATAN2;
+		if(s.equalsIgnoreCase("ATAN2")) return SVM_SYSCALL.P_ATAN2;
+		if(s.equalsIgnoreCase("RSINH")) return SVM_SYSCALL.P_RSINH;
+		if(s.equalsIgnoreCase("SINH")) return SVM_SYSCALL.P_SINH;
+		if(s.equalsIgnoreCase("RCOSH")) return SVM_SYSCALL.P_RCOSH;
+		if(s.equalsIgnoreCase("COSH")) return SVM_SYSCALL.P_COSH;
+		if(s.equalsIgnoreCase("RTANH")) return SVM_SYSCALL.P_RTANH;
+		if(s.equalsIgnoreCase("TANH")) return SVM_SYSCALL.P_TANH;
+		if(s.equalsIgnoreCase("BEGDEB")) return SVM_SYSCALL.P_BEGDEB;
+		if(s.equalsIgnoreCase("ENDDEB")) return SVM_SYSCALL.P_ENDDEB;
+		if(s.equalsIgnoreCase("BEGTRP")) return SVM_SYSCALL.P_BEGTRP;
+		if(s.equalsIgnoreCase("ENDTRP")) return SVM_SYSCALL.P_ENDTRP;
+		if(s.equalsIgnoreCase("GTPADR")) return SVM_SYSCALL.P_GTPADR;
+		if(s.equalsIgnoreCase("GTOUTM")) return SVM_SYSCALL.P_GTOUTM;
+		if(s.equalsIgnoreCase("GTLNID")) return SVM_SYSCALL.P_GTLNID;
+		if(s.equalsIgnoreCase("GTLNO")) return SVM_SYSCALL.P_GTLNO;
+		if(s.equalsIgnoreCase("BRKPNT")) return SVM_SYSCALL.P_BRKPNT;
+		if(s.equalsIgnoreCase("STMNOT")) return SVM_SYSCALL.P_STMNOT;
+		if(s.equalsIgnoreCase("DMPOBJ")) return SVM_SYSCALL.P_DMPOBJ;
+
+		// KNOWN 
+		if(s.equalsIgnoreCase("MODULO")) return SVM_SYSCALL.P_MODULO;
+		if(s.equalsIgnoreCase("RADDEP")) return SVM_SYSCALL.P_RADDEP;
+		if(s.equalsIgnoreCase("DADDEP")) return SVM_SYSCALL.P_DADDEP;
+		if(s.equalsIgnoreCase("RSUBEP")) return SVM_SYSCALL.P_RSUBEP;
+		if(s.equalsIgnoreCase("DSUBEP")) return SVM_SYSCALL.P_DSUBEP;
+		if(s.equalsIgnoreCase("IIPOWR")) return SVM_SYSCALL.P_IIPOWR;
+		if(s.equalsIgnoreCase("RIPOWR")) return SVM_SYSCALL.P_RIPOWR;
+		if(s.equalsIgnoreCase("RRPOWR")) return SVM_SYSCALL.P_RRPOWR;
+		if(s.equalsIgnoreCase("RDPOWR")) return SVM_SYSCALL.P_RDPOWR;
+		if(s.equalsIgnoreCase("DIPOWR")) return SVM_SYSCALL.P_DIPOWR;
+		if(s.equalsIgnoreCase("DRPOWR")) return SVM_SYSCALL.P_DRPOWR;
+		if(s.equalsIgnoreCase("DDPOWR")) return SVM_SYSCALL.P_DDPOWR;
 		Util.IERR(""+s);
 		return 0;
 	}
@@ -295,13 +363,39 @@ public class ProfileDescr extends Descriptor {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 
+	private static final boolean TESTING = true;
 	public void write(AttributeOutputStream oupt) throws IOException {
 		if(Global.ATTR_OUTPUT_TRACE) System.out.println("ProfileDescr.Write: " + this);
+		DSEG.write(oupt);
 		oupt.writeKind(kind);
 //		oupt.writeShort(ModuleIO.chgType(tag));
 		tag.write(oupt);
-		oupt.writeKind(Pkind);
-		oupt.writeShort(nparbyte);
+		oupt.writeShort(npar);
+		oupt.writeShort(pKind);
+//		oupt.writeShort(nparbyte);
+		oupt.writeString(DSEG.ident);
+		
+		//public Vector<Variable> imports;
+//		oupt.writeShort(imports.size());
+//		for(Variable par:imports) {
+//			if(TESTING) {
+//				par.write(oupt);
+//			} else {
+//				par.tag.write(oupt);
+//			}
+//		}
+		oupt.writeShort(params.size());
+		for(Tag par:params) {
+			par.write(oupt);
+		}
+
+		returAddr.write(oupt);
+		if(export != null) {
+			oupt.writeBoolean(true);
+			exportTag.write(oupt);
+//			export.write(oupt);
+		} else oupt.writeBoolean(false);
+		
 //		oupt.writeShort(imports.size()); // npar
 //		for(Variable imprt:imports) imprt.write(oupt);
 //		if(exit   != null) exit.write(oupt);
@@ -314,8 +408,42 @@ public class ProfileDescr extends Descriptor {
 //		tag = InsertStatement.current.chgInType(tag);
 		Tag tag = Tag.read(inpt);
 		ProfileDescr prf = new ProfileDescr(Kind.K_RecordDescr, tag);
-		prf.Pkind = inpt.readKind();
-		prf.nparbyte = inpt.readShort();
+		prf.npar = inpt.readShort();
+		prf.pKind = inpt.readShort();
+//		prf.nparbyte = inpt.readShort();
+		String segID = inpt.readString();
+		prf.DSEG = (DataSegment) Segment.lookup(segID);
+		System.out.println("ProfileDescr.read: DSEG="+prf.DSEG);
+		
+		//public Vector<Variable> imports;
+//		prf.imports = new Vector<Variable>();
+		prf.params = new Vector<Tag>();
+		int n = inpt.readShort();
+		System.out.println("ProfileDescr.read: nPar="+n);
+		for(int i=0;i<n;i++) {
+//			if(TESTING) {
+//				int kind = inpt.readKind();
+//				Variable par = Variable.read(inpt, kind);
+//				System.out.println("ProfileDescr.read: par="+par);
+//				prf.imports.add(par);
+//			} else {
+//				Tag ptag = Tag.read(inpt);
+//				Variable par = (Variable) Global.getMeaning(ptag.val);
+//				System.out.println("ProfileDescr.read: par="+par);
+//				prf.imports.add(par);
+//			}
+			prf.params.add(Tag.read(inpt));
+		}
+		
+		prf.returAddr = MemAddr.read(inpt);
+		System.out.println("ProfileDescr.read: returAddr="+prf.returAddr);
+		boolean present = inpt.readBoolean();
+		if(present) {
+//			int kind = inpt.readKind();
+//			prf.export = Variable.read(inpt, kind);
+			prf.exportTag = Tag.read(inpt);
+			System.out.println("ProfileDescr.read: exportTag="+prf.exportTag);
+		}
 		if(Global.ATTR_OUTPUT_TRACE) System.out.println("ProfileDescr.Read: " + prf);
 		prf.print("   ");
 //		Util.IERR("");

@@ -15,10 +15,10 @@ import bec.util.Util;
 import bec.value.MemAddr;
 import bec.value.RepetitionValue;
 import bec.value.Value;
-import removed.java.Coasm;
 
 public class ConstDescr extends Descriptor {
 //	int tag;
+	public Type type;
 	public MemAddr address;
 //	public QuantityDescriptor quant;
 	RepetitionValue value;
@@ -32,32 +32,53 @@ public class ConstDescr extends Descriptor {
 
 //	%title ***   C o n s t   and   C o n s t s p e c   ***
 	/**
+	 * constant_declaration
+	 * 		::= constant_specification | constant_definition
+	 * 
 	 *	constant_specification
 	 *		::= constspec const:newtag quantity_descriptor
 	 *
 	 *	constant_definition
 	 *		::= const const:spectag quantity_descriptor repetition_value
 	 */
-	public static ConstDescr inConstant(boolean constDef) {
+	public static ConstDescr ofConstSpec() {
+//		Tag tag = Tag.inTag();
+		Tag tag = Tag.inTag();
+		ConstDescr cnst = (ConstDescr) Global.DISPL.get(tag.val);
+		if(cnst != null) Util.IERR("New CONSPEC but cnst="+cnst);
+		cnst = new ConstDescr(Kind.K_Coonst, tag);
+		System.out.println("NEW ConstDescr.ofConstSpec: "+cnst);
+		
+//		cnst.quant = new QuantityDescriptor();
+		cnst.type = Type.ofScode();
+		int repCount = (Scode.accept(Scode.S_REP)) ? Scode.inNumber() : 1;
+
+		
+		System.out.println("CONST.inConstant: " + cnst);
+//		if(Global.traceMode > 3)
+			cnst.print("   ");
+//		Util.IERR("");
+		return cnst;
+		
+	}
+	public static ConstDescr ofConstDef() {
 //		Tag tag = Tag.inTag();
 		Tag tag = Tag.inTag();
 		ConstDescr cnst = (ConstDescr) Global.DISPL.get(tag.val);
 		if(cnst == null) {
-			if(constDef) Util.IERR("New CONSPEC but constDef="+constDef);
 			cnst = new ConstDescr(Kind.K_Coonst, tag);
 		}
+		System.out.println("NEW ConstDescr.ofConstDef: "+cnst);
 //		cnst.quant = new QuantityDescriptor();
-		Type type = new Type();
+		cnst.type = Type.ofScode();
 		int repCount = (Scode.accept(Scode.S_REP)) ? Scode.inNumber() : 1;
 
 //		if(constDef) cnst.value = new RepetitionValue();
-		if(constDef) {
-			String comment = tag + " type=" + type;
+			String comment = tag + " type=" + cnst.type;
 //			System.out.println("NEW CONST: "+comment);
 			cnst.address = Global.CSEG.emitValue(comment);
 //			Global.CSEG.dump("CONST.inConstant: ");
 //			Util.IERR("");
-		}
 		
 //		System.out.println("CONST.inConstant: " + cnst);
 		if(Global.traceMode > 3) cnst.print("   ");
@@ -65,53 +86,6 @@ public class ConstDescr extends Descriptor {
 		return cnst;
 	}
 	
-	public static void XXXX_inConstant(boolean constDef) {
-//	begin ref(RepValue) cnst; ref(IntDescr) v; infix(WORD) tag,count;
-//	      range(0:MaxWord) nbyte; range(0:MaxType) type;
-//	      InTag(%tag%); TypeLength:=0; type:=intype; nbyte:=TypeLength;
-		Scode.inTag();
-		Scode.inType();
-		if(Scode.accept(Scode.S_REP)) {
-			Scode.inNumber();
-//	      if NextByte = S_REP
-//	      then inputInstr;
-//	%+D        count:=InputNumber;
-//	%-D        InNumber(%count%);
-//	%+C        if count.val=0
-//	%+C        then IERR("Illegal 'REP 0'"); count.val:=1 endif;
-//	      else count.val:=1 endif;
-		}
-//	      if type < T_Max then nbyte:=TTAB(type).nbyte endif;
-//	%+C   if nbyte=0 then IERR("Illegal Type on Constant") endif;
-//	      v:=if DISPL(tag.HI)=none then none else DISPL(tag.HI).elt(tag.LO);
-//	      if v=none
-//	      then v:=NEWOBJ(K_GlobalVar,size(IntDescr));
-//	           v.type:=type; v.adr:=noadr; IntoDisplay(v,tag);
-//	%+C   else if v.kind <> K_GlobalVar
-//	%+C        then
-//	%+CD            edtag(errmsg,tag);
-//	%+C             IERR("Display-entry is not defined as a constant:");
-//	%+C        endif;
-//	%+C        if v.type <> type
-//	%+C        then IERR("Type not same as given by CONSTSPEC") endif;
-//	      endif;
-	      if(constDef) {
-	    	  System.out.println("Minut.inConstant'constDef");
-//	      then
-//	    	  EmitRepValue(v,nbyte);
-	    	  Coasm.emitValue();
-//	%+S        if NextByte = S_SYSTEM
-//	%+S        then inputInstr;
-//	%+S             v.adr.kind:=extadr; v.adr.rela.val:=0;
-//	%+S             v.adr.smbx:=InExtr('G',DGROUP);
-//	%+S %-E         v.adr.sbireg:=0;
-//	%+SE            v.adr.sibreg:=NoIBREG;
-//	%+S        endif;
-	    	  Scode.accept(Scode.S_SYSTEM);
-	      }
-    	  System.out.println("Minut.inConstant FINISH");
-	}
-
 	@Override
 	public void print(final String indent) {
 		if(value != null) {
@@ -147,6 +121,7 @@ public class ConstDescr extends Descriptor {
 		oupt.writeKind(kind);
 //		oupt.writeShort(ModuleIO.chgType(tag));
 		tag.write(oupt);
+		type.write(oupt);
 		address.write(oupt);
 //		quant.write(oupt);
 	}
@@ -158,6 +133,7 @@ public class ConstDescr extends Descriptor {
 		Tag tag = Tag.read(inpt);
 		ConstDescr cns = new ConstDescr(Kind.K_Coonst, tag);
 		System.out.println("AFTER NEW CONST: "+cns);
+		cns.type = Type.read(inpt);
 		cns.address = MemAddr.read(inpt);
 		System.out.println("AFTER NEW MEMADDR: "+cns);
 //		Util.IERR("Static Method 'readObject' needs a redefiniton");

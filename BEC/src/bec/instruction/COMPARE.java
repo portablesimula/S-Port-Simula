@@ -3,7 +3,7 @@ package bec.instruction;
 import bec.compileTimeStack.CTStack;
 import bec.util.Global;
 import bec.util.Relation;
-import bec.util.Scode;
+import bec.util.Type;
 import bec.virtualMachine.SVM_COMPARE;
 
 public class COMPARE extends Instruction {
@@ -27,7 +27,7 @@ public class COMPARE extends Instruction {
 	 * relation ::= ?lt | ?le | ?eq | ?ge | ?gt | ?ne
 	 */
 	public void parse() {
-		relation = new Relation();
+		relation = Relation.ofScode();
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class COMPARE extends Instruction {
 		CTStack.checkTypesEqual(); CTStack.checkSosValue();	
 		CTStack.pop(); CTStack.pop();
 		Global.PSEG.emit(new SVM_COMPARE(relation), "");
-		CTStack.pushTemp(Scode.TAG_BOOL);
+		CTStack.pushTemp(Type.T_BOOL, "COMPARE: ");
 
 //		CTStack.dumpStack();
 //		Global.PSEG.dump();
@@ -45,8 +45,8 @@ public class COMPARE extends Instruction {
 	}
 
 	@Override
-	public void printTree(final int indent) {
-		sLIST(indent, toString());
+	public void print(final String indent) {
+		System.out.println(indent + toString());
 	}
 	
 	public String toString() {

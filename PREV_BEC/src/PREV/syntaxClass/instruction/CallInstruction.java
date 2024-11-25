@@ -5,7 +5,7 @@ import java.util.Vector;
 import PREV.syntaxClass.programElement.PREV_Variable;
 import PREV.syntaxClass.programElement.routine.PREV_PROFILE;
 import PREV.syntaxClass.programElement.routine.PREV_ROUTINE;
-import PREV.syntaxClass.programElement.routine.ParameterEval;
+import PREV.syntaxClass.programElement.routine.PREV_ParameterEval;
 import PREV.util.PREV_QuantityDescriptor;
 import bec.compileTimeStack.ProfileItem;
 import bec.compileTimeStack.Address;
@@ -24,7 +24,7 @@ public class CallInstruction extends PREV_Instruction {
 	int n; // Kind
 	int profileTag;
 	int routineTag;
-	Vector<ParameterEval> argumentEvaluation;
+	Vector<PREV_ParameterEval> argumentEvaluation;
 	Vector<PREV_Instruction> CALL_TOS_Instructions;
 	
 	/**
@@ -45,7 +45,7 @@ public class CallInstruction extends PREV_Instruction {
 	 */
 	public CallInstruction(int n) {
 		this.n = n;
-		argumentEvaluation = new Vector<ParameterEval>();
+		argumentEvaluation = new Vector<PREV_ParameterEval>();
 		profileTag = Scode.inTag();
 		Scode.inputInstr();
 		
@@ -57,12 +57,12 @@ public class CallInstruction extends PREV_Instruction {
 			
 			if(Scode.curinstr == Scode.S_ASSPAR) {
 				Scode.inputInstr();
-				argumentEvaluation.add(new ParameterEval(instructions,-1));
+				argumentEvaluation.add(new PREV_ParameterEval(instructions,-1));
 			}
 			else if(Scode.curinstr == Scode.S_ASSREP) {
 				int nRep = Scode.inByte();
 				Scode.inputInstr();
-				argumentEvaluation.add(new ParameterEval(instructions,nRep));
+				argumentEvaluation.add(new PREV_ParameterEval(instructions,nRep));
 //				System.out.println("CallInstruction: ASSREP: NextInstr="+Scode.edInstr(Scode.nextByte()));
 			}
 			else if(Scode.curinstr == Scode.S_CALL_TOS) {
@@ -118,7 +118,7 @@ public class CallInstruction extends PREV_Instruction {
 			Util.IERR("NOT IMPL");
 		}
 		
-	      for(ParameterEval par:argumentEvaluation) {
+	      for(PREV_ParameterEval par:argumentEvaluation) {
 	    	  par.doCode();
 	    	  putPar(pitem,1);
 	      }
@@ -255,7 +255,7 @@ public class CallInstruction extends PREV_Instruction {
 //	         else  IERR("Syntax error in call Instruction") endif;
 //	%+D      if TraceMode <> 0 then DumpStack endif;
 //	      endrepeat;
-	      for(ParameterEval par:argumentEvaluation) {
+	      for(PREV_ParameterEval par:argumentEvaluation) {
 	    	  par.doCode();
 	    	  putPar(pitem,1);
 	      }
@@ -341,7 +341,7 @@ public class CallInstruction extends PREV_Instruction {
 			default: lead = "REPCALL " + n + " "; break;
 		}
 		sLIST(indent, lead + Scode.edTag(profileTag));
-		for(ParameterEval p:argumentEvaluation) p.printTree(indent + 1);
+		for(PREV_ParameterEval p:argumentEvaluation) p.printTree(indent + 1);
 		if(CALL_TOS_Instructions != null) {
 			for(PREV_Instruction instr:CALL_TOS_Instructions)
 				sLIST(indent + 1, instr.toString());

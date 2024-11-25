@@ -23,15 +23,21 @@ public class SVM_Instruction {
 	public final static int iPUSH = 12;
 	public final static int iPUSHC = 13;
 	public final static int iRETURN = 14;
-	public final static int iPOPtoREG = 15;
-	public final static int iPOPtoMEM = 16;
-	public final static int iSTOREC = 17;
+	public final static int iPOP2REG = 15;
+	public final static int iPOP2MEM = 16;
+//	public final static int iSTOREC = 17;
 	public final static int iSUB = 18;
 	public final static int iSWITCH = 19;
 	public final static int iSYSCALL = 20;
 	public final static int iLINE = 21;
+	public final static int iNOOP = 22;
+	public final static int iNOT = 23;
 	public final static int iNOT_IMPL = 99;
-	
+
+	public void execute() {
+		Util.IERR("Method execute need a redefinition in "+this.getClass().getSimpleName());
+	}
+
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
@@ -63,13 +69,15 @@ public class SVM_Instruction {
 			case iPUSH:		return SVM_PUSH.read(inpt);
 			case iPUSHC:	return SVM_PUSHC.read(inpt);
 			case iRETURN:	return SVM_RETURN.read(inpt);
-			case iPOPtoREG:	return SVM_POPtoREG.read(inpt);
-			case iPOPtoMEM:	return SVM_POPtoMEM.read(inpt);
-			case iSTOREC:	return SVM_STOREC.read(inpt);
+			case iPOP2REG:	return SVM_POP2REG.read(inpt);
+			case iPOP2MEM:	return SVM_POP2MEM.read(inpt);
+//			case iSTOREC:	return SVM_STOREC.read(inpt);
 			case iSUB:		return SVM_SUB.read(inpt);
 			case iSWITCH:	return SVM_SWITCH.read(inpt);
 			case iLINE:		return SVM_LINE.read(inpt);
 			case iSYSCALL:	return SVM_SYSCALL.read(inpt);
+			case iNOOP:		return SVM_NOOP.read(inpt);
+			case iNOT:		return SVM_NOT.read(inpt);
 			case iNOT_IMPL:	return SVM_NOT_IMPL.read(inpt);
 			default: Util.IERR("MISSING: " + edOpcode(opcode));
 		}
@@ -92,12 +100,14 @@ public class SVM_Instruction {
 			case iPUSH:		return "iPUSH";
 			case iPUSHC:	return "iPUSHC";
 			case iRETURN:	return "iRETURN";
-			case iPOPtoREG:	return "iPOPtoREG";
-			case iPOPtoMEM:	return "iPOPtoMEM";
-			case iSTOREC:	return "iSTOREC";
+			case iPOP2REG:	return "iPOPtoREG";
+			case iPOP2MEM:	return "iPOPtoMEM";
+//			case iSTOREC:	return "iSTOREC";
 			case iSUB:		return "iSUB";
 			case iSWITCH:	return "iSWITCH";
 			case iSYSCALL:	return "iSYSCALL";
+			case iNOOP:		return "iNOOP";
+			case iNOT:		return "iNOT";
 			case iNOT_IMPL:	return "iNOT_IMPL";
 			default:		return "UNKNOWN:" + opcode;
 		}

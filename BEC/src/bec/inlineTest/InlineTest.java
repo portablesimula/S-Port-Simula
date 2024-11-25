@@ -24,9 +24,9 @@ public class InlineTest {
 	}
 
 	private static String Pick_RTS_Source() {
-		return "C:/Simuletta/SCode/simulaRTS/RT.scd";
+//		return "C:/Simuletta/SCode/simulaRTS/RT.scd";
 //		return "C:/Simuletta/SCode/simulaRTS/SYSR.scd";
-//		return "C:/Simuletta/SCode/simulaRTS/KNWN.scd";
+		return "C:/Simuletta/SCode/simulaRTS/KNWN.scd";
 //		return "C:/Simuletta/SCode/simulaRTS/UTIL.scd";		
 //		return "C:/Simuletta/SCode/simulaRTS/STRG.scd";
 //		return "C:/Simuletta/SCode/simulaRTS/CENT.scd";

@@ -391,7 +391,7 @@ Visible define
 
  --- when bioIns is changed, remember also bioPtp in MNTR !!!!!
 
- Visible record bioIns:inst;
+ Visible record bioIns:inst; info "TYPE"
  begin ref(entity)            nxtAdr;   -- NOT in bioptp'refvec
        ref(entity)            lstAdr;   -- NOT in bioptp'refvec
        ref(prtEnt)            sysout;
@@ -619,7 +619,7 @@ Visible define
        infix(moddes) mod(0);
  end;
 
- Visible record moddes;
+ Visible record moddes; info "TYPE"
  begin ref(ptp) pp;               -- prototype of ext. proc or class.
        integer check;             -- expected checkcode
  end;

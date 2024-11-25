@@ -53,6 +53,7 @@ public final class Scanner {
 			sourceFileReader.close();
 		} catch (IOException e) {
 			e.printStackTrace();
+			Util.IERR("");
 		}
 		sourceFileReader=null;
 	}

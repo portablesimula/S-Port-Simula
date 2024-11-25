@@ -1,8 +1,8 @@
 package bec.instruction;
 
-import bec.compileTimeStack.Address;
+import bec.compileTimeStack.AddressItem;
 import bec.compileTimeStack.CTStack;
-import bec.compileTimeStack.Coonst;
+import bec.compileTimeStack.ConstItem;
 import bec.compileTimeStack.StackItem;
 import bec.util.Global;
 import bec.util.Scode;
@@ -39,26 +39,26 @@ public class INDEX extends Instruction {
 
 		CTStack.checkTosInt();
 		CTStack.checkSosRef();
-//        adr:=TOS.suc; repdist:=adr.repdist;
-		Address adr = (Address) CTStack.TOS.suc;
-		int repdist = adr.repdist;
-		if(repdist == 0) Util.IERR("PARSE.INDEX: Not info type");
+//        adr:=TOS.suc; size:=adr.size;
+		AddressItem adr = (AddressItem) CTStack.TOS.suc;
+		int size = adr.size;
+		if(size == 0) Util.IERR("PARSE.INDEX: Not info type");
 //        if TOS.kind=K_Coonst
 		StackItem tos = CTStack.TOS;
-		if(tos instanceof Coonst itm) {
+		if(tos instanceof ConstItem itm) {
 //        then itm:=TOS qua Coonst.itm;
 			IntegerValue ival = (IntegerValue) itm.value;
-			adr.offset = adr.offset + (repdist * ival.value);
+			adr.offset = adr.offset + (size * ival.value);
 			Util.GQpop();
-             if(adr.atrState == Address.State.FromConst) {
-            	 adr.atrState = Address.State.NotStacked;
+             if(adr.atrState == AddressItem.State.FromConst) {
+            	 adr.atrState = AddressItem.State.NotStacked;
 //            	 qPOPKill(AllignFac);
             	 Global.PSEG.emit(new SVM_NOT_IMPL(), "INDEX-1");
              }
 		} else {
 //%+E             if TOS.type <> T_WRD4 then GQconvert(T_WRD4) endif;
 //%+E             GetTosAdjustedIn86(qEAX); Pop; AssertObjStacked;
-//%+E             GQeMultc(repdist); -- EAX:=EAX*repdist
+//%+E             GQeMultc(size); -- EAX:=EAX*size
 //%+E             if    adr.AtrState=FromConst then qPOPKill(4)
 //%+E             elsif adr.AtrState=Calculated
 //%+E             then Qf1(qPOPR,qEBX,cVAL);
@@ -79,8 +79,8 @@ public class INDEX extends Instruction {
 	}
 
 	@Override
-	public void printTree(final int indent) {
-		sLIST(indent, toString());
+	public void print(final String indent) {
+		System.out.println(indent + toString());
 	}
 	
 	public String toString() {

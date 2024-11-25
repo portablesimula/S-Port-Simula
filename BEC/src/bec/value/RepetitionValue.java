@@ -10,11 +10,16 @@ import bec.util.Scode;
 public class RepetitionValue extends Value {
 	public Vector<Value> values;
 	
-	public RepetitionValue() {
-		values = new Vector<Value>();
-		parse();
+	private RepetitionValue(Vector<Value> values) {
+		this.values = values;
 	}
 
+	public static RepetitionValue ofValue(Value value) {
+		Vector<Value> values = new Vector<Value>();
+		values.add(value);
+		return new RepetitionValue(values);
+	}
+	
 	/**
 	 * repetition_value
 	 * 		::= <boolean_value>+
@@ -52,7 +57,8 @@ public class RepetitionValue extends Value {
 	 * 		::= c-record structured_type
 	 * 			<attribute_value>+ endrecord
 	 */
-	public void parse() {
+	public static RepetitionValue ofScode() {
+		Vector<Value> values = new Vector<Value>();
 		LOOP:while(true) {
 //			System.out.println("RepetitionValue.treatValue: "+Scode.edInstr(Scode.nextByte()));
 			switch(Scode.nextByte()) {
@@ -76,16 +82,17 @@ public class RepetitionValue extends Value {
 				case Scode.S_C_OADDR:  Scode.inputInstr(); values.add(AddressValue.ofOADDR()); break;
 				case Scode.S_C_GADDR:  Scode.inputInstr(); values.add(AddressValue.ofGADDR()); break;
 				case Scode.S_C_DOT:    Scode.inputInstr(); values.add(new DotAddress()); break;
-				case Scode.S_C_RECORD: Scode.inputInstr(); values.add(new RecordValue()); break;
+				case Scode.S_C_RECORD: Scode.inputInstr(); values.add(RecordValue.ofScode()); break;
 				default: break LOOP;
 			}
 		}
+		return new RepetitionValue(values);
 	}
 	
 
 //	@Override
-//	public void printTree(final int indent) {
-//		sLIST(indent, toString());
+//	public void print(final String indent) {
+//		System.out.println(indent + toString());
 //	}
 
 	public String toString() {

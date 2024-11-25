@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
+import bec.descriptor.Kind;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Type;
@@ -27,20 +28,34 @@ public class DataSegment extends Segment {
 	
 	public DataSegment(String ident, int segmentKind) {
 		super(ident, segmentKind);
-		SEGMAP.put(ident, this);
+		System.out.println("NEW DataSegment: " + this);
 		this.ident = ident.toUpperCase();
 		this.segmentKind = segmentKind;
 		values = new Vector<Value>();
 		comment = new Vector<String>();
 	}
 	
+	public MemAddr ofOffset(int ofst) {
+		return new MemAddr(this,ofst);
+	}
+	
 	public MemAddr nextAddress() {
 		return new MemAddr(this,values.size());
 	}
 	
-	public void emit(Value value,String cmnt) {
+	public void store(int index, Value value) {
+		values.set(index, value);
+	}
+	
+	public Value load(int index) {
+		return values.get(index);
+	}
+	
+	public MemAddr emit(Value value,String cmnt) {
+		MemAddr addr = nextAddress();
 		values.add(value);
 		comment.add(cmnt);
+		return addr;
 	}
 
 	public void emitDefaultValue(int size, String cmnt) {
@@ -97,7 +112,7 @@ public class DataSegment extends Segment {
 		Scode.inputInstr();
 		while(Scode.curinstr == Scode.S_ATTR) {
 			int atag = Scode.inTag();
-			Type type = new Type();
+			Type type = Type.ofScode();
 //			System.out.println("DataSegment.emitRecordValue'S_ATTR: "+Scode.edTag(atag)+"  "+type);
 
 			emitValue(comment + "  " + Scode.edTag(atag) + "  " + Scode.edTag(type.tag));
@@ -111,7 +126,7 @@ public class DataSegment extends Segment {
 	
 	public void dump(String title) {
 		if(values.size() == 0) return;
-		System.out.println("==================== " + title + ident + " DUMP ====================");
+		System.out.println("==================== " + title + ident + " DUMP ====================" + this.hashCode());
 		for(int i=0;i<values.size();i++) {
 			String line = "" + i + ": ";
 			while(line.length() < 8) line = " " +line;
@@ -123,6 +138,8 @@ public class DataSegment extends Segment {
 	}
 	
 	public String toString() {
+		if(segmentKind == Kind.K_SEG_CONST)
+			return "ConstSegment " + ident;
 		return "DataSegment " + ident;
 	}
 
@@ -130,10 +147,7 @@ public class DataSegment extends Segment {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 	private DataSegment(String ident, int segmentKind, AttributeInputStream inpt) throws IOException {
-//		this.ident = ident;
-//		this.segmentKind = segmentKind;
 		super(ident, segmentKind);
-		SEGMAP.put(ident, this);
 		values = new Vector<Value>();
 		comment = new Vector<String>();
 		int n = inpt.readShort();

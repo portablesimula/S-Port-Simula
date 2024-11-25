@@ -1,16 +1,55 @@
 package bec.virtualMachine;
 
-import PREV.syntaxClass.value.PREV_Value;
+import java.io.IOException;
+
+import bec.AttributeInputStream;
+import bec.AttributeOutputStream;
+import bec.segment.RTStack;
+import bec.util.Global;
+import bec.util.Scode;
+import bec.util.Type;
+import bec.value.Value;
 
 //The value is pushed onto the operand stack.
 public class SVM_PUSHC extends SVM_Instruction {
-	PREV_Value value;
+	Type type;
+	Value value;
 	
-	public SVM_PUSHC(PREV_Value value) {
+	public SVM_PUSHC(Type type, Value value) {
+		this.opcode = SVM_Instruction.iPUSHC;
+		this.type = type;
 		this.value = value;
 	}
 	
-	public String toString() {
-		return "PUSHC    " + value;
+	@Override
+	public void execute() {
+		RTStack.push(type, value);
+		Global.PSC.ofst++;
 	}
+	
+	@Override
+	public String toString() {
+		return "PUSHC    " + Scode.edTag(type.tag) + " " + value;
+	}
+
+	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+	private SVM_PUSHC(AttributeInputStream inpt) throws IOException {
+		this.opcode = SVM_Instruction.iPUSHC;
+		this.type = Type.read(inpt);
+		this.value = Value.read(inpt);
+	}
+
+	@Override
+	public void write(AttributeOutputStream oupt) throws IOException {
+		oupt.writeKind(opcode);
+		type.write(oupt);
+		value.write(oupt);
+	}
+
+	public static SVM_Instruction read(AttributeInputStream inpt) throws IOException {
+		return new SVM_PUSHC(inpt);
+	}
+
 }

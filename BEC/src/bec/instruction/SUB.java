@@ -3,7 +3,7 @@ package bec.instruction;
 import bec.compileTimeStack.CTStack;
 import bec.compileTimeStack.StackItem;
 import bec.util.Global;
-import bec.util.Util;
+import bec.util.Type;
 import bec.virtualMachine.SVM_SUB;
 
 /**
@@ -36,19 +36,19 @@ public class SUB extends Instruction {
 //		Global.PSEG.dump();
 		CTStack.checkTosArith(); CTStack.checkSosArith(); CTStack.checkSosValue(); CTStack.checkTypesEqual();
 		StackItem tos = CTStack.TOS;
-	    int at = CTStack.arithType(tos.type, tos.suc.type);
+	    Type at = CTStack.arithType(tos.type, tos.suc.type);
 		Global.PSEG.emit(new SVM_SUB(at), "");
 		CTStack.pop();
 		CTStack.pop();
-	    CTStack.pushTemp(at);
+	    CTStack.pushTemp(at, "SUB: ");
 //		CTStack.dumpStack();
 //		Global.PSEG.dump();
 //		Util.IERR(""+this);
 	}
 
 	@Override
-	public void printTree(final int indent) {
-		sLIST(indent, toString());
+	public void print(final String indent) {
+		System.out.println(indent + toString());
 	}
 	
 	public String toString() {

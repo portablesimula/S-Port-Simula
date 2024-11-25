@@ -5,12 +5,13 @@ import java.io.IOException;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Scode;
+import bec.util.Type;
 
 public class RealValue extends Value {
 	float value;
 	
 	public RealValue(float value) {
-		this.type = Scode.TAG_REAL;
+		this.type = Type.T_REAL;
 		this.value = value;
 	}
 
@@ -22,8 +23,8 @@ public class RealValue extends Value {
 	}
 
 //	@Override
-//	public void printTree(final int indent) {
-//		sLIST(indent, toString());
+//	public void print(final String indent) {
+//		System.out.println(indent + toString());
 //	}
 	
 	public String toString() {
@@ -35,7 +36,7 @@ public class RealValue extends Value {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 	private RealValue(AttributeInputStream inpt) throws IOException {
-		this.type = Scode.TAG_REAL;
+		this.type = Type.T_REAL;
 		value = inpt.readFloat();
 //		System.out.println("NEW IMPORT: " + this);
 	}

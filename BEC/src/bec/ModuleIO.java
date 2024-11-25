@@ -5,8 +5,8 @@ import java.io.IOException;
 
 import bec.descriptor.Descriptor;
 import bec.descriptor.Kind;
-import bec.segment.Segment;
 import bec.util.Global;
+import bec.util.Type;
 import bec.util.Util;
 
 public class ModuleIO {
@@ -39,10 +39,17 @@ public class ModuleIO {
 		modoupt.writeString(Global.modident);
 		modoupt.writeString(Global.modcheck);
 
-		Segment.writeSegments(modoupt);
+		if(Global.currentModule instanceof InterfaceModule) Type.writeRECTYPES(modoupt);
+		
+//		Segment.writeSegments(modoupt);
 		
 		writeDescriptors(modoupt, nXtag);
 		
+//		Segment.writeSegments(modoupt);
+		Global.CSEG.write(modoupt);
+		Global.DSEG.write(modoupt);
+		Global.PSEG.write(modoupt);
+
 //		writePreamble();
 		modoupt.writeKind(Kind.K_EndModule);
 		

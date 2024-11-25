@@ -11,7 +11,7 @@ public class SizeValue extends Value {
 	int size;
 	
 	public SizeValue(int size) {
-		this.type = Scode.TAG_SIZE;
+		this.type = Type.T_SIZE;
 		this.size = size;
 	}
 
@@ -21,14 +21,14 @@ public class SizeValue extends Value {
 	 * 		::= NOSIZE
 	 */
 	public SizeValue() {
-		this.type = Scode.TAG_SIZE;
-		Type type = new Type();
+		this.type = Type.T_SIZE;
+		Type type = Type.ofScode();
 		size = type.size();
 	}
 
 //	@Override
-//	public void printTree(final int indent) {
-//		sLIST(indent, toString());
+//	public void print(final String indent) {
+//		System.out.println(indent + toString());
 //	}
 	
 	public String toString() {
@@ -40,7 +40,7 @@ public class SizeValue extends Value {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 	private SizeValue(AttributeInputStream inpt) throws IOException {
-		this.type = Scode.TAG_SIZE;
+		this.type = Type.T_SIZE;
 		size = inpt.readShort();
 //		System.out.println("NEW IMPORT: " + this);
 	}

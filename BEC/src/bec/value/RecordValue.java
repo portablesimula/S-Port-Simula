@@ -5,15 +5,17 @@ import java.util.Vector;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
+import bec.util.Global;
 import bec.util.Scode;
+import bec.util.Util;
 
 public class RecordValue extends Value {
 	int tag;
-	Vector<AttributeValue> attrValues;
+	public Vector<AttributeValue> attrValues;
 	
-	public RecordValue() {
+	private RecordValue() {
 		attrValues = new Vector<AttributeValue>();
-		parse();
+//		parse();
 	}
 
 	/**
@@ -28,11 +30,12 @@ public class RecordValue extends Value {
 	 * 
 	 * End-Condition: Scode'nextByte = First byte after ENDRECORD
 	 */
-	public void parse() {
-		tag = Scode.inTag();
+	public static RecordValue ofScode() {
+		RecordValue rec = new RecordValue();
+		rec.tag = Scode.inTag();
 		while(Scode.nextByte() == Scode.S_ATTR) {
 			Scode.inputInstr();
-			attrValues.add(new AttributeValue());
+			rec.attrValues.add(AttributeValue.ofScode());
 		}
 //		if(Scode.inputTrace > 3) printTree(0);
 //		System.out.println("MainProgram.parse: Curinstr = "+Scode.edInstr(Scode.curinstr));
@@ -41,18 +44,18 @@ public class RecordValue extends Value {
 //		Scode.checkEqual(Scode.S_ENDRECORD);
 		
 //		if(Scode.inputTrace > 3) printTree(0);
+		return rec;
 	}
 
-
-//	@Override
-//	public void printTree(final int indent) {
-//		sLIST(indent, "C-RECORD " + Scode.edTag(tag));
-//		for(AttributeValue value:attrValues) {
-////			sLIST(indent, "   ATTR " + value);
-//			sLIST(indent + 1, ""+value);
-//		}
-//		sLIST(indent, "ENDRECORD");
-//	}
+	@Override
+	public void print(final String indent) {
+		System.out.println(indent + "C-RECORD " + Scode.edTag(tag));
+		for(AttributeValue value:attrValues) {
+//			System.out.println(indent + "   ATTR " + value);
+			System.out.println(indent + "   "+value);
+		}
+		System.out.println(indent + "ENDRECORD");
+	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

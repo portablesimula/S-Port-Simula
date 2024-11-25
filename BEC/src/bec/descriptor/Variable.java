@@ -20,6 +20,7 @@ import bec.value.Value;
 public class Variable extends Descriptor {
 //	public int instr; // S_GLOBAL, S_LOCAL, S_IMPORT, S_EXPORT, S_EXIT
 	public MemAddr address;
+	public Type type;
 	public int repCount;
 	
 //	String system;
@@ -43,12 +44,10 @@ public class Variable extends Descriptor {
 		if(seg == null) Util.IERR("");
 		Tag tag = Tag.inTag();
 		Variable var = new Variable(Kind.K_Import, tag);
-		Type type = new Type();
+		var.type = Type.ofScode();
 		var.repCount = (Scode.accept(Scode.S_REP)) ? Scode.inNumber() : 1;
 		var.address = seg.nextAddress();
-		if(var.address.seg == null) Util.IERR("");
-//		type.emitDefaultValue(seg, "IMPORT " + type);
-		seg.emitDefaultValue(type.size(), "IMPORT " + type);
+		seg.emitDefaultValue(var.type.size(), "IMPORT " + var.type);
 		return var;
 	}
 	
@@ -56,38 +55,38 @@ public class Variable extends Descriptor {
 		if(seg == null) Util.IERR("");
 		Tag tag = Tag.inTag();
 		Variable var = new Variable(Kind.K_Export, tag);
-		Type type = new Type();
+		var.type = Type.ofScode();
 		var.repCount = (Scode.accept(Scode.S_REP)) ? Scode.inNumber() : 1;
 		var.address = seg.nextAddress();
 //		type.emitDefaultValue(seg, "EXPORT " + type);
-		seg.emitDefaultValue(type.size(), "EXPORT " + type);
+		seg.emitDefaultValue(var.type.size(), "EXPORT " + var.type);
 		return var;
 	}
 	
-	public static Variable ofEXIT(DataSegment seg) {
-		if(seg == null) Util.IERR("");
+	public static Variable ofEXIT(MemAddr returAddr) {
 		Tag tag = Tag.inTag();
 		Variable var = new Variable(Kind.K_Exit, tag);
-		var.address = seg.nextAddress();
-		seg.emit(null, "EXIT");
+//		var.type = new Type(Scode.TAG_PADDR);
+		var.type = Type.T_PADDR;
+		var.address = returAddr;
 		return var;
 	}
 	
-	public static Variable ofRETUR(DataSegment seg) {
+	public static Variable ofRETUR(MemAddr returAddr) {
 		Variable var = new Variable(Kind.K_Retur, null);
-		var.address = seg.nextAddress();
-		seg.emit(null, "RETUR");
+		var.type = Type.T_PADDR;
+		var.address = returAddr;
 		return var;
 	}
 	
 	public static Variable ofLocal(DataSegment seg) {
 		Tag tag = Tag.inTag();
 		Variable var = new Variable(Kind.K_LocalVar, tag);
-		Type type = new Type();
+		var.type = Type.ofScode();
 		var.repCount = (Scode.accept(Scode.S_REP)) ? Scode.inNumber() : 1;
 		var.address = seg.nextAddress();
 //		type.emitDefaultValue(Global.DSEG, var.toString());			
-		seg.emitDefaultValue(type.size(), "LOCAL " + type);
+		seg.emitDefaultValue(var.type.size(), "LOCAL " + var.type);
 		if(var.repCount > 1) {
 			Util.IERR("");
 		}
@@ -100,7 +99,7 @@ public class Variable extends Descriptor {
 	public static Variable ofGlobal(DataSegment seg) {
 		Tag tag = Tag.inTag();
 		Variable var = new Variable(Kind.K_GlobalVar, tag);
-		Type type = new Type();
+		var.type = Type.ofScode();
 		var.repCount = (Scode.accept(Scode.S_REP)) ? Scode.inNumber() : 1;
 		var.address = seg.nextAddress();
 		if(Scode.accept(Scode.S_SYSTEM)) {
@@ -128,7 +127,7 @@ public class Variable extends Descriptor {
 			Global.DSEG.emit(value, var.toString());
 		} else {
 //			type.emitDefaultValue(Global.DSEG, var.toString());			
-			seg.emitDefaultValue(type.size(), "GLOBAL " + type);
+			seg.emitDefaultValue(var.type.size(), "GLOBAL " + var.type);
 			if(var.repCount > 1) {
 				Util.IERR("");
 			}
@@ -154,7 +153,7 @@ public class Variable extends Descriptor {
 	}
 	
 	public String toString() {
-		String s = "Variable " +Kind.edKind(kind) + " " + tag + " " + address;
+		String s = "Variable " +Kind.edKind(kind) + " " + tag + ", type=" + type + " " + address;
 //		if(system != null) s += " " + "SYSTEM " + system;
 		return s;
 	}
@@ -168,6 +167,7 @@ public class Variable extends Descriptor {
 		oupt.writeKind(kind); // K_GLOBAL, K_LOCAL, K_IMPORT, K_EXPORT, K_EXIT, K_RETUR
 //		oupt.writeShort(tag);
 		tag.write(oupt);
+		type.write(oupt);
 		oupt.writeShort(repCount);
 		address.write(oupt);
 	}
@@ -177,6 +177,7 @@ public class Variable extends Descriptor {
 //		tag = InsertStatement.current.chgInType(tag);
 		Tag tag = Tag.read(inpt);
 		Variable var = new Variable(kind, tag);
+		var.type = Type.read(inpt);
 		var.repCount = inpt.readShort();
 		var.address = MemAddr.read(inpt);
 		if(Global.ATTR_OUTPUT_TRACE) System.out.println("Variable.Read: " + var);

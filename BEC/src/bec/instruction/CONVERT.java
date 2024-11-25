@@ -3,11 +3,11 @@ package bec.instruction;
 import bec.compileTimeStack.CTStack;
 import bec.compileTimeStack.StackItem;
 import bec.util.Global;
-import bec.util.Scode;
+import bec.util.Type;
 import bec.virtualMachine.SVM_CONVERT;
 
 public class CONVERT extends Instruction {
-	int toType;
+	Type toType;
 	
 	/**
 	 * convert_instruction ::= convert simple_type
@@ -17,7 +17,7 @@ public class CONVERT extends Instruction {
 	 * The TYPE of TOS is changed to the type specified in the instruction, this may imply code generation.
 	 */
 	public CONVERT() {
-		toType = Scode.inTag();
+		toType = Type.ofScode();
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class CONVERT extends Instruction {
 			Global.PSEG.emit(new SVM_CONVERT(toType), "");
 //		}
 
-		CTStack.pushTemp(toType);
+		CTStack.pushTemp(toType, "CONVERT: ");
 
 //		CTStack.dumpStack();
 //		Global.PSEG.dump();
@@ -38,12 +38,12 @@ public class CONVERT extends Instruction {
 	}
 
 	@Override
-	public void printTree(final int indent) {
-		sLIST(indent, toString());
+	public void print(final String indent) {
+		System.out.println(indent + toString());
 	}
 	
 	public String toString() {
-		return "CONVERT " + Scode.edTag(toType);
+		return "CONVERT " + toType;
 	}
 	
 

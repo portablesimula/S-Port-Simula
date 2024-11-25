@@ -1,14 +1,11 @@
-package PREV.syntaxClass.programElement.routine;
+package bec.util;
 
 import java.util.Vector;
 
-import PREV.syntaxClass.SyntaxClass;
-import PREV.syntaxClass.instruction.PREV_Instruction;
-import PREV.syntaxClass.programElement.ProgramElement;
-import bec.segment.ProgramSegment;
+import bec.instruction.Instruction;
 
-public class ParameterEval extends SyntaxClass {
-	Vector<PREV_Instruction> instructions;
+public class ParameterEval { // extends SyntaxClass {
+	Vector<Instruction> instructions;
 	int nRep;
 	
 	/**
@@ -16,36 +13,36 @@ public class ParameterEval extends SyntaxClass {
 	 * 		::= <instruction>+ asspar
 	 * 		::= <instruction>+ assrep n:byte
 	 */
-	public ParameterEval(Vector<PREV_Instruction> instructions,int nRep) {
+	public ParameterEval(Vector<Instruction> instructions,int nRep) {
 		this.instructions = instructions;
 		this.nRep = nRep;
 //		System.out.println("NEW ParameterEvaluation: " + this);
 //		print();
 	}
 	
-	@Override
+//	@Override
 	public void doCode() {
-		for(ProgramElement instr:instructions)
+		for(Instruction instr:instructions)
 			instr.doCode();
 	}
 
 	public void print() {
-		for(ProgramElement instr:instructions)
+		for(Instruction instr:instructions)
 			System.out.println("   " + instr);
 		System.out.println((nRep < 0) ? "   ASSPAR" : "   ASSREP " + nRep);
 	}
 
-	@Override
-	public void printTree(final int indent) {
+//	@Override
+	public void printTree(final String indent) {
 		
-		for(ProgramElement instr:instructions)
-			instr.printTree(indent);
+		for(Instruction instr:instructions)
+			instr.print(indent);
 //		// Modify Scode.STACK
 //		int nPop = (nRep < 0) ? 1 : nRep;
 //		System.out.println("ParameterEval.printTree: nPop="+nPop);
 //		for(int i=0;i<nPop;i++) Scode.STACK.pop();
 		
-		sLIST(indent, (nRep < 0) ? "ASSPAR" : "ASSREP " + nRep);
+		System.out.println(indent + ((nRep < 0) ? "ASSPAR" : "ASSREP " + nRep));
 		
 	}
 		

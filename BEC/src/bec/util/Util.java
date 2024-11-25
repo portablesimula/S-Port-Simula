@@ -4,19 +4,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
-import bec.compileTimeStack.Address;
+import bec.compileTimeStack.AddressItem;
 import bec.compileTimeStack.CTStack;
+import bec.compileTimeStack.ConstItem;
 import bec.compileTimeStack.DataType;
 import bec.compileTimeStack.StackItem;
 import bec.compileTimeStack.Temp;
 import bec.value.MemAddr;
 import bec.virtualMachine.SVM_NOT_IMPL;
-import bec.virtualMachine.SVM_POPtoREG;
+import bec.virtualMachine.SVM_POP2REG;
 import bec.virtualMachine.SVM_PUSH;
 
 public class Util {
 
-	public static void setLine(int type) {
+	public static void setLine(Type type) {
 		Scode.curline = Scode.inNumber();
 	}
 
@@ -111,8 +112,8 @@ public class Util {
 	// ***************************************************************
 	// *** GQ-Utilities
 	// ***************************************************************
-	public static void GQconvert(int toType) {
-		GQfetch("GQconvert " + Scode.edTag(toType));
+	public static void GQconvert(Type toType) {
+		GQfetch("GQconvert " + toType);
 		if(CTStack.TOS.type != toType) doConvert(toType);
 	}
 
@@ -120,13 +121,13 @@ public class Util {
 //	%-D Visible Routine GQfetchxx; --  M} ikke bruke qDI(se rupdate) --
 //	begin infix(MemAddr) opr; range(0:MaxType) type;
 //	      range(0:MaxWord) nbyte; range(0:MaxByte) cTYP;
-		if(CTStack.TOS instanceof Address) {
+		if(CTStack.TOS instanceof AddressItem) {
 //	           opr:=GetTosSrcAdr;
 			MemAddr addr = getTosSrcAdr();
-			int type = CTStack.TOS.type;
-			int size = DataType.typeSize(type);
-			Global.PSEG.emit(new SVM_PUSH(addr, size), comment + " " +Scode.edTag(type));
-			CTStack.pop(); CTStack.pushTemp(type);
+			Type type = CTStack.TOS.type;
+//			int size = DataType.typeSize(type);
+			Global.PSEG.emit(new SVM_PUSH(type, addr, type.size()), comment + " " +type);
+			CTStack.pop(); CTStack.pushTemp(type, "GQFetch: ");
 //			CTStack.dumpStack("GQfetch: "+comment);
 //			Global.PSEG.dump("GQfetch: "+comment);
 //			Util.IERR("NOT IMPL");
@@ -145,7 +146,7 @@ public class Util {
 //	           then repeat qPOPKill(AllignFac); nbyte:=nbyte-AllignFac;
 //	                while nbyte<>0 do endrepeat;
 //	           else qPOPKill(nbyte) endif;
-		} else if(tos instanceof Address) {
+		} else if(tos instanceof AddressItem) {
 //	      when K_Address:
 //	           if TOS qua Address.AtrState <> NotStacked
 //	           then qPOPKill(AllignFac) endif;
@@ -159,7 +160,7 @@ public class Util {
 	}
 
 	public static MemAddr getTosSrcAdr() { //; export infix(MemAddr) a;
-		Address tos = (Address) CTStack.TOS;
+		AddressItem tos = (AddressItem) CTStack.TOS;
 		MemAddr a = tos.objadr;
 		a.ofst = a.ofst + tos.offset;
 		switch(tos.atrState) {
@@ -186,7 +187,7 @@ public class Util {
 		case Calculated:
 //	        Qf1(qPOPR,qEBX,cOBJ);
 //	        a.sibreg:=bOR(bAND(a.sibreg,IndxREG),bEBX);
-			Global.PSEG.emit(new SVM_POPtoREG(1), ""+tos);
+			Global.PSEG.emit(new SVM_POP2REG(1), ""+tos);
 
 //			Util.IERR("NOT IMPL");
 		}
@@ -196,7 +197,7 @@ public class Util {
 	
 	public static MemAddr getTosDstAdr() { // export infix(MemAddr) a;
 //	begin a:=TOS qua Address.Objadr;
-		Address tos = (Address) CTStack.TOS;
+		AddressItem tos = (AddressItem) CTStack.TOS;
 		MemAddr a = tos.objadr;
 //	      a.rela.val:=a.rela.val+TOS qua Address.Offset;
 		a.ofst = a.ofst + tos.offset;
@@ -225,7 +226,7 @@ public class Util {
 		case Calculated:
 //	        Qf1(qPOPR,qEBX,cOBJ);
 //	        a.sibreg:=bOR(bAND(a.sibreg,IndxREG),bEBX);
-			Global.PSEG.emit(new SVM_POPtoREG(1), ""+tos);
+			Global.PSEG.emit(new SVM_POP2REG(1), ""+tos);
 
 //			Util.IERR("NOT IMPL");
 		}
@@ -242,12 +243,12 @@ public class Util {
 	}
 
 
-	public static void doConvert(int totype) {
+	public static void doConvert(Type totype) {
 //	begin range(0:MaxType) fromtype; Boolean ILL;
 //	      infix(ValueItem) itm; infix(MemAddr) opr; range(0:nregs) a,d;
-		int fromtype = CTStack.TOS.type;
-		System.out.println("Util.doConvert: "+Scode.edTag(fromtype) + " ===> " + Scode.edTag(totype));
-//		CTStack.dumpStack();
+		Type fromtype = CTStack.TOS.type;
+		System.out.println("Util.doConvert: "+fromtype + " ===> " + totype);
+		CTStack.dumpStack("Util.doConvert: ");
 //	%+D   if fromtype=totype then -- Nothing
 //	%+D   elsif fromtype > T_max
 //	%+D   then EdWrd(errmsg,fromtype); Ed(errmsg," ==> ");
@@ -256,8 +257,9 @@ public class Util {
 //	%+D   then EdWrd(errmsg,fromtype); Ed(errmsg," ==> ");
 //	%+D        EdWrd(errmsg,totype); IERR(" CODER:GQconvert-2")
 //	%+D   else
-		Util.IERR("NOT IMPL");
-//	      if TOS.kind = K_Coonst then ConvConst(totype)
+		if(CTStack.TOS instanceof ConstItem cnst) cnst.convert(totype); // ConvConst(totype)
+		else {
+			Util.IERR("NOT IMPL");
 //	      else ILL:=false;
 //	           case 0:T_max (fromtype)
 //	           when T_TREAL:       -- temp real
@@ -433,7 +435,8 @@ public class Util {
 //	           Pop; pushTemp(totype);
 //	      endif;
 //	%+D   endif;
-}
+		}
+	}
 
 	public static int GQrelation() { // export range(0:255) res;
 //	%-E   import boolean jmprel;

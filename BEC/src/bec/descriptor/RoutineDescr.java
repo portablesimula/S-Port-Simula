@@ -6,7 +6,9 @@ import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.compileTimeStack.CTStack;
 import bec.instruction.Instruction;
+import bec.segment.DataSegment;
 import bec.segment.ProgramSegment;
+import bec.segment.Segment;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Tag;
@@ -15,13 +17,20 @@ import bec.value.MemAddr;
 import bec.virtualMachine.SVM_RETURN;
 
 public class RoutineDescr extends Descriptor {
-	MemAddr adr;
+	ProgramSegment PSEG;
+	public MemAddr adr;
 	
 	// NOT SAVED
 	Tag prftag;
 	
 	public RoutineDescr(int kind, Tag tag) {
 		super(kind, tag);
+	}
+
+
+	@Override
+	public void doCode() {
+		// NOTHING
 	}
 	
 	public String toString() {
@@ -69,32 +78,25 @@ public class RoutineDescr extends Descriptor {
 	 *			::= local var:newtag quantity_descriptor
 	 */
 	public static void ofRoutine() {
-//	Util.IERR("Parse.XXX: NOT IMPLEMENTED");
-//	    begin ref(ProfileDescr) p; ref(IntDescr) r;
-//	      range(0:MaxWord) nlocbyte; ref(LocDescr) locvar;
-//	      infix(WORD) smbx,tag,prftag; range(0:MaxWord) xrela;
-//	      range(0:MaxType) xt,type; infix(MemAddr) a; range(0:1) visflag;
-//
-//	      InTag(%tag%); InTag(%prftag%);
-
 		Tag tag = Tag.inTag();
 		Tag prftag = Tag.inTag();
-		Global.dumpDISPL("ROUTINE.doCode: ");
+		Global.dumpDISPL("RoutineDescr.ofRoutine: ");
 		System.out.println("RoutineDescr.ofRoutine: tag="+tag + "  prfTag="+prftag);
 		
-		String id = Global.moduleID + '_' + prftag.ident();
-		ProgramSegment PSEG = new ProgramSegment("PSEG_" + id, Kind.K_SEG_CODE);
-		ProgramSegment prevPSEG = Global.PSEG; Global.PSEG = PSEG;
 		RoutineDescr rut = (RoutineDescr) Global.DISPL.get(tag.val);
 		if(rut == null) rut = new RoutineDescr(Kind.K_IntRoutine, tag);
 		rut.prftag = prftag;
-		rut.adr = new MemAddr(PSEG,0);
+		String id = Global.moduleID + '_' + prftag.ident();
+		rut.PSEG = new ProgramSegment("PSEG_" + id, Kind.K_SEG_CODE);
+		ProgramSegment prevPSEG = Global.PSEG; Global.PSEG = rut.PSEG;
+		rut.adr = new MemAddr(rut.PSEG,0);
 		
 		System.out.println("RoutineDescr.ofRoutine: "+Global.DISPL.get(prftag.val));
 		ProfileDescr prf = (ProfileDescr) Global.DISPL.get(prftag.val);
-		boolean visflag = prf.kind == Kind.P_ROUTINE;
+		if(prf == null) Util.IERR("Missing Profile " + Scode.edTag(prftag.val));
+//		boolean visflag = prf.kind == Kind.P_ROUTINE;
 //		rut.tag = prf.tag;
-		Global.insideRoutine = true;
+//		Global.insideRoutine = true;
 
 		Scode.inputInstr();
 		while(Scode.curinstr == Scode.S_LOCAL) {
@@ -102,15 +104,16 @@ public class RoutineDescr extends Descriptor {
 			Scode.inputInstr();
 		}
 	
-		while(Instruction.inInstruction() != null) { Scode.inputInstr(); }
+		Instruction instr;
+		while((instr = (Instruction) Instruction.inInstruction()) != null) { instr.doCode(); Scode.inputInstr(); }
 	
 		if(Scode.curinstr != Scode.S_ENDROUTINE) Util.IERR("Missing - endroutine");
 		CTStack.checkStackEmpty();
-		Global.PSEG.emit(new SVM_RETURN(prf), "");
+		Global.PSEG.emit(new SVM_RETURN(prf.returAddr), "");
 		CTStack.checkStackEmpty();
 
-//		prf.DSEG.dump("ROUTINE.doCode: ");
-		PSEG.dump("ROUTINE.doCode: ");
+		rut.PSEG.dump("RoutineDescr.ofRoutine: "+id);
+		prf.DSEG.dump("RoutineDescr.ofRoutine: "+id);
 		Global.PSEG = prevPSEG;
 //		Util.IERR("");
 	}
@@ -134,7 +137,7 @@ public class RoutineDescr extends Descriptor {
 //////		type = intype;
 //////		nbyte = TypeLength;
 ////		Type Type = new Type();
-////		int type = Type.tag;
+////		Type type = Type.tag;
 ////		int nbyte = 0; // ?????
 ////		Util.IERR("SJEKK DETTE");
 ////
@@ -165,11 +168,13 @@ public class RoutineDescr extends Descriptor {
 
 	public void write(AttributeOutputStream oupt) throws IOException {
 		if(Global.ATTR_OUTPUT_TRACE) System.out.println("RoutineDescr.Write: " + this);
+		if(PSEG != null) PSEG.write(oupt);
 		oupt.writeKind(kind);
 		tag.write(oupt);
 		if(adr != null) {
 			oupt.writeBoolean(true);
 			adr.write(oupt);
+			oupt.writeString(PSEG.ident);
 		} else {
 			oupt.writeBoolean(false);
 		}
@@ -178,10 +183,14 @@ public class RoutineDescr extends Descriptor {
 	public static RoutineDescr read(AttributeInputStream inpt) throws IOException {
 		System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  BEGIN RoutineDescr.Read");
 		Tag tag = Tag.read(inpt);
-		RoutineDescr lab = new RoutineDescr(Kind.K_IntRoutine, tag);
+		RoutineDescr rut = new RoutineDescr(Kind.K_IntRoutine, tag);
 		boolean present = inpt.readBoolean();
-		if(present) lab.adr = MemAddr.read(inpt);
-		return(lab);
+		if(present) {
+			rut.adr = MemAddr.read(inpt);
+			String segID = inpt.readString();
+			rut.PSEG = (ProgramSegment) Segment.lookup(segID);
+		}
+		return(rut);
 	}
 
 }

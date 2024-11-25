@@ -5,11 +5,12 @@ import java.io.IOException;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Scode;
+import bec.util.Type;
 
 public class AddressValue extends Value {
 	int tag;
 	
-	private AddressValue(int tag, int type) {
+	private AddressValue(int tag, Type type) {
 		this.tag = tag;
 		this.type = type;
 	}
@@ -21,19 +22,19 @@ public class AddressValue extends Value {
 	 * routine_address		::= c-raddr body:tag
 	 * program_address		::= c-paddr label:tag
 	 */
-	public static AddressValue ofAADDR() { return new AddressValue(Scode.inTag(), Scode.TAG_AADDR); }
-	public static AddressValue ofOADDR() { return new AddressValue(Scode.inTag(), Scode.TAG_OADDR); }
-	public static AddressValue ofGADDR() { return new AddressValue(Scode.inTag(), Scode.TAG_GADDR); }
-	public static AddressValue ofRADDR() { return new AddressValue(Scode.inTag(), Scode.TAG_RADDR); }
-	public static AddressValue ofPADDR() { return new AddressValue(Scode.inTag(), Scode.TAG_PADDR); }
+	public static AddressValue ofAADDR() { return new AddressValue(Scode.inTag(), Type.T_AADDR); }
+	public static AddressValue ofOADDR() { return new AddressValue(Scode.inTag(), Type.T_OADDR); }
+	public static AddressValue ofGADDR() { return new AddressValue(Scode.inTag(), Type.T_GADDR); }
+	public static AddressValue ofRADDR() { return new AddressValue(Scode.inTag(), Type.T_RADDR); }
+	public static AddressValue ofPADDR() { return new AddressValue(Scode.inTag(), Type.T_PADDR); }
 
 //	@Override
-//	public void printTree(final int indent) {
-//		sLIST(indent, toString());
+//	public void print(final String indent) {
+//		System.out.println(indent + toString());
 //	}
 	
 	public String toString() {
-		return(Scode.edTag(tag) + " " + Scode.edTag(type));
+		return(Scode.edTag(tag) + " " + type);
 	}
 	
 
@@ -42,13 +43,13 @@ public class AddressValue extends Value {
 	// ***********************************************************************************************
 	private AddressValue(AttributeInputStream inpt) throws IOException {
 		tag = inpt.readTag();
-		type = inpt.readTag();
+		type = Type.read(inpt);
 //		System.out.println("NEW AddressValue: " + this);
 	}
 
 	public void write(AttributeOutputStream oupt) throws IOException {
 		oupt.writeTag(tag);
-		oupt.writeTag(type);
+		type.write(oupt);;
 	}
 
 	public static AddressValue read(AttributeInputStream inpt) throws IOException {

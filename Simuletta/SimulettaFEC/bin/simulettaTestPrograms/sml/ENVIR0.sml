@@ -80,7 +80,7 @@ Visible define
  end;
 
 
- Visible record bioIns;--:inst;
+ Visible record bioIns;  info "TYPE"; --:inst;
  begin ref(txtent)            nxtAdr;   -- NOT in bioptp'refvec
        ref(txtent)            lstAdr;   -- NOT in bioptp'refvec
        integer        utpos;  -- Current output pos (0..utlng-1)

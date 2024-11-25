@@ -1,27 +1,27 @@
 package bec.instruction;
 
-import PREV.syntaxClass.value.AttributeAddress;
-import PREV.syntaxClass.value.BooleanValue;
-import PREV.syntaxClass.value.CharacterValue;
-import PREV.syntaxClass.value.DotAddress;
-import PREV.syntaxClass.value.GeneralAddress;
-import PREV.syntaxClass.value.IntegerValue;
-import PREV.syntaxClass.value.LongRealValue;
-import PREV.syntaxClass.value.ObjectAddress;
-import PREV.syntaxClass.value.ProgramAddress;
-import PREV.syntaxClass.value.RealValue;
-import PREV.syntaxClass.value.RecordValue;
-import PREV.syntaxClass.value.RoutineAddress;
-import PREV.syntaxClass.value.SizeValue;
-import PREV.syntaxClass.value.TextValue;
-import PREV.syntaxClass.value.PREV_Value;
+import bec.compileTimeStack.CTStack;
+import bec.compileTimeStack.ConstItem;
 import bec.util.Global;
 import bec.util.Scode;
+import bec.util.Type;
 import bec.util.Util;
+import bec.value.AddressValue;
+import bec.value.BooleanValue;
+import bec.value.CharacterValue;
+import bec.value.DotAddress;
+import bec.value.IntegerValue;
+import bec.value.LongRealValue;
+import bec.value.RealValue;
+import bec.value.RecordValue;
+import bec.value.SizeValue;
+import bec.value.TextValue;
+import bec.value.Value;
 import bec.virtualMachine.SVM_PUSHC;
 
 public class PUSHC extends Instruction {
-	PREV_Value value;
+	Type type;
+	Value value;
 	
 	/**
 	 * stack_instruction ::= pushc value
@@ -71,49 +71,52 @@ public class PUSHC extends Instruction {
 	public PUSHC() {
 		Scode.inputInstr();
 		switch(Scode.curinstr) {
-		    case Scode.S_TEXT:     value = new TextValue(); break;
-		    case Scode.S_C_INT:    value = new IntegerValue(); break;
-		    case Scode.S_C_REAL:   value = new RealValue(); break;
-		    case Scode.S_C_LREAL:  value = new LongRealValue(); break;
-		    case Scode.S_C_CHAR:   value = new CharacterValue(); break;
-		    case Scode.S_NOSIZE:   value = new SizeValue(true); break;
-		    case Scode.S_C_SIZE:   value = new SizeValue(false); break;
-		    case Scode.S_TRUE:     value = new BooleanValue(true); break;
-		    case Scode.S_FALSE:    value = new BooleanValue(false); break;
-		    case Scode.S_ANONE:    value = new AttributeAddress(true); break;
-		    case Scode.S_C_AADDR:  value = new AttributeAddress(false); break;
-		    case Scode.S_NOWHERE:  value = new ProgramAddress(true); break;
-		    case Scode.S_C_PADDR:  value = new ProgramAddress(false); break;
-			case Scode.S_NOBODY:   value = new RoutineAddress(true); break;
-		    case Scode.S_C_RADDR:  value = new RoutineAddress(false); break;
-		    case Scode.S_ONONE:    value = new ObjectAddress(true); break;
-		    case Scode.S_C_OADDR:  value = new ObjectAddress(false); break;
-		    case Scode.S_GNONE:    value = new GeneralAddress(true); break;
-		    case Scode.S_C_GADDR:  value = new GeneralAddress(false); break;
-		    case Scode.S_C_DOT:    value = new DotAddress(); break;
-		    case Scode.S_C_RECORD: value = new RecordValue(); break;
+		    case Scode.S_C_INT:    type = Type.T_INT; value = new IntegerValue(); break;
+		    case Scode.S_C_REAL:   type = Type.T_REAL; value = new RealValue(); break;
+		    case Scode.S_C_LREAL:  type = Type.T_LREAL; value = new LongRealValue(); break;
+		    case Scode.S_C_CHAR:   type = Type.T_CHAR; value = new CharacterValue(); break;
+		    case Scode.S_NOSIZE:   type = Type.T_SIZE; value = null; break;
+		    case Scode.S_C_SIZE:   type = Type.T_SIZE; value = new SizeValue(); break;
+		    case Scode.S_TRUE:     type = Type.T_BOOL; value = new BooleanValue(true); break;
+		    case Scode.S_FALSE:    type = Type.T_BOOL; value = new BooleanValue(false); break;
+		    case Scode.S_ANONE:    type = Type.T_AADDR; value = null; break;
+		    case Scode.S_C_AADDR:  type = Type.T_AADDR; value = AddressValue.ofAADDR(); break;
+		    case Scode.S_NOWHERE:  type = Type.T_PADDR; value = null; break;
+		    case Scode.S_C_PADDR:  type = Type.T_PADDR; value = AddressValue.ofPADDR(); break;
+			case Scode.S_NOBODY:   type = Type.T_RADDR; value = null; break;
+		    case Scode.S_C_RADDR:  type = Type.T_RADDR; value = AddressValue.ofRADDR(); break;
+		    case Scode.S_ONONE:    type = Type.T_OADDR; value = null; break;
+		    case Scode.S_C_OADDR:  type = Type.T_OADDR; value = AddressValue.ofOADDR(); break;
+		    case Scode.S_GNONE:    type = Type.T_GADDR; value = null; break;
+		    case Scode.S_C_GADDR:  type = Type.T_GADDR; value = AddressValue.ofGADDR(); break;
+		    case Scode.S_C_DOT:	   value = new DotAddress(); type = value.type; break;
+		    case Scode.S_C_RECORD: value = RecordValue.ofScode(); type = value.type; break;
+		    case Scode.S_TEXT: 	   type = Type.T_TEXT; value = new TextValue(); break;
 		    default: Util.IERR("NOT IMPLEMENTED: " + Scode.edInstr(Scode.curinstr));
 		}
 	}
 	
 	@Override
 	public void doCode() {
-//		Coonst cns = new Coonst(value);
-//		CTStack.push(cns);
-		Util.IERR("DETTE MÅ RETTES");
+		ConstItem cns = new ConstItem(type, value);
+		CTStack.push(cns);
+		CTStack.dumpStack("PUSHC: "+value+": ");
+//		Util.IERR("DETTE MÅ RETTES");
 		
-		Global.PSEG.emit(new SVM_PUSHC(value), "");
-//		CTStack.dumpStack("PUSHC: "+value);
-//		Global.PSEG.dump("PUSHC: "+value);
-//		Util.IERR(""+this);
+		Global.PSEG.emit(new SVM_PUSHC(type, value), "");
+		Global.PSEG.dump("PUSHC: "+value+": ");
+		if(type == Type.T_TEXT) {
+			Global.CSEG.dump("PUSHC.doCode: ");
+//			Util.IERR(""+value);
+		}
 	}
 
 	@Override
-	public void printTree(final int indent) {
+	public void print(final String indent) {
 		if(value instanceof RecordValue rVal) {
-			sLIST(indent, "PUSHC");
-			rVal.printTree(indent + 1);
-		} else sLIST(indent, toString());
+			System.out.println(indent + "PUSHC");
+			rVal.print(indent + "   ");
+		} else System.out.println(indent + toString());
 		
 	}
 	

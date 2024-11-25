@@ -1,6 +1,7 @@
 package bec.instruction;
 
 import bec.compileTimeStack.CTStack;
+import bec.descriptor.SwitchDescr;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
@@ -29,7 +30,7 @@ public class SDEST extends Instruction {
 	public void doCode() {
 //		CTStack.dumpStack();
 		CTStack.checkStackEmpty();
-		SWITCH swt = (SWITCH) Global.getMeaning(tag);
+		SwitchDescr swt = (SwitchDescr) Global.getMeaning(tag);
 		if(swt.DESTAB[which] != null) Util.IERR("SWITCH dest["+which+"]. dest != null");
 
 		swt.DESTAB[which] = Global.PSEG.nextAddress();
@@ -39,8 +40,8 @@ public class SDEST extends Instruction {
 	}
 	
 	@Override
-	public void printTree(final int indent) {
-		sLIST(indent, toString());
+	public void print(final String indent) {
+		System.out.println(indent + toString());
 	}
 	
 	public String toString() {

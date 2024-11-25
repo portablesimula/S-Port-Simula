@@ -2,13 +2,14 @@ package bec.instruction;
 
 import java.util.Vector;
 
-import PREV.syntaxClass.programElement.ProgramElement;
 import bec.descriptor.ConstDescr;
+import bec.descriptor.RecordDescr;
 import bec.descriptor.RoutineDescr;
+import bec.descriptor.SwitchDescr;
 import bec.util.Scode;
 import bec.util.Util;
 
-public class Instruction extends ProgramElement {
+public class Instruction { // extends ProgramElement {
 	
 //	%title ***   I n s t r u c t i o n   ***
 	public static Vector<Instruction> inInstructionSet(){
@@ -30,14 +31,41 @@ public class Instruction extends ProgramElement {
 		return instructionSet;
 	}
 
+	
+//	public void doCode() {
+//		Util.IERR("Method doCode need a redefinition in "+this.getClass().getSimpleName());
+//	}
 
+	/**
+	 * Utility print method.
+	 * 
+	 * @param indent number of spaces leading the lines
+	 */
+	public void print(final String indent) {
+		Util.IERR("Method printTree need a redefinition in "+this.getClass().getSimpleName());
+	}
+
+	/**
+	 * instruction
+	 * 		::= constant_declaration
+	 * 		::= record_descriptor | routine_specification
+	 * 		::= stack_instruction | assign_instruction
+	 * 		::= addressing_instruction | protect_instruction
+	 * 		::= temp_control | access_instruction
+	 * 		::= arithmetic_instruction | convert_instruction
+	 * 		::= jump_instruction | goto_instruction
+	 * 		::= if_instruction | skip_instruction
+	 * 		::= segment_instruction | call_instruction
+	 * 		::= area_initialisation | eval_instruction
+	 * 		::= info_setting | macro_call
+	 */
 	public static Object inInstruction() {
-//		System.out.println("Parse.instruction: "+Scode.edInstr(Scode.curinstr));
+		System.out.println("Parse.instruction: "+Scode.edInstr(Scode.curinstr));
 		switch(Scode.curinstr) {
-			case Scode.S_CONSTSPEC:	  return ConstDescr.inConstant(false);
-			case Scode.S_CONST:		  return ConstDescr.inConstant(true);
+			case Scode.S_CONSTSPEC:	  return ConstDescr.ofConstSpec();
+			case Scode.S_CONST:		  return ConstDescr.ofConstDef();
 			case Scode.S_ROUTINESPEC: return RoutineDescr.ofRoutineSpec();
-			case Scode.S_RECORD:      return new RECORD();
+			case Scode.S_RECORD:      return RecordDescr.of();
 			case Scode.S_SETOBJ:      Util.IERR("SSTMT.SETOBJ is not implemented");
 			case Scode.S_GETOBJ:      Util.IERR("SSTMT.GETOBJ is not implemented");
 			case Scode.S_ACCESS, Scode.S_ACCESSV: Util.IERR("SSTMT.ACCESS is not implemented");
@@ -86,7 +114,7 @@ public class Instruction extends ProgramElement {
 			case Scode.S_BDEST:       return new BDEST();
 			case Scode.S_BJUMP:       return new BJUMP();
 			case Scode.S_BJUMPIF:     return new BJUMPIF();
-			case Scode.S_SWITCH:      return new SWITCH();
+			case Scode.S_SWITCH:      return SwitchDescr.ofScode();
 			case Scode.S_SDEST:       return new SDEST();
 			case Scode.S_CONVERT:     return new CONVERT();
 			case Scode.S_NEG:	      return new NEG();

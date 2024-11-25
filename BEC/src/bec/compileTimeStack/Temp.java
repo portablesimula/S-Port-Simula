@@ -1,19 +1,18 @@
 package bec.compileTimeStack;
 
-import bec.util.Global;
 import bec.util.Scode;
-import bec.value.MemAddr;
-import bec.virtualMachine.SVM_POPtoMEM;
+import bec.util.Type;
 
 public class Temp extends StackItem {
-
+	String comment;
+	
 	// Value is pushed on RT-stack
-	public Temp(int type) { //, int repdist) {
+	public Temp(Type type, String comment) {
 		this.type = type;
-//		this.repdist = repdist;
+		this.comment = comment;
 	}
 	
 	public String toString() {
-		return "Temp " + Scode.edTag(type);
+		return "Temp " + Scode.edTag(type.tag) + " " + comment;
 	}
 }
