@@ -7,7 +7,7 @@ import bec.util.Type;
 import bec.util.Util;
 import bec.virtualMachine.SVM_XOR;
 
-public class XOR extends Instruction {
+public abstract class XOR extends Instruction {
 	
 	/**
 	 * arithmetic_instruction ::= xor
@@ -22,11 +22,7 @@ public class XOR extends Instruction {
 	 * TOS and SOS are replaced by a description of the result of applying the operator.
 	 * Note that SOS is the left operand.
 	 */
-	public XOR() {
-	}
-
-	@Override
-	public void doCode() {
+	public static void ofScode() {
 //		CTStack.dumpStack();
 //		Global.PSEG.dump();
 		StackItem tos = CTStack.TOS;

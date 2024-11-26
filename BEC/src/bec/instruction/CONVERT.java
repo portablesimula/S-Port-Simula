@@ -6,8 +6,7 @@ import bec.util.Global;
 import bec.util.Type;
 import bec.virtualMachine.SVM_CONVERT;
 
-public class CONVERT extends Instruction {
-	Type toType;
+public abstract class CONVERT extends Instruction {
 	
 	/**
 	 * convert_instruction ::= convert simple_type
@@ -16,14 +15,10 @@ public class CONVERT extends Instruction {
 	 * 
 	 * The TYPE of TOS is changed to the type specified in the instruction, this may imply code generation.
 	 */
-	public CONVERT() {
-		toType = Type.ofScode();
-	}
-
-	@Override
-	public void doCode() {
+	public static void ofScode() {
 //		CTStack.dumpStack();
 		StackItem tos = CTStack.takeTOS();
+		Type toType = Type.ofScode();
 //		if(tos instanceof Coonst) {
 //			ConvConst(totype);
 //		} else {
@@ -36,15 +31,5 @@ public class CONVERT extends Instruction {
 //		Global.PSEG.dump();
 //		Util.IERR(""+this);
 	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		return "CONVERT " + toType;
-	}
-	
 
 }

@@ -1,21 +1,15 @@
 package bec.instruction;
 
-public class REM extends Instruction {
+import bec.util.Util;
+
+public abstract class REM extends Instruction {
 	
 	/**
 	 * arithmetic_instruction ::= rem
 	 */
-	public REM() {
+	private REM() {}
+	public static void ofScode() {
+		Util.IERR("NOT IMPL");
 	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		return "REM";
-	}
-	
 
 }

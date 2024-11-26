@@ -1,21 +1,14 @@
 package bec.instruction;
 
-public class DIST extends Instruction {
+import bec.util.Util;
+
+public abstract class DIST extends Instruction {
 	
 	/**
 	 * addressing_instruction ::= dist
 	 */
-	public DIST() {
+	public static void ofScode() {
+		Util.IERR("NOT IMPL");
 	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		return "DIST";
-	}
-	
 
 }

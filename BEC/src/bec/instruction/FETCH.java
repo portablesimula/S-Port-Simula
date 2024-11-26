@@ -2,7 +2,7 @@ package bec.instruction;
 
 import bec.util.Util;
 
-public class FETCH extends Instruction {
+public abstract class FETCH extends Instruction {
 	
 	/**
 	 * addressing_instruction ::= fetch
@@ -19,26 +19,11 @@ public class FETCH extends Instruction {
 	 *          TOS -----------------|---> VALUE  |
 	 *      after fetch              '============'
 	 */
-	public FETCH() {
-	}
-
-
-	@Override
-	public void doCode() {
+	public static void ofScode() {
 //		CTStack.dumpStack();
 		Util.GQfetch("FETCH");
 //		Global.PSEG.dump();
 //		Util.IERR(""+this);
 	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		return "FETCH";
-	}
-	
 
 }

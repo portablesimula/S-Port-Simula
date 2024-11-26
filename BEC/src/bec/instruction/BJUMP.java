@@ -7,12 +7,7 @@ import bec.util.Util;
 import bec.value.MemAddr;
 import bec.virtualMachine.SVM_GOTO;
 
-public class BJUMP extends Instruction {
-	int destination;
-	
-	public BJUMP() {
-		parse();
-	}
+public abstract class BJUMP extends Instruction {
 
 	/**
 	 * backward_jump ::= bjump destination:index
@@ -22,32 +17,18 @@ public class BJUMP extends Instruction {
 	 * The destination must have been defined in a bdest instruction, otherwise: error.
 	 * A jump to the referenced program point is generated, and the destination becomes undefined.
 	 */
-	public void parse() {
-		destination = Scode.inByte();
-	}
-
-	@Override
-	public void doCode() {
+	public static void ofScode() {
 		CTStack.checkStackEmpty();
+		int destination = Scode.inByte();
 
 //		CTStack.dumpStack();
 		
 		MemAddr addr = Global.DESTAB[destination];
 		if(addr == null) Util.IERR("BJUMP dest. dest == null");
-		Global.PSEG.emit(new SVM_GOTO(addr), ""+this);
+		Global.PSEG.emit(new SVM_GOTO(addr), "BJUMP: ");
 		Global.DESTAB[destination] = null;
 //		Global.PSEG.dump();
 //		Util.IERR(""+this);
 	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		return "BJUMP " + destination;
-	}
-	
 
 }

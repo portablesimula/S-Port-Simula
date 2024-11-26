@@ -8,13 +8,7 @@ import bec.util.Util;
 import bec.value.MemAddr;
 import bec.virtualMachine.SVM_GOTOIF;
 
-public class BJUMPIF extends Instruction {
-	Relation relation;
-	int destination;
-	
-	public BJUMPIF() {
-		parse();
-	}
+public abstract class BJUMPIF extends Instruction {
 
 	/**
 	 * backward_jump ::= bjumpif relation destination:index
@@ -29,18 +23,12 @@ public class BJUMPIF extends Instruction {
 	 * A conditional jump sequence will be generated, branching only if the relation evaluates true. The
 	 * destination becomes undefined.
 	 */
-	public void parse() {
-//		Util.IERR("NOT IMPLEMENTED");
-		relation = Relation.ofScode();
-		destination = Scode.inByte();
-//		Util.IERR(""+this);
-	}
-
-	@Override
-	public void doCode() {
+	public static void ofScode() {
 //		CTStack.dumpStack();
 		CTStack.checkTypesEqual();
 		CTStack.checkSosValue();
+		Relation relation = Relation.ofScode();
+		int destination = Scode.inByte();
 		
 //		int cond = Util.GQrelation();
 		// Check Relation
@@ -49,22 +37,12 @@ public class BJUMPIF extends Instruction {
 		
 		MemAddr addr = Global.DESTAB[destination];
 		if(addr == null) Util.IERR("");
-		Global.PSEG.emit(new SVM_GOTOIF(relation, addr), ""+this);
+		Global.PSEG.emit(new SVM_GOTOIF(relation, addr), "BJUMPIF: "+destination+ " " + destination);
 		Global.DESTAB[destination] = null;
 		
 //		Global.PSEG.dump("BJUMPIF: ");
 //		CTStack.dumpStack("BJUMPIF: ");
 //		Util.IERR(""+this);
 	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		return "BJUMPIF " + relation + " " + destination;
-	}
-	
 
 }

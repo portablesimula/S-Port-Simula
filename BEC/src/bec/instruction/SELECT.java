@@ -21,54 +21,29 @@ import bec.virtualMachine.SVM_NOT_IMPL;
  * component of that record. Note that no qualification check is implied, i.e. TOS.TYPE may be
  * different from 'REC'.
  */
-public class SELECT extends Instruction {
-	int instr;
-	int tag;
-	
-	public SELECT(int instr) {
-		this.instr = instr;
-		parse();
-	}
+public abstract class SELECT extends Instruction {
 
 	/**
 	 * addressing_instruction ::= select attribute:tag | selectv attribute:tag
 	 */
-	public void parse() {
-//		Util.IERR("NOT IMPLEMENTED");
-		tag = Scode.inTag();
-	}
-
-	@Override
-	public void doCode() {
+	public static void ofScode(int instr) {
 //		CTStack.dumpStack();
+		int tag = Scode.inTag();
 		CTStack.checkTosRef();
-//		AttributeDefinition attr = (AttributeDefinition) Global.getMeaning(tag);
 		Attribute attr = (Attribute) Global.getMeaning(tag);
 		CTStack.TOS.type = attr.type;
 		AddressItem adr = (AddressItem) CTStack.TOS;
 		adr.offset = adr.offset + attr.rela;
 		adr.type = attr.type;
-//		adr.size = DataType.typeSize(adr.type);
 		adr.size = attr.size;
 		if(adr.atrState == AddressItem.State.FromConst) {
 			adr.atrState = AddressItem.State.NotStacked;
-			Global.PSEG.emit(new SVM_NOT_IMPL(), ""+this);
+			Global.PSEG.emit(new SVM_NOT_IMPL(), "SELECT: ");
 //             qPOPKill(AllignFac);
 		}
 		if(instr == Scode.S_SELECTV) Util.GQfetch("SELECTV " + Scode.edTag(tag) + ": ");
 //		CTStack.dumpStack();
 //		Util.IERR("");
 	}
-	
-	@Override
-	public void print(final String indent) {
-//		System.out.println(indent + toString() + Scode.edTag(tag));
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		return Scode.edInstr(instr) + " " + Scode.edTag(tag);
-	}
-	
 
 }

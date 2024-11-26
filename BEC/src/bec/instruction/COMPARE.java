@@ -6,12 +6,7 @@ import bec.util.Relation;
 import bec.util.Type;
 import bec.virtualMachine.SVM_COMPARE;
 
-public class COMPARE extends Instruction {
-	Relation relation;
-	
-	public COMPARE() {
-		parse();
-	}
+public abstract class COMPARE extends Instruction {
 
 	/**
 	 * arithmetic_instruction ::= compare relation
@@ -26,13 +21,9 @@ public class COMPARE extends Instruction {
 	 * 
 	 * relation ::= ?lt | ?le | ?eq | ?ge | ?gt | ?ne
 	 */
-	public void parse() {
-		relation = Relation.ofScode();
-	}
-
-	@Override
-	public void doCode() {
+	public static void ofScode() {
 //		CTStack.dumpStack();
+		Relation relation = Relation.ofScode();
 		
 		CTStack.checkTypesEqual(); CTStack.checkSosValue();	
 		CTStack.pop(); CTStack.pop();
@@ -42,16 +33,6 @@ public class COMPARE extends Instruction {
 //		CTStack.dumpStack();
 //		Global.PSEG.dump();
 //		Util.IERR(""+this);
-	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		return "COMPARE " + relation;
-	}
-	
+	}	
 
 }

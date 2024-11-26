@@ -1,21 +1,14 @@
 package bec.instruction;
 
-public class POPALL extends Instruction {
+import bec.util.Util;
+
+public abstract class POPALL extends Instruction {
 	
 	/**
 	 * stack_instruction ::= pop
 	 */
-	public POPALL() {
+	public static void ofScode() {
+		Util.IERR("NOT IMPL");
 	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		return "POPALL";
-	}
-	
 
 }

@@ -1,21 +1,14 @@
 package bec.instruction;
 
-public class EMPTY extends Instruction {
+import bec.util.Util;
+
+public abstract class EMPTY extends Instruction {
 	
 	/**
 	 * stack_instruction ::= empty
 	 */
-	public EMPTY() {
+	public static void ofScode() {
+		Util.IERR("NOT IMPL");
 	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		return "EMPTY";
-	}
-	
 
 }

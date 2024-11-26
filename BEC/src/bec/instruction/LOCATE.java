@@ -1,21 +1,14 @@
 package bec.instruction;
 
-public class LOCATE extends Instruction {
+import bec.util.Util;
+
+public abstract class LOCATE extends Instruction {
 	
 	/**
 	 * addressing_instruction ::= locate
 	 */
-	public LOCATE() {
+	public static void ofScode() {
+		Util.IERR("NOT IMPL");
 	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		return "LOCATE";
-	}
-	
 
 }

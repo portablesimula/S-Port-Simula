@@ -7,12 +7,8 @@ import bec.value.MemAddr;
 import bec.virtualMachine.SVM_GOTO;
 import bec.virtualMachine.SVM_NOOP;
 
-public class FDEST extends Instruction {
+public abstract class FDEST extends Instruction {
 	int destination;
-	
-	public FDEST() {
-		parse();
-	}
 
 	/**
 	 * forward_destination ::= fdest destination:index
@@ -23,18 +19,10 @@ public class FDEST extends Instruction {
 	 * The current program point becomes the destination of the jump-instruction and the destination becomes
 	 * undefined.
 	 */
-	public void parse() {
-		destination = Scode.inByte();
-	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-
-	@Override
-	public void doCode() {
+	public static void ofScode() {
+//		CTStack.dumpStack();
 		CTStack.checkStackEmpty();
+		int destination = Scode.inByte();
 
 //		CTStack.dumpStack();
 		MemAddr addr = Global.DESTAB[destination];
@@ -45,10 +33,5 @@ public class FDEST extends Instruction {
 //		Global.PSEG.dump();
 //		Util.IERR(""+this);
 	}
-	
-	public String toString() {
-		return "FDEST " + destination;
-	}
-	
 
 }

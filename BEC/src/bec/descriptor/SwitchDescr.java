@@ -27,25 +27,9 @@ public class SwitchDescr extends Descriptor {
 		size = Scode.inNumber();
 //		if(size >= MxpSdest) Util.ERROR("Too large Case-Statement");
 		DESTAB = new MemAddr[size];
-//		doCode();
-	}
-	
-	public static SwitchDescr ofScode() {
-		Tag tag = Tag.inTag();
-		SwitchDescr sw = new SwitchDescr(Kind.K_SwitchDescr, tag);
-		return sw;
-	}
-
-	@Override
-	public void doCode() {
-//        InTag(%tag%);
-//%+D        ndest:=InputNumber;
-//        sw:=NEWOBJ(K_SwitchDescr,size(SwitchDescr));
-//        sw.ndest:=ndest.val; sw.nleft:=ndest.val;
-//        i.val:=0; sw.swtab:=NewFixAdr(DSEGID,i); IntoDisplay(sw,tag);
 		CTStack.checkTosInt();
-//        if TOS.type < T_WRD2 then GQconvert(T_WRD2) endif;
-//        a:=sw.swtab;
+//      if TOS.type < T_WRD2 then GQconvert(T_WRD2) endif;
+//      a:=sw.swtab;
 		int qEBX = 1; // MÅ RETTES
 		CTStack.getTosAdjustedIn86(qEBX);
 		CTStack.pop();
@@ -63,9 +47,15 @@ public class SwitchDescr extends Descriptor {
 //%+D        endif; --- pje 22.10.90
 //
 //%+E        a.sibreg:=bOR(bOR(128,bEBX),iEBX); -- swtab+[4*EBX] 
-//        Qf3(qJMPM,0,0,0,a);
-      	Global.PSEG.emit(new SVM_SWITCH(DESTAB), "");
-      	Global.PSEG.dump("SWITCH: ");
+//      Qf3(qJMPM,0,0,0,a);
+    	Global.PSEG.emit(new SVM_SWITCH(DESTAB), "");
+    	Global.PSEG.dump("SWITCH: ");
+	}
+	
+	public static SwitchDescr ofScode() {
+		Tag tag = Tag.inTag();
+		SwitchDescr sw = new SwitchDescr(Kind.K_SwitchDescr, tag);
+		return sw;
 	}
 	
 	@Override

@@ -9,7 +9,7 @@ import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
 
-public class PUSH extends Instruction {
+public abstract class PUSH extends Instruction {
 	int instr;
 	int tag;
 	
@@ -18,15 +18,9 @@ public class PUSH extends Instruction {
 	 * 
 	 * End-Condition: Scode'nextByte = First byte after the tag
 	 */
-	public PUSH(int instr) {
-		this.instr = instr;
-		tag = Scode.inTag();
-	}
-	
-	@Override
-	public void doCode() {
+	public static void ofScode(int instr) {
 //		System.out.println("PUSH.doCode: tag="+Scode.edTag(tag)+"  "+tag);
-//		SyntaxClass x = Global.getMeaning(tag);
+		int tag = Scode.inTag();
 		Descriptor x = Global.getMeaning(tag);
 		if(x instanceof Variable var) {
 //			System.out.println("PUSH.doCode: var="+var);
@@ -41,15 +35,5 @@ public class PUSH extends Instruction {
         if(instr == Scode.S_PUSHV) Util.GQfetch("PUSHV: ");
 //      CTStack.dumpStack("PUSH: "+Scode.edInstr(instr));
 	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		return Scode.edInstr(instr) + " " + Scode.edTag(tag);
-	}
-	
 
 }

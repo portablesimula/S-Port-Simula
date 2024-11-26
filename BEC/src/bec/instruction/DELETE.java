@@ -1,32 +1,16 @@
 package bec.instruction;
 
-import bec.util.Scode;
+import bec.util.Util;
 
-public class DELETE extends Instruction {
-	int tag;
-	
-	public DELETE() {
-		parse();
-	}
+public abstract class DELETE extends Instruction {
 
 	/**
 	 * delete_statement ::= delete from:tag
 	 * 
      * check stacks empty;
 	 */
-	public void parse() {
-//		Util.IERR("NOT IMPLEMENTED");
-		tag = Scode.inTag();
+	public static void ofScode() {
+		Util.IERR("NOT IMPL");
 	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		return "DELETE " + Scode.edTag(tag);
-	}
-	
 
 }

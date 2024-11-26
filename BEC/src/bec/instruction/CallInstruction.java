@@ -5,7 +5,6 @@ import java.util.Vector;
 import bec.compileTimeStack.ProfileItem;
 import bec.compileTimeStack.AddressItem;
 import bec.compileTimeStack.CTStack;
-import bec.compileTimeStack.DataType;
 import bec.compileTimeStack.StackItem;
 import bec.descriptor.ProfileDescr;
 import bec.descriptor.RoutineDescr;
@@ -17,17 +16,11 @@ import bec.util.Type;
 import bec.util.Util;
 import bec.virtualMachine.SVM_CALL;
 import bec.virtualMachine.SVM_CALL_TOS;
-import bec.virtualMachine.SVM_NOT_IMPL;
 import bec.virtualMachine.SVM_POP2MEM;
 import bec.virtualMachine.SVM_PUSH;
 import bec.virtualMachine.SVM_SYSCALL;
 
-public class CallInstruction extends Instruction {
-	int n; // Kind
-	int profileTag;
-	int routineTag;
-	Vector<ParameterEval> argumentEvaluation;
-	Vector<Instruction> CALL_TOS_Instructions;
+public abstract class CallInstruction extends Instruction {
 	
 	/**
 	 * call_instruction
@@ -45,14 +38,14 @@ public class CallInstruction extends Instruction {
 	 * 			::= <instruction>+ asspar
 	 * 			::= <instruction>+ assrep n:byte
 	 */
-	public CallInstruction(int n) {
-		this.n = n;
-		argumentEvaluation = new Vector<ParameterEval>();
-		profileTag = Scode.inTag();
+	public static void ofScode(int n) {
+		Vector<ParameterEval> argumentEvaluation = new Vector<ParameterEval>();
+		int profileTag = Scode.inTag();
 		Scode.inputInstr();
 		
 //		if(Scode.inputTrace > 3) System.out.println("CallInstruction: n="+n+", Curinstr="+Scode.edInstr(Scode.curinstr));
 		
+		Vector<Instruction> CALL_TOS_Instructions = null;
 		LOOP:while(Scode.curinstr != Scode.S_CALL) {
 			Vector<Instruction> instructions = Instruction.inInstructionSet();
 			if(instructions.isEmpty()) break LOOP;
@@ -69,16 +62,18 @@ public class CallInstruction extends Instruction {
 			}
 			else if(Scode.curinstr == Scode.S_CALL_TOS) {
 //				Scode.inputInstr();
-				CALL_TOS_Instructions = instructions;
+//				CALL_TOS_Instructions = instructions;
+				CALL_TOS_Instructions = Instruction.inInstructionSet();
 				break LOOP;
 			}
 			else Util.IERR("Syntax error in call Instruction");
 		}
 	    //  ---------  Call Routine  ---------
-		if(CALL_TOS_Instructions == null) routineTag = Scode.inTag();
-	}
-	
-	public void doCode() {
+		int routineTag = 0;
+		if(CALL_TOS_Instructions == null) {
+			routineTag = Scode.inTag();
+		}
+
 		// CODING ....
 		ProfileDescr spec = (ProfileDescr) Global.DISPL.get(profileTag);
 		if(spec == null) Util.IERR(""+Scode.edTag(profileTag));
@@ -88,9 +83,9 @@ public class CallInstruction extends Instruction {
 //		System.out.println("-------------------------------------------------- ENDOF PRINT CALL Instruction");
 		CTStack.dumpStack("BEGIN CallInstruction.doCode: ");
 		if(spec.pKind > 0)
-			 callSYS(spec);
+			 callSYS(spec, argumentEvaluation);
 		else {
-			callDefault(spec);
+			callDefault(spec, argumentEvaluation, routineTag, CALL_TOS_Instructions);
 		}
 		// Routines return values on the RT-Stack
 		Variable export = spec.getExport();
@@ -106,7 +101,7 @@ public class CallInstruction extends Instruction {
 		}
 	}
 	
-	private void callSYS(ProfileDescr spec) {
+	private static void callSYS(ProfileDescr spec, Vector<ParameterEval> argumentEvaluation) {
 		System.out.println("BEGIN CallInstruction.callSYS: " + spec.tag +" EXPORT="+ spec.export +" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 		spec.print("   ");
 		ProfileItem pitem = new ProfileItem(Type.T_VOID,spec);
@@ -133,7 +128,7 @@ public class CallInstruction extends Instruction {
 	}
 	
 	
-	private int putPar(ProfileItem pItm, int nrep) { // export range(0:255) npop;
+	private static int putPar(ProfileItem pItm, int nrep) { // export range(0:255) npop;
 		int npop = 0;
 		Variable param = (Variable) pItm.spc.params.get(pItm.nasspar).getMeaning();
 		Type parType = param.type;
@@ -186,7 +181,7 @@ public class CallInstruction extends Instruction {
 		return npop;
 	}
 
-	private void callDefault(ProfileDescr spec) {
+	private static void callDefault(ProfileDescr spec, Vector<ParameterEval> argumentEvaluation, int routineTag, Vector<Instruction> CALL_TOS_Instructions) {
 		ProfileItem pitem = new ProfileItem(Type.T_VOID,spec);
 		CTStack.push(pitem);
 
@@ -202,11 +197,14 @@ public class CallInstruction extends Instruction {
 
 //	    ---------  Call Routine  ---------
 	    if(CALL_TOS_Instructions != null) {
-	    	for(Instruction instr:CALL_TOS_Instructions) instr.doCode();
+	    	for(Instruction instr:CALL_TOS_Instructions) {
+	    		// instr.doCode();
+	    		Util.IERR("DETTE MÅ RETTES OPP");
+	    	}
 	    	Global.PSEG.emit(new SVM_CALL_TOS(), "");
 	    	CTStack.pop();
 //	    	Global.PSEG.dump("");
-//	    	Util.IERR("");
+	    	Util.IERR("NOT IMPL");
 	    } else {
 	    	RoutineDescr rut = (RoutineDescr) Global.DISPL.get(routineTag);
 	    	if(rut == null) Util.IERR("Unknown Routine: " + Scode.edTag(routineTag));
@@ -218,37 +216,5 @@ public class CallInstruction extends Instruction {
 	    if(CTStack.TOS != pitem) Util.IERR("SSTMT.Call");
 	    CTStack.pop();
 	}
-	
-	@Override
-	public void print(final String indent) {
-//		System.out.println(edLead(indent) + this);
-		String lead = null;
-		switch(n) {
-			case 0:  lead = "PRECALL "; break;
-			case 1:  lead = "ASSCALL "; break;
-			default: lead = "REPCALL " + n + " "; break;
-		}
-		System.out.println(indent + lead + Scode.edTag(profileTag));
-		for(ParameterEval p:argumentEvaluation) p.printTree(indent + 1);
-		if(CALL_TOS_Instructions != null) {
-			for(Instruction instr:CALL_TOS_Instructions)
-				System.out.println(indent + "   " + instr.toString());
-			System.out.println(indent + "CALL-TOS");
-//			Util.IERR("SJEKK DETTE");
-		} else {
-			System.out.println(indent + "CALL " + Scode.edTag(routineTag));
-		}
-	}
-	
-	public String toString() {
-		String lead = null;
-		switch(n) {
-			case 0:  lead = "PRECALL "; break;
-			case 1:  lead = "ASSCALL "; break;
-			default: lead = "REPCALL " + n + " "; break;
-		}
-		return lead + Scode.edTag(profileTag) + " ...";
-	}
-	
 
 }

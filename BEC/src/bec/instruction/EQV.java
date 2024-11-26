@@ -7,7 +7,7 @@ import bec.util.Type;
 import bec.util.Util;
 import bec.virtualMachine.SVM_EQV;
 
-public class EQV extends Instruction {
+public abstract class EQV extends Instruction {
 	
 	/**
 	 * arithmetic_instruction ::= eqv
@@ -22,11 +22,7 @@ public class EQV extends Instruction {
 	 * TOS and SOS are replaced by a description of the result of applying the operator.
 	 * Note that SOS is the left operand.
 	 */
-	public EQV() {
-	}
-
-	@Override
-	public void doCode() {
+	public static void ofScode() {
 //		CTStack.dumpStack();
 //		Global.PSEG.dump();
 		StackItem tos = CTStack.TOS;
@@ -48,16 +44,6 @@ public class EQV extends Instruction {
 //		CTStack.dumpStack();
 //		Global.PSEG.dump();
 //		Util.IERR(""+this);
-	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		return "OR";
-	}
-	
+	}	
 
 }

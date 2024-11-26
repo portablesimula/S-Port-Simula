@@ -5,7 +5,7 @@ import bec.util.Global;
 import bec.util.Type;
 import bec.virtualMachine.SVM_NEG;
 
-public class NEG extends Instruction {
+public abstract class NEG extends Instruction {
 	
 	/**
 	 * arithmetic_instruction ::= neg
@@ -15,11 +15,7 @@ public class NEG extends Instruction {
 	 * 
 	 * TOS is replaced by a description of the TOS value with its sign inverted.
 	 */
-	public NEG() {
-	}
-
-	@Override
-	public void doCode() {
+	public static void ofScode() {
 //		CTStack.dumpStack();
 //		Global.PSEG.dump();
 		CTStack.checkTosArith();
@@ -28,15 +24,5 @@ public class NEG extends Instruction {
 		CTStack.pop();
 	    CTStack.pushTemp(at, "NEG: ");
 	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		return "NEG";
-	}
-	
 
 }

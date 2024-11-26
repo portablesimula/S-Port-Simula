@@ -10,8 +10,8 @@ import bec.util.Util;
 import bec.value.IntegerValue;
 import bec.virtualMachine.SVM_NOT_IMPL;
 
-public class INDEX extends Instruction {
-	int instr;
+public abstract class INDEX extends Instruction {
+	int instr; // INDEX | INDEXV
 	
 	/**
 	 * addressing_instruction ::= ::= index | indexv
@@ -29,12 +29,7 @@ public class INDEX extends Instruction {
 	 * index the stack top will describe A(N), where N is the value of TOS. No bounds checking should
 	 * be performed.
 	 */
-	public INDEX(int instr) {
-		this.instr = instr;
-	}
-
-	@Override
-	public void doCode() {
+	public static void ofScode(int instr) {
 //		CTStack.dumpStack();
 
 		CTStack.checkTosInt();

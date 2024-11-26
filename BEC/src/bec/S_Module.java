@@ -72,8 +72,6 @@ public abstract class S_Module {
 				default:{
 					Object obj = Instruction.inInstruction();
 					if(obj == null) break LOOP;
-					if(obj instanceof Instruction instr)
-						instr.doCode();
 				}
 			}
 			Scode.inputInstr();

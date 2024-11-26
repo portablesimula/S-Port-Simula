@@ -9,7 +9,7 @@ import bec.virtualMachine.SVM_SUB;
 /**
  * 
  */
-public class SUB extends Instruction {
+public abstract class SUB extends Instruction {
 	
 	/**
 	 * arithmetic_instruction ::= sub
@@ -27,11 +27,7 @@ public class SUB extends Instruction {
 	 * type of the result is the same as the type of the operands. SOS is always the left operand, i.e.
 	 * SOS op TOS. All arithmetic on subranges of INT should be performed in full integer arithmetic. 
 	 */
-	public SUB() {
-	}
-
-	@Override
-	public void doCode() {
+	public static void ofScode() {
 //		CTStack.dumpStack();
 //		Global.PSEG.dump();
 		CTStack.checkTosArith(); CTStack.checkSosArith(); CTStack.checkSosValue(); CTStack.checkTypesEqual();
@@ -45,15 +41,5 @@ public class SUB extends Instruction {
 //		Global.PSEG.dump();
 //		Util.IERR(""+this);
 	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		return "SUB";
-	}
-	
 
 }

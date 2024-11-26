@@ -1,21 +1,14 @@
 package bec.instruction;
 
-public class DECO extends Instruction {
+import bec.util.Util;
+
+public abstract class DECO extends Instruction {
 	
 	/**
 	 * addressing_instruction ::= deco
 	 */
-	public DECO() {
+	public static void ofScode() {
+		Util.IERR("NOT IMPL");
 	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		return "DECO";
-	}
-	
 
 }

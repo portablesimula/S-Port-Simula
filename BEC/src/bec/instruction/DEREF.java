@@ -3,7 +3,7 @@ package bec.instruction;
 import bec.compileTimeStack.CTStack;
 import bec.util.Type;
 
-public class DEREF extends Instruction {
+public abstract class DEREF extends Instruction {
 	
 	/**
 	 * addressing_instruction ::= deref
@@ -23,11 +23,7 @@ public class DEREF extends Instruction {
      *                                                      |        |
      *                                                      '========'
 	 */
-	public DEREF() {
-	}
-
-	@Override
-	public void doCode() {
+	public static void ofScode() {
 //		CTStack.dumpStack();
 
 		CTStack.checkTosRef();
@@ -44,15 +40,5 @@ public class DEREF extends Instruction {
 //		Global.PSEG.dump();
 //		Util.IERR(""+this);
 	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
 	
-	public String toString() {
-		return "DEREF";
-	}
-	
-
 }

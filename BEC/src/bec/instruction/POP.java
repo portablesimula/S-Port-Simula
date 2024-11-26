@@ -4,7 +4,7 @@ import bec.compileTimeStack.CTStack;
 import bec.compileTimeStack.ProfileItem;
 import bec.util.Util;
 
-public class POP extends Instruction {
+public abstract class POP extends Instruction {
 	
 	/**
 	 * stack_instruction ::= pop
@@ -12,25 +12,11 @@ public class POP extends Instruction {
 	 * Pop off TOS;
 	 * This instruction is illegal if TOS is a profile description.
 	 */
-	public POP() {
-		if(CTStack.TOS instanceof ProfileItem) Util.IERR("Illegal pop of profileItem ");
-	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-
-	@Override
-	public void doCode() {
+	public static void ofScode() {
 //		CTStack.dumpStack();
+		if(CTStack.TOS instanceof ProfileItem) Util.IERR("Illegal pop of profileItem ");
 		CTStack.pop();
 		CTStack.dumpStack("POP: ");
 	}
-	
-	public String toString() {
-		return "POP";
-	}
-	
 
 }

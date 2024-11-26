@@ -1,54 +1,30 @@
 package bec.instruction;
 
-import java.util.Vector;
-
+import bec.S_Module;
 import bec.util.Scode;
 import bec.util.Util;
 
-public class BSEG extends Instruction {
-	Vector<Instruction> Instructions;
-	
-	public BSEG() {
-		parse();
-	}
+public abstract class BSEG extends Instruction {
 
 	/**
 	 * segment_instruction ::= bseg <program_element>* eseg
 	 * 
 	 * End-Condition: Scode'nextByte = First byte after ESEG
 	 */
-	public void parse() {
+	public static void ofScode() {
 		// BSEGInstruction
-		Instructions = new Vector<Instruction>();
-		while(Scode.nextByte() != Scode.S_ESEG) {
-			Instruction elt = (Instruction) Instruction.inInstruction();
-			if(elt == null) Util.IERR("Inconsistent instruction in BSE-ESEG");
-			Instructions.add(elt);
-		}
+//		Instructions = new Vector<Instruction>();
+//		while(Scode.nextByte() != Scode.S_ESEG) {
+//			Instruction elt = (Instruction) Instruction.inInstruction();
+//			if(elt == null) Util.IERR("Inconsistent instruction in BSE-ESEG");
+//			Instructions.add(elt);
+//		}
+		S_Module.programElements();
 		Scode.inputInstr();
+		if(Scode.curinstr != Scode.S_ESEG) Util.IERR("Missing ESEG");
+		Util.IERR("SJEKK DETTE");
 		
 //		if(Scode.inputTrace > 3) print();
-	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + "BSEG");
-		for(Instruction elt:Instructions) {
-			elt.print(indent + "   ");
-		}
-		System.out.println(indent + "ESEG");
-	}
-	
-	public void print() {
-		System.out.println("BSEG");
-		for(Instruction elt:Instructions) {
-			System.out.println("   " + elt);
-		}
-		System.out.println("ESEG");
-	}
-	
-	public String toString() {
-		return "BSEG";
 	}
 
 }

@@ -1,27 +1,16 @@
 package bec.instruction;
 
-import bec.util.Scode;
+import bec.util.Util;
 
-public class DSIZE extends Instruction {
-	int tag;
+public abstract class DSIZE extends Instruction {
 	
 	/**
 	 * addressing_instruction ::= dsize structured_type
 	 * 
 	 *		structured_type ::= record_tag:tag
 	 */
-	public DSIZE() {
-		tag = Scode.inTag();
+	public static void ofScode() {
+		Util.IERR("NOT IMPL");
 	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		return "DSIZE " + Scode.edTag(tag);
-	}
-	
 
 }

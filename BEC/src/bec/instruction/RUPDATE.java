@@ -7,7 +7,7 @@ import bec.util.Util;
 import bec.value.MemAddr;
 import bec.virtualMachine.SVM_POP2MEM;
 
-public class RUPDATE extends Instruction {
+public abstract class RUPDATE extends Instruction {
 	
 	/**
 	 * assign_instruction ::= assign | update | rupdate
@@ -20,28 +20,14 @@ public class RUPDATE extends Instruction {
 	 * 
 	 * This instruction (“reverse update”) works almost like update with the sole exception that the
 	 * roles of TOS and SOS are interchanged, i.e. the value transfer is from SOS to TOS.	 */
-	public RUPDATE() {
-	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	@Override
-	public void doCode() {
+	public static void ofScode() {
 //		CTStack.dumpStack();
 		CTStack.checkTosRef(); CTStack.checkSosValue(); CTStack.checkTypesEqual();
 		MemAddr adr = Util.getTosDstAdr();
 		StackItem tos = CTStack.pop();
 		CTStack.dumpStack("RUPDATE: ");
-		Global.PSEG.emit(new SVM_POP2MEM(adr, tos.size), ""+this); // Store into adr
+		Global.PSEG.emit(new SVM_POP2MEM(adr, tos.size), "RUPDATE: "); // Store into adr
 //		Global.PSEG.dump();
 	}
-	
-	public String toString() {
-		return "RUPDATE";
-	}
-	
 
 }

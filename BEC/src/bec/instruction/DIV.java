@@ -6,7 +6,7 @@ import bec.util.Global;
 import bec.util.Type;
 import bec.virtualMachine.SVM_DIV;
 
-public class DIV extends Instruction {
+public abstract class DIV extends Instruction {
 	
 	/**
 	 * arithmetic_instruction ::= div
@@ -24,11 +24,7 @@ public class DIV extends Instruction {
 	 * type of the result is the same as the type of the operands. SOS is always the left operand, i.e.
 	 * SOS op TOS. All arithmetic on subranges of INT should be performed in full integer arithmetic. 
 	 */
-	public DIV() {
-	}
-
-	@Override
-	public void doCode() {
+	public static void ofScode() {
 //		CTStack.dumpStack();
 //		Global.PSEG.dump();
 		CTStack.checkTosArith(); CTStack.checkSosArith(); CTStack.checkSosValue(); CTStack.checkTypesEqual();
@@ -42,15 +38,5 @@ public class DIV extends Instruction {
 //		Global.PSEG.dump();
 //		Util.IERR(""+this);
 	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		return "MULT";
-	}
-	
 
 }

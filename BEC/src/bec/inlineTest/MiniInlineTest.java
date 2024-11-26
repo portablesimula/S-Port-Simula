@@ -11,11 +11,11 @@ public class MiniInlineTest {
 	public static void main(String[] argv) {
 		Vector<String> names=new Vector<String>();
 		
-		names.add("ENVIR0");
-//		names.add("MODL001");
+//		names.add("ENVIR0");
+////		names.add("MODL001");
 		names.add("MODL01");
-		names.add("MODL02");
-		names.add("TEST6");
+//		names.add("MODL02");
+//		names.add("TEST6");
 
 //		names.add("TEST00");
 

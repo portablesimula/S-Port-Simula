@@ -6,13 +6,9 @@ import bec.util.Relation;
 import bec.util.Scode;
 import bec.virtualMachine.SVM_GOTOIF;
 
-public class FJUMPIF extends Instruction {
+public abstract class FJUMPIF extends Instruction {
 	Relation relation;
 	int destination;
-	
-	public FJUMPIF() {
-		parse();
-	}
 
 	/**
 	 * forward_jump ::= fjumpif relation destination:newindex
@@ -26,18 +22,12 @@ public class FJUMPIF extends Instruction {
 	 * A conditional forward jump sequence will be generated, branching only if the relation (see chapter 9)
 	 * evaluates true. The destination will refer to an undefined program point to be located later (by fdest).
 	 */
-	public void parse() {
-//		Util.IERR("NOT IMPLEMENTED");
-		relation = Relation.ofScode();
-		destination = Scode.inByte();
-//		Util.IERR(""+this);
-	}
-
-	@Override
-	public void doCode() {
+	public static void ofScode() {
 //		CTStack.dumpStack();
 		CTStack.checkTypesEqual();
 		CTStack.checkSosValue();
+		Relation relation = Relation.ofScode();
+		int destination = Scode.inByte();
 		
 //		int cond = Util.GQrelation();
 		// Check Relation
@@ -45,20 +35,10 @@ public class FJUMPIF extends Instruction {
 		CTStack.pop();
 		
 		Global.DESTAB[destination] = Global.PSEG.nextAddress();
-		Global.PSEG.emit(new SVM_GOTOIF(relation, null), ""+this);
+		Global.PSEG.emit(new SVM_GOTOIF(relation, null), "FJUMPIF: ");
 //		Global.PSEG.dump();
 //		CTStack.dumpStack();
 //		Util.IERR(""+this);
 	}
-	
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		return "FJUMPIF " + relation + " " + destination;
-	}
-	
 
 }

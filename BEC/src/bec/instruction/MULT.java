@@ -6,7 +6,7 @@ import bec.util.Global;
 import bec.util.Type;
 import bec.virtualMachine.SVM_MULT;
 
-public class MULT extends Instruction {
+public abstract class MULT extends Instruction {
 	
 	/**
 	 * arithmetic_instruction ::= mult
@@ -24,17 +24,13 @@ public class MULT extends Instruction {
 	 * type of the result is the same as the type of the operands. SOS is always the left operand, i.e.
 	 * SOS op TOS. All arithmetic on subranges of INT should be performed in full integer arithmetic. 
 	 */
-	public MULT() {
-	}
-
-	@Override
-	public void doCode() {
+	public static void ofScode() {
 //		CTStack.dumpStack();
 //		Global.PSEG.dump();
 		CTStack.checkTosArith(); CTStack.checkSosArith(); CTStack.checkSosValue(); CTStack.checkTypesEqual();
 		StackItem tos = CTStack.TOS;
 	    Type at = CTStack.arithType(tos.type, tos.suc.type);
-		Global.PSEG.emit(new SVM_MULT(at), "");
+		Global.PSEG.emit(new SVM_MULT(at), "MULT: ");
 		CTStack.pop();
 		CTStack.pop();
 	    CTStack.pushTemp(at, "MULT: ");
@@ -42,15 +38,5 @@ public class MULT extends Instruction {
 //		Global.PSEG.dump("MULT.doCode: ");
 //		Util.IERR(""+this);
 	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		return "MULT";
-	}
-	
 
 }

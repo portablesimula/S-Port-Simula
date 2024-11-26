@@ -7,9 +7,7 @@ import bec.util.Scode;
 import bec.util.Util;
 import bec.virtualMachine.SVM_NOOP;
 
-public class SDEST extends Instruction {
-	int tag;
-	int which;
+public abstract class SDEST extends Instruction {
 	
 	/**
 	 * forward_destination ::= sdest switch:tag which:number
@@ -21,14 +19,11 @@ public class SDEST extends Instruction {
 	 * The destination "D(which)" of the switch instruction defining the tag is located at the current program
 	 * point.
 	 */
-	public SDEST() {
-		tag = Scode.inTag();
-		which = Scode.inNumber();
-	}
-
-	@Override
-	public void doCode() {
+	private SDEST() {}
+	public static void ofScode() {
 //		CTStack.dumpStack();
+		int tag = Scode.inTag();
+		int which = Scode.inNumber();
 		CTStack.checkStackEmpty();
 		SwitchDescr swt = (SwitchDescr) Global.getMeaning(tag);
 		if(swt.DESTAB[which] != null) Util.IERR("SWITCH dest["+which+"]. dest != null");
@@ -38,15 +33,5 @@ public class SDEST extends Instruction {
 		Global.PSEG.dump("SDEST: ");
 //		Util.IERR(""+this);
 	}
-	
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		return "SDEST " + Scode.edTag(tag) + " " + which;
-	}
-	
 
 }

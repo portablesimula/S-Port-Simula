@@ -1,14 +1,12 @@
 package bec.instruction;
 
-import java.util.Vector;
-
 import bec.compileTimeStack.CTStack;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.value.MemAddr;
 import bec.virtualMachine.SVM_SWITCH;
 
-public class SWITCH extends Instruction {
+public abstract class SWITCH extends Instruction {
 	int tag;
 	int size;
 	MemAddr[] DESTAB;
@@ -16,20 +14,12 @@ public class SWITCH extends Instruction {
 	/**
 	 * forward_jump ::= switch switch:newtag size:number
 	 */
-	public SWITCH() {
-		tag = Scode.inTag();
-		size = Scode.inNumber();
+	private SWITCH() {}
+	public static void ofScode() {
+		int tag = Scode.inTag();
+		int size = Scode.inNumber();
 //		if(size >= MxpSdest) Util.ERROR("Too large Case-Statement");
-		DESTAB = new MemAddr[size];
-	}
-
-	@Override
-	public void doCode() {
-//        InTag(%tag%);
-//%+D        ndest:=InputNumber;
-//        sw:=NEWOBJ(K_SwitchDescr,size(SwitchDescr));
-//        sw.ndest:=ndest.val; sw.nleft:=ndest.val;
-//        i.val:=0; sw.swtab:=NewFixAdr(DSEGID,i); IntoDisplay(sw,tag);
+		MemAddr[] DESTAB = new MemAddr[size];
 		CTStack.checkTosInt();
 //        if TOS.type < T_WRD2 then GQconvert(T_WRD2) endif;
 //        a:=sw.swtab;
@@ -54,15 +44,5 @@ public class SWITCH extends Instruction {
       	Global.PSEG.emit(new SVM_SWITCH(DESTAB), "");
       	Global.PSEG.dump("SWITCH: ");
 	}
-	
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		return "SWITCH " + Scode.edTag(tag) + " " + size;
-	}
-	
 
 }

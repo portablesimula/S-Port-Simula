@@ -12,14 +12,7 @@ import bec.value.MemAddr;
 /**
  * 
  */
-public class REMOTE extends Instruction {
-	int instr;
-	int tag;
-	
-	public REMOTE(int instr) {
-		this.instr = instr;
-		parse();
-	}
+public abstract class REMOTE extends Instruction {
 
 	/**
 	 * addressing_instruction ::= remote attribute:tag | remotev attribute:tag
@@ -34,14 +27,10 @@ public class REMOTE extends Instruction {
 	 * designated component of that object. Note again that no qualification check is implied (neither
 	 * could it be done).
 	 */
-	public void parse() {
-//		Util.IERR("NOT IMPLEMENTED");
-		tag = Scode.inTag();
-	}
-
-	@Override
-	public void doCode() {
+	private REMOTE() {}
+	public static void ofScode(int instr) {
 //		CTStack.dumpStack();
+		int tag = Scode.inTag();
 		CTStack.checkTosRef();
 		CTStack.checkTosType(Type.T_OADDR); // CheckTosType(T_OADDR);
 		AddressItem adr = (AddressItem) CTStack.TOS;
@@ -58,15 +47,5 @@ public class REMOTE extends Instruction {
 //		CTStack.dumpStack();
 //		Global.PSEG.dump();
 	}
-	
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		return Scode.edInstr(instr) + ' ' + Scode.edTag(tag);
-	}
-	
 
 }

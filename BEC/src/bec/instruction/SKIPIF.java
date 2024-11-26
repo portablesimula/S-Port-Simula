@@ -4,19 +4,13 @@ import bec.S_Module;
 import bec.util.Relation;
 import bec.util.Util;
 
-public class SKIPIF extends Instruction {
-	Relation relation;
-//	Vector<ProgramElement> programElements;
-	
-	public SKIPIF() {
-		parse();
-	}
+public abstract class SKIPIF extends Instruction {
 
 	/**
 	 * skip_statement ::= skipif relation <program_element>* endskip
 	 */
-	public void parse() {
-		relation = Relation.ofScode();
+	public static void ofScode() {
+		Relation relation = Relation.ofScode();
 //		programElements = new Vector<ProgramElement>();
 //		while(Scode.nextByte() != Scode.S_ENDSKIP) {
 //			ProgramElement elt = ProgramElement.inProgramElement();
@@ -28,27 +22,6 @@ public class SKIPIF extends Instruction {
 	
 //		if(Scode.inputTrace > 3) print();
 		Util.IERR("NOT IMPLEMENTED");
-	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + "SKIPIF");
-//		for(ProgramElement elt:programElements) {
-//			elt.printTree(indent + 1);
-//		}
-		System.out.println(indent + "ENDSKIP");
-	}
-
-	public void print() {
-		System.out.println("SKIPIF " + relation);
-//		for(ProgramElement elt:programElements) {
-//			System.out.println("   " + elt);
-//		}
-		System.out.println("ENDSKIP");
-	}
-
-	public String toString() {
-		return "SKIPIF ... ENDSKIP";
 	}
 
 }

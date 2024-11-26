@@ -1,21 +1,14 @@
 package bec.instruction;
 
-public class GOTO extends Instruction {
+import bec.util.Util;
+
+public abstract class GOTO extends Instruction {
 	
 	/**
 	 * goto_instruction ::= goto
 	 */
-	public GOTO() {
+	public static void ofScode() {
+		Util.IERR("NOT IMPL");
 	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		return "GOTO";
-	}
-	
 
 }

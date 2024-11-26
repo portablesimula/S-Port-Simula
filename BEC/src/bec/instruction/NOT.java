@@ -3,12 +3,11 @@ package bec.instruction;
 import bec.compileTimeStack.CTStack;
 import bec.compileTimeStack.StackItem;
 import bec.util.Global;
-import bec.util.Scode;
 import bec.util.Type;
 import bec.util.Util;
 import bec.virtualMachine.SVM_NOT;
 
-public class NOT extends Instruction {
+public abstract class NOT extends Instruction {
 	
 	/**
 	 * arithmetic_instruction ::= not
@@ -18,11 +17,7 @@ public class NOT extends Instruction {
 	 * value(TOS) := not value(TOS);
 	 * TOS is replaced by a description of the negated TOS value.
 	 */
-	public NOT() {
-	}
-
-	@Override
-	public void doCode() {
+	public static void ofScode() {
 //		CTStack.dumpStack();
 //		Global.PSEG.dump();
 		StackItem tos = CTStack.TOS;
@@ -33,7 +28,7 @@ public class NOT extends Instruction {
 		    CTStack.checkTosArith();
 		    if( at == Type.T_REAL || at == Type.T_LREAL) Util.IERR("CODER.GQnot-1");
 	    }
-		Global.PSEG.emit(new SVM_NOT(at), "");
+		Global.PSEG.emit(new SVM_NOT(at), "NOT: ");
 		CTStack.pop();
 	    CTStack.pushTemp(at, "NOT: ");
 	    
@@ -41,15 +36,5 @@ public class NOT extends Instruction {
 //		Global.PSEG.dump("NOT: ");
 //		Util.IERR(""+this);
 	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		return "NOT";
-	}
-	
 
 }

@@ -26,12 +26,6 @@ public class RoutineDescr extends Descriptor {
 	public RoutineDescr(int kind, Tag tag) {
 		super(kind, tag);
 	}
-
-
-	@Override
-	public void doCode() {
-		// NOTHING
-	}
 	
 	public String toString() {
 		return "Routine " + tag + ", profile:" + prftag + ", adr:" + adr;
@@ -105,7 +99,8 @@ public class RoutineDescr extends Descriptor {
 		}
 	
 		Instruction instr;
-		while((instr = (Instruction) Instruction.inInstruction()) != null) { instr.doCode(); Scode.inputInstr(); }
+//		while((instr = (Instruction) Instruction.inInstruction()) != null) { Scode.inputInstr(); }
+		while(Instruction.inInstruction()) { Scode.inputInstr(); }
 	
 		if(Scode.curinstr != Scode.S_ENDROUTINE) Util.IERR("Missing - endroutine");
 		CTStack.checkStackEmpty();

@@ -1,21 +1,14 @@
 package bec.instruction;
 
-public class ZEROAREA extends Instruction {
+import bec.util.Util;
+
+public abstract class ZEROAREA extends Instruction {
 	
 	/**
 	 * area_initialisation ::= zeroarea
 	 */
-	public ZEROAREA() {
+	public static void ofScode() {
+		Util.IERR("NOT IMPL");
 	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		return "ZEROAREA";
-	}
-	
 
 }

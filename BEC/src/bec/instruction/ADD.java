@@ -6,7 +6,7 @@ import bec.util.Global;
 import bec.util.Type;
 import bec.virtualMachine.SVM_ADD;
 
-public class ADD extends Instruction {
+public abstract class ADD extends Instruction {
 	
 	/**
 	 * arithmetic_instruction ::= add
@@ -24,11 +24,7 @@ public class ADD extends Instruction {
 	 * type of the result is the same as the type of the operands. SOS is always the left operand, i.e.
 	 * SOS op TOS. All arithmetic on subranges of INT should be performed in full integer arithmetic. 
 	 */
-	public ADD() {
-	}
-
-	@Override
-	public void doCode() {
+	public static void ofScode() {
 		CTStack.dumpStack("ADD: ");
 		Global.PSEG.dump("ADD: ");
 		CTStack.checkTosArith(); CTStack.checkSosArith(); CTStack.checkSosValue(); CTStack.checkTypesEqual();
@@ -41,15 +37,6 @@ public class ADD extends Instruction {
 //		CTStack.dumpStack("ADD: ");
 //		Global.PSEG.dump("ADD: ");
 //		Util.IERR(""+this);
-	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		return "ADD";
 	}
 	
 }

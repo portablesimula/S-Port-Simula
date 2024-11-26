@@ -1,22 +1,14 @@
 package bec.instruction;
 
-import bec.util.Scode;
+import bec.util.Util;
 
-public class BITWISE_SHIFT extends Instruction {
+public abstract class BITWISE_SHIFT extends Instruction {
 	int instr;
 	
-	public BITWISE_SHIFT(int instr) {
-		this.instr = instr;
+	public static void ofScode(int instr) {
+//		BITWISE_SHIFT shift = new BITWISE_SHIFT();
+//		shift.instr = instr;
+		Util.IERR("");
 	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		return Scode.edInstr(instr);
-	}
-	
 
 }

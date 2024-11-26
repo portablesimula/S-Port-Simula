@@ -19,9 +19,7 @@ import bec.value.TextValue;
 import bec.value.Value;
 import bec.virtualMachine.SVM_PUSHC;
 
-public class PUSHC extends Instruction {
-	Type type;
-	Value value;
+public abstract class PUSHC extends Instruction {
 	
 	/**
 	 * stack_instruction ::= pushc value
@@ -68,7 +66,9 @@ public class PUSHC extends Instruction {
 	 * 
 	 * A descriptor of the given value is pushed onto the stack.
 	 */
-	public PUSHC() {
+	public static void ofScode() {
+		Type type = null;
+		Value value = null;
 		Scode.inputInstr();
 		switch(Scode.curinstr) {
 		    case Scode.S_C_INT:    type = Type.T_INT; value = new IntegerValue(); break;
@@ -94,10 +94,6 @@ public class PUSHC extends Instruction {
 		    case Scode.S_TEXT: 	   type = Type.T_TEXT; value = new TextValue(); break;
 		    default: Util.IERR("NOT IMPLEMENTED: " + Scode.edInstr(Scode.curinstr));
 		}
-	}
-	
-	@Override
-	public void doCode() {
 		ConstItem cns = new ConstItem(type, value);
 		CTStack.push(cns);
 		CTStack.dumpStack("PUSHC: "+value+": ");
@@ -110,19 +106,5 @@ public class PUSHC extends Instruction {
 //			Util.IERR(""+value);
 		}
 	}
-
-	@Override
-	public void print(final String indent) {
-		if(value instanceof RecordValue rVal) {
-			System.out.println(indent + "PUSHC");
-			rVal.print(indent + "   ");
-		} else System.out.println(indent + toString());
-		
-	}
-	
-	public String toString() {
-		return "PUSHC " + value;
-	}
-	
 
 }

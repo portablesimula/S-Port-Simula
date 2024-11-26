@@ -9,16 +9,12 @@ import bec.util.Scode;
 import bec.util.Util;
 import bec.virtualMachine.SVM_NOT_IMPL;
 
-public class IF extends Instruction {
+public abstract class IF extends Instruction {
 	Relation relation;
 	
-	// NOT SAVED:
-	Vector<Instruction> thenElements;
-	Vector<Instruction> elseElements;
-	
-	public IF() {
-		parse();
-	}
+//	// NOT SAVED:
+//	Vector<Instruction> thenElements;
+//	Vector<Instruction> elseElements;
 
 	/**
 	 * 	if_statement ::= if relation <program_element>* else_part
@@ -27,68 +23,43 @@ public class IF extends Instruction {
 	 * 			::= else <program_element>* endif
 	 * 			::= endif
 	 */
-	public void parse() {
-		relation = Relation.ofScode();
-		thenElements = new Vector<Instruction>();
+	public static void ofScode() {
+		Relation relation = Relation.ofScode();
+//		thenElements = new Vector<Instruction>();
+		
+		// DIV JUMP-Instruksjoner mangler
+		
 		LOOP: while(true) {
 			switch(Scode.nextByte()) {
 				case Scode.S_ELSE -> {
 //					System.out.println("IF: BEGIN ELSE");
 					Scode.inputInstr();
-					elseElements = new Vector<Instruction>();
-					while(Scode.nextByte() != Scode.S_ENDIF) {
-						readElement(elseElements);
-					}
+//					elseElements = new Vector<Instruction>();
+//					while(Scode.nextByte() != Scode.S_ENDIF) {
+//						readElement(elseElements);
+//					}
+					S_Module.programElements();
 					break LOOP;
 				}
 				case Scode.S_ENDIF -> { break LOOP; }
-				default -> { readElement(thenElements); }
+				default -> {
+//					readElement(thenElements);
+					S_Module.programElements();
+				}
 			}
 		}
 		
-		// PRØV NOE SÅNNT:
-//		S_Module.programElements();
-//		if(Scode.nextByte() == Scode.S_ELSE) {
-//			
-//		}
-//		SJEKK S_ENDIF
-//		
-//		Scode.inputInstr();
+//		Scode.inputInstr();  // ????
 	
 //		if(Scode.inputTrace > 3) printTree(0);
-//		Util.IERR("NOT IMPLEMENTED");
-	}
-	
-	private void readElement(Vector<Instruction> programElements) {
-		Instruction elt = (Instruction) Instruction.inInstruction();
-		if(elt == null) Util.IERR("Inconsistent instruction in IF");
-		programElements.add(elt);
-	}
-
-	@Override
-	public void doCode() {
-//		CTStack.dumpStack();
-//		Global.PSEG.dump();
 		Global.PSEG.emit(new SVM_NOT_IMPL(), "IF Statement");
+		Util.IERR("SJEKK DETTE");
 	}
 	
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + "IF " + relation);
-//		for(ProgramElement elt:thenElements) {
-//			elt.printTree(indent + 1);
-//		}
-//		if(elseElements != null) {
-//			System.out.println(indent + "ELSE");
-//			for(ProgramElement elt:elseElements) {
-//				elt.printTree(indent + 1);
-//			}			
-//		}
-		System.out.println(indent + "ENDIF");
-	}
-
-	public String toString() {
-		return "SKIPIF ... ENDSKIP";
-	}
+//	private void readElement(Vector<Instruction> programElements) {
+//		Instruction elt = (Instruction) Instruction.inInstruction();
+//		if(elt == null) Util.IERR("Inconsistent instruction in IF");
+//		programElements.add(elt);
+//	}
 
 }

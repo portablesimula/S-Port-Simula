@@ -1,21 +1,14 @@
 package bec.instruction;
 
-public class INITO extends Instruction {
+import bec.util.Util;
+
+public abstract class INITO extends Instruction {
 	
 	/**
 	 * temp_control ::= t-inito
 	 */
-	public INITO() {
+	public static void ofScode() {
+		Util.IERR("NOT IMPL");
 	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		return "INITO";
-	}
-	
 
 }

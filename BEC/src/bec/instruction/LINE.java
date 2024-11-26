@@ -2,14 +2,7 @@ package bec.instruction;
 
 import bec.util.Scode;
 
-public class LINE extends Instruction {
-	int kind;
-	int lineNo;
-	
-	public LINE(int kind) {
-		this.kind = kind;
-		parse();
-	}
+public abstract class LINE extends Instruction {
 
 	/**
 	 * 	info_setting
@@ -17,29 +10,8 @@ public class LINE extends Instruction {
 	 * 		::= line line:number
 	 * 		::= stmt line:number
 	 */
-	public void parse() {
-		Scode.curline = lineNo = Scode.inNumber();
+	public static void ofScode(int kind) {
+		Scode.curline = Scode.inNumber();	
 	}
-	
-	@Override
-	public void doCode() {
-		// TODO: HVA HER
-	}
-
-	@Override
-	public void print(final String indent) {
-		System.out.println(indent + toString());
-	}
-	
-	public String toString() {
-		String id = null;
-		switch(kind) {
-			case 0: id = "LINE ";
-			case 1: id = "DECL ";
-			case 2: id = "STMT ";
-		}
-		return id + lineNo;
-	}
-	
 
 }
