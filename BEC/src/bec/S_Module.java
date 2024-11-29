@@ -1,6 +1,5 @@
 package bec;
 
-import bec.descriptor.Kind;
 import bec.descriptor.LabelDescr;
 import bec.descriptor.ProfileDescr;
 import bec.descriptor.RoutineDescr;
@@ -28,51 +27,20 @@ public abstract class S_Module {
 	 * 		::= goto_statement | insert_statement
 	 * 		::= delete_statement
 	 */
-//	public static boolean programElement() {
-//		System.out.println("S_Module.programElements: CurInstr="+Scode.edInstr(Scode.curinstr));
-//		Thread.dumpStack();
-//		switch(Scode.curinstr) {
-//			case Scode.S_LABELSPEC:		LabelDescr.ofLabelSpec(); break;
-//			case Scode.S_LABEL:			LabelDescr.ofLabel(Tag.inTag()); break;
-//			case Scode.S_PROFILE:		ProfileDescr.ofProfile(); break;
-//			case Scode.S_ROUTINE:		RoutineDescr.ofRoutine(); break;
-//			case Scode.S_IF:			new IfStatement(); break;
-//			case Scode.S_SKIPIF:		new SkipifStatement(); break;
-//			case Scode.S_SAVE:			new ProtectStatement(); break;
-//			case Scode.S_INSERT:		new InsertStatement(false); break;
-//			case Scode.S_SYSINSERT:		new InsertStatement(true); break;
-//			default:{
-//				Object obj = Instruction.inInstruction();
-//				if(obj == null) return false;
-//				if(obj instanceof Instruction instr)
-//					instr.doCode();
-//			}
-//		}
-//		return true;
-//	}
-//
-//	public static void programElements() {
-//		while(programElement()) ;
-//	}
-//	
 	public static void programElements() {
 		LOOP: while(true) {
-//			Scode.inputInstr();
-			System.out.println("MONITOR.programElements: CurInstr="+Scode.edInstr(Scode.curinstr));
+//			System.out.println("S_Module.programElements: CurInstr="+Scode.edInstr(Scode.curinstr));
 			switch(Scode.curinstr) {
-				case Scode.S_LABELSPEC:		LabelDescr.ofLabelSpec(); break;
-				case Scode.S_LABEL:			LabelDescr.ofLabel(Tag.inTag()); break;
-				case Scode.S_PROFILE:		ProfileDescr.ofProfile(); break;
-				case Scode.S_ROUTINE:		RoutineDescr.ofRoutine(); break;
-				case Scode.S_IF:			new IfStatement(); break;
-				case Scode.S_SKIPIF:		new SkipifStatement(); break;
-				case Scode.S_SAVE:			new ProtectStatement(); break;
-				case Scode.S_INSERT:		new InsertStatement(false); break;
-				case Scode.S_SYSINSERT:		new InsertStatement(true); break;
-				default:{
-					Object obj = Instruction.inInstruction();
-					if(obj == null) break LOOP;
-				}
+				case Scode.S_LABELSPEC ->	LabelDescr.ofLabelSpec();
+				case Scode.S_LABEL ->		LabelDescr.ofLabel(Tag.ofScode());
+				case Scode.S_PROFILE ->		ProfileDescr.ofProfile();
+				case Scode.S_ROUTINE ->		RoutineDescr.ofRoutine();
+				case Scode.S_IF ->			new IfStatement();
+				case Scode.S_SKIPIF ->		new SkipifStatement();
+				case Scode.S_SAVE ->		new ProtectStatement();
+				case Scode.S_INSERT ->		new InsertStatement(false);
+				case Scode.S_SYSINSERT ->	new InsertStatement(true);
+				default -> { if(! Instruction.inInstruction()) break LOOP; }
 			}
 			Scode.inputInstr();
 		}

@@ -23,7 +23,7 @@ public class Attribute extends Descriptor {
 	}
 	
 	public Attribute(int rela) {
-		super(Kind.K_Attribute, Tag.inTag());
+		super(Kind.K_Attribute, Tag.ofScode());
 		this.rela = rela;
 		this.type = Type.ofScode();
 		this.size = type.size();
@@ -58,13 +58,7 @@ public class Attribute extends Descriptor {
 	public void write(AttributeOutputStream oupt) throws IOException {
 		if(Global.ATTR_OUTPUT_TRACE) System.out.println("LocDescr.Write: " + this);
 		oupt.writeKind(kind);
-//		oupt.writeShort(ModuleIO.chgType(tag));
 		tag.write(oupt);
-		
-//		if(type != null) {
-//			oupt.writeBoolean(true);
-//			type.write(oupt);
-//		} else oupt.writeBoolean(false);
 		type.write(oupt);
 		
 		oupt.writeShort(rela);
@@ -73,12 +67,7 @@ public class Attribute extends Descriptor {
 	}
 
 	public static Attribute read(AttributeInputStream inpt, int kind) throws IOException {
-//		int tag = inpt.readShort();
-//		tag = InsertStatement.current.chgInType(tag);
 		Tag tag = Tag.read(inpt);
-		
-//		boolean present = inpt.readBoolean();
-//		Type type = (present)? type = Type.read(inpt) : null;
 		Type type = Type.read(inpt);
 		
 		Attribute loc = new Attribute(kind, tag, type);

@@ -10,7 +10,8 @@
 
  -- MAIN Program:
  begin
- 	 insert envir0,modl01,modl02;
+-- 	 insert envir0,modl01,modl02;
+ 	 insert envir0xx,modl01xx,modl02xx;
 --      sysinsert rt,sysr,knwn,util;
 
     
@@ -28,5 +29,5 @@
 	call PEXERR(errorX)(666,none);
 	
 --	TEST_EXIT(444, "END PROGRAM");
-	TERMIN(0, "END PROGRAM");
+--	TERMIN(0, "END PROGRAM");
 end

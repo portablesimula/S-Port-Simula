@@ -12,8 +12,10 @@
 --%PASS 2 TRACE=1 -- Trace level
 --%TRACE 2 -- Output Trace
 
-Module MODL02("TST 1.0");
- begin insert envir0,modl01;
+Module MODL02xx("TST 1.0");
+ begin
+-- 	 insert envir0,modl01;
+ 	 insert envir0xx,modl01xx;
 
 
  Visible known("TRFREL") TRFREL; --- Text reference relation ---
@@ -51,8 +53,6 @@ end;
  -- import range(0:MAX_ENO) eno; ref(txtent) fil;
  begin
  	 label cont; --er_no:=eno;
- 	 integer ii;
- 	 ii := 8888;
  end;
    
 end;

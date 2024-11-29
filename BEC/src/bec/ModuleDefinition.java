@@ -67,7 +67,7 @@ public class ModuleDefinition extends S_Module {
 //	       endif;
 		Global.modident = Scode.inString();
 		Global.modcheck = Scode.inString();
-		Global.moduleID = Global.modident;
+		Global.moduleID = Global.modident.toUpperCase();
 		String sourceID = Global.getSourceID();
 		Global.CSEG = new DataSegment("CSEG_" + sourceID, Kind.K_SEG_CONST);
 		Global.DSEG = new DataSegment("DSEG_" + sourceID, Kind.K_SEG_DATA);
@@ -97,11 +97,11 @@ public class ModuleDefinition extends S_Module {
 		Global.xTAGTAB = new Array<Integer>();
 		int nXtag = 0;
 		while(Scode.curinstr == Scode.S_TAG) {
-			int itag = Scode.inTag();
+			int itag = Scode.ofScode();
 			int xtag = Scode.inNumber();
 			Global.iTAGTAB.set(xtag, itag); // Index xTag --> value iTag
 			Global.xTAGTAB.set(itag, xtag); // Index iTag --> value xTag
-			System.out.println("MONITOR: xtag="+xtag+"  itag="+itag);
+//			System.out.println("MONITOR: xtag="+xtag+"  itag="+itag);
 			Scode.inputInstr();
 			if(xtag > nXtag) nXtag = xtag;
 		}
@@ -160,7 +160,7 @@ public class ModuleDefinition extends S_Module {
 	 * 		::= info_setting
 	 */
 	private static boolean viisible() {
-		System.out.println("MONITOR.viisible: CurInstr="+Scode.edInstr(Scode.curinstr));
+//		System.out.println("MONITOR.viisible: CurInstr="+Scode.edInstr(Scode.curinstr));
 		switch(Scode.curinstr) {
 			case Scode.S_CONSTSPEC:		ConstDescr.ofConstSpec(); break;
 			case Scode.S_LABELSPEC:		LabelDescr.ofLabelSpec(); break;
@@ -175,7 +175,7 @@ public class ModuleDefinition extends S_Module {
 			case Scode.S_SETSWITCH:		setSwitch(); break;
 			case Scode.S_INFO:			Util.WARNING("Unknown info: " + Scode.inString());
 			default:
-				System.out.println("MONITOR.viisible: CurInstr="+Scode.edInstr(Scode.curinstr) + " TERMINATES VIISIBLE");
+//				System.out.println("MONITOR.viisible: CurInstr="+Scode.edInstr(Scode.curinstr) + " TERMINATES VIISIBLE");
 				return false;
 		}
 		return true;

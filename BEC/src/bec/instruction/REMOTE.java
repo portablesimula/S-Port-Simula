@@ -3,8 +3,8 @@ package bec.instruction;
 import bec.compileTimeStack.AddressItem;
 import bec.compileTimeStack.CTStack;
 import bec.descriptor.Attribute;
-import bec.util.Global;
 import bec.util.Scode;
+import bec.util.Tag;
 import bec.util.Type;
 import bec.util.Util;
 import bec.value.MemAddr;
@@ -29,13 +29,14 @@ public abstract class REMOTE extends Instruction {
 	 */
 	private REMOTE() {}
 	public static void ofScode(int instr) {
-//		CTStack.dumpStack();
-		int tag = Scode.inTag();
+		CTStack.dumpStack("REMOTE-1: ");
+		Tag tag = Tag.ofScode();
 		CTStack.checkTosRef();
 		CTStack.checkTosType(Type.T_OADDR); // CheckTosType(T_OADDR);
 		AddressItem adr = (AddressItem) CTStack.TOS;
-		Util.GQfetch("REMOTE-1 " + Scode.edTag(tag) + ": ");
-		Attribute attr = (Attribute) Global.getMeaning(tag);
+		Util.GQfetch("REMOTE-1 " + tag + ": ");
+		CTStack.dumpStack("REMOTE-2: ");
+		Attribute attr = (Attribute) tag.getMeaning();
 		CTStack.pop();
 		MemAddr memAddr = new MemAddr(null,0); // a
 		adr = new AddressItem(attr.type, attr.rela, memAddr);
@@ -43,7 +44,7 @@ public abstract class REMOTE extends Instruction {
 //        System.out.println("REMOTE.doCode: adr="+adr);
 		CTStack.push(adr);
         if(instr == Scode.S_REMOTEV)
-        	Util.GQfetch("REMOTE-2 " + Scode.edTag(tag) + ": ");
+        	Util.GQfetch("REMOTE-2 " + tag + ": ");
 //		CTStack.dumpStack();
 //		Global.PSEG.dump();
 	}

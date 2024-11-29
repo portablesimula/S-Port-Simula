@@ -17,7 +17,7 @@ public abstract class RTStack {
 		
 		switch(type.tag) {
 		case Scode.TAG_TEXT:
-			System.out.println("RTStack.push: " + value.getClass().getSimpleName());
+//			System.out.println("RTStack.push: " + value.getClass().getSimpleName());
 			TextValue text = (TextValue) value;
 			push(Type.T_OADDR, text.addr); // CHRADR.OADDR
 			push(Type.T_INT, null);        // CHRADR.Offset
@@ -30,7 +30,7 @@ public abstract class RTStack {
 				stack.push(null);
 				stack.push(null);
 			} else {
-				System.out.println("RTStack.push: " + value.getClass().getSimpleName());
+//				System.out.println("RTStack.push: " + value.getClass().getSimpleName());
 //				RepetitionValue repval = (RepetitionValue) value;
 //				for(Value val:repval.values) {
 //					push(type, value);
@@ -40,7 +40,7 @@ public abstract class RTStack {
 				Util.IERR("");
 			}
 		}
-		System.out.println("RTStack.push: " + value);
+//		System.out.println("RTStack.push: " + value);
 		stack.push(value);
 //		Util.IERR("");
 	}

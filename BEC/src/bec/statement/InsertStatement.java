@@ -43,8 +43,8 @@ public class InsertStatement {
 		modid = Scode.inString();
 		check = Scode.inString();
 		extid = Scode.inString();
-		bias = Scode.inTag();
-		limit = Scode.inTag();
+		bias = Scode.ofScode();
+		limit = Scode.ofScode();
 
 		if(Global.ATTR_INPUT_TRACE)
 			System.out.println("**************   Begin  -  Input-module  " + modid + "  " + check + "   **************");
@@ -56,9 +56,9 @@ public class InsertStatement {
 			e.printStackTrace();
 			Util.IERR("ERROR READING: Input-module  " + modid + "  " + check);
 		}
-//		if(Global.ATTR_INPUT_TRACE)
+		if(Global.ATTR_INPUT_TRACE)
 			System.out.println("**************   Endof  -  Input-module  " + modid + "  " + check + "   **************");
-		Global.dumpDISPL("END INSERT: ");
+//		Global.dumpDISPL("END INSERT: ");
 //		Util.IERR("");
 	}
 	
@@ -77,7 +77,7 @@ public class InsertStatement {
 		LOOP:while(true) {
 			int prevKind = kind;
 			kind = inpt.readKind();
-			System.out.println("InsertStatement.readDescriptors'LOOP: " + Kind.edKind(kind));
+//			System.out.println("InsertStatement.readDescriptors'LOOP: " + Kind.edKind(kind));
 			if(kind == Kind.K_EndModule) break LOOP;
 			switch(kind) {
 				case Kind.K_RECTYPES:		Type.readRECTYPES(inpt); break;

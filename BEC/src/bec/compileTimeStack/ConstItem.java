@@ -38,7 +38,10 @@ public class ConstItem extends Temp {
 		System.out.println("ConstItem.convert: " + value.type + " ==> " + totype);
 		boolean ILL = false;
 		switch(value.type.tag) {
-			case Scode.TAG_TEXT: if(totype != Type.T_STRING) ILL = true; break;
+			case Scode.TAG_TEXT:
+				System.out.println("ConstItem.convert: totype="+totype+" HASH:"+totype.hashCode());
+				System.out.println("ConstItem.convert: String="+Type.T_STRING+" HASH:"+Type.T_STRING.hashCode());
+				if(totype != Type.T_STRING) ILL = true; break;
 			default: Util.IERR("FYLL PÅ FLERE CASER: " + value.type);
 		}
 //		      case 0:T_max (TOS.type)

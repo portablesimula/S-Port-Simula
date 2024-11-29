@@ -22,7 +22,7 @@ public class AttributeInputStream {
 //	 */
 //	public ObjectReferenceMap objectReference;
 	
-	private boolean TRACE = true;//false; //true;
+	private boolean TRACE = false; //true;
 
     public AttributeInputStream(InputStream inpt) throws IOException {
     	this.inpt = new DataInputStream(inpt);
@@ -47,13 +47,6 @@ public class AttributeInputStream {
     	if(TRACE) System.out.println("AttributeInputStream.readInstr: "+curinstr+':'+Scode.edInstr(curinstr));
 //    	return curinstr;
 	}
-
-
-//	public int readTag(SyntaxClass displayEntry) throws IOException {
-//		int tag = readTag();
-//		Global.Display.set(tag, displayEntry);
-//		return tag;
-//	}
 
     public int readTagID() throws IOException {
     	String ident = readString();

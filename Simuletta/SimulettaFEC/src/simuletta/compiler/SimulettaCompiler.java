@@ -100,14 +100,14 @@ public class SimulettaCompiler {
 	//title ******   I n i t i a l i z a t i o n   ******
 
 	private static void declareInlineRoutines() {
-	      def_inlineRoutine("zeroarea",InlineRoutine.Kind.ZEROAREA);
-	      def_inlineRoutine("initarea",InlineRoutine.Kind.INITAREA);
-	      def_inlineRoutine("dinitarea",InlineRoutine.Kind.DINITAREA);
-	      def_inlineRoutine("init_pointer",InlineRoutine.Kind.INITO);
-	      def_inlineRoutine("set_pointer",InlineRoutine.Kind.SETO);
-	      def_inlineRoutine("max_temps",InlineRoutine.Kind.MAXTEMPS);
-	      def_inlineRoutine("length_temps",InlineRoutine.Kind.PUSHLEN);
-	      def_inlineRoutine("get_pointer",InlineRoutine.Kind.GETO);
+//	      def_inlineRoutine("zeroarea",InlineRoutine.Kind.ZEROAREA);
+//	      def_inlineRoutine("initarea",InlineRoutine.Kind.INITAREA);
+//	      def_inlineRoutine("dinitarea",InlineRoutine.Kind.DINITAREA);
+//	      def_inlineRoutine("init_pointer",InlineRoutine.Kind.INITO);
+//	      def_inlineRoutine("set_pointer",InlineRoutine.Kind.SETO);
+//	      def_inlineRoutine("max_temps",InlineRoutine.Kind.MAXTEMPS);
+//	      def_inlineRoutine("length_temps",InlineRoutine.Kind.PUSHLEN);
+//	      def_inlineRoutine("get_pointer",InlineRoutine.Kind.GETO);
 
 //		  def_inlineRoutine("set_display",SystemFunction.Kind.SETOBJ);
 //	      def_inlineRoutine("display",SystemFunction.Kind.GETOBJ);

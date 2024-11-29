@@ -119,7 +119,7 @@ public class CTStack {
 	}
 
 	public static void checkTosArith() {
-		System.out.println("CTStack.checkTosArith: " + TOS.type);
+//		System.out.println("CTStack.checkTosArith: " + TOS.type);
 		switch(TOS.type.tag) {
 			case Scode.TAG_INT, Scode.TAG_SINT, Scode.TAG_REAL, Scode.TAG_LREAL: break; 
 			default: STKERR("Illegal type of TOS");
@@ -288,8 +288,8 @@ public class CTStack {
 			Global.PSEG.dump("getTosValueIn86'Address: ");
 			Util.IERR("NOT IMPL");
 		} else if(tos instanceof Temp) {
-			Global.PSEG.emit(new SVM_POP2REG(reg), "getTosValueIn86'Temp: ");
-			Global.PSEG.dump("getTosValueIn86'Temp: ");
+//			Global.PSEG.emit(new SVM_POP2REG(reg), "getTosValueIn86'Temp: ");
+//			Global.PSEG.dump("getTosValueIn86'Temp: ");
 //			Util.IERR("NOT IMPL");			
 		} else if(tos instanceof ConstItem) {
 			Global.PSEG.dump("getTosValueIn86: ");

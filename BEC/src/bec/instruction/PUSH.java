@@ -5,13 +5,11 @@ import bec.compileTimeStack.CTStack;
 import bec.descriptor.ConstDescr;
 import bec.descriptor.Descriptor;
 import bec.descriptor.Variable;
-import bec.util.Global;
 import bec.util.Scode;
+import bec.util.Tag;
 import bec.util.Util;
 
 public abstract class PUSH extends Instruction {
-	int instr;
-	int tag;
 	
 	/**
 	 * stack_instruction ::= push obj:tag | pushv obj:tag
@@ -20,8 +18,8 @@ public abstract class PUSH extends Instruction {
 	 */
 	public static void ofScode(int instr) {
 //		System.out.println("PUSH.doCode: tag="+Scode.edTag(tag)+"  "+tag);
-		int tag = Scode.inTag();
-		Descriptor x = Global.getMeaning(tag);
+		Tag tag = Tag.ofScode();
+		Descriptor x = tag.getMeaning();
 		if(x instanceof Variable var) {
 //			System.out.println("PUSH.doCode: var="+var);
 //			CTStack.push(new AddressItem(var.tag.val,0,var.address));

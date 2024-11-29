@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import bec.S_Module;
 import bec.descriptor.Descriptor;
+import bec.descriptor.ProfileDescr;
 import bec.segment.DataSegment;
 import bec.segment.ProgramSegment;
 import bec.segment.Segment;
@@ -39,9 +40,9 @@ public class Global {
 //	}
 	
 	public static Array<Descriptor> DISPL;
-	public static Descriptor getMeaning(int tag) {
-		Descriptor x = DISPL.get(tag);
-		if(x == null) Util.IERR("Missing meaning: " + Scode.edTag(tag));
+	public static Descriptor getMeaning(Tag tag) {
+		Descriptor x = DISPL.get(tag.val);
+		if(x == null) Util.IERR("Missing meaning: " + tag);
 		return(x);
 	}
 	

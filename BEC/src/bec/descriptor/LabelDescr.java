@@ -21,8 +21,8 @@ public class LabelDescr extends Descriptor {
 	}
 	
 	public static LabelDescr ofLabelSpec() {
-//		Tag tag = Tag.inTag();
-		Tag tag = Tag.inTag();
+//		Tag tag = Tag.ofScode();
+		Tag tag = Tag.ofScode();
 		LabelDescr lab = (LabelDescr) Global.DISPL.get(tag.val);
 		if(lab != null) Util.IERR("");
 		lab = new LabelDescr(Kind.K_IntLabel,tag);
@@ -59,7 +59,7 @@ public class LabelDescr extends Descriptor {
 	}
 
 	public static LabelDescr read(AttributeInputStream inpt, int kind) throws IOException {
-		System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  BEGIN IntDescr.Read");
+//		System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  BEGIN IntDescr.Read");
 		Tag tag = Tag.read(inpt);
 		LabelDescr lab = new LabelDescr(kind, tag);
 		System.out.println("AFTER NEW CONST: "+lab);

@@ -10,7 +10,7 @@ import bec.util.Scode;
 public class AttributeOutputStream {
 	DataOutputStream oupt;
 
-	private boolean TRACE = true;//false; //true;
+	private boolean TRACE = false; //true;
 
     public AttributeOutputStream(OutputStream oupt) throws IOException {
     	this.oupt = new DataOutputStream(oupt);

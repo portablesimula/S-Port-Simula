@@ -30,6 +30,12 @@ public class Instruction { // extends ProgramElement {
 
 		return instructionSet;
 	}
+	public static void inInstructions() {
+		LOOP:while(true) {
+			if(! inInstruction()) break LOOP;
+			Scode.inputInstr();
+		}
+	}
 
 	
 //	public static void ofScode() {
@@ -60,7 +66,7 @@ public class Instruction { // extends ProgramElement {
 	 * 		::= info_setting | macro_call
 	 */
 	public static boolean inInstruction() {
-		System.out.println("Parse.instruction: "+Scode.edInstr(Scode.curinstr));
+//		System.out.println("Parse.instruction: "+Scode.edInstr(Scode.curinstr));
 		switch(Scode.curinstr) {
 			case Scode.S_CONSTSPEC ->   ConstDescr.ofConstSpec();
 			case Scode.S_CONST ->	    ConstDescr.ofConstDef();
@@ -89,9 +95,9 @@ public class Instruction { // extends ProgramElement {
 			case Scode.S_BSEG ->        BSEG.ofScode();
 			case Scode.S_IF ->          IF.ofScode();
 			case Scode.S_SKIPIF ->      SKIPIF.ofScode();
-			case Scode.S_PRECALL ->     CallInstruction.ofScode(0);
-			case Scode.S_ASSCALL ->     CallInstruction.ofScode(0);
-			case Scode.S_REPCALL ->     CallInstruction.ofScode(Scode.inByte());
+			case Scode.S_PRECALL ->     CALL.ofScode(0);
+			case Scode.S_ASSCALL ->     CALL.ofScode(0);
+			case Scode.S_REPCALL ->     CALL.ofScode(Scode.inByte());
 			case Scode.S_GOTO ->        GOTO.ofScode();
 			case Scode.S_PUSHLEN ->     PUSHLEN.ofScode();
 			case Scode.S_SAVE ->        SAVE.ofScode(); //   ProtectConstruction(false)

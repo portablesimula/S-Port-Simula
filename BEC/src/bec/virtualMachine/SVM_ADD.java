@@ -25,7 +25,7 @@ public class SVM_ADD extends SVM_Instruction {
 		Value tos = RTStack.pop();
 		Value sos = RTStack.pop();
 		Value res = (tos == null)? sos : tos.add(sos);
-		System.out.println("SVM_ADD: " + tos + " + " + sos + " = " + res);
+//		System.out.println("SVM_ADD: " + tos + " + " + sos + " = " + res);
 		RTStack.push(type, res);
 		Global.PSC.ofst++;
 //		Util.IERR("");

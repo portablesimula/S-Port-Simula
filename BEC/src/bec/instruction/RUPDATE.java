@@ -25,7 +25,7 @@ public abstract class RUPDATE extends Instruction {
 		CTStack.checkTosRef(); CTStack.checkSosValue(); CTStack.checkTypesEqual();
 		MemAddr adr = Util.getTosDstAdr();
 		StackItem tos = CTStack.pop();
-		CTStack.dumpStack("RUPDATE: ");
+//		CTStack.dumpStack("RUPDATE: ");
 		Global.PSEG.emit(new SVM_POP2MEM(adr, tos.size), "RUPDATE: "); // Store into adr
 //		Global.PSEG.dump();
 	}

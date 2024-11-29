@@ -12,8 +12,8 @@
 --%PASS 2 TRACE=1 -- Trace level
 --%TRACE 2 -- Output Trace
 
-Module MODL01("TST 1.0");
- begin insert envir0;
+Module MODL01xx("TST 1.0");
+ begin insert envir0xx;
 
        -----------------------------------------------------------------------
        ---                                                                 ---

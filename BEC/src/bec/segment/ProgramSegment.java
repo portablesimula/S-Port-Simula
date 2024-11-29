@@ -69,7 +69,7 @@ public class ProgramSegment extends Segment {
 	@Override
 	public void write(AttributeOutputStream oupt) throws IOException {
 		if(Global.ATTR_OUTPUT_TRACE) System.out.println("ProgramSegment.Write: " + this);
-		this.dump("ProgramSegment.Write: ");
+//		this.dump("ProgramSegment.Write: ");
 //		oupt.writeInstr(Scode.S_BSEG);
 		oupt.writeKind(segmentKind);
 		oupt.writeString(ident);
@@ -88,7 +88,7 @@ public class ProgramSegment extends Segment {
 //		int segmentKind = inpt.readKind();
 		int segmentKind = Kind.K_SEG_CODE;
 		String ident = inpt.readString();
-		System.out.println("DataSegment.readObject: ident="+ident+", segmentKind="+segmentKind);
+//		System.out.println("ProgramSegment.readObject: ident="+ident+", segmentKind="+segmentKind);
 		ProgramSegment seg = new ProgramSegment(ident, segmentKind, inpt);
 		if(Global.ATTR_INPUT_DUMP) seg.dump("ProgramSegment.readObject: ");
 //		Util.IERR("");

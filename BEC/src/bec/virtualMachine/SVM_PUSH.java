@@ -35,11 +35,11 @@ public class SVM_PUSH extends SVM_Instruction {
 	@Override
 	public void execute() {
 		DataSegment dseg = (DataSegment) addr.segment();
-		dseg.dump("SVM_PUSH: " + addr + ", count=" + count);
+//		dseg.dump("SVM_PUSH: " + addr + ", count=" + count);
 		int ofst = addr.ofst;
 		for(int i=0;i<count;i++) {
 			Value value = dseg.load(ofst++);
-			System.out.println("SVM_PUSH: " + value);
+//			System.out.println("SVM_PUSH: " + value);
 			RTStack.push(type, value);
 		}
 		Global.PSC.ofst++;

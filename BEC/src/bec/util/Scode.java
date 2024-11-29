@@ -187,14 +187,14 @@ public class Scode {
 		return n;
 	}	
 
-//	public static int inTag(SyntaxClass displayEntry) {
+//	public static int ofScode(SyntaxClass displayEntry) {
 //		Util.IERR("DO NOT USE THIS METHOD");
-//		int tag = inTag();
+//		int tag = ofScode();
 //		Global.Display.set(tag, displayEntry);
 //		return tag;
 //	}
 	
-	public static int inTag() {
+	public static int ofScode() {
 		int t = get2Bytes();
 		if(t == 0) {
 			t = get2Bytes();
@@ -205,7 +205,7 @@ public class Scode {
 		if(Global.SCODE_INPUT_TRACE) {
 			traceBuff.append(" "+edTag(t));
 		}
-		System.out.println("Scode.inTag: " + t);
+//		System.out.println("Scode.ofScode: " + t);
 		return t;
 	}
 	
@@ -558,7 +558,7 @@ public static String edInstr(int i) {
 		case S_IF: return("IF");
 		case S_ELSE: return("ELSE");
 		case S_ENDIF: return("ENDIF");
-		case S_PRECALL: return("PRECAL");
+		case S_PRECALL: return("PRECALL");
 		case S_ASSPAR: return("ASSPAR");
 		case S_ASSREP: return("ASSREP");
 		case S_CALL: return("CALL");

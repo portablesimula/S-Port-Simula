@@ -14,8 +14,8 @@ public class Tag {
 		this.val = val;
 	}
 	
-	public static Tag inTag() {
-		return new Tag(Scode.inTag());
+	public static Tag ofScode() {
+		return new Tag(Scode.ofScode());
 	}
 	
 	public String ident() {
@@ -23,7 +23,7 @@ public class Tag {
 	}
 	
 	public Descriptor getMeaning() {
-		return Global.getMeaning(val);
+		return Global.getMeaning(this);
 	}
 	
 	private static int xTag(int t) { // export range(0:MaxType) tx;

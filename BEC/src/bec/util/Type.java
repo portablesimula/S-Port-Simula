@@ -37,7 +37,7 @@ public class Type {
 	 */
 //	public Type() {
 	public static Type ofScode() {
-		int tag = Scode.inTag();
+		int tag = Scode.ofScode();
 		if(tag == Scode.TAG_INT) {
 			if(Scode.accept(Scode.S_RANGE)) {
 				//range = new Range();
@@ -46,7 +46,7 @@ public class Type {
 			}
 		}
 		if(Scode.accept(Scode.S_FIXREP)) Util.IERR("DETTE ER EN 'ResolvedType' - HVA NÅ ?");
-		System.out.println("NEW Type.ofScode: " + Scode.edTag(tag));
+//		System.out.println("NEW Type.ofScode: " + Scode.edTag(tag));
 		Type type = TMAP.get(tag);
 //		Util.IERR("SJEKK DETTE: " + type);
 		if(type == null) {
@@ -66,9 +66,12 @@ public class Type {
 		Type type = new Type(rec.tag.val, rec.size, 0);
 		type.pntmap = rec.pntmap;
 		type.comment = "From " + rec;
-		if(TMAP.get(rec.tag) !=null) Util.IERR("Alredy defined: " + type);
-		TMAP.put(rec.tag.val, type);
-		RECTYPES.add(type);
+		if(TMAP.get(rec.tag.val) != null) {
+			if(rec.tag.val != Scode.TAG_STRING)	Util.IERR("Already defined: " + type);
+		} else {
+			TMAP.put(rec.tag.val, type);
+			RECTYPES.add(type);
+		}
 //		System.out.println("DataType.newRecType: " + Scode.edTag(tag) + ", size="+size);
 	}
 
@@ -197,7 +200,7 @@ public class Type {
 
 	public static Type read(AttributeInputStream inpt) throws IOException {
 		int tag = inpt.readTag();
-		System.out.println("NEW Type(inpt): " + Scode.edInstr(tag));
+//		System.out.println("NEW Type(inpt): " + Scode.edInstr(tag));
 		Type type = TMAP.get(tag);
 //		Util.IERR("SJEKK DETTE");
 		return type;

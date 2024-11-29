@@ -23,14 +23,13 @@ public class SVM_RETURN extends SVM_Instruction {
 	
 	@Override	
 	public void execute() {
-//		System.out.println("SVM_CALL.execute: ReturnAddress=" + retur);
-//		prf.DSEG.store(0, retur);
-//		prf.DSEG.dump("SVM_CALL.execute: ");
-		System.out.println("SVM_RETURN.execute: returAddr=" + returAddr);
+//		returAddr.segment().dump("SVM_RETURN.execute: ");
+//		System.out.println("SVM_RETURN.execute: returAddr=" + returAddr);
+		
 		DataSegment DSEG = (DataSegment) returAddr.segment();
-		DSEG.dump("SVM_RETURN.execute: ");
+//		DSEG.dump("SVM_RETURN.execute: ");
 		MemAddr padr = (MemAddr) DSEG.load(returAddr.ofst);
-		System.out.println("SVM_RETURN.execute: padr=" + padr);
+//		System.out.println("SVM_RETURN.execute: padr=" + padr);
 		Global.PSC = padr;
 //		Util.IERR("");
 	}

@@ -16,7 +16,7 @@ public abstract class POP extends Instruction {
 //		CTStack.dumpStack();
 		if(CTStack.TOS instanceof ProfileItem) Util.IERR("Illegal pop of profileItem ");
 		CTStack.pop();
-		CTStack.dumpStack("POP: ");
+//		CTStack.dumpStack("POP: ");
 	}
 
 }

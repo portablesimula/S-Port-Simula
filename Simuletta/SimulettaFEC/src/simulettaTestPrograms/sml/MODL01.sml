@@ -107,5 +107,8 @@ visible routine TEST_SWITCH; begin
       endcase;
    end;
    
+visible routine TEST_EXIT; import integer code; infix(string) msg;  begin
+			TERMIN(code, msg);
+	end;   
 end;
 

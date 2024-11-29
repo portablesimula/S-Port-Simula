@@ -18,6 +18,10 @@ public class Segment { // extends Descriptor {
 		this.segmentKind = segmentKind;
 	}
 
+	public static Segment find(String ident) {
+		return Global.SEGMAP.get(ident);
+	}
+
 	public static Segment lookup(String ident) {
 		Segment seg = Global.SEGMAP.get(ident);
 		if(seg == null) {

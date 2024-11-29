@@ -17,7 +17,6 @@ import bec.value.RepetitionValue;
 import bec.value.Value;
 
 public class ConstDescr extends Descriptor {
-//	int tag;
 	public Type type;
 	public MemAddr address;
 //	public QuantityDescriptor quant;
@@ -42,12 +41,12 @@ public class ConstDescr extends Descriptor {
 	 *		::= const const:spectag quantity_descriptor repetition_value
 	 */
 	public static ConstDescr ofConstSpec() {
-//		Tag tag = Tag.inTag();
-		Tag tag = Tag.inTag();
+//		Tag tag = Tag.ofScode();
+		Tag tag = Tag.ofScode();
 		ConstDescr cnst = (ConstDescr) Global.DISPL.get(tag.val);
 		if(cnst != null) Util.IERR("New CONSPEC but cnst="+cnst);
 		cnst = new ConstDescr(Kind.K_Coonst, tag);
-		System.out.println("NEW ConstDescr.ofConstSpec: "+cnst);
+//		System.out.println("NEW ConstDescr.ofConstSpec: "+cnst);
 		
 //		cnst.quant = new QuantityDescriptor();
 		cnst.type = Type.ofScode();
@@ -62,8 +61,8 @@ public class ConstDescr extends Descriptor {
 		
 	}
 	public static ConstDescr ofConstDef() {
-//		Tag tag = Tag.inTag();
-		Tag tag = Tag.inTag();
+//		Tag tag = Tag.ofScode();
+		Tag tag = Tag.ofScode();
 		ConstDescr cnst = (ConstDescr) Global.DISPL.get(tag.val);
 		if(cnst == null) {
 			cnst = new ConstDescr(Kind.K_Coonst, tag);
@@ -127,15 +126,13 @@ public class ConstDescr extends Descriptor {
 	}
 
 	public static ConstDescr read(AttributeInputStream inpt) throws IOException {
-		System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  BEGIN CONST.Read");
-//		int tag = inpt.readShort();
-//		tag = InsertStatement.current.chgInType(tag);
+//		System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  BEGIN CONST.Read");
 		Tag tag = Tag.read(inpt);
 		ConstDescr cns = new ConstDescr(Kind.K_Coonst, tag);
-		System.out.println("AFTER NEW CONST: "+cns);
+//		System.out.println("AFTER NEW CONST: "+cns);
 		cns.type = Type.read(inpt);
 		cns.address = MemAddr.read(inpt);
-		System.out.println("AFTER NEW MEMADDR: "+cns);
+//		System.out.println("AFTER NEW MEMADDR: "+cns);
 //		Util.IERR("Static Method 'readObject' needs a redefiniton");
 		return(cns);
 	}

@@ -5,6 +5,7 @@ import bec.compileTimeStack.CTStack;
 import bec.descriptor.Attribute;
 import bec.util.Global;
 import bec.util.Scode;
+import bec.util.Tag;
 import bec.util.Util;
 import bec.virtualMachine.SVM_NOT_IMPL;
 
@@ -28,9 +29,9 @@ public abstract class SELECT extends Instruction {
 	 */
 	public static void ofScode(int instr) {
 //		CTStack.dumpStack();
-		int tag = Scode.inTag();
+		Tag tag = Tag.ofScode();
 		CTStack.checkTosRef();
-		Attribute attr = (Attribute) Global.getMeaning(tag);
+		Attribute attr = (Attribute) tag.getMeaning();
 		CTStack.TOS.type = attr.type;
 		AddressItem adr = (AddressItem) CTStack.TOS;
 		adr.offset = adr.offset + attr.rela;
@@ -41,7 +42,7 @@ public abstract class SELECT extends Instruction {
 			Global.PSEG.emit(new SVM_NOT_IMPL(), "SELECT: ");
 //             qPOPKill(AllignFac);
 		}
-		if(instr == Scode.S_SELECTV) Util.GQfetch("SELECTV " + Scode.edTag(tag) + ": ");
+		if(instr == Scode.S_SELECTV) Util.GQfetch("SELECTV " + tag + ": ");
 //		CTStack.dumpStack();
 //		Util.IERR("");
 	}

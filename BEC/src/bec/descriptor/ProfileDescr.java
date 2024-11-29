@@ -10,60 +10,40 @@ import bec.segment.Segment;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Tag;
-import bec.util.Type;
 import bec.util.Util;
 import bec.value.MemAddr;
 import bec.virtualMachine.SVM_SYSCALL;
 
-//Record ProfileDescr:Descriptor;  -- K_ProfileDescr     SIZE = (6+npar*2) align 4
-//begin range(0:MaxByte) npar;     -- No.of parameters
-//      range(0:1) WithExit;
-//      range(0:MaxParByte) nparbyte;
-//      range(0:P_max) pKind;
-//      infix(ParamSpec) Par(0);   -- Parameter Specifications
-//end;
 public class ProfileDescr extends Descriptor {
-	public int npar;     // No.of parameters
-//	boolean withExit;
-//	int nparbyte;
 	public int pKind; // Peculiar Profile Kind
 	public Vector<Tag> params;
 	private Tag exportTag;
-	MemAddr returAddr;
+	MemAddr returSlot;
 	public DataSegment DSEG;
 	
 	//	NOT SAVED:
-	public Vector<Variable> imports;
-	public Variable export;
+	private Vector<Variable> imports;
+	private Variable export;
 	public Variable exit;
 	
 	public int bodyTag;    // peculiar
 	private String nature; // peculiar
 	public String ident;   // peculiar
-
-	
-//	Record ParamSpec; info "TYPE";
-//	begin range(0:MaxType) type;
-//	      range(0:MaxByte) count;
-//	end;
-//	class ParamSpec {
-//		Type type;
-//		int count;
-//		public void write(AttributeOutputStream oupt) throws IOException {
-//			oupt.writeShort(type);
-//			oupt.writeShort(count);
-//		}
-//	}
 	
 	private ProfileDescr(int kind, Tag tag) {
 		super(kind, tag);
-//		System.out.println("NEW ProfileDescr: " + Scode.edTag(tag));
+//		System.out.println("NEW ProfileDescr: " + tag);
 	}
 	
 	public Variable getExport() {
 		if(exportTag == null) return null;
-		Variable export = (Variable) Global.getMeaning(exportTag.val);
+		Variable export = (Variable) exportTag.getMeaning();
 		return export;
+	}
+	
+	private String dsegIdent() {
+		return "DSEG_" + Global.moduleID + '_' + tag.ident();
+
 	}
 
 //	%title ***   I n p u t   P r o f i l e   ***
@@ -86,15 +66,14 @@ public class ProfileDescr extends Descriptor {
 	 * 			::= exit return:newtag
 	 */
 	public static ProfileDescr ofProfile() {
-		Tag ptag = Tag.inTag();
+		Tag ptag = Tag.ofScode();
 //		System.out.println("ProfileDescr.inProfile: " + Scode.edTag(ptag));
 		ProfileDescr prf = new ProfileDescr(Kind.K_ProfileDescr, ptag);
 		if(Scode.nextByte() == Scode.S_EXTERNAL) {
 			 // peculiar ::= external body:newtag nature:string xid:string
 			Scode.inputInstr();
-			Tag.inTag();
+			Tag.ofScode();
 			Scode.inString();
-			// IntDescr rut = new IntDescr(Kind.K_IntRoutine, rtag);
 			Util.IERR("External Routines is not part of this implementation");
 		} else if(Scode.nextByte() == Scode.S_INTERFACE) {
 			 // peculiar ::= interface pid:string
@@ -104,22 +83,26 @@ public class ProfileDescr extends Descriptor {
 		} else if(Scode.nextByte() == Scode.S_KNOWN) {
 			// peculiar	::= known body:newtag kid:string
 			Scode.inputInstr();
-			Tag rtag = Tag.inTag();
+			Tag rtag = Tag.ofScode();
 			String xid = Scode.inString();
-			RoutineDescr rut = new RoutineDescr(Kind.K_IntRoutine, rtag);
+			RoutineDescr rut = new RoutineDescr(Kind.K_IntRoutine, rtag, null);
 //			prf.pKind = getKnownKind(xid);
 		} else if(Scode.nextByte() == Scode.S_SYSTEM) {
 			 //	peculiar ::= system body:newtag sid:string
 			Scode.inputInstr();
-			Tag rtag = Tag.inTag();
+			Tag rtag = Tag.ofScode();
 			String xid = Scode.inString();
-			RoutineDescr rut = new RoutineDescr(Kind.K_IntRoutine, rtag);
+			RoutineDescr rut = new RoutineDescr(Kind.K_IntRoutine, rtag, null);
 			prf.pKind = getSysKind(xid);
 		}
 		prf.imports = new Vector<Variable>();
 		prf.params = new Vector<Tag>();
-		prf.DSEG = new DataSegment("DSEG_" + Global.moduleID + '_' + ptag.ident(), Kind.K_SEG_DATA);
-		prf.returAddr = prf.DSEG.nextAddress();
+		if(prf.DSEG == null) {
+//			prf.DSEG = new DataSegment("DSEG_" + Global.moduleID + '_' + ptag.ident(), Kind.K_SEG_DATA);
+			prf.DSEG = new DataSegment(prf.dsegIdent(), Kind.K_SEG_DATA);
+//			System.out.println("ProfileDescr.ofProfile: SET-DSEG: DSEG="+prf.DSEG.ident + " PTAG="+ptag);
+		}
+		prf.returSlot = prf.DSEG.nextAddress();
 		prf.DSEG.emit(null, "RETUR");
 
 		Scode.inputInstr();
@@ -129,23 +112,17 @@ public class ProfileDescr extends Descriptor {
 			prf.params.add(par.tag);
 			Scode.inputInstr();
 		}
-		prf.npar = prf.imports.size();
 		if(Scode.curinstr == Scode.S_EXIT) {
-//			prf.exit = Variable.ofEXIT(prf.DSEG);
-			prf.exit = Variable.ofEXIT(prf.returAddr);
+			prf.exit = Variable.ofEXIT(prf.returSlot);
 			Scode.inputInstr();
 		} else if(Scode.curinstr == Scode.S_EXPORT) {
 			prf.export = Variable.ofEXPORT(prf.DSEG);
 			prf.exportTag = prf.export.tag;
 			Scode.inputInstr();
 		}
-		if(prf.exit == null) prf.exit = Variable.ofRETUR(prf.returAddr);
+		if(prf.exit == null) prf.exit = Variable.ofRETUR(prf.returSlot);
 		if(Scode.curinstr != Scode.S_ENDPROFILE)
 			Util.IERR("Missing ENDPROFILE. Got " + Scode.edInstr(Scode.curinstr));
-		
-//		Global.dumpDISPL("END PROFILE: ");
-//		prf.print("   ");
-//		Util.IERR("");
 		return prf;
 	}
 
@@ -159,11 +136,13 @@ public class ProfileDescr extends Descriptor {
 		case Scode.S_INTERFACE -> profile += " INTERFACE " + ident;
 		}
 		System.out.println(indent + profile);
-		if(imports != null) for(Variable imprt:imports) System.out.println(indent + "   " + imprt.toString());
-		if(exit != null)   System.out.println(indent + "   " + exit.toString());
-		if(export != null) System.out.println(indent + "   " + export.toString());
-		if(DSEG != null) DSEG.dump("");
-		System.out.println(indent + "ENDPROFILE");		
+		if(params != null) for(Tag ptag:params) System.out.println(indent + "   " + ptag.getMeaning());
+		if(exportTag != null) System.out.println(indent + "   " + exportTag.getMeaning());
+		if(returSlot != null) System.out.println(indent + "   returSlotess = " + returSlot);
+		if(DSEG != null) System.out.println(indent + "   DSEG = " + DSEG);
+//		if(DSEG != null) DSEG.dump("ProfileDescr.print: ");
+		System.out.println(indent + "ENDPROFILE");	
+//		Util.IERR("");
 	}
 	
 	public String toString() {
@@ -174,58 +153,18 @@ public class ProfileDescr extends Descriptor {
 			case Scode.S_EXTERNAL ->  profile += " EXTERNAL " + Scode.edTag(bodyTag) + " " + nature + " " + ident;
 			case Scode.S_INTERFACE -> profile += " INTERFACE " + ident;
 		}
-//		for(Variable imprt:imports) profile += " " + imprt;
-//		if(exit != null)   profile += " " + exit;
-//		if(export != null) profile += " " + export;
-		profile += " ...";
-		if(exportTag != null) profile += " exportTag=" + exportTag;
-		profile += " returAddr=" + returAddr;
+		profile += " DSEG=" + DSEG;
+		if(params != null) {
+			String cc = "( ";
+			for(Tag ptag:params) {
+				profile += cc +ptag;
+				cc = ", ";
+			}
+			profile += ")";
+		}
+		if(exportTag != null) profile += " ==> exportTag=" + exportTag;
+		profile += " returSlot=" + returSlot;
 		return profile;
-	}
-
-	
-	private static int getKnownKind(String s) {
-//		if(s.equalsIgnoreCase("RLOG10")) return SVM_SYSCALL.P_RLOG10;
-//		if(s.equalsIgnoreCase("DLOG10")) return SVM_SYSCALL.P_DLOG10;
-//		if(s.equalsIgnoreCase("RCOSIN")) return SVM_SYSCALL.P_RCOSIN;
-//		if(s.equalsIgnoreCase("COSINU")) return SVM_SYSCALL.P_COSINU;
-//		if(s.equalsIgnoreCase("RTANGN")) return SVM_SYSCALL.P_RTANGN;
-//		if(s.equalsIgnoreCase("TANGEN")) return SVM_SYSCALL.P_TANGEN;
-//		if(s.equalsIgnoreCase("RARCOS")) return SVM_SYSCALL.P_RARCOS;
-//		if(s.equalsIgnoreCase("ARCCOS")) return SVM_SYSCALL.P_ARCCOS;
-//		if(s.equalsIgnoreCase("RARSIN")) return SVM_SYSCALL.P_RARSIN;
-//		if(s.equalsIgnoreCase("ARCSIN")) return SVM_SYSCALL.P_ARCSIN;
-//		if(s.equalsIgnoreCase("ERRNON")) return SVM_SYSCALL.P_ERRNON;
-//		if(s.equalsIgnoreCase("ERRQUA")) return SVM_SYSCALL.P_ERRQUA;
-//		if(s.equalsIgnoreCase("ERRSWT")) return SVM_SYSCALL.P_ERRSWT;
-//		if(s.equalsIgnoreCase("ERROR")) return SVM_SYSCALL.P_ERROR;
-//		if(s.equalsIgnoreCase("CBLNK")) return SVM_SYSCALL.P_CBLNK;
-//		if(s.equalsIgnoreCase("CMOVE")) return SVM_SYSCALL.P_CMOVE;
-		if(s.equalsIgnoreCase("STRIP")) return SVM_SYSCALL.P_STRIP;
-//		if(s.equalsIgnoreCase("TXTREL")) return SVM_SYSCALL.P_TXTREL;
-		if(s.equalsIgnoreCase("TRFREL")) return SVM_SYSCALL.P_TRFREL;
-		if(s.equalsIgnoreCase("TRFREL")) return SVM_SYSCALL.P_TRFREL;
-//		if(s.equalsIgnoreCase("AR1IND")) return SVM_SYSCALL.P_AR1IND;
-//		if(s.equalsIgnoreCase("AR2IND")) return SVM_SYSCALL.P_AR2IND;
-//		if(s.equalsIgnoreCase("ARGIND")) return SVM_SYSCALL.P_ARGIND;
-//		if(s.equalsIgnoreCase("IABS")) return SVM_SYSCALL.P_IABS;
-//		if(s.equalsIgnoreCase("RABS")) return SVM_SYSCALL.P_RABS;
-//		if(s.equalsIgnoreCase("DABS")) return SVM_SYSCALL.P_DABS;
-//		if(s.equalsIgnoreCase("RSIGN")) return SVM_SYSCALL.P_RSIGN;
-//		if(s.equalsIgnoreCase("DSIGN")) return SVM_SYSCALL.P_DSIGN;
-//		if(s.equalsIgnoreCase("MODULO")) return SVM_SYSCALL.P_MODULO;
-//		if(s.equalsIgnoreCase("RENTI")) return SVM_SYSCALL.P_RENTI;
-//		if(s.equalsIgnoreCase("DENTI")) return SVM_SYSCALL.P_DENTI;
-//		if(s.equalsIgnoreCase("DIGIT")) return SVM_SYSCALL.P_DIGIT;
-//		if(s.equalsIgnoreCase("LETTER")) return SVM_SYSCALL.P_LETTER;
-//		if(s.equalsIgnoreCase("RIPOWR")) return SVM_SYSCALL.P_RIPOWR;
-//		if(s.equalsIgnoreCase("RRPOWR")) return SVM_SYSCALL.P_RRPOWR;
-//		if(s.equalsIgnoreCase("RDPOWR")) return SVM_SYSCALL.P_RDPOWR;
-//		if(s.equalsIgnoreCase("DIPOWR")) return SVM_SYSCALL.P_DIPOWR;
-//		if(s.equalsIgnoreCase("DRPOWR")) return SVM_SYSCALL.P_DRPOWR;
-//		if(s.equalsIgnoreCase("DDPOWR")) return SVM_SYSCALL.P_DDPOWR;
-		Util.IERR(""+s);
-		return 0;
 	}
 
 	private static int getSysKind(String s) {
@@ -363,89 +302,40 @@ public class ProfileDescr extends Descriptor {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 
-	private static final boolean TESTING = true;
 	public void write(AttributeOutputStream oupt) throws IOException {
 		if(Global.ATTR_OUTPUT_TRACE) System.out.println("ProfileDescr.Write: " + this);
 		DSEG.write(oupt);
 		oupt.writeKind(kind);
-//		oupt.writeShort(ModuleIO.chgType(tag));
 		tag.write(oupt);
-		oupt.writeShort(npar);
 		oupt.writeShort(pKind);
-//		oupt.writeShort(nparbyte);
-		oupt.writeString(DSEG.ident);
-		
-		//public Vector<Variable> imports;
-//		oupt.writeShort(imports.size());
-//		for(Variable par:imports) {
-//			if(TESTING) {
-//				par.write(oupt);
-//			} else {
-//				par.tag.write(oupt);
-//			}
-//		}
+//		oupt.writeString(DSEG.ident);
+		oupt.writeString(this.dsegIdent());
 		oupt.writeShort(params.size());
-		for(Tag par:params) {
-			par.write(oupt);
-		}
-
-		returAddr.write(oupt);
+		for(Tag par:params) par.write(oupt);
+		returSlot.write(oupt);
 		if(export != null) {
 			oupt.writeBoolean(true);
 			exportTag.write(oupt);
-//			export.write(oupt);
 		} else oupt.writeBoolean(false);
-		
-//		oupt.writeShort(imports.size()); // npar
-//		for(Variable imprt:imports) imprt.write(oupt);
-//		if(exit   != null) exit.write(oupt);
-//		if(export != null) export.write(oupt);
-//		Util.IERR("");
 	}
 
 	public static ProfileDescr read(AttributeInputStream inpt) throws IOException {
-//		int tag = inpt.readShort();
-//		tag = InsertStatement.current.chgInType(tag);
 		Tag tag = Tag.read(inpt);
 		ProfileDescr prf = new ProfileDescr(Kind.K_RecordDescr, tag);
-		prf.npar = inpt.readShort();
 		prf.pKind = inpt.readShort();
-//		prf.nparbyte = inpt.readShort();
 		String segID = inpt.readString();
-		prf.DSEG = (DataSegment) Segment.lookup(segID);
-		System.out.println("ProfileDescr.read: DSEG="+prf.DSEG);
-		
-		//public Vector<Variable> imports;
-//		prf.imports = new Vector<Variable>();
+		prf.DSEG =(DataSegment) Segment.lookup(segID);
 		prf.params = new Vector<Tag>();
 		int n = inpt.readShort();
-		System.out.println("ProfileDescr.read: nPar="+n);
 		for(int i=0;i<n;i++) {
-//			if(TESTING) {
-//				int kind = inpt.readKind();
-//				Variable par = Variable.read(inpt, kind);
-//				System.out.println("ProfileDescr.read: par="+par);
-//				prf.imports.add(par);
-//			} else {
-//				Tag ptag = Tag.read(inpt);
-//				Variable par = (Variable) Global.getMeaning(ptag.val);
-//				System.out.println("ProfileDescr.read: par="+par);
-//				prf.imports.add(par);
-//			}
 			prf.params.add(Tag.read(inpt));
 		}
-		
-		prf.returAddr = MemAddr.read(inpt);
-		System.out.println("ProfileDescr.read: returAddr="+prf.returAddr);
+		prf.returSlot = MemAddr.read(inpt);
 		boolean present = inpt.readBoolean();
-		if(present) {
-//			int kind = inpt.readKind();
-//			prf.export = Variable.read(inpt, kind);
-			prf.exportTag = Tag.read(inpt);
-			System.out.println("ProfileDescr.read: exportTag="+prf.exportTag);
-		}
-		if(Global.ATTR_OUTPUT_TRACE) System.out.println("ProfileDescr.Read: " + prf);
-		prf.print("   ");
+		if(present) prf.exportTag = Tag.read(inpt);
+		
+		if(Global.ATTR_INPUT_TRACE) System.out.println("ProfileDescr.Read: " + prf);
+//		prf.print("   ");
 //		Util.IERR("");
 		return prf;
 	}

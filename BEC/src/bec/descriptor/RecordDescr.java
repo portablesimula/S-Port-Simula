@@ -52,7 +52,7 @@ public class RecordDescr extends Descriptor {
  * 
  */
 	public static RecordDescr of() {
-		RecordDescr rec = new RecordDescr(Kind.K_RecordDescr,Tag.inTag());
+		RecordDescr rec = new RecordDescr(Kind.K_RecordDescr,Tag.ofScode());
 		int comnSize = 0;
 			
 		if(Scode.accept(Scode.S_INFO)) {
@@ -60,7 +60,7 @@ public class RecordDescr extends Descriptor {
 			if("TYPE".equalsIgnoreCase(info)) rec.infoType = true;
 		}
 		if(Scode.accept(Scode.S_PREFIX)) {
-			rec.prefixTag = Scode.inTag();
+			rec.prefixTag = Scode.ofScode();
 			RecordDescr prefix = rec.getPrefix(rec.prefixTag);
 			comnSize = prefix.size;
 		}
@@ -188,7 +188,6 @@ public class RecordDescr extends Descriptor {
 	public void write(AttributeOutputStream oupt) throws IOException {
 		if(Global.ATTR_OUTPUT_TRACE) System.out.println("RecordDescr.Write: " + this);
 		oupt.writeKind(kind);
-//		oupt.writeShort(ModuleIO.chgType(tag));
 		tag.write(oupt);
 		oupt.writeShort(size);
 		oupt.writeShort(nbrep);
@@ -196,8 +195,6 @@ public class RecordDescr extends Descriptor {
 	}
 
 	public static RecordDescr read(AttributeInputStream inpt) throws IOException {
-//		int tag = inpt.readShort();
-//		tag = InsertStatement.current.chgInType(tag);
 		Tag tag = Tag.read(inpt);
 		RecordDescr rec = new RecordDescr(Kind.K_RecordDescr, tag);
 		rec.size = inpt.readShort();

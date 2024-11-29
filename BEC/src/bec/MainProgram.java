@@ -58,7 +58,7 @@ public class MainProgram extends S_Module {
 //        DefLABEL(qEPROC,MainEntry.fix.val,entx.val);
 //        peepExhaust(true); ENDASM;
 		
-		Segment.dumpAll("MainProgram: ");
+//		Segment.dumpAll("MainProgram: ");
 	
 		if(Scode.curinstr != Scode.S_ENDPROGRAM)
 			Util.IERR("Illegal termination of program");

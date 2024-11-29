@@ -38,14 +38,18 @@ public class SVM_PUSHC extends SVM_Instruction {
 	private SVM_PUSHC(AttributeInputStream inpt) throws IOException {
 		this.opcode = SVM_Instruction.iPUSHC;
 		this.type = Type.read(inpt);
-		this.value = Value.read(inpt);
+		boolean present = inpt.readBoolean();
+		if(present)	this.value = Value.read(inpt);
 	}
 
 	@Override
 	public void write(AttributeOutputStream oupt) throws IOException {
 		oupt.writeKind(opcode);
 		type.write(oupt);
-		value.write(oupt);
+		if(value != null) {
+			oupt.writeBoolean(true);
+			value.write(oupt);
+		} else oupt.writeBoolean(false);
 	}
 
 	public static SVM_Instruction read(AttributeInputStream inpt) throws IOException {

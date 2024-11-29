@@ -11,7 +11,7 @@ public class SVM_Instruction {
 
 	public final static int iADD = 1;
 	public final static int iAND = 2;
-	public final static int iCALL_TOS = 3;
+//	public final static int iCALL_TOS = 3;
 	public final static int iCALL = 4;
 	public final static int iCOMPARE = 5;
 	public final static int iCONVERT = 6;
@@ -53,11 +53,11 @@ public class SVM_Instruction {
 	
 	public static SVM_Instruction readObject(AttributeInputStream inpt) throws IOException {
 		int opcode = inpt.readKind();
-		System.out.println("SVM_Instruction.read: opcode="+edOpcode(opcode));
+//		System.out.println("SVM_Instruction.read: opcode="+edOpcode(opcode));
 		switch(opcode) {
 			case iADD:		return SVM_ADD.read(inpt);
 			case iAND:		return SVM_AND.read(inpt);
-			case iCALL_TOS:	return SVM_CALL.read(inpt);
+//			case iCALL_TOS:	return SVM_CALL_TOS.read(inpt);
 			case iCALL:		return SVM_CALL.read(inpt);
 			case iCOMPARE:	return SVM_COMPARE.read(inpt);
 			case iCONVERT:	return SVM_CONVERT.read(inpt);
@@ -88,7 +88,7 @@ public class SVM_Instruction {
 		switch(opcode) {
 			case iADD:		return "iADD";
 			case iAND:		return "iAND";
-			case iCALL_TOS:	return "iCALL_TOS";
+//			case iCALL_TOS:	return "iCALL_TOS";
 			case iCALL:		return "iCALL";
 			case iCOMPARE:	return "iCOMPARE";
 			case iCONVERT:	return "iCONVERT";
@@ -106,6 +106,7 @@ public class SVM_Instruction {
 			case iSUB:		return "iSUB";
 			case iSWITCH:	return "iSWITCH";
 			case iSYSCALL:	return "iSYSCALL";
+			case iLINE:		return "iNOOP";
 			case iNOOP:		return "iNOOP";
 			case iNOT:		return "iNOT";
 			case iNOT_IMPL:	return "iNOT_IMPL";

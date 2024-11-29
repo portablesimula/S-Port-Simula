@@ -54,6 +54,7 @@ Visible define
  Visible       size             maxlen; -- system "MAXLEN";               -- ØM
 -- Visible const integer          inplth    system "INPLTH";-- inptlinelng
  Visible integer          inplth    system "INPLTH";-- inptlinelng
+ Visible entry(PEXERR)          errorX    system "INIERR";
  Visible infix(bioIns) bio;
  
  Visible const infix(string)

@@ -23,15 +23,12 @@ Module MODL01("TST 1.0");
        -----------------------------------------------------------------------
 
 
-   
-   Visible routine XREST; export infix(string) s; begin
--- 		s.chradr:=@bio.utbuff(bio.utpos); s.nchr:=utlng-bio.utpos;
-   end;
 
-Visible routine XED_STR; import infix(string) str; begin
-	infix(string) xstr;
-	xstr := XREST;
---	bio.utpos:=bio.utpos+PUTSTR(REST,str);
+Visible routine TX2STR;
+import infix (txtqnt) txt; export infix (string) str;
+begin str.nchr:=txt.lp - txt.sp;
+      str.chradr:=if txt.lp = 0 then noname
+      else name(txt.ent.cha(txt.sp));
 end;
    
    

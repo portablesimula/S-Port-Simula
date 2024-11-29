@@ -33,7 +33,7 @@ public class SVM_SYSCALL extends SVM_Instruction {
 	
 	@Override	
 	public String toString() {
-		return "SYSCALL  " + Kind.edKind(kind);
+		return "SYSCALL  " + edKind(kind);
 	}
 	
 	/**

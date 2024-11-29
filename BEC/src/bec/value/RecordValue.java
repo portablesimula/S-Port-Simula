@@ -7,10 +7,11 @@ import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Global;
 import bec.util.Scode;
+import bec.util.Tag;
 import bec.util.Util;
 
 public class RecordValue extends Value {
-	int tag;
+	Tag tag;
 	public Vector<AttributeValue> attrValues;
 	
 	private RecordValue() {
@@ -32,7 +33,7 @@ public class RecordValue extends Value {
 	 */
 	public static RecordValue ofScode() {
 		RecordValue rec = new RecordValue();
-		rec.tag = Scode.inTag();
+		rec.tag = Tag.ofScode();
 		while(Scode.nextByte() == Scode.S_ATTR) {
 			Scode.inputInstr();
 			rec.attrValues.add(AttributeValue.ofScode());
@@ -49,7 +50,7 @@ public class RecordValue extends Value {
 
 	@Override
 	public void print(final String indent) {
-		System.out.println(indent + "C-RECORD " + Scode.edTag(tag));
+		System.out.println(indent + "C-RECORD " + tag);
 		for(AttributeValue value:attrValues) {
 //			System.out.println(indent + "   ATTR " + value);
 			System.out.println(indent + "   "+value);
@@ -59,7 +60,7 @@ public class RecordValue extends Value {
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("C-RECORD " + Scode.edTag(tag));
+		sb.append("C-RECORD " + tag);
 		for(AttributeValue value:attrValues) {
 			sb.append(" ATTR " + value);
 		}
@@ -71,7 +72,7 @@ public class RecordValue extends Value {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 	private RecordValue(AttributeInputStream inpt) throws IOException {
-		tag = inpt.readTag();
+		tag = Tag.read(inpt);
 		attrValues = new Vector<AttributeValue>();
 		int kind = inpt.readKind();
 		while(kind != Scode.S_ENDRECORD) {
@@ -86,7 +87,7 @@ public class RecordValue extends Value {
 
 	public void write(AttributeOutputStream oupt) throws IOException {
 		oupt.writeInstr(Scode.S_C_RECORD);
-		oupt.writeTag(tag);
+		tag.write(oupt);;
 		for(AttributeValue value:attrValues) value.write(oupt);
 		oupt.writeInstr(Scode.S_ENDRECORD);
 		

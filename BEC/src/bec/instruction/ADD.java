@@ -25,8 +25,9 @@ public abstract class ADD extends Instruction {
 	 * SOS op TOS. All arithmetic on subranges of INT should be performed in full integer arithmetic. 
 	 */
 	public static void ofScode() {
-		CTStack.dumpStack("ADD: ");
-		Global.PSEG.dump("ADD: ");
+//		CTStack.dumpStack("ADD: ");
+//		Global.PSEG.dump("ADD: ");
+		
 		CTStack.checkTosArith(); CTStack.checkSosArith(); CTStack.checkSosValue(); CTStack.checkTypesEqual();
 		StackItem tos = CTStack.TOS;
 	    Type at = CTStack.arithType(tos.type, tos.suc.type);
@@ -34,6 +35,7 @@ public abstract class ADD extends Instruction {
 		CTStack.pop();
 		CTStack.pop();
 	    CTStack.pushTemp(at, "ADD: ");
+	    
 //		CTStack.dumpStack("ADD: ");
 //		Global.PSEG.dump("ADD: ");
 //		Util.IERR(""+this);

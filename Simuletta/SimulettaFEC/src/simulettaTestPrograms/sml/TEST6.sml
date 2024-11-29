@@ -9,11 +9,12 @@
 --%TRACE 2 -- Output Trace
 
  -- MAIN Program:
- begin insert envir0,modl01,modl02;
+ begin
+ 	 insert envir0,modl01,modl02;
 --      sysinsert rt,sysr,knwn,util;
 
     
-    TEST_ADD;
+--    TEST_ADD;
 --    TEST_SUB;
 --    TEST_DIV;
 --    TEST_MULT;
@@ -22,5 +23,10 @@
     
 --    GET;
 
+--	ERRNON;
+	errorX:=entry(EXERR);
+	call PEXERR(errorX)(666,none);
+	
+--	TEST_EXIT(444, "END PROGRAM");
 	TERMIN(0, "END PROGRAM");
 end

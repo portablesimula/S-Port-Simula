@@ -43,5 +43,16 @@ begin boolean cont; name(character) chaadr;
    while cont do endrepeat;
 end;
    
+
+ Visible known("ERRNON") ERRNON;
+ begin call PEXERR(errorX)(666,none) end;
+ 
+  Visible body(pEXERR) EXERR;
+ -- import range(0:MAX_ENO) eno; ref(txtent) fil;
+ begin
+ 	 label cont; --er_no:=eno;
+ 	 integer ii;
+ 	 ii := 8888;
+ end;
    
 end;

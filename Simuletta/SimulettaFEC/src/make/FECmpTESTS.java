@@ -24,9 +24,14 @@ public final class FECmpTESTS {
 		long startTimeMs = System.currentTimeMillis( );
 		Vector<String> names=new Vector<String>();
 		
+//		names.add("ENVIR0xx");
+//		names.add("MODL01xx");
+//		names.add("MODL02xx");
+//		names.add("TEST6xx");
+		
 		names.add("ENVIR0");
-//		names.add("MODL001");
-		names.add("MODL01");
+		names.add("MODL001");
+//		names.add("MODL01");
 //		names.add("MODL02");
 //		names.add("TEST6");
 		

@@ -46,7 +46,7 @@ public class InterfaceModule extends S_Module {
 		if(Scode.curinstr != Scode.S_MODULE) Util.IERR("Missing - MODULE");
 		Global.modident = Scode.inString();
 		Global.modcheck = Scode.inString();
-		Global.moduleID = Global.modident;
+		Global.moduleID = Global.modident.toUpperCase();
 		String sourceID = Global.getSourceID();
 		Global.CSEG = new DataSegment("CSEG_" + sourceID, Kind.K_SEG_CONST);
 		Global.DSEG = new DataSegment("DSEG_" + sourceID, Kind.K_SEG_DATA);
@@ -77,7 +77,7 @@ public class InterfaceModule extends S_Module {
 		Global.xTAGTAB = new Array<Integer>();
 		int nXtag = 0;
 		while(Scode.curinstr == Scode.S_TAG) {
-			int itag = Scode.inTag();
+			int itag = Scode.ofScode();
 			int xtag = Scode.inNumber();
 			Global.iTAGTAB.set(xtag, itag); // Index xTag --> value iTag
 			Global.xTAGTAB.set(itag, xtag); // Index iTag --> value xTag
@@ -94,14 +94,14 @@ public class InterfaceModule extends S_Module {
 			Util.IERR("");
 		}
 
-		Tag.dumpITAGTABLE("MONITOR.interfaceModule'END: ");
-		Tag.dumpXTAGTABLE("MONITOR.interfaceModule'END: ");
-		DataType.dumpDataTypes("MONITOR.interfaceModule'END: ");
-		Global.DSEG.dump("MONITOR.interfaceModule'END: ");
-		Global.CSEG.dump("MONITOR.interfaceModule'END: ");
-		Global.dumpDISPL("MONITOR.interfaceModule'END: ");
-		Scode.dumpTAGIDENTS("MONITOR.interfaceModule'END: ");
-		Type.dumpTypes("MONITOR.interfaceModule'END: ");
+//		Tag.dumpITAGTABLE("MONITOR.interfaceModule'END: ");
+//		Tag.dumpXTAGTABLE("MONITOR.interfaceModule'END: ");
+//		DataType.dumpDataTypes("MONITOR.interfaceModule'END: ");
+//		Global.DSEG.dump("MONITOR.interfaceModule'END: ");
+//		Global.CSEG.dump("MONITOR.interfaceModule'END: ");
+//		Global.dumpDISPL("MONITOR.interfaceModule'END: ");
+//		Scode.dumpTAGIDENTS("MONITOR.interfaceModule'END: ");
+//		Type.dumpTypes("MONITOR.interfaceModule'END: ");
 		if(Scode.curinstr != Scode.S_BODY) Util.IERR("Illegal termination of module head");
 		Scode.inputInstr();
 //	%+SC    repeat InputInstr while CurInstr=S_INIT

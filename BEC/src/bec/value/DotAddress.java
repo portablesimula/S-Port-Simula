@@ -6,16 +6,17 @@ import java.util.Vector;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Scode;
+import bec.util.Tag;
 import bec.util.Type;
 import bec.util.Util;
 
 public class DotAddress extends Value {
-	Vector<Integer> attrTags;
+	Vector<Tag> attrTags;
 	int globalOrConstTag;
 	int terminator;
 	
 	public DotAddress() {
-		attrTags = new Vector<Integer>();
+		attrTags = new Vector<Tag>();
 		parse();
 		this.type = (terminator == Scode.S_C_AADDR) ? Type.T_AADDR : Type.T_GADDR;
 	}
@@ -30,13 +31,13 @@ public class DotAddress extends Value {
 	 */
 	public void parse() {
 		do {
-			attrTags.add(Scode.inTag());
+			attrTags.add(Tag.ofScode());
 			Scode.inputInstr();
 		} while (Scode.curinstr == Scode.S_C_DOT);
 
            terminator = Scode.curinstr;
            if(terminator == Scode.S_C_AADDR || terminator == Scode.S_C_GADDR) {
-        	   globalOrConstTag = Scode.inTag();
+        	   globalOrConstTag = Scode.ofScode();
            }
            else Util.IERR("Illegal termination of C-DOT value");
 	}
@@ -48,7 +49,7 @@ public class DotAddress extends Value {
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		for(Integer tag:attrTags) {
+		for(Tag tag:attrTags) {
 			sb.append("C-DOT ").append(tag);
 		}
 		sb.append(" " + Scode.edInstr(terminator) + " " + Scode.edTag(globalOrConstTag));
@@ -60,9 +61,9 @@ public class DotAddress extends Value {
 	// ***********************************************************************************************
 	private DotAddress(AttributeInputStream inpt) throws IOException {
 		int n = inpt.readShort();
-		attrTags = new Vector<Integer>();
+		attrTags = new Vector<Tag>();
 		for(int i=0;i<n;i++) {
-			int tag = inpt.readTag();
+			Tag tag = Tag.read(inpt);
 			attrTags.add(tag);
 		}
 		globalOrConstTag = inpt.readTag();
@@ -77,7 +78,7 @@ public class DotAddress extends Value {
 	public void write(AttributeOutputStream oupt) throws IOException {
 		oupt.writeInstr(Scode.S_C_DOT);
 		oupt.writeShort(attrTags.size());
-		for(int t:attrTags) oupt.writeTag(t);
+		for(Tag tag:attrTags) tag.write(oupt);
 		oupt.writeTag(globalOrConstTag);
 		oupt.writeKind(terminator);
 	}

@@ -42,7 +42,7 @@ public class Variable extends Descriptor {
 	
 	public static Variable ofIMPORT(DataSegment seg) {
 		if(seg == null) Util.IERR("");
-		Tag tag = Tag.inTag();
+		Tag tag = Tag.ofScode();
 		Variable var = new Variable(Kind.K_Import, tag);
 		var.type = Type.ofScode();
 		var.repCount = (Scode.accept(Scode.S_REP)) ? Scode.inNumber() : 1;
@@ -53,7 +53,7 @@ public class Variable extends Descriptor {
 	
 	public static Variable ofEXPORT(DataSegment seg) {
 		if(seg == null) Util.IERR("");
-		Tag tag = Tag.inTag();
+		Tag tag = Tag.ofScode();
 		Variable var = new Variable(Kind.K_Export, tag);
 		var.type = Type.ofScode();
 		var.repCount = (Scode.accept(Scode.S_REP)) ? Scode.inNumber() : 1;
@@ -64,7 +64,7 @@ public class Variable extends Descriptor {
 	}
 	
 	public static Variable ofEXIT(MemAddr returAddr) {
-		Tag tag = Tag.inTag();
+		Tag tag = Tag.ofScode();
 		Variable var = new Variable(Kind.K_Exit, tag);
 //		var.type = new Type(Scode.TAG_PADDR);
 		var.type = Type.T_PADDR;
@@ -80,7 +80,7 @@ public class Variable extends Descriptor {
 	}
 	
 	public static Variable ofLocal(DataSegment seg) {
-		Tag tag = Tag.inTag();
+		Tag tag = Tag.ofScode();
 		Variable var = new Variable(Kind.K_LocalVar, tag);
 		var.type = Type.ofScode();
 		var.repCount = (Scode.accept(Scode.S_REP)) ? Scode.inNumber() : 1;
@@ -97,7 +97,7 @@ public class Variable extends Descriptor {
 	}
 	
 	public static Variable ofGlobal(DataSegment seg) {
-		Tag tag = Tag.inTag();
+		Tag tag = Tag.ofScode();
 		Variable var = new Variable(Kind.K_GlobalVar, tag);
 		var.type = Type.ofScode();
 		var.repCount = (Scode.accept(Scode.S_REP)) ? Scode.inNumber() : 1;
@@ -165,7 +165,6 @@ public class Variable extends Descriptor {
 	public void write(AttributeOutputStream oupt) throws IOException {
 		if(Global.ATTR_OUTPUT_TRACE) System.out.println("Variable.Write: " + this);
 		oupt.writeKind(kind); // K_GLOBAL, K_LOCAL, K_IMPORT, K_EXPORT, K_EXIT, K_RETUR
-//		oupt.writeShort(tag);
 		tag.write(oupt);
 		type.write(oupt);
 		oupt.writeShort(repCount);
@@ -173,14 +172,12 @@ public class Variable extends Descriptor {
 	}
 
 	public static Variable read(AttributeInputStream inpt, int kind) throws IOException {
-//		int tag = inpt.readShort();
-//		tag = InsertStatement.current.chgInType(tag);
 		Tag tag = Tag.read(inpt);
 		Variable var = new Variable(kind, tag);
 		var.type = Type.read(inpt);
 		var.repCount = inpt.readShort();
 		var.address = MemAddr.read(inpt);
-		if(Global.ATTR_OUTPUT_TRACE) System.out.println("Variable.Read: " + var);
+		if(Global.ATTR_INPUT_TRACE) System.out.println("Variable.Read: " + var);
 		return var;
 	}
 

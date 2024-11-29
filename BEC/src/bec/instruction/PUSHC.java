@@ -96,11 +96,11 @@ public abstract class PUSHC extends Instruction {
 		}
 		ConstItem cns = new ConstItem(type, value);
 		CTStack.push(cns);
-		CTStack.dumpStack("PUSHC: "+value+": ");
+//		CTStack.dumpStack("PUSHC: "+value+": ");
 //		Util.IERR("DETTE MÅ RETTES");
 		
 		Global.PSEG.emit(new SVM_PUSHC(type, value), "");
-		Global.PSEG.dump("PUSHC: "+value+": ");
+//		Global.PSEG.dump("PUSHC: "+value+": ");
 		if(type == Type.T_TEXT) {
 			Global.CSEG.dump("PUSHC.doCode: ");
 //			Util.IERR(""+value);

@@ -7,15 +7,10 @@ import bec.util.Tag;
 import bec.value.MemAddr;
 import bec.virtualMachine.SVM_SWITCH;
 
-//Record SwitchDescr:Descriptor;
-//begin range(0:MaxSdest) ndest;   -- No. of Sdest in this switch
-//      range(0:MaxSdest) nleft;   -- No. of Sdest left to be defined
-//      infix(MemAddr) swtab;      -- Start of Sdest-Table
-//      ref(AddrBlock) DESTAB(MxpSdest); -- All SDEST addresses
-//end;
+/**
+ * forward_jump ::= switch switch:newtag size:number
+ */
 public class SwitchDescr extends Descriptor {
-
-	int tag;
 	int size;
 	public MemAddr[] DESTAB;
 	
@@ -33,27 +28,12 @@ public class SwitchDescr extends Descriptor {
 		int qEBX = 1; // MÅ RETTES
 		CTStack.getTosAdjustedIn86(qEBX);
 		CTStack.pop();
-//
-//%+D        if IDXCHK <> 0 then --- pje 22.10.90
-//%+D           PreMindMask:=wOR(PreMindMask,uBX);
-//%+DE          Qf2(qDYADC,qCMP,qEBX,cVAL,ndest.val);
-//%+DE          PreReadMask:=uBX;
-//%+D           LL:=ForwJMP(q_WLT);
-//%+D           Qf5(qCALL,0,0,0,X_ECASE); -- OutOfRange ==> ERROR
-//%+DE          Qf2(qLOADC,0,qEBX,cVAL,0);
-//%+D           PreReadMask:=uBX;
-//%+DE          PreMindMask:=wOR(PreMindMask,uBX);
-//%+D           DefFDEST(LL);
-//%+D        endif; --- pje 22.10.90
-//
-//%+E        a.sibreg:=bOR(bOR(128,bEBX),iEBX); -- swtab+[4*EBX] 
-//      Qf3(qJMPM,0,0,0,a);
     	Global.PSEG.emit(new SVM_SWITCH(DESTAB), "");
-    	Global.PSEG.dump("SWITCH: ");
+//    	Global.PSEG.dump("SWITCH: ");
 	}
 	
 	public static SwitchDescr ofScode() {
-		Tag tag = Tag.inTag();
+		Tag tag = Tag.ofScode();
 		SwitchDescr sw = new SwitchDescr(Kind.K_SwitchDescr, tag);
 		return sw;
 	}
@@ -64,7 +44,7 @@ public class SwitchDescr extends Descriptor {
 	}
 	
 	public String toString() {
-		return "SWITCH " + Scode.edTag(tag) + " " + size;
+		return "SWITCH " + tag + " " + size;
 	}
 	
 

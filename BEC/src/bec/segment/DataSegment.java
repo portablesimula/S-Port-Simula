@@ -29,6 +29,7 @@ public class DataSegment extends Segment {
 	public DataSegment(String ident, int segmentKind) {
 		super(ident, segmentKind);
 		System.out.println("NEW DataSegment: " + this);
+//		Thread.dumpStack();
 		this.ident = ident.toUpperCase();
 		this.segmentKind = segmentKind;
 		values = new Vector<Value>();
@@ -108,10 +109,10 @@ public class DataSegment extends Segment {
 	 * 				::= attr attribute:tag type repetition_value
 	 */
 	private void emitRecordValue(String comment) {
-		Scode.inTag(); 
+		Scode.ofScode(); 
 		Scode.inputInstr();
 		while(Scode.curinstr == Scode.S_ATTR) {
-			int atag = Scode.inTag();
+			int atag = Scode.ofScode();
 			Type type = Type.ofScode();
 //			System.out.println("DataSegment.emitRecordValue'S_ATTR: "+Scode.edTag(atag)+"  "+type);
 
@@ -135,6 +136,7 @@ public class DataSegment extends Segment {
 			System.out.println(line + value + "   " + comment.get(i));
 		}
 		System.out.println("==================== " + title + ident + " END  ====================");
+//		Util.IERR("");
 	}
 	
 	public String toString() {
@@ -177,7 +179,7 @@ public class DataSegment extends Segment {
 	public static DataSegment readObject(AttributeInputStream inpt, int segmentKind) throws IOException {
 //		int segmentKind = inpt.readKind();
 		String ident = inpt.readString();
-		System.out.println("DataSegment.readObject: ident="+ident+", segmentKind="+segmentKind);
+//		System.out.println("DataSegment.readObject: ident="+ident+", segmentKind="+segmentKind);
 		DataSegment seg = new DataSegment(ident, segmentKind, inpt);
 		if(Global.ATTR_INPUT_DUMP) seg.dump("DataSegment.readObject: ");
 //		Util.IERR("");

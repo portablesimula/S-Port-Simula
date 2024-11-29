@@ -85,7 +85,7 @@ public class MemAddr extends Value {
 	public void execute() {
 		ProgramSegment seg = (ProgramSegment) segment();
 		SVM_Instruction cur = seg.instructions.get(ofst);
-		System.out.println("MemAddr.execute: " + cur);
+//		System.out.println("MemAddr.execute: " + cur);
 		cur.execute();
 //		Util.IERR("");
 	}
@@ -105,7 +105,7 @@ public class MemAddr extends Value {
 		ofst = inpt.readShort();
 //		if(ident != null) seg = Segment.lookup(ident);
 
-		System.out.println("=============================================================================================================== " + this);
+//		System.out.println("=============================================================================================================== " + this);
 		if(ofst > 9000 || ofst < 0) Util.IERR(""+ofst);
 //		Util.IERR(""+seg);
 //		System.out.println("NEW IMPORT: " + this);
@@ -117,7 +117,7 @@ public class MemAddr extends Value {
 //		oupt.writeInt(ofst);
 		oupt.writeShort(ofst);
 		if(ofst > 9000 || ofst < 0) Util.IERR("");
-		System.out.println("=============================================================================================================== " + this);
+//		System.out.println("=============================================================================================================== " + this);
 	}
 
 	public static MemAddr read(AttributeInputStream inpt) throws IOException {

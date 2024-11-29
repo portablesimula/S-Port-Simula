@@ -8,7 +8,7 @@
 --%PASS 2 TRACE=1 -- Trace level
 --%TRACE 2 -- Output Trace
 
- Global ENVIR0("TST 1.0");
+ Global ENVIR0xx("TST 1.0");
  begin
        -----------------------------------------------------------------------
        ---                                                                 ---
@@ -96,3 +96,4 @@ Visible define
  Visible entry(PRF)   BDY0;
 
  end;
+ 

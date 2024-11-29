@@ -5,10 +5,11 @@ import java.io.IOException;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Scode;
+import bec.util.Tag;
 import bec.util.Type;
 
 public class AttributeValue extends Value {
-	int tag;
+	Tag tag;
 	public Type type;
 	public RepetitionValue value;
 	
@@ -22,14 +23,14 @@ public class AttributeValue extends Value {
 	 */
 	public static AttributeValue ofScode() {
 		AttributeValue aval = new AttributeValue();
-		aval.tag = Scode.inTag();
+		aval.tag = Tag.ofScode();
 		aval.type = Type.ofScode();
 		aval.value = RepetitionValue.ofScode();
 //		System.out.println("AttributeValue.parse: value=" + value);
 		return aval;
 	}
 
-	public static AttributeValue of(int tag, Type type, RepetitionValue value) {
+	public static AttributeValue of(Tag tag, Type type, RepetitionValue value) {
 		AttributeValue aval = new AttributeValue();
 		aval.tag = tag;
 		aval.type = type;
@@ -44,14 +45,14 @@ public class AttributeValue extends Value {
 //	}
 	
 	public String toString() {
-		return "ATTR " + Scode.edTag(tag) + " " + type + " "+ value;
+		return "ATTR " + tag + " " + type + " "+ value;
 	}
 
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 	private AttributeValue(AttributeInputStream inpt) throws IOException {
-		tag = inpt.readTag();
+		tag = Tag.read(inpt);
 		type = Type.read(inpt);
 		value = RepetitionValue.read(inpt);
 		System.out.println("NEW ATTR-VALUE: " + this);
@@ -59,7 +60,7 @@ public class AttributeValue extends Value {
 
 	public void write(AttributeOutputStream oupt) throws IOException {
 		oupt.writeInstr(Scode.S_ATTR);
-		oupt.writeTag(tag);
+		tag.write(oupt);;
 		type.write(oupt);
 		value.write(oupt);
 		
