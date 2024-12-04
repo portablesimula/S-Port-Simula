@@ -11,14 +11,15 @@ import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Tag;
 import bec.util.Util;
-import bec.value.MemAddr;
+import bec.value.ObjectAddress;
+import bec.value.Value;
 import bec.virtualMachine.SVM_SYSCALL;
 
 public class ProfileDescr extends Descriptor {
 	public int pKind; // Peculiar Profile Kind
 	public Vector<Tag> params;
 	private Tag exportTag;
-	MemAddr returSlot;
+	ObjectAddress returSlot;
 	public DataSegment DSEG;
 	
 	//	NOT SAVED:
@@ -321,7 +322,8 @@ public class ProfileDescr extends Descriptor {
 
 	public static ProfileDescr read(AttributeInputStream inpt) throws IOException {
 		Tag tag = Tag.read(inpt);
-		ProfileDescr prf = new ProfileDescr(Kind.K_RecordDescr, tag);
+		ProfileDescr prf = new ProfileDescr(Kind.K_ProfileDescr, tag);
+		if(Global.ATTR_INPUT_TRACE) System.out.println("BEGIN ProfileDescr.Read: " + prf);
 		prf.pKind = inpt.readShort();
 		String segID = inpt.readString();
 		prf.DSEG =(DataSegment) Segment.lookup(segID);
@@ -330,7 +332,7 @@ public class ProfileDescr extends Descriptor {
 		for(int i=0;i<n;i++) {
 			prf.params.add(Tag.read(inpt));
 		}
-		prf.returSlot = MemAddr.read(inpt);
+		prf.returSlot = (ObjectAddress) Value.read(inpt);
 		boolean present = inpt.readBoolean();
 		if(present) prf.exportTag = Tag.read(inpt);
 		

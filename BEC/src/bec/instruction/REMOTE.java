@@ -7,7 +7,7 @@ import bec.util.Scode;
 import bec.util.Tag;
 import bec.util.Type;
 import bec.util.Util;
-import bec.value.MemAddr;
+import bec.value.ObjectAddress;
 
 /**
  * 
@@ -38,7 +38,7 @@ public abstract class REMOTE extends Instruction {
 		CTStack.dumpStack("REMOTE-2: ");
 		Attribute attr = (Attribute) tag.getMeaning();
 		CTStack.pop();
-		MemAddr memAddr = new MemAddr(null,0); // a
+		ObjectAddress memAddr = new ObjectAddress(null,0); // a
 		adr = new AddressItem(attr.type, attr.rela, memAddr);
         adr.objState = AddressItem.State.Calculated;
 //        System.out.println("REMOTE.doCode: adr="+adr);

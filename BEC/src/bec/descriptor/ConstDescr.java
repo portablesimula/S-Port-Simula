@@ -12,13 +12,13 @@ import bec.util.Type;
 import bec.util.Scode;
 import bec.util.Tag;
 import bec.util.Util;
-import bec.value.MemAddr;
+import bec.value.ObjectAddress;
 import bec.value.RepetitionValue;
 import bec.value.Value;
 
 public class ConstDescr extends Descriptor {
 	public Type type;
-	public MemAddr address;
+	public ObjectAddress address;
 //	public QuantityDescriptor quant;
 	RepetitionValue value;
 	
@@ -39,6 +39,18 @@ public class ConstDescr extends Descriptor {
 	 *
 	 *	constant_definition
 	 *		::= const const:spectag quantity_descriptor repetition_value
+	 *
+	 *		repetition_value
+	 *			::= <boolean_value>+
+	 *			::= <character_value>+ | text_value
+	 *			::= <integer_value>+ | <size_value>+
+	 *			::= <real_value>+ | <longreal_value>+
+	 *			::= <attribute_address>+ | <object_address>+
+	 *			::= <general_address>+ | <program_address>+
+	 *			::= <routine_address>+ | <record_value>+
+	 *
+	 *			text_value
+	 *				::= text long_string
 	 */
 	public static ConstDescr ofConstSpec() {
 //		Tag tag = Tag.ofScode();
@@ -75,12 +87,12 @@ public class ConstDescr extends Descriptor {
 //		if(constDef) cnst.value = new RepetitionValue();
 			String comment = tag + " type=" + cnst.type;
 //			System.out.println("NEW CONST: "+comment);
-			cnst.address = Global.CSEG.emitValue(comment);
+			cnst.address = Global.CSEG.emitRepetitionValue(comment);
 //			Global.CSEG.dump("CONST.inConstant: ");
 //			Util.IERR("");
 		
-//		System.out.println("CONST.inConstant: " + cnst);
-		if(Global.traceMode > 3) cnst.print("   ");
+		System.out.println("CONST.inConstant: " + cnst);
+//		if(Global.traceMode > 3) cnst.print("   ");
 //		Util.IERR("");
 		return cnst;
 	}
@@ -131,9 +143,10 @@ public class ConstDescr extends Descriptor {
 		ConstDescr cns = new ConstDescr(Kind.K_Coonst, tag);
 //		System.out.println("AFTER NEW CONST: "+cns);
 		cns.type = Type.read(inpt);
-		cns.address = MemAddr.read(inpt);
+		cns.address = (ObjectAddress) Value.read(inpt);
 //		System.out.println("AFTER NEW MEMADDR: "+cns);
 //		Util.IERR("Static Method 'readObject' needs a redefiniton");
+//		if(Global.ATTR_INPUT_TRACE) System.out.println("ConstDescr.Read: " + cns);
 		return(cns);
 	}
 

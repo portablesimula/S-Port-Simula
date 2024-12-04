@@ -4,7 +4,8 @@ import bec.compileTimeStack.CTStack;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Tag;
-import bec.value.MemAddr;
+import bec.value.ObjectAddress;
+import bec.value.ProgramAddress;
 import bec.virtualMachine.SVM_SWITCH;
 
 /**
@@ -12,7 +13,7 @@ import bec.virtualMachine.SVM_SWITCH;
  */
 public class SwitchDescr extends Descriptor {
 	int size;
-	public MemAddr[] DESTAB;
+	public ProgramAddress[] DESTAB;
 	
 	/**
 	 * forward_jump ::= switch switch:newtag size:number
@@ -21,7 +22,7 @@ public class SwitchDescr extends Descriptor {
 		super(kind, tag);
 		size = Scode.inNumber();
 //		if(size >= MxpSdest) Util.ERROR("Too large Case-Statement");
-		DESTAB = new MemAddr[size];
+		DESTAB = new ProgramAddress[size];
 		CTStack.checkTosInt();
 //      if TOS.type < T_WRD2 then GQconvert(T_WRD2) endif;
 //      a:=sw.swtab;

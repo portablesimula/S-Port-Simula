@@ -26,9 +26,9 @@ public final class FECmpRTS {
 		names.add("RT");
 		names.add("SYSR");
 		names.add("KNWN");
-//		names.add("UTIL");
-//		
-//		names.add("STRG");
+		names.add("UTIL");
+		names.add("STRG");
+		
 //		names.add("CENT");
 //		names.add("CINT");
 //		names.add("ARR");
@@ -90,7 +90,7 @@ public final class FECmpRTS {
 		
 		// Coder Trace Options
 //		Option.TRACE_FIND_MEANING=true;
-		Option.TRACE_CODING=4; //1;
+		Option.TRACE_CODING=1;//4; //1;
 		
 		//Option.TRACE_REPAIRING=true;
 

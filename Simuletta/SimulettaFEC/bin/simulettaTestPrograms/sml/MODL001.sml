@@ -13,22 +13,36 @@
 --%TRACE 2 -- Output Trace
 
 Module MODL01("TST 1.0");
- begin insert envir0;
-
+ begin
+--  insert envir0;
+  insert ENVIR_RT;
        -----------------------------------------------------------------------
        ---                                                                 ---
        ---            S I M U L E T T A    T E S T B A T C H               ---
        ---                                                                 ---
        ---                                                                 ---
        -----------------------------------------------------------------------
+ const infix(string) ERR_MSG(MAX_ENO) = (
 
+ "Unspecified error condition.",
+ "Invalid floating point operation." );
 
+character xbuff(5);
 
 Visible routine TX2STR;
-import infix (txtqnt) txt; export infix (string) str;
-begin str.nchr:=txt.lp - txt.sp;
-      str.chradr:=if txt.lp = 0 then noname
-      else name(txt.ent.cha(txt.sp));
+import infix (txtqnt) txt; export infix (string) str; begin
+	integer tull; boolean cond;
+	str:="not observable";
+	
+--	str.nchr:=txt.lp - txt.sp;
+--	str.chradr:=if txt.lp = 0 then noname
+--	else name(txt.ent.cha(txt.sp));
+	tull := 222 + if cond then 444 else 666;
+end;
+
+ routine ED_iID; import ref(inst) ins;
+ begin ref(ptpExt) xpp; label act;
+       act:=ins.pp qua ref(claptp).stm;
 end;
    
    

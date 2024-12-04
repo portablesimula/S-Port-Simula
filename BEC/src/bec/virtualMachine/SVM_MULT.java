@@ -41,12 +41,15 @@ public class SVM_MULT extends SVM_Instruction {
 	// ***********************************************************************************************
 
 	public void write(AttributeOutputStream oupt) throws IOException {
+		if(Global.ATTR_OUTPUT_TRACE) System.out.println("SVM.Write: " + this);
 		oupt.writeKind(SVM_Instruction.iMULT);
 		type.write(oupt);;
 	}
 
 	public static SVM_MULT read(AttributeInputStream inpt) throws IOException {
-		return new SVM_MULT(Type.read(inpt));
+		SVM_MULT instr = new SVM_MULT(Type.read(inpt));
+		if(Global.ATTR_INPUT_TRACE) System.out.println("SVM.Read: " + instr);
+		return instr;
 	}
 
 }

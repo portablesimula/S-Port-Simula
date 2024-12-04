@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
+import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Type;
 
@@ -43,7 +44,8 @@ public class LongRealValue extends Value {
 	}
 
 	public void write(AttributeOutputStream oupt) throws IOException {
-		oupt.writeInstr(Scode.S_C_LREAL);
+		if(Global.ATTR_OUTPUT_TRACE) System.out.println("Value.write: " + this);
+		oupt.writeKind(Scode.S_C_LREAL);
 		oupt.writeDouble(value);
 	}
 

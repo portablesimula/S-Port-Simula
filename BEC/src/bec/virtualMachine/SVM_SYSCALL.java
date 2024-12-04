@@ -8,10 +8,13 @@ import bec.descriptor.Kind;
 import bec.segment.DataSegment;
 import bec.segment.Segment;
 import bec.util.Global;
+import bec.util.Type;
 import bec.util.Util;
 import bec.value.IntegerValue;
-import bec.value.MemAddr;
+import bec.value.ObjectAddress;
+import bec.value.StringValue;
 import bec.value.TextValue;
+import bec.value.Value;
 
 public class SVM_SYSCALL extends SVM_Instruction {
 	int kind;
@@ -65,21 +68,25 @@ public class SVM_SYSCALL extends SVM_Instruction {
 	 * @param addr address to a Infix(String) 
 	 * @return
 	 */
-	private String edString(MemAddr addr) {
+	private String edString(ObjectAddress addr) {
 		DataSegment DSEG = (DataSegment) addr.segment();
-		MemAddr chradr = (MemAddr) DSEG.load(addr.ofst);
+		DSEG.dump("SVM_SYSCALL.terminate: "+DSEG.load(addr.ofst).getClass().getSimpleName());
+		Value value = DSEG.load(addr.ofst);
+		if(value instanceof StringValue str) return str.value;
+//		OADDR_Value chradr = (OADDR_Value) DSEG.load(addr.ofst);
+		ObjectAddress chradr = (ObjectAddress) value;
 		IntegerValue ofst = (IntegerValue) DSEG.load(addr.ofst+1);
 		IntegerValue nchr = (IntegerValue) DSEG.load(addr.ofst+2);
 		
 		int offset = (ofst == null)? 0 : ofst.value;
-		MemAddr x = chradr.ofset(offset);
+		ObjectAddress x = chradr.ofset(offset);
 		Object obj = x.load();
-		if(obj instanceof TextValue text) {
-//			System.out.println("SVM_SYSCALL.edString: "+obj.getClass().getSimpleName());
-			return text.value;
-		} else {
+//		if(obj instanceof TextValue text) {
+////			System.out.println("SVM_SYSCALL.edString: "+obj.getClass().getSimpleName());
+//			return text.getString();
+//		} else {
 			Util.IERR("SVM_SYSCALL.edString: "+obj.getClass().getSimpleName() + "  nchr="+nchr);
-		}
+//		}
 //		System.out.println("SVM_SYSCALL.edString: "+obj.getClass().getSimpleName());
 		return obj.toString();
 	}
@@ -489,12 +496,15 @@ public class SVM_SYSCALL extends SVM_Instruction {
 
 	@Override
 	public void write(AttributeOutputStream oupt) throws IOException {
+		if(Global.ATTR_OUTPUT_TRACE) System.out.println("SVM.Write: " + this);
 		oupt.writeKind(opcode);
 		oupt.writeKind(kind);
 	}
 
 	public static SVM_Instruction read(AttributeInputStream inpt) throws IOException {
-		return new SVM_SYSCALL(inpt.readKind());
+		SVM_SYSCALL instr = new SVM_SYSCALL(inpt.readKind());
+		if(Global.ATTR_INPUT_TRACE) System.out.println("SVM.Read: " + instr);
+		return instr;
 	}
 
 

@@ -7,7 +7,8 @@ import bec.segment.Segment;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
-import bec.value.MemAddr;
+import bec.value.ObjectAddress;
+import bec.value.ProgramAddress;
 import bec.virtualMachine.SVM_Instruction;
 
 public class MainProgram extends S_Module {
@@ -43,7 +44,7 @@ public class MainProgram extends S_Module {
 		Global.CSEG = new DataSegment("CSEG_" + sourceID, Kind.K_SEG_CONST);
 		Global.DSEG = new DataSegment("DSEG_" + sourceID, Kind.K_SEG_DATA);
 		Global.PSEG = new ProgramSegment("PSEG_" + sourceID, Kind.K_SEG_CODE);
-		MemAddr mainEntry = Global.PSEG.nextAddress();
+		ProgramAddress mainEntry = Global.PSEG.nextAddress();
 		if(Global.PROGID == null) Global.PROGID = Global.modident;
 
 		while(Scode.nextByte() == Scode.S_LOCAL) {

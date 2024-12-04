@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
+import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Tag;
 import bec.util.Type;
@@ -76,7 +77,8 @@ public class DotAddress extends Value {
 //	int globalOrConstTag;
 //	int terminator;
 	public void write(AttributeOutputStream oupt) throws IOException {
-		oupt.writeInstr(Scode.S_C_DOT);
+		if(Global.ATTR_OUTPUT_TRACE) System.out.println("Value.write: " + this);
+		oupt.writeKind(Scode.S_C_DOT);
 		oupt.writeShort(attrTags.size());
 		for(Tag tag:attrTags) tag.write(oupt);
 		oupt.writeTag(globalOrConstTag);

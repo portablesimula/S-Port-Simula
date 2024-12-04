@@ -86,7 +86,8 @@ public class RecordValue extends Value {
 	}
 
 	public void write(AttributeOutputStream oupt) throws IOException {
-		oupt.writeInstr(Scode.S_C_RECORD);
+		if(Global.ATTR_OUTPUT_TRACE) System.out.println("Value.write: " + this);
+		oupt.writeKind(Scode.S_C_RECORD);
 		tag.write(oupt);;
 		for(AttributeValue value:attrValues) value.write(oupt);
 		oupt.writeInstr(Scode.S_ENDRECORD);

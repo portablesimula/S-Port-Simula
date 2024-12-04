@@ -6,7 +6,7 @@ import bec.util.Scode;
 import bec.util.Type;
 import bec.util.Util;
 import bec.value.IntegerValue;
-import bec.value.MemAddr;
+import bec.value.ObjectAddress;
 import bec.value.TextValue;
 import bec.value.Value;
 
@@ -21,7 +21,7 @@ public abstract class RTStack {
 			TextValue text = (TextValue) value;
 			push(Type.T_OADDR, text.addr); // CHRADR.OADDR
 			push(Type.T_INT, null);        // CHRADR.Offset
-			push(Type.T_INT, new IntegerValue(text.value.length())); // NCHR
+			push(Type.T_INT, new IntegerValue(Type.T_INT, text.getString().length())); // NCHR
 //			Util.IERR("");
 			return;
 //			break;
@@ -35,7 +35,7 @@ public abstract class RTStack {
 //				for(Value val:repval.values) {
 //					push(type, value);
 //				}
-				MemAddr oaddr = (MemAddr) value;
+				ObjectAddress oaddr = (ObjectAddress) value;
 				push(Type.T_OADDR, oaddr);
 				Util.IERR("");
 			}

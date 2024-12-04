@@ -8,13 +8,15 @@ import bec.compileTimeStack.CTStack;
 import bec.util.Global;
 import bec.util.Tag;
 import bec.util.Util;
-import bec.value.MemAddr;
+import bec.value.ObjectAddress;
+import bec.value.ProgramAddress;
+import bec.value.Value;
 
 //Record IntDescr:Descriptor;      -- K_Globalvar
 //begin infix(MemAddr) adr;        -- K_IntLabel
 //end;                             -- K_IntRoutine   Local Routine  ER FJÆRNET !"!!
 public class LabelDescr extends Descriptor {
-	MemAddr adr;
+	public ProgramAddress adr;
 
 	private LabelDescr(int kind, Tag tag) {
 		super(kind, tag);
@@ -64,8 +66,9 @@ public class LabelDescr extends Descriptor {
 		LabelDescr lab = new LabelDescr(kind, tag);
 		System.out.println("AFTER NEW CONST: "+lab);
 		boolean present = inpt.readBoolean();
-		if(present) lab.adr = MemAddr.read(inpt);
+		if(present) lab.adr = (ProgramAddress) Value.read(inpt);
 		System.out.println("AFTER NEW MEMADDR: "+lab);
+		if(Global.ATTR_INPUT_TRACE) System.out.println("LabelDescr.Read: " + lab);
 		return(lab);
 	}
 

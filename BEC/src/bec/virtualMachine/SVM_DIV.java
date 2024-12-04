@@ -43,12 +43,15 @@ public class SVM_DIV extends SVM_Instruction {
 	// ***********************************************************************************************
 
 	public void write(AttributeOutputStream oupt) throws IOException {
+		if(Global.ATTR_OUTPUT_TRACE) System.out.println("SVM.Write: " + this);
 		oupt.writeKind(opcode);
 		type.write(oupt);;
 	}
 
 	public static SVM_DIV read(AttributeInputStream inpt) throws IOException {
-		return new SVM_DIV(Type.read(inpt));
+		SVM_DIV instr = new SVM_DIV(Type.read(inpt));
+		if(Global.ATTR_INPUT_TRACE) System.out.println("SVM.Read: " + instr);
+		return instr;
 	}
 
 }

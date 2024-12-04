@@ -4,11 +4,8 @@ import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Type;
 import bec.util.Util;
-import bec.value.MemAddr;
-import bec.virtualMachine.SVM_CALL;
-import bec.virtualMachine.SVM_GOTO;
+import bec.value.ObjectAddress;
 import bec.virtualMachine.SVM_NOT_IMPL;
-import bec.virtualMachine.SVM_PUSH;
 import bec.virtualMachine.SVM_POP2REG;
 
 public class CTStack {
@@ -18,8 +15,8 @@ public class CTStack {
 	public static StackItem TOS; // Top of Compile-time stack
 	static StackItem BOS; // Bot of Compile-time stack
 	public static StackItem SAV; // Last Compile-time stack-item for which
-                          // the corresponding Runtime-item is saved.
-                          // NOTE: SAV =/= none implies TOS =/= none
+                          		 // the corresponding Runtime-item is saved.
+                          		 // NOTE: SAV =/= none implies TOS =/= none
 
 
 	public static void push(StackItem s) {
@@ -140,19 +137,6 @@ public class CTStack {
 			default: STKERR("Illegal type of SOS: " + type);
 		}
 	}
-	
-//	public final static int TAG_BOOL  = 1;
-//	public final static int TAG_CHAR  = 2;
-//	public final static int	TAG_INT   = 3;
-//	public final static int TAG_SINT  = 4;
-//	public final static int TAG_REAL  = 5;
-//	public final static int TAG_LREAL = 6;
-//	public final static int TAG_AADDR = 7;
-//	public final static int TAG_OADDR = 8;
-//	public final static int TAG_GADDR = 9;
-//	public final static int TAG_PADDR = 10;
-//	public final static int TAG_RADDR = 11;
-//	public final static int TAG_SIZE  = 12;
 
 	public static void checkSosType2(Type t1, Type t2) {
 		if(TOS.suc.type == t1) ; // OK
@@ -183,7 +167,7 @@ public class CTStack {
 		AddressItem tos = (AddressItem) CTStack.TOS;
 		if(tos.objState == AddressItem.State.NotStacked) {
 			tos.objState = AddressItem.State.FromConst;
-			MemAddr adr = tos.objadr;
+			ObjectAddress adr = tos.objadr;
 //	           case 0:adrMax (adr.kind)
 //	           when reladr,locadr: 
 //	%+E             Qf3(qPUSHA,0,qEBX,cOBJ,adr);
@@ -305,7 +289,7 @@ public class CTStack {
 		if(TOS == null) {
 			System.out.println(lead + ": **Empty**");
 		} else {
-			System.out.println(lead + ":"); item = TOS;
+			System.out.println(lead + ": SAV=" + SAV); item = TOS;
 			lead ="  TOS: ";
 			do {
 //				if(item.type != 0) System.out.print(Scode.edTag(item.type) + '(' + item.size + ")-");

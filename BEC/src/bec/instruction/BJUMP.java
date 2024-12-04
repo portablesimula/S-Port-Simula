@@ -4,7 +4,7 @@ import bec.compileTimeStack.CTStack;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
-import bec.value.MemAddr;
+import bec.value.ProgramAddress;
 import bec.virtualMachine.SVM_GOTO;
 
 public abstract class BJUMP extends Instruction {
@@ -23,7 +23,7 @@ public abstract class BJUMP extends Instruction {
 
 //		CTStack.dumpStack();
 		
-		MemAddr addr = Global.DESTAB[destination];
+		ProgramAddress addr = Global.DESTAB[destination];
 		if(addr == null) Util.IERR("BJUMP dest. dest == null");
 		Global.PSEG.emit(new SVM_GOTO(addr), "BJUMP: ");
 		Global.DESTAB[destination] = null;

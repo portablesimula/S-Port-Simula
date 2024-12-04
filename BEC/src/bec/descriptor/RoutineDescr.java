@@ -13,13 +13,16 @@ import bec.segment.Segment;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Tag;
+import bec.util.Type;
 import bec.util.Util;
-import bec.value.MemAddr;
+import bec.value.ObjectAddress;
+import bec.value.ProgramAddress;
+import bec.value.Value;
 import bec.virtualMachine.SVM_RETURN;
 
 public class RoutineDescr extends Descriptor {
 	ProgramSegment PSEG;
-	public MemAddr adr;
+	public ProgramAddress adr;
 	public Tag prftag;
 	DataSegment DSEG; // With LOCAL Variables
 	Vector<Tag> locals;
@@ -71,7 +74,7 @@ public class RoutineDescr extends Descriptor {
 		DataSegment prevDSEG = Global.DSEG; Global.DSEG = rut.DSEG;
 		rut.PSEG = new ProgramSegment("PSEG_" + id, Kind.K_SEG_CODE);
 		ProgramSegment prevPSEG = Global.PSEG; Global.PSEG = rut.PSEG;
-		rut.adr = new MemAddr(rut.PSEG,0);
+		rut.adr = new ProgramAddress(Type.T_RADDR, rut.PSEG,0);
 		
 //		System.out.println("RoutineDescr.ofRoutine: "+Global.DISPL.get(prftag.val));
 		ProfileDescr prf = (ProfileDescr) Global.DISPL.get(prftag.val);
@@ -92,8 +95,7 @@ public class RoutineDescr extends Descriptor {
 //			==================== RoutineDescr.ofRoutine: MODL02_PEXERRDSEG_ENVIR0_PEXERR END  ====================
 		}
 	
-//		Instruction instr;
-//		while((instr = (Instruction) Instruction.inInstruction()) != null) { Scode.inputInstr(); }
+		System.out.println("RoutineDescr.ofRoutine: " + rut + "??????????????????????????????????????????????????????????????????????????????????????");
 		while(Instruction.inInstruction()) { Scode.inputInstr(); }
 	
 		if(Scode.curinstr != Scode.S_ENDROUTINE) Util.IERR("Missing - endroutine");
@@ -141,13 +143,14 @@ public class RoutineDescr extends Descriptor {
 		RoutineDescr rut = new RoutineDescr(Kind.K_IntRoutine, tag, prftag);
 		present = inpt.readBoolean();
 		if(present) {
-			rut.adr = MemAddr.read(inpt);
+			rut.adr = (ProgramAddress) Value.read(inpt);
 			String segID = inpt.readString();
 			rut.PSEG = (ProgramSegment) Segment.lookup(segID);
 		}
 		
 		int n = inpt.readShort();
 		for(int i=0;i<n;i++) rut.locals.add(Tag.read(inpt));
+		if(Global.ATTR_INPUT_TRACE) System.out.println("RoutineDescr.Read: " + rut);
 		
 		return(rut);
 	}

@@ -4,11 +4,12 @@ import java.io.IOException;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
+import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Type;
 
 public class RealValue extends Value {
-	float value;
+	public float value;
 	
 	public RealValue(float value) {
 		this.type = Type.T_REAL;
@@ -42,7 +43,8 @@ public class RealValue extends Value {
 	}
 
 	public void write(AttributeOutputStream oupt) throws IOException {
-		oupt.writeInstr(Scode.S_C_REAL);
+		if(Global.ATTR_OUTPUT_TRACE) System.out.println("Value.write: " + this);
+		oupt.writeKind(Scode.S_C_REAL);
 		oupt.writeFloat(value);
 	}
 

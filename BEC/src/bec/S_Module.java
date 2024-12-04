@@ -4,7 +4,7 @@ import bec.descriptor.LabelDescr;
 import bec.descriptor.ProfileDescr;
 import bec.descriptor.RoutineDescr;
 import bec.instruction.Instruction;
-import bec.statement.IfStatement;
+import bec.statement.IfConstrction;
 import bec.statement.InsertStatement;
 import bec.statement.ProtectStatement;
 import bec.statement.SkipifStatement;
@@ -35,7 +35,7 @@ public abstract class S_Module {
 				case Scode.S_LABEL ->		LabelDescr.ofLabel(Tag.ofScode());
 				case Scode.S_PROFILE ->		ProfileDescr.ofProfile();
 				case Scode.S_ROUTINE ->		RoutineDescr.ofRoutine();
-				case Scode.S_IF ->			new IfStatement();
+				case Scode.S_IF ->			IfConstrction.ofScode();
 				case Scode.S_SKIPIF ->		new SkipifStatement();
 				case Scode.S_SAVE ->		new ProtectStatement();
 				case Scode.S_INSERT ->		new InsertStatement(false);
@@ -44,6 +44,8 @@ public abstract class S_Module {
 			}
 			Scode.inputInstr();
 		}
+		System.out.println("S_Module.programElements: Terminated by: " + Scode.edInstr(Scode.curinstr));
+//		Util.IERR("");
 	}
 
 	public static void setSwitch() {

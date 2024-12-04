@@ -84,6 +84,7 @@ public class BecCompiler {
 		Global.scodeSource = scodeSource;
 		Global.DISPL = new Array<Descriptor>();
 		Global.SEGMAP = new HashMap<String, Segment>();
+		Global.ifDepth = 0;
 		Scode.initScode();
 //		DataType.initDataTypes();
 		Type.init();

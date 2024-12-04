@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
+import bec.util.Global;
 import bec.util.Type;
 
 /**
@@ -32,12 +33,15 @@ public class SVM_AND extends SVM_Instruction {
 
 	@Override
 	public void write(AttributeOutputStream oupt) throws IOException {
+		if(Global.ATTR_OUTPUT_TRACE) System.out.println("SVM.Write: " + this);
 		oupt.writeKind(opcode);
 		type.write(oupt);;
 	}
 
 	public static SVM_Instruction read(AttributeInputStream inpt) throws IOException {
-		return new SVM_AND(Type.read(inpt));
+		SVM_AND instr = new SVM_AND(Type.read(inpt));
+		if(Global.ATTR_INPUT_TRACE) System.out.println("SVM.Read: " + instr);
+		return instr;
 	}
 
 

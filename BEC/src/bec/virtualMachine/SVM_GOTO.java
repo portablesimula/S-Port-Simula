@@ -4,12 +4,14 @@ import java.io.IOException;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
-import bec.value.MemAddr;
+import bec.util.Global;
+import bec.value.ProgramAddress;
+import bec.value.Value;
 
 public class SVM_GOTO extends SVM_Instruction {
-	public MemAddr destination;
+	public ProgramAddress destination;
 
-	public SVM_GOTO(MemAddr destination) {
+	public SVM_GOTO(ProgramAddress destination) {
 		this.opcode = SVM_Instruction.iGOTO;
 		this.destination = destination;
 	}
@@ -24,11 +26,13 @@ public class SVM_GOTO extends SVM_Instruction {
 	// ***********************************************************************************************
 	protected SVM_GOTO(AttributeInputStream inpt) throws IOException {
 		this.opcode = SVM_Instruction.iGOTO;
-		this.destination = MemAddr.read(inpt);
+		this.destination = (ProgramAddress) Value.read(inpt);
+		if(Global.ATTR_INPUT_TRACE) System.out.println("SVM.Read: " + this);
 	}
 
 	@Override
 	public void write(AttributeOutputStream oupt) throws IOException {
+		if(Global.ATTR_OUTPUT_TRACE) System.out.println("SVM.Write: " + this);
 		oupt.writeKind(opcode);
 		destination.write(oupt);
 	}

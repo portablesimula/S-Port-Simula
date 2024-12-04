@@ -9,6 +9,7 @@ import bec.descriptor.LabelDescr;
 import bec.descriptor.ProfileDescr;
 import bec.descriptor.RecordDescr;
 import bec.descriptor.RoutineDescr;
+import bec.descriptor.Variable;
 import bec.segment.DataSegment;
 import bec.segment.ProgramSegment;
 import bec.statement.InsertStatement;
@@ -44,27 +45,6 @@ public class ModuleDefinition extends S_Module {
 	 */
 	public ModuleDefinition() {
 		Global.currentModule = this;
-//	       range(0:MaxWord) nXtag; ref(ModElt) m;
-//	       infix(WORD) itag,xtag; infix(Fixup) Fx;
-//	       modident:=inMsymb; modcheck:=inSymb;
-//	       if PROGID.val = 0
-//	       then edsymb(sysedit,modident);
-//	            PROGID:=DefSymb(pickup(sysedit));
-//	       endif;
-//	       BEGASM(CSEGNAM,DSEGNAM); nXtag:=0;
-//	       InputInstr;
-//	       m:=DICREF(modident);
-//	%+S    if SYSGEN=0
-//	%+S    then
-//	            m.RelElt:=RELID;
-//	%+S    endif;
-//	       if LtabEntry.kind=0 then -- No LineNumberTable
-//	       else
-//	%+D         if LtabEntry.kind<>fixadr then IERR("PARSE:Md-1") endif
-//	            Fx:=FIXTAB(LtabEntry.fix.HI).elt(LtabEntry.fix.LO);
-//	%+D         if Fx.smbx.val=0 then IERR("PARSE:Md-2") endif;
-//	            m.LinTab:=Fx.smbx;
-//	       endif;
 		Global.modident = Scode.inString();
 		Global.modcheck = Scode.inString();
 		Global.moduleID = Global.modident.toUpperCase();
@@ -76,21 +56,6 @@ public class ModuleDefinition extends S_Module {
 
 		Scode.inputInstr();
 		while(viisible()) { Scode.inputInstr(); }
-		
-		
-//	       repeat while CurInstr=S_TAG
-//	       do InTag(%itag%);
-//	%+D       xtag:=InputNumber;
-//	%-D       InNumber(%xtag%);
-//	%+D       if xtag.HI >= MxpXtag then CAPERR(CapTags) endif;
-//	          if   TAGTAB(xtag.HI)=none
-//	          then TAGTAB(xtag.HI):=
-//	               NEWOBJ(K_WordBlock,size(WordBlock)) endif;
-//	          TAGTAB(xtag.HI).elt(xtag.LO):=itag;
-//	          InputInstr;
-//	          if xtag.val>nXtag then nXtag:=xtag.val endif;
-//	       endrepeat;
-//	       OutputModule(nXtag);
 
 		// tag_list ::= < tag internal:tag external:number >+
 		Global.iTAGTAB = new Array<Integer>();
@@ -105,48 +70,44 @@ public class ModuleDefinition extends S_Module {
 			Scode.inputInstr();
 			if(xtag > nXtag) nXtag = xtag;
 		}
-		
-		
-//
-//	       if CurInstr <> S_BODY then
-//	       IERR("Illegal termination of module head") endif;
 
 		if(Scode.curinstr != Scode.S_BODY) Util.IERR("Illegal termination of module head");
 		Scode.inputInstr();
-//%+SC    repeat InputInstr while CurInstr=S_INIT
-//%+SC    do IERR("InterfaceModule: Init values is not supported");
-//%+SC       InTag(%wrd%); intype; SkipRepValue;
-//%+SC    endrepeat;
+
 		while(Scode.curinstr == Scode.S_INIT) {
+			//%+SC       InTag(%wrd%); intype; SkipRepValue;
 			Util.IERR("InterfaceModule: Init values is not supported");
 		}
 
-		
-		
-//	       repeat while NextByte = S_LOCAL
-//	       do inputInstr; inGlobal endrepeat;
-		while(Scode.nextByte() == Scode.S_LOCAL) {
-//			inGlobal;
-			Util.IERR("SJEKK DETTE");
+		System.out.println("ModuleDefinition: curinstr="+Scode.edInstr(Scode.curinstr));
+		LOOP: while(true) {
+			switch(Scode.curinstr) {
+				case Scode.S_CONST: ConstDescr.ofConstDef(); break;
+				case Scode.S_LOCAL:
+					Variable.ofGlobal(Global.DSEG);
+					Global.DSEG.dump("ModuleDefinition: ");
+//					Util.IERR("SJEKK DETTE");
+					break;
+				default:
+//					System.out.println("ModuleDefinition'LOOP: Terminated by: " + Scode.edInstr(Scode.curinstr));
+					break LOOP;
+			}
+			Scode.inputInstr();
+//			System.out.println("ModuleDefinition: +++++++++++++ REPEAT: "+Scode.edInstr(Scode.curinstr));
 		}
 
 		programElements();
-//
-//	       if CurInstr <> S_ENDMODULE then
-//	       IERR("Improper termination of module") endif;
-//	       peepExhaust(true);
-//	       ENDASM;
 
-		if(Scode.curinstr != Scode.S_ENDMODULE) Util.IERR("Improper termination of module");
+		if(Scode.curinstr != Scode.S_ENDMODULE) Util.IERR("Improper termination of module: "+Scode.edInstr(Scode.curinstr));
 
-		
-		Tag.dumpITAGTABLE("MONITOR.moduleDefinition'END: ");
-		Tag.dumpXTAGTABLE("MONITOR.moduleDefinition'END: ");
+//		Tag.dumpITAGTABLE("MONITOR.moduleDefinition'END: ");
+//		Tag.dumpXTAGTABLE("MONITOR.moduleDefinition'END: ");
 //		DataType.dumpDataTypes("MONITOR.moduleDefinition'END: ");
 //		Global.DSEG.dump("MONITOR.moduleDefinition'END: ");
 //		Global.CSEG.dump("MONITOR.moduleDefinition'END: ");
 		Global.dumpDISPL("MONITOR.moduleDefinition'END: ");
 //		Scode.dumpTAGIDENTS("MONITOR.moduleDefinition'END: ");
+		
 		try { ModuleIO.outputModule(nXtag);
 		} catch (IOException e) { e.printStackTrace(); Util.IERR(""); }
 	}

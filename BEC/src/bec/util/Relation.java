@@ -8,8 +8,8 @@ import bec.AttributeOutputStream;
 public class Relation {
 	int relation;
 	
-	private Relation() {
-//		parse();
+	private Relation(int relation) {
+		this.relation = relation;
 	}
 
 	/**
@@ -17,16 +17,28 @@ public class Relation {
 	 */
 	public static Relation ofScode() {
 		Scode.inputInstr();
-		Relation rel = new Relation();
-		rel.relation = Scode.curinstr;
-		if(rel.relation == Scode.S_LT) ; // OK
-		else if(rel.relation == Scode.S_LE) ; // OK
-		else if(rel.relation == Scode.S_EQ) ; // OK
-		else if(rel.relation == Scode.S_GE) ; // OK
-		else if(rel.relation == Scode.S_GT) ; // OK
-		else if(rel.relation == Scode.S_NE) ; // OK
-		else Util.IERR("Illegal Relation: " + rel.relation);
+		Relation rel = new Relation(Scode.curinstr);
+		System.out.println("Relation.ofScode: CurInstr="+Scode.edInstr(Scode.curinstr));
+		System.out.println("Relation.ofScode: relation="+Scode.edInstr(rel.relation));
+		switch(rel.relation) {
+			case Scode.S_LT, Scode.S_LE, Scode.S_EQ,
+			     Scode.S_GE, Scode.S_GT, Scode.S_NE: break; // OK
+			default: Util.IERR("Illegal Relation: " + rel.relation);
+		}
 		return rel;
+	}
+	
+	public Relation not() {
+		switch(this.relation) {
+		case Scode.S_LT: return new Relation(Scode.S_GE);
+		case Scode.S_LE: return new Relation(Scode.S_GT);
+		case Scode.S_EQ: return new Relation(Scode.S_NE);
+		case Scode.S_GE: return new Relation(Scode.S_LT);
+		case Scode.S_GT: return new Relation(Scode.S_LE);
+		case Scode.S_NE: return new Relation(Scode.S_EQ);
+		}
+		Util.IERR("Illegal Relation: " + this);
+		return this;
 	}
 	
 	public String toString() {

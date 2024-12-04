@@ -4,6 +4,7 @@ import bec.compileTimeStack.CTStack;
 import bec.compileTimeStack.StackItem;
 import bec.util.Global;
 import bec.util.Type;
+import bec.util.Util;
 import bec.virtualMachine.SVM_ADD;
 
 public abstract class ADD extends Instruction {
@@ -38,7 +39,7 @@ public abstract class ADD extends Instruction {
 	    
 //		CTStack.dumpStack("ADD: ");
 //		Global.PSEG.dump("ADD: ");
-//		Util.IERR(""+this);
+//		Util.IERR("");
 	}
 	
 }

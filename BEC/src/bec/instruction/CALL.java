@@ -13,7 +13,7 @@ import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Type;
 import bec.util.Util;
-import bec.value.MemAddr;
+import bec.value.ObjectAddress;
 import bec.virtualMachine.SVM_CALL;
 import bec.virtualMachine.SVM_POP2MEM;
 import bec.virtualMachine.SVM_PUSH;
@@ -71,7 +71,7 @@ public abstract class CALL extends Instruction {
 //	    ---------  Final Actions  ---------
 	    if(pitem.nasspar != pitem.spc.params.size()) Util.IERR("Wrong number of Parameters");
 //	    ---------  Call Routine  ---------
-		MemAddr prfAddr = new MemAddr(spec.DSEG, 0);
+		ObjectAddress prfAddr = new ObjectAddress(spec.DSEG, 0);
 	    if(CALL_TOS) {
 	    	Global.PSEG.emit(SVM_CALL.ofTOS(prfAddr), "");
 	    	CTStack.pop();
@@ -116,9 +116,9 @@ public abstract class CALL extends Instruction {
 		Type st = tos.type;
 		//--- First: Treat TOS ---
 //		System.out.println("CallInstruction.putPar: "+st.tag + " ===> " + parType.tag);
-		if(st != parType) Util.GQconvert(parType);
+		if(st != parType) CONVERT.GQconvert(parType);
 		else if(tos instanceof AddressItem) tos.type = st;
-		else Util.GQconvert(parType);
+		else CONVERT.GQconvert(parType);
 		
 		if(CTStack.TOS instanceof AddressItem) Util.GQfetch("putPar: ");
 		CTStack.pop();

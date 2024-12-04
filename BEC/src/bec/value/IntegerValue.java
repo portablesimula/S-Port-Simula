@@ -4,35 +4,57 @@ import java.io.IOException;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
+import bec.descriptor.Variable;
+import bec.util.Global;
 import bec.util.Scode;
+import bec.util.Tag;
 import bec.util.Type;
 import bec.util.Util;
 
 public class IntegerValue extends Value {
 	public int value;
 	
-	public IntegerValue(int value) {
+	public IntegerValue(Type type, int value) {
 		this.type = Type.T_INT;
 		this.value = value;
-		if(value == 0) Util.IERR("");
 	}
 
 	/**
 	 * integer_value   ::= c-int integer_literal:string
+	 * 
+	 * character_value ::= c-char byte
+	 * 
+	 * size_value
+	 * 		::= c-size type
+	 * 		::= NOSIZE
+	 * 
+	 * attribute_address	::= c-aaddr attribute:tag
 	 */
-	public IntegerValue() {
-		this.type = Type.T_INT;
-		this.value = Integer.valueOf(Scode.inString());
+	public static IntegerValue ofScode_INT() {
+		return new IntegerValue(Type.T_INT, Integer.valueOf(Scode.inString()));
+	}
+	public static IntegerValue ofScode_CHAR() {
+		return new IntegerValue(Type.T_INT, Scode.inByte());
+	}
+	
+	public static IntegerValue ofScode_SIZE() {
+		Type type = Type.ofScode();
+		return new IntegerValue(Type.T_SIZE, type.size());
 	}
 
-//	@Override
-//	public void print(final String indent) {
-//		System.out.println(indent + toString());
-//	}
+	public static IntegerValue ofScode_AADDR() {
+		Tag tag = Tag.ofScode();
+		Variable var = (Variable) tag.getMeaning();
+		if(var == null) Util.IERR("IMPOSSIBLE: TESTING FAILED");
+//		System.out.println("OADDR_Value.ofScode: descr="+descr.getClass().getSimpleName()+"  "+descr);
+//		return new AADDR_Value(var.address.ofst);
+		Util.IERR("NOT IMPL");
+		return new IntegerValue(Type.T_AADDR, var.address.ofst);
+	}
 
 	@Override
 	public Value neg() {
-		return new IntegerValue(- value);
+		return new IntegerValue(this.type,- value);
 	}
 
 	@Override
@@ -41,7 +63,7 @@ public class IntegerValue extends Value {
 		IntegerValue val2 = (IntegerValue) other;
 		int res = value + val2.value;
 		if(res == 0) return null;
-		return new IntegerValue(res);
+		return new IntegerValue(this.type, res);
 	}
 
 	@Override
@@ -53,7 +75,7 @@ public class IntegerValue extends Value {
 		} else res = this.value;
 		System.out.println("IntegerValue.sub: " + this.value + " - " + other + " = " + res);
 		if(res == 0) return null;
-		return new IntegerValue(res);
+		return new IntegerValue(this.type, res);
 	}
 
 	@Override
@@ -62,7 +84,7 @@ public class IntegerValue extends Value {
 		IntegerValue val2 = (IntegerValue) other;
 		int res = value * val2.value;
 		if(res == 0) return null;
-		return new IntegerValue(res);
+		return new IntegerValue(this.type, res);
 	}
 
 	@Override
@@ -75,7 +97,7 @@ public class IntegerValue extends Value {
 		} else res = 0;
 		System.out.println("IntegerValue.div: " + other + " / " + this.value + " = " + res);
 		if(res == 0) return null;
-		return new IntegerValue(res);
+		return new IntegerValue(this.type, res);
 	}
 
 	public String toString() {
@@ -93,7 +115,8 @@ public class IntegerValue extends Value {
 	}
 
 	public void write(AttributeOutputStream oupt) throws IOException {
-		oupt.writeInstr(Scode.S_C_INT);
+		if(Global.ATTR_OUTPUT_TRACE) System.out.println("Value.write: " + this);
+		oupt.writeKind(Scode.S_C_INT);
 		oupt.writeInt(value);
 	}
 

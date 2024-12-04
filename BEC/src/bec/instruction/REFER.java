@@ -5,7 +5,7 @@ import bec.compileTimeStack.CTStack;
 import bec.util.Scode;
 import bec.util.Type;
 import bec.util.Util;
-import bec.value.MemAddr;
+import bec.value.ObjectAddress;
 
 public abstract class REFER extends Instruction {
 	
@@ -21,7 +21,7 @@ public abstract class REFER extends Instruction {
 //		CTStack.dumpStack();
 		Type type = Type.ofScode();
 		CTStack.checkTosType(Type.T_GADDR);
-		MemAddr a = new MemAddr(null, 0);
+		ObjectAddress a = new ObjectAddress(null, 0);
 		AddressItem adr = new AddressItem(type, 0, a);
         Util.GQfetch("REFER " + Scode.edTag(type.tag) + ": ");
 		adr.objState = adr.atrState = AddressItem.State.Calculated;

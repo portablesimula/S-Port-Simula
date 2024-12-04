@@ -87,7 +87,7 @@ public class Scode {
 //		%+D       if SBUF.nxt >= sBufLen then InSbuffer endif;
 		if(Scode.curinstr < 1 || Scode.curinstr > S_max) {
 			if(traceBuff != null) System.out.println(traceBuff);
-//			dumpBytes(40);
+			dumpBytes(4);
 			Util.IERR("Illegal instruction["+(SBUF_nxt -1)+"]: " + Scode.curinstr);
 		}
 		if(Global.SCODE_INPUT_TRACE) {
@@ -485,7 +485,9 @@ public final static int S_MPAR=145; public final static int S_ENDMACRO=146; publ
 public final static int S_SELECTV=149; public final static int S_REMOTEV=150; public final static int S_INDEXV=151; public final static int S_ACCESSV=152;
 public final static int S_DECL=153; public final static int S_STMT=154;
 
-public final static int S_max=154;  // Max value of S-Instruction codes
+public final static int S_STRING=155;
+
+public final static int S_max=155;  // Max value of S-Instruction codes
 
 public static String edInstr(int i) {
 		switch(i) {

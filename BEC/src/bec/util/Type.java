@@ -79,6 +79,13 @@ public class Type {
 		return tag <= Scode.TAG_SIZE;
 	}
 	
+	public boolean isArithmetic() {
+		switch(tag) {
+		case Scode.TAG_INT, Scode.TAG_REAL, Scode.TAG_LREAL: return true;
+		}
+		return false;
+	}
+	
 	
 	public int size() {
 		return size;

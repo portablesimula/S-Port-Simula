@@ -1,7 +1,7 @@
 package bec.compileTimeStack;
 
 import bec.util.Type;
-import bec.value.MemAddr;
+import bec.value.ObjectAddress;
 
 //Record Address:StackItem;
 //begin infix(MemAddr) Objadr;   -- Object Address
@@ -12,12 +12,12 @@ import bec.value.MemAddr;
 public class AddressItem extends StackItem {
 //	Visible Define NotStacked=0,FromConst=1,Calculated=2;
 	public enum State { NotStacked , FromConst , Calculated }
-	public MemAddr objadr;
+	public ObjectAddress objadr;
 	public int offset;
 	public State objState;
 	public State atrState;
 	
-	public AddressItem(Type type, int offset, MemAddr objadr) {
+	public AddressItem(Type type, int offset, ObjectAddress objadr) {
 		this.type = type;
 //		this.size = DataType.TTAB[type].nbyte;
 		this.size = type.size();

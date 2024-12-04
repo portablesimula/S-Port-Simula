@@ -8,7 +8,9 @@ import bec.AttributeOutputStream;
 import bec.descriptor.Kind;
 import bec.util.Global;
 import bec.util.Scode;
-import bec.value.MemAddr;
+import bec.util.Type;
+import bec.value.ObjectAddress;
+import bec.value.ProgramAddress;
 import bec.virtualMachine.SVM_Instruction;
 
 public class ProgramSegment extends Segment {
@@ -23,8 +25,8 @@ public class ProgramSegment extends Segment {
 		comment = new Vector<String>();
 	}
 	
-	public MemAddr nextAddress() {
-		return new MemAddr(this,instructions.size());
+	public ProgramAddress nextAddress() {
+		return new ProgramAddress(Type.T_PADDR, this,instructions.size());
 	}
 	
 	public SVM_Instruction load(int index) {
@@ -68,7 +70,7 @@ public class ProgramSegment extends Segment {
 
 	@Override
 	public void write(AttributeOutputStream oupt) throws IOException {
-		if(Global.ATTR_OUTPUT_TRACE) System.out.println("ProgramSegment.Write: " + this);
+		if(Global.ATTR_OUTPUT_TRACE) System.out.println("ProgramSegment.Write: " + this + ", Size=" + instructions.size());
 //		this.dump("ProgramSegment.Write: ");
 //		oupt.writeInstr(Scode.S_BSEG);
 		oupt.writeKind(segmentKind);
@@ -90,6 +92,7 @@ public class ProgramSegment extends Segment {
 		String ident = inpt.readString();
 //		System.out.println("ProgramSegment.readObject: ident="+ident+", segmentKind="+segmentKind);
 		ProgramSegment seg = new ProgramSegment(ident, segmentKind, inpt);
+		if(Global.ATTR_INPUT_TRACE) System.out.println("ProgramSegment.Read: " + seg);
 		if(Global.ATTR_INPUT_DUMP) seg.dump("ProgramSegment.readObject: ");
 //		Util.IERR("");
 		return seg;

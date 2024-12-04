@@ -9,7 +9,9 @@ import bec.descriptor.ProfileDescr;
 import bec.segment.DataSegment;
 import bec.segment.ProgramSegment;
 import bec.segment.Segment;
-import bec.value.MemAddr;
+import bec.value.ObjectAddress;
+import bec.value.ProgramAddress;
+import bec.value.ProgramAddress;
 
 public class Global {
 	public static boolean INLINE_TESTING = false;
@@ -24,7 +26,7 @@ public class Global {
 	public static boolean SEGMENT_INPUT_DUMP = false;
 	public static boolean SEGMENT_OUTPUT_DUMP = false;
 	
-	public static MemAddr PSC; // ProgramSequenceControl during execute
+	public static ProgramAddress PSC; // ProgramSequenceControl during execute
 	public static HashMap<String, Segment> SEGMAP;
 
 	public static S_Module currentModule;
@@ -104,7 +106,8 @@ public class Global {
 	public static DataSegment DSEG; 
 	public static ProgramSegment PSEG; // Current PSEG
 
-	public static MemAddr[] DESTAB = new MemAddr[64];
+	public static ProgramAddress[] DESTAB = new ProgramAddress[64];
+	public static int ifDepth;
 
 	public static String getSourceID() {
 		File file = new File(scodeSource);

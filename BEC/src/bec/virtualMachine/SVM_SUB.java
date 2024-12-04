@@ -47,12 +47,15 @@ public class SVM_SUB extends SVM_Instruction {
 
 	@Override
 	public void write(AttributeOutputStream oupt) throws IOException {
+		if(Global.ATTR_OUTPUT_TRACE) System.out.println("SVM.Write: " + this);
 		oupt.writeKind(opcode);
 		type.write(oupt);;
 	}
 
 	public static SVM_Instruction read(AttributeInputStream inpt) throws IOException {
-		return new SVM_SUB(Type.read(inpt));
+		SVM_SUB instr = new SVM_SUB(Type.read(inpt));
+		if(Global.ATTR_INPUT_TRACE) System.out.println("SVM.Read: " + instr);
+		return instr;
 	}
 
 }

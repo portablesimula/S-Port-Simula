@@ -10,7 +10,7 @@ import bec.compileTimeStack.ConstItem;
 import bec.compileTimeStack.DataType;
 import bec.compileTimeStack.StackItem;
 import bec.compileTimeStack.Temp;
-import bec.value.MemAddr;
+import bec.value.ObjectAddress;
 import bec.virtualMachine.SVM_NOT_IMPL;
 import bec.virtualMachine.SVM_POP2REG;
 import bec.virtualMachine.SVM_PUSH;
@@ -112,10 +112,6 @@ public class Util {
 	// ***************************************************************
 	// *** GQ-Utilities
 	// ***************************************************************
-	public static void GQconvert(Type toType) {
-		GQfetch("GQconvert " + toType);
-		if(CTStack.TOS.type != toType) doConvert(toType);
-	}
 
 	public static void GQfetch(String comment) { //  ; --  M} ikke bruke qDI(se rupdate) --
 //	%-D Visible Routine GQfetchxx; --  M} ikke bruke qDI(se rupdate) --
@@ -123,13 +119,14 @@ public class Util {
 //	      range(0:MaxWord) nbyte; range(0:MaxByte) cTYP;
 		if(CTStack.TOS instanceof AddressItem) {
 //	           opr:=GetTosSrcAdr;
-			MemAddr addr = getTosSrcAdr();
+			ObjectAddress addr = getTosSrcAdr();
+			System.out.println("Util.GQfetch: addr="+addr);
 			Type type = CTStack.TOS.type;
 //			int size = DataType.typeSize(type);
 			Global.PSEG.emit(new SVM_PUSH(type, addr, type.size()), comment + " " +type);
 			CTStack.pop(); CTStack.pushTemp(type, "GQFetch: ");
-//			CTStack.dumpStack("GQfetch: "+comment);
-//			Global.PSEG.dump("GQfetch: "+comment);
+			CTStack.dumpStack("GQfetch: "+comment);
+			Global.PSEG.dump("GQfetch: "+comment);
 //			Util.IERR("NOT IMPL");
 		}
 	}
@@ -159,10 +156,9 @@ public class Util {
 		CTStack.pop();
 	}
 
-	public static MemAddr getTosSrcAdr() { //; export infix(MemAddr) a;
+	public static ObjectAddress getTosSrcAdr() { //; export infix(MemAddr) srcAddr;
 		AddressItem tos = (AddressItem) CTStack.TOS;
-		MemAddr a = tos.objadr;
-		a.ofst = a.ofst + tos.offset;
+		ObjectAddress srcAddr = tos.objadr.ofset(tos.offset);
 		switch(tos.atrState) {
 		case NotStacked: break; // Nothing
 		case FromConst:
@@ -170,10 +166,10 @@ public class Util {
 			Util.IERR("NOT IMPL");
 			break;
 		case Calculated:
-//			%+D        if GetIreg(a)<>0 then IERR("GetTosSrcAdr-0") endif;
+//			%+D        if GetIreg(srcAddr)<>0 then IERR("GetTosSrcAdr-0") endif;
 //			%+E        Qf1(qPOPR,qESI,cVAL);
-//			%+E        if a.sibreg=NoIBREG then a.sibreg:=bESI+iESI;
-//			%+E        else a.sibreg:=wOR(wAND(a.sibreg,BaseREG),iESI) endif;
+//			%+E        if srcAddr.sibreg=NoIBREG then srcAddr.sibreg:=bESI+iESI;
+//			%+E        else srcAddr.sibreg:=wOR(wAND(srcAddr.sibreg,BaseREG),iESI) endif;
 			Global.PSEG.emit(new SVM_NOT_IMPL(), "getTosSrcAdr");
 			break;
 		}
@@ -186,21 +182,18 @@ public class Util {
 			break;
 		case Calculated:
 //	        Qf1(qPOPR,qEBX,cOBJ);
-//	        a.sibreg:=bOR(bAND(a.sibreg,IndxREG),bEBX);
+//	        srcAddr.sibreg:=bOR(bAND(srcAddr.sibreg,IndxREG),bEBX);
 			Global.PSEG.emit(new SVM_POP2REG(1), ""+tos);
 
 //			Util.IERR("NOT IMPL");
 		}
 //		Util.IERR("");
-		return a;
+		return srcAddr;
 	}
 	
-	public static MemAddr getTosDstAdr() { // export infix(MemAddr) a;
-//	begin a:=TOS qua Address.Objadr;
+	public static ObjectAddress getTosDstAdr() { // export infix(MemAddr) dstAddr;
 		AddressItem tos = (AddressItem) CTStack.TOS;
-		MemAddr a = tos.objadr;
-//	      a.rela.val:=a.rela.val+TOS qua Address.Offset;
-		a.ofst = a.ofst + tos.offset;
+		ObjectAddress dstAddr = tos.objadr.ofset(tos.offset);
 		switch(tos.atrState) {
 		case NotStacked: break; // Nothing
 		case FromConst:
@@ -208,10 +201,10 @@ public class Util {
 			Util.IERR("NOT IMPL");
 			break;
 		case Calculated:
-//			%+D        if GetIreg(a)<>0 then IERR("GetTosDstAdr-0") endif;
+//			%+D        if GetIreg(dstAddr)<>0 then IERR("GetTosDstAdr-0") endif;
 //			%+E        Qf1(qPOPR,qEDI,cVAL);
-//			%+E        if a.sibreg=NoIBREG then a.sibreg:=bEDI+iEDI;
-//			%+E        else a.sibreg:=wOR(wAND(a.sibreg,BaseREG),iEDI) endif;
+//			%+E        if dstAddr.sibreg=NoIBREG then dstAddr.sibreg:=bEDI+iEDI;
+//			%+E        else dstAddr.sibreg:=wOR(wAND(dstAddr.sibreg,BaseREG),iEDI) endif;
 			
 //			Global.PSEG.emit(new SVM_POPR(1), ""+tos); // ???
 //			Util.IERR("NOT IMPL");
@@ -225,7 +218,7 @@ public class Util {
 			break;
 		case Calculated:
 //	        Qf1(qPOPR,qEBX,cOBJ);
-//	        a.sibreg:=bOR(bAND(a.sibreg,IndxREG),bEBX);
+//	        dstAddr.sibreg:=bOR(bAND(dstAddr.sibreg,IndxREG),bEBX);
 			Global.PSEG.emit(new SVM_POP2REG(1), ""+tos);
 
 //			Util.IERR("NOT IMPL");
@@ -236,206 +229,10 @@ public class Util {
 //	%+E   when NotStacked: -- Nothing
 //	%+E   when FromConst:  qPOPKill(4);
 //	%+E   when Calculated: Qf1(qPOPR,qEBX,cOBJ);
-//	%+E        a.sibreg:=bOR(bAND(a.sibreg,IndxREG),bEBX);
+//	%+E        dstAddr.sibreg:=bOR(bAND(dstAddr.sibreg,IndxREG),bEBX);
 //	%+E   endcase;
 //		Util.IERR("");
-		return a;
-	}
-
-
-	public static void doConvert(Type totype) {
-//	begin range(0:MaxType) fromtype; Boolean ILL;
-//	      infix(ValueItem) itm; infix(MemAddr) opr; range(0:nregs) a,d;
-		Type fromtype = CTStack.TOS.type;
-		System.out.println("Util.doConvert: "+fromtype + " ===> " + totype);
-		CTStack.dumpStack("Util.doConvert: ");
-//	%+D   if fromtype=totype then -- Nothing
-//	%+D   elsif fromtype > T_max
-//	%+D   then EdWrd(errmsg,fromtype); Ed(errmsg," ==> ");
-//	%+D        EdWrd(errmsg,totype); IERR(" CODER:GQconvert-1")
-//	%+D   elsif totype > T_max
-//	%+D   then EdWrd(errmsg,fromtype); Ed(errmsg," ==> ");
-//	%+D        EdWrd(errmsg,totype); IERR(" CODER:GQconvert-2")
-//	%+D   else
-		if(CTStack.TOS instanceof ConstItem cnst) cnst.convert(totype); // ConvConst(totype)
-		else {
-			Util.IERR("NOT IMPL");
-//	      else ILL:=false;
-//	           case 0:T_max (fromtype)
-//	           when T_TREAL:       -- temp real
-//	                case 0:T_max (totype)
-//	                when T_LREAL, -- temp real --> long real
-//	                     T_REAL,  -- temp real --> real
-//	                     T_WRD4:  -- temp real --> 32bit integer
-//	                     PopTosToNPX; PushFromNPX(fromtype,totype);
-//	                     pushTemp(totype);
-//	                when T_WRD2,T_BYT2,T_BYT1,T_CHAR:
-//	                     PopTosToNPX; PushFromNPX(fromtype,T_WRD4);
-//	                     pushTemp(T_WRD4); goto LL1;
-//	                otherwise ILL:=true endcase;
-//	           when T_LREAL:       -- long real
-//	                case 0:T_max (totype)
-//	                when T_TREAL: -- long real --> temp real
-//	                     PopTosToNPX; PushFromNPX(fromtype,totype);
-//	                     pushTemp(totype);
-//	                when T_REAL: -- long real --> real
-//	%-E                  if NUMID=NoNPX then EM8CNV4(X_LR2RE)
-//	%-E                  else
-//	                          PopTosToNPX; PushFromNPX(fromtype,totype);
-//	%-E                  endif;
-//	                     pushTemp(T_REAL);
-//	                when T_WRD4: -- long real --> 32bit integer
-//	%-E                  if NUMID=NoNPX then EM8CNV4(X_LR2IN)
-//	%-E                  else
-//	                          PopTosToNPX; PushFromNPX(fromtype,totype);
-//	%-E                  endif;
-//	                     pushTemp(T_WRD4);
-//	                when T_WRD2,T_BYT2,T_BYT1,T_CHAR:
-//	%-E                  if NUMID=NoNPX then EM8CNV4(X_LR2IN)
-//	%-E                  else
-//	                          PopTosToNPX; PushFromNPX(fromtype,T_WRD4);
-//	%-E                  endif;
-//	                     pushTemp(T_WRD4); goto LL2;
-//	                otherwise ILL:=true endcase;
-//	           when T_REAL:       -- real
-//	                case 0:T_max (totype)
-//	                when T_TREAL: -- real --> temp real
-//	                     PopTosToNPX; PushFromNPX(fromtype,totype);
-//	                     pushTemp(T_TREAL);
-//	                when T_LREAL: -- real --> long real
-//	%-E                  if NUMID=NoNPX then EM4CNV8(X_RE2LR)
-//	%-E                  else
-//	                          PopTosToNPX; PushFromNPX(fromtype,totype);
-//	%-E                  endif;
-//	                     pushTemp(T_LREAL);
-//	                when T_WRD4: -- real --> 32bit integer
-//	%-E                  if NUMID=NoNPX then EM4MONAD(X_RE2IN);
-//	%-E                  else
-//	                          PopTosToNPX; PushFromNPX(fromtype,totype);
-//	%-E                  endif;
-//	                     pushTemp(T_WRD4);
-//	                when T_WRD2,T_BYT2,T_BYT1,T_CHAR:
-//	%-E                  if NUMID=NoNPX then EM4MONAD(X_RE2IN);
-//	%-E                  else
-//	                          PopTosToNPX; PushFromNPX(fromtype,T_WRD4);
-//	%-E                  endif;
-//	                     pushTemp(T_WRD4); goto LL3;
-//	                otherwise ILL:=true endcase;
-//	           when T_WRD4:       -- 4-byte signed integer in 86
-//	LL1:LL2:LL3:LL4:LL5:LL6:
-//	                case 0:T_max (totype)
-//	                when T_TREAL: -- 32bit integer --> temp real
-//	                     PopTosToNPX; PushFromNPX(fromtype,totype);
-//	                     pushTemp(T_TREAL);
-//	                when T_LREAL: -- 32bit integer --> long real
-//	%-E                  if NUMID=NoNPX then EM4CNV8(X_IN2LR);
-//	%-E                  else
-//	                          PopTosToNPX; PushFromNPX(fromtype,totype);
-//	%-E                  endif;
-//	                     pushTemp(T_LREAL);
-//	                when T_REAL: -- 32bit integer --> real
-//	%-E                  if NUMID=NoNPX then EM4MONAD(X_IN2RE);
-//	%-E                  else
-//	                          PopTosToNPX; PushFromNPX(fromtype,totype);
-//	%-E                  endif;
-//	                     pushTemp(T_REAL);
-//	                when T_WRD2: -- 32bit integer --> 16bit signed integer
-//	                     -- CHECK_RANGE(-32768:32767)
-//	                     a:=FreePartReg; Qf1(qPOPR,a,cVAL);
-//	%-E                  qPOPKill(2); Qf1(qPUSHR,a,cVAL);
-//	%+E                  Qf1(qPUSHR,WordReg(a),cVAL);
-//	                when T_BYT2: -- 32bit integer  --> 16bit unsigned integer
-//	                     -- CHECK_RANGE(0:65535)
-//	                     a:=FreePartReg; Qf1(qPOPR,a,cVAL);
-//	%-E                  qPOPKill(2); Qf1(qPUSHR,a,cVAL);
-//	%+E                  Qf1(qPUSHR,WordReg(a),cVAL);
-//	                when T_BYT1, -- 32bit integer --> 1-byte unsigned integer
-//	                     T_CHAR: -- 32bit integer --> Character
-//	                     -- CHECK_RANGE(0:255)
-//	                     a:=FreePartReg;
-//	                     NotMindMask:=wOR(NotMindMask,uMask(HighPart(%a%)));
-//	                     Qf1(qPOPR,a,cVAL);
-//	%-E                  qPOPKill(2);
-//	                     Qf1(qPUSHR,LowPart(%a%),cVAL);
-//	                otherwise ILL:=true endcase;
-//	           when T_WRD2:       -- 2-byte signed integer in 86
-//	                case 0:T_max (totype)
-//	                when T_TREAL,T_LREAL,T_REAL:   --> any real
-//	                     Qf1(qPOPR,qAX,cVAL);
-//	%-E                  Qf1(qCWD,qAX,cVAL);
-//	%-E                  Qf1(qPUSHR,qDX,cVAL); Qf1(qPUSHR,qAX,cVAL);
-//	%+E                  Qf2(qMOV,qSEXT,qAX,cVAL,qAX); Qf1(qPUSHR,qEAX,cVAL);
-//	                     Pop; pushTemp(T_WRD4); goto LL4;
-//	                when T_WRD4:   --> 4-byte signed integer in 86
-//	                     Qf1(qPOPR,qAX,cVAL);
-//	%-E                  Qf1(qCWD,qAX,cVAL);
-//	%-E                  Qf1(qPUSHR,qDX,cVAL); Qf1(qPUSHR,qAX,cVAL);
-//	%+E                  Qf2(qMOV,qSEXT,qAX,cVAL,qAX); Qf1(qPUSHR,qEAX,cVAL);
-//	                when T_BYT2:   --> 2-byte unsigned integer in 86
-//	                     -- CHECK_POSITIVE
-//	                when T_BYT1,  -- real etc. --> 1-byte unsigned int in 86
-//	                     T_CHAR:  -- real etc. --> Character
-//	                     -- CHECK_RANGE(0:255)
-//	                     a:=FreePartReg;
-//	                     NotMindMask:=wOR(NotMindMask,uMask(HighPart(%a%)));
-//	                     Qf1(qPOPR,WordReg(a),cVAL); Qf1(qPUSHR,LowPart(%a%),cVAL);
-//	                otherwise ILL:=true endcase;
-//	           when T_BYT2:       -- 2-byte unsigned integer in 86
-//	                case 0:T_max (totype)
-//	                when T_TREAL,T_LREAL,T_REAL:   --> any real
-//	%-E                  a:=FreePartReg; Qf1(qPOPR,a,cVAL);
-//	%-E                  d:=FreePartReg; Qf2(qPUSHC,0,d,cVAL,0); Qf1(qPUSHR,a,cVAL);
-//	%+E                  a:=FreePartReg; GetTosAdjustedIn86(a);
-//	%+E                  Qf1(qPUSHR,a,cVAL);
-//	                     Pop; pushTemp(T_WRD4); goto LL5;
-//	                when T_WRD4:   --> 4-byte signed integer in 86
-//	%-E                  a:=FreePartReg; Qf1(qPOPR,a,cVAL);
-//	%-E                  d:=FreePartReg; Qf2(qPUSHC,0,d,cVAL,0); Qf1(qPUSHR,a,cVAL);
-//	%+E                  a:=FreePartReg; GetTosAdjustedIn86(a);
-//	%+E                  Qf1(qPUSHR,a,cVAL);
-//	                when T_WRD2:   --> 2-byte signed integer in 86
-//	                when T_BYT1,  -- real etc. --> 1-byte unsigned int in 86
-//	                     T_CHAR:  -- real etc. --> Character
-//	                     -- CHECK_RANGE(0:255)
-//	                     a:=FreePartReg;
-//	                     NotMindMask:=wOR(NotMindMask,uMask(HighPart(%a%)));
-//	                     Qf1(qPOPR,WordReg(a),cVAL); Qf1(qPUSHR,LowPart(%a%),cVAL);
-//	                otherwise ILL:=true endcase;
-//	           when T_BYT1,       -- 1-byte unsigned integer in 86
-//	                T_CHAR:       -- Character
-//	                case 0:T_max (totype)
-//	                when T_TREAL,T_LREAL,T_REAL:   --> any real
-//	                     a:=FreePartReg; GetTosAdjustedIn86(a);
-//	%-E                  d:=FreePartReg; Qf2(qPUSHC,0,d,cVAL,0);
-//	                     Qf1(qPUSHR,a,cVAL);
-//	                     Pop; pushTemp(T_WRD4); goto LL6;
-//	                when T_WRD4:  --> 4-byte signed integer in 86
-//	                     a:=FreePartReg; GetTosAdjustedIn86(a);
-//	%-E                  d:=FreePartReg; Qf2(qPUSHC,0,d,cVAL,0);
-//	                     Qf1(qPUSHR,a,cVAL);
-//	                when T_WRD2,  --> 2-byte signed integer in 86
-//	                     T_BYT2:  --> 2-byte unsigned integer in 86
-//	                     a:=WordReg(FreePartReg);
-//	                     GetTosAdjustedIn86(a); Qf1(qPUSHR,a,cVAL);
-//	                when T_BYT1,  --> 1-byte unsigned integer in 86
-//	                     T_CHAR:  --> Character
-//	                otherwise ILL:=true endcase;
-//	           when T_OADDR:
-//	                if totype = T_GADDR
-//	                then Qf2(qPUSHC,0,FreePartReg,cVAL,0) else ILL:=true endif;
-//	           when T_GADDR:
-//	                if totype = T_AADDR
-//	                then a:=FreePartReg; Qf1(qPOPR,a,cVAL);
-//	%-E                  qPOPKill(2);
-//	                     qPOPKill(AllignFac); Qf1(qPUSHR,a,cVAL);
-//	                elsif totype = T_OADDR
-//	                then qPOPKill(AllignFac) else ILL:=true endif;
-//	           otherwise ILL:=true endcase;
-//	           if ILL then ERROR("Type conversion is undefined") endif;
-//	           Pop; pushTemp(totype);
-//	      endif;
-//	%+D   endif;
-		}
+		return dstAddr;
 	}
 
 	public static int GQrelation() { // export range(0:255) res;

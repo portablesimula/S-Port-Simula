@@ -35,6 +35,7 @@ public abstract class SELECT extends Instruction {
 		CTStack.TOS.type = attr.type;
 		AddressItem adr = (AddressItem) CTStack.TOS;
 		adr.offset = adr.offset + attr.rela;
+		System.out.println("SELECT.ofScode: ofst="+adr.offset + ", rela=" + attr.rela);
 		adr.type = attr.type;
 		adr.size = attr.size;
 		if(adr.atrState == AddressItem.State.FromConst) {

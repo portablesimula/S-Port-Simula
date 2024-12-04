@@ -6,17 +6,18 @@ import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Type;
 import bec.util.Util;
-import bec.value.AddressValue;
 import bec.value.BooleanValue;
-import bec.value.CharacterValue;
 import bec.value.DotAddress;
+import bec.value.GeneralAddress;
 import bec.value.IntegerValue;
 import bec.value.LongRealValue;
+import bec.value.ObjectAddress;
+import bec.value.ProgramAddress;
 import bec.value.RealValue;
 import bec.value.RecordValue;
-import bec.value.SizeValue;
 import bec.value.TextValue;
 import bec.value.Value;
+import bec.virtualMachine.SVM_PUSH;
 import bec.virtualMachine.SVM_PUSHC;
 
 public abstract class PUSHC extends Instruction {
@@ -71,40 +72,50 @@ public abstract class PUSHC extends Instruction {
 		Value value = null;
 		Scode.inputInstr();
 		switch(Scode.curinstr) {
-		    case Scode.S_C_INT:    type = Type.T_INT; value = new IntegerValue(); break;
+		    case Scode.S_C_INT:    type = Type.T_INT; value = IntegerValue.ofScode_INT(); break;
 		    case Scode.S_C_REAL:   type = Type.T_REAL; value = new RealValue(); break;
 		    case Scode.S_C_LREAL:  type = Type.T_LREAL; value = new LongRealValue(); break;
-		    case Scode.S_C_CHAR:   type = Type.T_CHAR; value = new CharacterValue(); break;
+		    case Scode.S_C_CHAR:   type = Type.T_CHAR; value = IntegerValue.ofScode_CHAR(); break;
 		    case Scode.S_NOSIZE:   type = Type.T_SIZE; value = null; break;
-		    case Scode.S_C_SIZE:   type = Type.T_SIZE; value = new SizeValue(); break;
+		    case Scode.S_C_SIZE:   type = Type.T_SIZE; value = IntegerValue.ofScode_SIZE(); break;
 		    case Scode.S_TRUE:     type = Type.T_BOOL; value = new BooleanValue(true); break;
 		    case Scode.S_FALSE:    type = Type.T_BOOL; value = new BooleanValue(false); break;
 		    case Scode.S_ANONE:    type = Type.T_AADDR; value = null; break;
-		    case Scode.S_C_AADDR:  type = Type.T_AADDR; value = AddressValue.ofAADDR(); break;
+		    case Scode.S_C_AADDR:  type = Type.T_AADDR; value = IntegerValue.ofScode_AADDR(); break;
 		    case Scode.S_NOWHERE:  type = Type.T_PADDR; value = null; break;
-		    case Scode.S_C_PADDR:  type = Type.T_PADDR; value = AddressValue.ofPADDR(); break;
+		    case Scode.S_C_PADDR:  type = Type.T_PADDR; value = ProgramAddress.ofScode(Type.T_PADDR); break;
 			case Scode.S_NOBODY:   type = Type.T_RADDR; value = null; break;
-		    case Scode.S_C_RADDR:  type = Type.T_RADDR; value = AddressValue.ofRADDR(); break;
+		    case Scode.S_C_RADDR:  type = Type.T_RADDR; value = ProgramAddress.ofScode(Type.T_RADDR); break;
 		    case Scode.S_ONONE:    type = Type.T_OADDR; value = null; break;
-		    case Scode.S_C_OADDR:  type = Type.T_OADDR; value = AddressValue.ofOADDR(); break;
+		    case Scode.S_C_OADDR:  type = Type.T_OADDR; value = ObjectAddress.ofScode(); break;
 		    case Scode.S_GNONE:    type = Type.T_GADDR; value = null; break;
-		    case Scode.S_C_GADDR:  type = Type.T_GADDR; value = AddressValue.ofGADDR(); break;
+		    case Scode.S_C_GADDR:  type = Type.T_GADDR; value = GeneralAddress.ofScode(); break;
 		    case Scode.S_C_DOT:	   value = new DotAddress(); type = value.type; break;
 		    case Scode.S_C_RECORD: value = RecordValue.ofScode(); type = value.type; break;
-		    case Scode.S_TEXT: 	   type = Type.T_TEXT; value = new TextValue(); break;
+		    case Scode.S_TEXT:	   type = Type.T_TEXT; value = TextValue.ofScode(); break;
 		    default: Util.IERR("NOT IMPLEMENTED: " + Scode.edInstr(Scode.curinstr));
+		}
+		
+		if(type == Type.T_TEXT) {
+			Global.CSEG.dump("PUSHC.doCode: ");
+			TextValue txtval = (TextValue) value;
+			String strval = txtval.getString();
+//			Util.IERR(""+value);
+			Global.PSEG.emit(new SVM_PUSH(Type.T_OADDR, txtval.addr, 1), "TEXT'CHRADR'oaddr: "+strval);
+			IntegerValue lng = new IntegerValue(Type.T_INT, txtval.getString().length());  // ELLER OMVENDT !
+			Global.PSEG.emit(new SVM_PUSHC(Type.T_INT, null), "TEXT'CHRADR'ofst:  "+strval);
+			Global.PSEG.emit(new SVM_PUSHC(Type.T_INT, lng), "TEXT'lng:   "+strval);
+			type = Type.T_STRING;
+			Global.PSEG.dump("PUSHC: "+value+": ");
+//			Util.IERR("");
+		} else {
+			Global.PSEG.emit(new SVM_PUSHC(type, value), "");
 		}
 		ConstItem cns = new ConstItem(type, value);
 		CTStack.push(cns);
 //		CTStack.dumpStack("PUSHC: "+value+": ");
 //		Util.IERR("DETTE MÅ RETTES");
-		
-		Global.PSEG.emit(new SVM_PUSHC(type, value), "");
 //		Global.PSEG.dump("PUSHC: "+value+": ");
-		if(type == Type.T_TEXT) {
-			Global.CSEG.dump("PUSHC.doCode: ");
-//			Util.IERR(""+value);
-		}
 	}
 
 }

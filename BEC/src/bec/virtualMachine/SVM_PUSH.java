@@ -9,16 +9,16 @@ import bec.segment.DataSegment;
 import bec.segment.RTStack;
 import bec.util.Global;
 import bec.util.Type;
-import bec.value.MemAddr;
+import bec.value.ObjectAddress;
 import bec.value.Value;
 
 // The count values at addr... is pushed onto the operand stack.
 public class SVM_PUSH extends SVM_Instruction {
 	Type type;
-	MemAddr addr;
+	ObjectAddress addr;
 	int count;
 	
-	public SVM_PUSH(Type type, MemAddr addr, int count) {
+	public SVM_PUSH(Type type, ObjectAddress addr, int count) {
 		this.opcode = SVM_Instruction.iPUSH;
 		this.type = type;
 		this.addr = addr;
@@ -56,12 +56,14 @@ public class SVM_PUSH extends SVM_Instruction {
 	private SVM_PUSH(AttributeInputStream inpt) throws IOException {
 		this.opcode = SVM_Instruction.iPUSH;
 		this.type = Type.read(inpt);
-		this.addr = MemAddr.read(inpt);
+		this.addr = (ObjectAddress) Value.read(inpt);
 		this.count = inpt.readShort();
+		if(Global.ATTR_INPUT_TRACE) System.out.println("SVM.Read: " + this);
 	}
 
 	@Override
 	public void write(AttributeOutputStream oupt) throws IOException {
+		if(Global.ATTR_OUTPUT_TRACE) System.out.println("SVM.Write: " + this);
 		oupt.writeKind(opcode);
 		type.write(oupt);
 		addr.write(oupt);

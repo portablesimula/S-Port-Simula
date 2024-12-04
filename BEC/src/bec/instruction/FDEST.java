@@ -3,7 +3,8 @@ package bec.instruction;
 import bec.compileTimeStack.CTStack;
 import bec.util.Global;
 import bec.util.Scode;
-import bec.value.MemAddr;
+import bec.value.ObjectAddress;
+import bec.value.ProgramAddress;
 import bec.virtualMachine.SVM_GOTO;
 import bec.virtualMachine.SVM_NOOP;
 
@@ -25,7 +26,7 @@ public abstract class FDEST extends Instruction {
 		int destination = Scode.inByte();
 
 //		CTStack.dumpStack();
-		MemAddr addr = Global.DESTAB[destination];
+		ProgramAddress addr = Global.DESTAB[destination];
 		Global.DESTAB[destination] = null;
 		SVM_GOTO instr = (SVM_GOTO) Global.PSEG.instructions.get(addr.ofst);
 		instr.destination = Global.PSEG.nextAddress();

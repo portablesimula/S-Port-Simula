@@ -74,7 +74,7 @@ public class Attribute extends Descriptor {
 		loc.rela = inpt.readShort();
 		loc.repCount = inpt.readShort();
 		loc.size = inpt.readShort();
-		if(Global.ATTR_OUTPUT_TRACE) System.out.println("LocDescr.Read: " + loc);
+		if(Global.ATTR_INPUT_TRACE) System.out.println("LocDescr.Read: " + loc);
 		return loc;
 	}
 

@@ -7,40 +7,39 @@ import bec.AttributeOutputStream;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Type;
+import bec.util.Util;
 
-public class BooleanValue extends Value {
-	boolean value;
+public class StringValue extends Value {
+	public String value;
 	
-	/**
-	 * boolean_value ::= true | false
-	 */
-	public BooleanValue(boolean value) {
-		this.type = Type.T_BOOL;
+	public StringValue(String value) {
+		this.type = Type.T_STRING;
 		this.value = value;
 	}
-
-	@Override
-//	public void print(final String indent) {
-//		System.out.println(indent + toString());
-//	}
 	
 	public String toString() {
-		return "" + value;
+		return value;
 	}
 	
-	
+
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
+	private StringValue(AttributeInputStream inpt) throws IOException {
+		this.type = Type.T_STRING;
+		value = inpt.readString();
+		System.out.println("NEW StringValue: " + this);
+//		Util.IERR("SJEKK DETTE");
+	}
 
 	public void write(AttributeOutputStream oupt) throws IOException {
 		if(Global.ATTR_OUTPUT_TRACE) System.out.println("Value.write: " + this);
-		oupt.writeKind((value)?Scode.S_TRUE:Scode.S_FALSE);
+		oupt.writeKind(Scode.S_STRING);
+		oupt.writeString(value);
 	}
 
-	public static BooleanValue read(AttributeInputStream inpt) throws IOException {
-		inpt.readInstr();
-		return new BooleanValue(inpt.curinstr==Scode.S_TRUE);
+	public static StringValue read(AttributeInputStream inpt) throws IOException {
+		return new StringValue(inpt);
 	}
 
 

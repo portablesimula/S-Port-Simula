@@ -5,7 +5,10 @@ import java.util.Vector;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
+import bec.util.Global;
 import bec.util.Scode;
+import bec.util.Type;
+import bec.util.Util;
 
 public class RepetitionValue extends Value {
 	public Vector<Value> values;
@@ -62,12 +65,12 @@ public class RepetitionValue extends Value {
 		LOOP:while(true) {
 //			System.out.println("RepetitionValue.treatValue: "+Scode.edInstr(Scode.nextByte()));
 			switch(Scode.nextByte()) {
-				case Scode.S_TEXT:     Scode.inputInstr(); values.add(new TextValue()); break;
-				case Scode.S_C_INT:    Scode.inputInstr(); values.add(new IntegerValue()); break;
+				case Scode.S_TEXT:     Scode.inputInstr(); values.add(TextValue.ofScode()); break;
+				case Scode.S_C_INT:    Scode.inputInstr(); values.add(IntegerValue.ofScode_INT()); break;
+				case Scode.S_C_CHAR:   Scode.inputInstr(); values.add(IntegerValue.ofScode_CHAR()); break;
+				case Scode.S_C_SIZE:   Scode.inputInstr(); values.add(IntegerValue.ofScode_SIZE()); break;
 				case Scode.S_C_REAL:   Scode.inputInstr(); values.add(new RealValue()); break;
 				case Scode.S_C_LREAL:  Scode.inputInstr(); values.add(new LongRealValue()); break;
-				case Scode.S_C_CHAR:   Scode.inputInstr(); values.add(new CharacterValue()); break;
-				case Scode.S_C_SIZE:   Scode.inputInstr(); values.add(new SizeValue()); break;
 				case Scode.S_TRUE:     Scode.inputInstr(); values.add(new BooleanValue(true)); break;
 				case Scode.S_FALSE:    Scode.inputInstr(); values.add(new BooleanValue(false)); break;
 				case Scode.S_NOSIZE:   Scode.inputInstr(); values.add(null); break;
@@ -76,11 +79,11 @@ public class RepetitionValue extends Value {
 				case Scode.S_NOBODY:   Scode.inputInstr(); values.add(null); break;
 				case Scode.S_ONONE:    Scode.inputInstr(); values.add(null); break;
 				case Scode.S_GNONE:    Scode.inputInstr(); values.add(null); break;
-				case Scode.S_C_AADDR:  Scode.inputInstr(); values.add(AddressValue.ofAADDR()); break;
-				case Scode.S_C_PADDR:  Scode.inputInstr(); values.add(AddressValue.ofPADDR()); break;
-				case Scode.S_C_RADDR:  Scode.inputInstr(); values.add(AddressValue.ofRADDR()); break;
-				case Scode.S_C_OADDR:  Scode.inputInstr(); values.add(AddressValue.ofOADDR()); break;
-				case Scode.S_C_GADDR:  Scode.inputInstr(); values.add(AddressValue.ofGADDR()); break;
+				case Scode.S_C_AADDR:  Scode.inputInstr(); values.add(IntegerValue.ofScode_AADDR()); break;
+				case Scode.S_C_PADDR:  Scode.inputInstr(); values.add(ProgramAddress.ofScode(Type.T_PADDR)); break;
+				case Scode.S_C_RADDR:  Scode.inputInstr(); values.add(ProgramAddress.ofScode(Type.T_RADDR)); break;
+				case Scode.S_C_OADDR:  Scode.inputInstr(); values.add(ObjectAddress.ofScode()); break;
+				case Scode.S_C_GADDR:  Scode.inputInstr(); values.add(GeneralAddress.ofScode()); break;
 				case Scode.S_C_DOT:    Scode.inputInstr(); values.add(new DotAddress()); break;
 				case Scode.S_C_RECORD: Scode.inputInstr(); values.add(RecordValue.ofScode()); break;
 				default: break LOOP;
@@ -119,9 +122,9 @@ public class RepetitionValue extends Value {
 	}
 
 	public void write(AttributeOutputStream oupt) throws IOException {
-//		oupt.writeInstr(Scode.S_EXPORT);
-//		oupt.writeTag(tag);
-//		type.write(oupt);
+		if(Global.ATTR_OUTPUT_TRACE) System.out.println("Value.write: " + this);
+//		oupt.writeKind(Scode.S_C_???);
+		Util.IERR("TEST DETTE");
 		oupt.writeShort(values.size());
 		for(Value value:values) {
 			value.write(oupt);

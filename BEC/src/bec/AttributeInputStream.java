@@ -22,7 +22,7 @@ public class AttributeInputStream {
 //	 */
 //	public ObjectReferenceMap objectReference;
 	
-	private boolean TRACE = false; //true;
+	private boolean TRACE = true;//false; //true;
 
     public AttributeInputStream(InputStream inpt) throws IOException {
     	this.inpt = new DataInputStream(inpt);
@@ -137,6 +137,7 @@ public class AttributeInputStream {
     		return null;
     	}
     	if(TRACE) System.out.println("AttributeInputStream.readString: lng="+(char)lng+" "+lng);
+    	if(lng > 2000) Thread.dumpStack();
     	StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < lng; i++) sb.append(inpt.readChar());
     	String s = sb.toString();

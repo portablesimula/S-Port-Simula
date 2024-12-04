@@ -10,15 +10,14 @@ import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Type;
 import bec.util.Util;
-import bec.value.AddressValue;
 import bec.value.BooleanValue;
-import bec.value.CharacterValue;
 import bec.value.DotAddress;
+import bec.value.GeneralAddress;
 import bec.value.IntegerValue;
 import bec.value.LongRealValue;
-import bec.value.MemAddr;
+import bec.value.ObjectAddress;
+import bec.value.ProgramAddress;
 import bec.value.RealValue;
-import bec.value.SizeValue;
 import bec.value.TextValue;
 import bec.value.Value;
 
@@ -36,12 +35,12 @@ public class DataSegment extends Segment {
 		comment = new Vector<String>();
 	}
 	
-	public MemAddr ofOffset(int ofst) {
-		return new MemAddr(this,ofst);
+	public ObjectAddress ofOffset(int ofst) {
+		return new ObjectAddress(this,ofst);
 	}
 	
-	public MemAddr nextAddress() {
-		return new MemAddr(this,values.size());
+	public ObjectAddress nextAddress() {
+		return new ObjectAddress(this,values.size());
 	}
 	
 	public void store(int index, Value value) {
@@ -52,32 +51,33 @@ public class DataSegment extends Segment {
 		return values.get(index);
 	}
 	
-	public MemAddr emit(Value value,String cmnt) {
-		MemAddr addr = nextAddress();
+	public ObjectAddress emit(Value value,String cmnt) {
+		ObjectAddress addr = nextAddress();
 		values.add(value);
 		comment.add(cmnt);
 		return addr;
 	}
 
 	public void emitDefaultValue(int size, String cmnt) {
+//		System.out.println("DataSegment.emitDefaultValue: size="+size);
 		for(int i=0;i<size;i++) {
 			emit(null, cmnt);
 		}
 	}
 
-	public MemAddr emitValue(String comment) {
+	public ObjectAddress emitRepetitionValue(String comment) {
 //		MemAddr addr = Global.DSEG.nextAddress();
-		MemAddr addr = nextAddress();
+		ObjectAddress addr = nextAddress();
 	LOOP:while(true) {
 //			if(Global.ATTR_OUTPUT_TRACE)
-//				System.out.println("DataSegment.emitValue: "+Scode.edInstr(Scode.nextByte())+"  Comment="+comment);
+				System.out.println("DataSegment.emitRepetitionValue: "+Scode.edInstr(Scode.nextByte())+"  Comment="+comment);
 			switch(Scode.nextByte()) {
-				case Scode.S_TEXT:     Scode.inputInstr(); emit(new TextValue(), comment); break;
-			    case Scode.S_C_INT:    Scode.inputInstr(); emit(new IntegerValue(), comment); break;
-			    case Scode.S_C_REAL:   Scode.inputInstr(); emit(new RealValue(), comment); break;
-			    case Scode.S_C_LREAL:  Scode.inputInstr(); emit(new LongRealValue(), comment); break;
-			    case Scode.S_C_CHAR:   Scode.inputInstr(); emit(new CharacterValue(), comment); break;
-			    case Scode.S_C_SIZE:   Scode.inputInstr(); emit(new SizeValue(), comment); break;
+				case Scode.S_TEXT:     Scode.inputInstr(); TextValue.ofScode(); break;
+			    case Scode.S_C_INT:    Scode.inputInstr(); IntegerValue.ofScode_INT(); break;
+			    case Scode.S_C_CHAR:   Scode.inputInstr(); IntegerValue.ofScode_CHAR(); break;
+			    case Scode.S_C_SIZE:   Scode.inputInstr(); IntegerValue.ofScode_SIZE(); break;
+			    case Scode.S_C_REAL:   Scode.inputInstr(); new RealValue(); break;
+			    case Scode.S_C_LREAL:  Scode.inputInstr(); new LongRealValue(); break;
 			    case Scode.S_TRUE:     Scode.inputInstr(); emit(new BooleanValue(true), comment); break;
 			    case Scode.S_FALSE:    Scode.inputInstr(); emit(new BooleanValue(false), comment); break;
 			    case Scode.S_NOSIZE:   Scode.inputInstr(); emit(null, comment); break;
@@ -86,17 +86,20 @@ public class DataSegment extends Segment {
 			    case Scode.S_NOBODY:   Scode.inputInstr(); emit(null, comment); break;
 			    case Scode.S_ONONE:    Scode.inputInstr(); emit(null, comment); break;
 			    case Scode.S_GNONE:    Scode.inputInstr(); emit(null, comment); break;
-			    case Scode.S_C_AADDR:  Scode.inputInstr(); emit(AddressValue.ofAADDR(), comment); break;
-			    case Scode.S_C_PADDR:  Scode.inputInstr(); emit(AddressValue.ofPADDR(), comment); break;
-			    case Scode.S_C_RADDR:  Scode.inputInstr(); emit(AddressValue.ofRADDR(), comment); break;
-			    case Scode.S_C_OADDR:  Scode.inputInstr(); emit(AddressValue.ofOADDR(), comment); break;
-			    case Scode.S_C_GADDR:  Scode.inputInstr(); emit(AddressValue.ofGADDR(), comment); break;
-			    case Scode.S_C_DOT:    Scode.inputInstr(); emit(new DotAddress(), comment); break;
+			    case Scode.S_C_AADDR:  Scode.inputInstr(); IntegerValue.ofScode_AADDR(); break;
+			    case Scode.S_C_PADDR:  Scode.inputInstr(); ProgramAddress.ofScode(Type.T_PADDR); break;
+			    case Scode.S_C_RADDR:  Scode.inputInstr(); ProgramAddress.ofScode(Type.T_RADDR); break;
+			    case Scode.S_C_OADDR:  Scode.inputInstr(); ObjectAddress.ofScode(); break;
+			    case Scode.S_C_GADDR:  Scode.inputInstr(); GeneralAddress.ofScode(); break;
+			    case Scode.S_C_DOT:    Scode.inputInstr(); new DotAddress(); break;
 			    case Scode.S_C_RECORD: Scode.inputInstr(); emitRecordValue(comment); break;
-				default: break LOOP;
+				default:
+					System.out.println("DataSegment.emitRepetitionValue: TERMINATED BY: "+Scode.edInstr(Scode.nextByte())+"  Comment="+comment);
+					break LOOP;
 			}
 		}
-		return addr;
+	this.dump("emitRepetitionValue: ");
+	return addr;
 	}
 
 	/**
@@ -116,7 +119,7 @@ public class DataSegment extends Segment {
 			Type type = Type.ofScode();
 //			System.out.println("DataSegment.emitRecordValue'S_ATTR: "+Scode.edTag(atag)+"  "+type);
 
-			emitValue(comment + "  " + Scode.edTag(atag) + "  " + Scode.edTag(type.tag));
+			emitRepetitionValue(comment + "  " + Scode.edTag(atag) + "  " + Scode.edTag(type.tag));
 			Scode.inputInstr();
 //			System.out.println("DataSegment.emitRecordValue: Curinstr="+Scode.edInstr(Scode.curinstr));
 		}
@@ -162,7 +165,7 @@ public class DataSegment extends Segment {
 
 	@Override
 	public void write(AttributeOutputStream oupt) throws IOException {
-		if(Global.ATTR_OUTPUT_TRACE) System.out.println("DataSegment.Write: " + this);
+		if(Global.ATTR_OUTPUT_TRACE) System.out.println("DataSegment.Write: " + this + ", Size=" + values.size());
 //		oupt.writeInstr(Scode.S_BSEG);
 		oupt.writeKind(segmentKind);
 		oupt.writeString(ident);
@@ -170,6 +173,7 @@ public class DataSegment extends Segment {
 		for(int i=0;i<values.size();i++) {
 			oupt.writeString(comment.get(i));
 			Value val = values.get(i);
+			System.out.println("DataSegment.Write: "+val);
 			if(val == null)
 				 oupt.writeInstr(Scode.S_NULL);
 			else val.write(oupt);
@@ -181,6 +185,7 @@ public class DataSegment extends Segment {
 		String ident = inpt.readString();
 //		System.out.println("DataSegment.readObject: ident="+ident+", segmentKind="+segmentKind);
 		DataSegment seg = new DataSegment(ident, segmentKind, inpt);
+		if(Global.ATTR_INPUT_TRACE) System.out.println("DataSegment.Read: " + seg);
 		if(Global.ATTR_INPUT_DUMP) seg.dump("DataSegment.readObject: ");
 //		Util.IERR("");
 		return seg;

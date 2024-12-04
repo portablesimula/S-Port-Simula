@@ -7,6 +7,7 @@ import bec.AttributeOutputStream;
 import bec.segment.RTStack;
 import bec.util.Global;
 import bec.util.Type;
+import bec.util.Util;
 import bec.value.Value;
 
 /**
@@ -28,7 +29,7 @@ public class SVM_ADD extends SVM_Instruction {
 //		System.out.println("SVM_ADD: " + tos + " + " + sos + " = " + res);
 		RTStack.push(type, res);
 		Global.PSC.ofst++;
-//		Util.IERR("");
+//		Util.IERR(""+res);
 	}
 
 	@Override	
@@ -41,12 +42,15 @@ public class SVM_ADD extends SVM_Instruction {
 	// ***********************************************************************************************
 
 	public void write(AttributeOutputStream oupt) throws IOException {
+		if(Global.ATTR_OUTPUT_TRACE) System.out.println("SVM.Write: " + this);
 		oupt.writeKind(opcode);
 		type.write(oupt);;
 	}
 
 	public static SVM_ADD read(AttributeInputStream inpt) throws IOException {
-		return new SVM_ADD(Type.read(inpt));
+		SVM_ADD instr = new SVM_ADD(Type.read(inpt));
+		if(Global.ATTR_INPUT_TRACE) System.out.println("SVM.Read: " + instr);
+		return instr;
 	}
 
 }

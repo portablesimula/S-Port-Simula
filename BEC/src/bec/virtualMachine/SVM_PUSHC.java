@@ -40,10 +40,12 @@ public class SVM_PUSHC extends SVM_Instruction {
 		this.type = Type.read(inpt);
 		boolean present = inpt.readBoolean();
 		if(present)	this.value = Value.read(inpt);
+		if(Global.ATTR_INPUT_TRACE) System.out.println("SVM.Read: " + this);
 	}
 
 	@Override
 	public void write(AttributeOutputStream oupt) throws IOException {
+		if(Global.ATTR_OUTPUT_TRACE) System.out.println("SVM.Write: " + this);
 		oupt.writeKind(opcode);
 		type.write(oupt);
 		if(value != null) {

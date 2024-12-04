@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
+import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Tag;
 import bec.util.Type;
@@ -59,7 +60,8 @@ public class AttributeValue extends Value {
 	}
 
 	public void write(AttributeOutputStream oupt) throws IOException {
-		oupt.writeInstr(Scode.S_ATTR);
+		if(Global.ATTR_OUTPUT_TRACE) System.out.println("Value.write: " + this);
+		oupt.writeKind(Scode.S_ATTR);
 		tag.write(oupt);;
 		type.write(oupt);
 		value.write(oupt);

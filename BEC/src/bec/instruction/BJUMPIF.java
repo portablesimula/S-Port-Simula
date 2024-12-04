@@ -5,7 +5,7 @@ import bec.util.Global;
 import bec.util.Relation;
 import bec.util.Scode;
 import bec.util.Util;
-import bec.value.MemAddr;
+import bec.value.ProgramAddress;
 import bec.virtualMachine.SVM_GOTOIF;
 
 public abstract class BJUMPIF extends Instruction {
@@ -35,7 +35,7 @@ public abstract class BJUMPIF extends Instruction {
 		CTStack.pop();
 		CTStack.pop();
 		
-		MemAddr addr = Global.DESTAB[destination];
+		ProgramAddress addr = Global.DESTAB[destination];
 		if(addr == null) Util.IERR("");
 		Global.PSEG.emit(new SVM_GOTOIF(relation, addr), "BJUMPIF: "+destination+ " " + destination);
 		Global.DESTAB[destination] = null;
