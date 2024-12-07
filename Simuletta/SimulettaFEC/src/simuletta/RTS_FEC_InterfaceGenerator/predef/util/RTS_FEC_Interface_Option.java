@@ -12,7 +12,7 @@ import simuletta.RTS_FEC_InterfaceGenerator.RTS_FEC_InterfaceGenerator;
 /**
  * Compile Time Options
  * 
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  *
  */
 public final class RTS_FEC_Interface_Option {

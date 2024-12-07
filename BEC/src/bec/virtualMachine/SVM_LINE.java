@@ -5,7 +5,6 @@ import java.io.IOException;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Global;
-import bec.util.Type;
 
 /**
  * 
@@ -18,6 +17,11 @@ public class SVM_LINE extends SVM_Instruction {
 	public SVM_LINE(int type, int sourceLine) {
 		this.type = type;
 		this.sourceLine = sourceLine;
+	}
+
+	@Override
+	public void execute() {
+		Global.PSC.ofst++;
 	}
 	
 	@Override	

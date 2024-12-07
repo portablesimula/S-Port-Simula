@@ -16,8 +16,8 @@ public class SVM_Instruction {
 	public final static int iCOMPARE = 5;
 	public final static int iCONVERT = 6;
 	public final static int iDIV = 7;
-	public final static int iGOTO = 8;
-	public final static int iGOTOIF = 9;
+	public final static int iJUMP = 8;
+	public final static int iJUMPIF = 9;
 	public final static int iMULT = 10;
 	public final static int iNEG = 11;
 	public final static int iPUSH = 12;
@@ -25,14 +25,17 @@ public class SVM_Instruction {
 	public final static int iRETURN = 14;
 	public final static int iPOP2REG = 15;
 	public final static int iPOP2MEM = 16;
-//	public final static int iSTOREC = 17;
+	public final static int iREM = 17;
 	public final static int iSUB = 18;
 	public final static int iSWITCH = 19;
 	public final static int iSYSCALL = 20;
 	public final static int iLINE = 21;
 	public final static int iNOOP = 22;
 	public final static int iNOT = 23;
+	public final static int iGOTO = 24;
+	
 	public final static int iNOT_IMPL = 99;
+	
 
 	public void execute() {
 		Util.IERR("Method execute need a redefinition in "+this.getClass().getSimpleName());
@@ -62,8 +65,8 @@ public class SVM_Instruction {
 			case iCOMPARE:	return SVM_COMPARE.read(inpt);
 			case iCONVERT:	return SVM_CONVERT.read(inpt);
 			case iDIV:		return SVM_DIV.read(inpt);
-			case iGOTO:		return SVM_GOTO.read(inpt);
-			case iGOTOIF:	return SVM_GOTOIF.read(inpt);
+			case iJUMP:		return SVM_JUMP.read(inpt);
+			case iJUMPIF:	return SVM_JUMPIF.read(inpt);
 			case iMULT:		return SVM_MULT.read(inpt);
 			case iNEG:		return SVM_NEG.read(inpt);
 			case iPUSH:		return SVM_PUSH.read(inpt);
@@ -78,6 +81,8 @@ public class SVM_Instruction {
 			case iSYSCALL:	return SVM_SYSCALL.read(inpt);
 			case iNOOP:		return SVM_NOOP.read(inpt);
 			case iNOT:		return SVM_NOT.read(inpt);
+			case iGOTO:		return SVM_GOTO.read(inpt);
+			
 			case iNOT_IMPL:	return SVM_NOT_IMPL.read(inpt);
 			default: Util.IERR("MISSING: " + edOpcode(opcode));
 		}
@@ -93,8 +98,8 @@ public class SVM_Instruction {
 			case iCOMPARE:	return "iCOMPARE";
 			case iCONVERT:	return "iCONVERT";
 			case iDIV:		return "iDIV";
-			case iGOTO:		return "iGOTO";
-			case iGOTOIF:	return "iGOTOIF";
+			case iJUMP:		return "iJUMP";
+			case iJUMPIF:	return "iJUMPIF";
 			case iMULT:		return "iMULT";
 			case iNEG:		return "iNEG";
 			case iPUSH:		return "iPUSH";
@@ -109,6 +114,8 @@ public class SVM_Instruction {
 			case iLINE:		return "iNOOP";
 			case iNOOP:		return "iNOOP";
 			case iNOT:		return "iNOT";
+			case iGOTO:		return "iGOTO";
+
 			case iNOT_IMPL:	return "iNOT_IMPL";
 			default:		return "UNKNOWN:" + opcode;
 		}

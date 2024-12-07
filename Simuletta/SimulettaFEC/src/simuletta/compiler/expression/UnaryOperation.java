@@ -30,7 +30,7 @@ import simuletta.utilities.Option;
  *
  * </pre>
  * 
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  * 
  */
 public class UnaryOperation extends Expression {

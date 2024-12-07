@@ -5,20 +5,19 @@ import java.io.IOException;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Global;
-import bec.value.ProgramAddress;
-import bec.value.Value;
 
+/**
+ * Remove top item on the Runtime-Stack and set PSC to that value
+ */
 public class SVM_GOTO extends SVM_Instruction {
-	public ProgramAddress destination;
 
-	public SVM_GOTO(ProgramAddress destination) {
+	public SVM_GOTO() {
 		this.opcode = SVM_Instruction.iGOTO;
-		this.destination = destination;
 	}
 	
 	@Override	
 	public String toString() {
-		return "GOTO     " + destination;
+		return "GOTO     ";
 	}
 	
 	// ***********************************************************************************************
@@ -26,7 +25,6 @@ public class SVM_GOTO extends SVM_Instruction {
 	// ***********************************************************************************************
 	protected SVM_GOTO(AttributeInputStream inpt) throws IOException {
 		this.opcode = SVM_Instruction.iGOTO;
-		this.destination = (ProgramAddress) Value.read(inpt);
 		if(Global.ATTR_INPUT_TRACE) System.out.println("SVM.Read: " + this);
 	}
 
@@ -34,7 +32,6 @@ public class SVM_GOTO extends SVM_Instruction {
 	public void write(AttributeOutputStream oupt) throws IOException {
 		if(Global.ATTR_OUTPUT_TRACE) System.out.println("SVM.Write: " + this);
 		oupt.writeKind(opcode);
-		destination.write(oupt);
 	}
 
 	public static SVM_Instruction read(AttributeInputStream inpt) throws IOException {

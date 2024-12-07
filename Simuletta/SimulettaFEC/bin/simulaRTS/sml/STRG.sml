@@ -139,14 +139,14 @@ Module strg("RTS");
        ref(area) current_pool;      -- Pointer to current pool
        size minsize;                -- Minimum size of a pool
 
-       record area;                 -- Definition of storage pool
-       begin ref(area) suc;         -- Used to organize the pool list
-             ref(entity) nxt,lim;   -- Boundary pointers within the pool
-             ref(entity) startgc;   -- "freeze-address" for the pool
-             size stepsize;         -- extend/contract step
-             size mingap;           -- for this pool
-             short integer sequ;    -- Sequence number (1,2, ... )
-       end;
+%       record area;                 -- Definition of storage pool
+%       begin ref(area) suc;         -- Used to organize the pool list
+%             ref(entity) nxt,lim;   -- Boundary pointers within the pool
+%             ref(entity) startgc;   -- "freeze-address" for the pool
+%             size stepsize;         -- extend/contract step
+%             size mingap;           -- for this pool
+%             short integer sequ;    -- Sequence number (1,2, ... )
+%       end;
 
        infix(area) poolzero;        -- describes bioins
 

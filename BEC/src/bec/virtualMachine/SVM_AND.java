@@ -24,7 +24,7 @@ public class SVM_AND extends SVM_Instruction {
 	
 	@Override	
 	public String toString() {
-		return "ADD      " + type;
+		return "AND      " + type;
 	}
 
 	// ***********************************************************************************************

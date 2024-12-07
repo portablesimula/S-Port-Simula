@@ -124,6 +124,7 @@ public class ModuleDefinition extends S_Module {
 //		System.out.println("MONITOR.viisible: CurInstr="+Scode.edInstr(Scode.curinstr));
 		switch(Scode.curinstr) {
 			case Scode.S_CONSTSPEC:		ConstDescr.ofConstSpec(); break;
+			case Scode.S_CONST:			ConstDescr.ofConstDef(); break;
 			case Scode.S_LABELSPEC:		LabelDescr.ofLabelSpec(); break;
 			case Scode.S_RECORD:		RecordDescr.of(); break;
 			case Scode.S_PROFILE:		ProfileDescr.ofProfile(); break;
@@ -136,7 +137,7 @@ public class ModuleDefinition extends S_Module {
 			case Scode.S_SETSWITCH:		setSwitch(); break;
 			case Scode.S_INFO:			Util.WARNING("Unknown info: " + Scode.inString());
 			default:
-//				System.out.println("MONITOR.viisible: CurInstr="+Scode.edInstr(Scode.curinstr) + " TERMINATES VIISIBLE");
+				System.out.println("MONITOR.viisible: CurInstr="+Scode.edInstr(Scode.curinstr) + " TERMINATES VIISIBLE");
 				return false;
 		}
 		return true;

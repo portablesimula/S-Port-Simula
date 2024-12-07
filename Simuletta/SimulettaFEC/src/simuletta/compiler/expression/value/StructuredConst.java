@@ -68,7 +68,7 @@ import simuletta.utilities.Util;
  *
  * </pre>
  * 
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  */
 public class StructuredConst extends Value {
 	public String ident;
@@ -120,7 +120,7 @@ public class StructuredConst extends Value {
 		Type cnstype;
 		int fixrep;
 		enterLine();
-			System.out.println("StructuredConst.doOutConst: "+this);
+//			System.out.println("StructuredConst.doOutConst: "+this);
 			sCode.outinst(S_C_RECORD);
 			Record rec=(Record) Declaration.findMeaning(this.ident);
 			sCode.outtag(rec.getTag());
@@ -138,8 +138,8 @@ public class StructuredConst extends Value {
 	// *** Coding: outstruct  also used by Type.outdefault
 	// ***********************************************************************************************
 	public static int outstruct(Record rec,Vector<AttributeValue> set) {
-		System.out.println("StructuredConst.outstruct: QUAL="+rec.getClass().getSimpleName()+", set.size="+set.size()+", rec="+rec);
-		for(AttributeValue atr:set) System.out.println("StructuredConst.outstruct: atr="+atr);
+//		System.out.println("StructuredConst.outstruct: QUAL="+rec.getClass().getSimpleName()+", set.size="+set.size()+", rec="+rec);
+//		for(AttributeValue atr:set) System.out.println("StructuredConst.outstruct: atr="+atr);
 		int result=0;
 		if(rec.prefixIdentifier != null && rec.prefixIdentifier.length()>0) {
 			Record prefix=(Record) Declaration.findMeaning(rec.prefixIdentifier);

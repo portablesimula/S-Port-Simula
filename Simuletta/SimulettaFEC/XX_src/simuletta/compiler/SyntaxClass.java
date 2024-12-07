@@ -40,7 +40,7 @@ import simuletta.utilities.Util;
  * ***********************************************************************	
  * </pre>
  * 
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  */
 
 public abstract class SyntaxClass { 

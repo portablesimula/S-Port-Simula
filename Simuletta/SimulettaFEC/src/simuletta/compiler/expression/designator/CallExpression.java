@@ -36,7 +36,7 @@ import simuletta.utilities.VarSet;
  *				Argument ::=  Expression  |  ( Expression  <  ,  Expression  >*  ) 				
  * 
  * </pre>
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  */
 public class CallExpression extends SimpleDesignator {
 //	public int lineNumber;     // From SyntaxClass

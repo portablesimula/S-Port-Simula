@@ -43,7 +43,7 @@ import simuletta.utilities.Util;
  * 		IfStatement ::= 
  * </pre>
  * 
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  */
 public class ConditionalStatement extends Statement {
 //	public int lineNumber;    // From SyntaxClass

@@ -5,7 +5,7 @@ import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
 import bec.value.MemAddr;
-import bec.virtualMachine.SVM_GOTO;
+import bec.virtualMachine.SVM_JUMP;
 import bec.virtualMachine.SVM_NOOP;
 
 public class FDEST extends PREV_Instruction {
@@ -40,7 +40,7 @@ public class FDEST extends PREV_Instruction {
 //		CTStack.dumpStack();
 		MemAddr addr = Global.DESTAB[destination];
 		Global.DESTAB[destination] = null;
-		SVM_GOTO instr = (SVM_GOTO) Global.PSEG.instructions.get(addr.ofst);
+		SVM_JUMP instr = (SVM_JUMP) Global.PSEG.instructions.get(addr.ofst);
 		instr.destination = Global.PSEG.nextAddress();
       	Global.PSEG.emit(new SVM_NOOP(), "FDEST " + destination);
 //		Global.PSEG.dump();

@@ -6,31 +6,30 @@ import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Global;
 import bec.util.Relation;
-import bec.value.ObjectAddress;
 import bec.value.ProgramAddress;
 
-public class SVM_GOTOIF extends SVM_GOTO {
+public class SVM_JUMPIF extends SVM_JUMP {
 	Relation relation;
 //	MemAddr destination;
 
-	public SVM_GOTOIF(Relation relation, ProgramAddress destination) {
+	public SVM_JUMPIF(Relation relation, ProgramAddress destination) {
 		super(destination);
-		this.opcode = SVM_Instruction.iGOTOIF;
+		this.opcode = SVM_Instruction.iJUMPIF;
 		this.relation = relation;
 //		this.destination = destination;
 	}
 	
 	@Override	
 	public String toString() {
-		return "GOTOIF   " + relation + " " + destination;
+		return "JUMPIF   " + relation + " " + destination;
 	}
 	
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	private SVM_GOTOIF(AttributeInputStream inpt) throws IOException {
+	private SVM_JUMPIF(AttributeInputStream inpt) throws IOException {
 		super(inpt);
-		this.opcode = SVM_Instruction.iGOTOIF;
+		this.opcode = SVM_Instruction.iJUMPIF;
 		this.relation = Relation.read(inpt);
 		if(Global.ATTR_INPUT_TRACE) System.out.println("SVM.Read: " + this);
 	}
@@ -44,7 +43,7 @@ public class SVM_GOTOIF extends SVM_GOTO {
 	}
 
 	public static SVM_Instruction read(AttributeInputStream inpt) throws IOException {
-		return new SVM_GOTOIF(inpt);
+		return new SVM_JUMPIF(inpt);
 	}
 
 }

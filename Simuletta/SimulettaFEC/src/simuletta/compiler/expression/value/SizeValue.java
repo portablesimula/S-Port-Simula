@@ -33,7 +33,7 @@ import simuletta.type.Type;
  * <p>
  * size = dist(first,next)
  * 
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  */
 public class SizeValue extends Value {
 	private final String ident; // Record Identifier

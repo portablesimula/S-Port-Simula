@@ -39,7 +39,7 @@ import simuletta.RTS_FEC_InterfaceGenerator.predef.util.Util;
  * 
  * </pre>
  * 
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  * 
  */
 public class Procedure extends Quantity {

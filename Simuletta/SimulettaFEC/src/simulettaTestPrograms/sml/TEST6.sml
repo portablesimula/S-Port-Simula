@@ -11,13 +11,14 @@
  -- MAIN Program:
  begin
  	 insert envir0,modl01,modl02;
---      sysinsert rt,sysr,knwn,util;
+--   sysinsert rt,sysr,knwn,util;
+--     sysinsert rt,sysr,knwn,util,strg; 
 
     
---    TEST_ADD;
---    TEST_SUB;
---    TEST_DIV;
---    TEST_MULT;
+    TEST_ADD;
+    TEST_SUB;
+    TEST_DIV;
+    TEST_MULT;
     
 --    TEST_SWITCH;
     

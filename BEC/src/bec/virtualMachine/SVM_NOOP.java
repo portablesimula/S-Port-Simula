@@ -12,6 +12,11 @@ public class SVM_NOOP extends SVM_Instruction {
 	public SVM_NOOP() {
 		this.opcode = SVM_Instruction.iNOOP;
 	}
+
+	@Override
+	public void execute() {
+		Global.PSC.ofst++;
+	}
 	
 	@Override	
 	public String toString() {

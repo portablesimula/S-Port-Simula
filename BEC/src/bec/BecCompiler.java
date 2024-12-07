@@ -1,8 +1,6 @@
 package bec;
 
 import java.util.HashMap;
-
-import bec.compileTimeStack.DataType;
 import bec.descriptor.Descriptor;
 import bec.segment.Segment;
 import bec.util.Array;

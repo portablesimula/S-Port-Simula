@@ -11,7 +11,7 @@ import simuletta.compiler.declaration.Declaration;
 import simuletta.compiler.expression.Expression;
 
 /**
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  */
 public class AttributeValue extends Declaration {
 	public String ident;

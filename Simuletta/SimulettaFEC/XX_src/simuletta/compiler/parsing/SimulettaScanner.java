@@ -24,7 +24,7 @@ import simuletta.utilities.Util;
 /**
  * A simuletta Scanner
  * 
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  *
  */
 public final class SimulettaScanner {

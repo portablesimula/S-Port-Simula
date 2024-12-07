@@ -189,6 +189,15 @@ Visible define
  import name() old, new;
  end;
 
+ Visible record area; info "TYPE";  -- Definition of storage pool
+       begin ref(area) suc;         -- Used to organize the pool list
+             ref(entity) nxt,lim;   -- Boundary pointers within the pool
+             ref(entity) startgc;   -- "freeze-address" for the pool
+             size stepsize;         -- extend/contract step
+             size mingap;           -- for this pool
+             short integer sequ;    -- Sequence number (1,2, ... )
+       end;
+
  --  Start of variables etc.,  CURINS must be first (as wanted by QZ) --
 
  Visible       ref(inst)        curins    system "CURINS";

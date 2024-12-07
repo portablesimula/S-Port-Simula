@@ -21,7 +21,7 @@ import simuletta.RTS_FEC_InterfaceGenerator.predef.util.Util;
 /**
  * A simuletta Scanner
  * 
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  *
  */
 public final class InterfaceScanner {

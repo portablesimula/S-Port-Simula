@@ -5,7 +5,7 @@ import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
 import bec.value.MemAddr;
-import bec.virtualMachine.SVM_GOTO;
+import bec.virtualMachine.SVM_JUMP;
 
 public class BJUMP extends PREV_Instruction {
 	int destination;
@@ -34,7 +34,7 @@ public class BJUMP extends PREV_Instruction {
 		
 		MemAddr addr = Global.DESTAB[destination];
 		if(addr == null) Util.IERR("BJUMP dest. dest == null");
-		Global.PSEG.emit(new SVM_GOTO(addr), ""+this);
+		Global.PSEG.emit(new SVM_JUMP(addr), ""+this);
 		Global.DESTAB[destination] = null;
 //		Global.PSEG.dump();
 //		Util.IERR(""+this);

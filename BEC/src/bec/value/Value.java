@@ -65,13 +65,13 @@ public class Value {
 
 	public static Value read(AttributeInputStream inpt) throws IOException {
 		Value val = read1(inpt);
-		System.out.println("Value.read: " + val);
+//		System.out.println("Value.read: " + val);
 		return val;
 	}
 	
 	private static Value read1(AttributeInputStream inpt) throws IOException {
 		int kind = inpt.readKind();
-//		System.out.println("Value.read: kind="+Scode.edInstr(kind));
+		System.out.println("Value.read: kind="+Scode.edInstr(kind));
 		switch(kind) {
 			case Scode.S_NULL:		return null;
 			case Scode.S_TRUE:		return new BooleanValue(true);
@@ -85,7 +85,7 @@ public class Value {
 			case Scode.S_C_OADDR:	return ObjectAddress.read(inpt);
 			case Scode.S_C_GADDR:	return GeneralAddress.read(inpt);
 			case Scode.S_C_PADDR, Scode.S_C_RADDR: return ProgramAddress.read(inpt);
-			case Scode.S_C_DOT:		return DotAddress.read(inpt);
+//			case Scode.S_C_DOT:		return DotAddress.read(inpt);
 			default: Util.IERR("MISSING: " + Scode.edInstr(kind)); return null;
 		}
 	}

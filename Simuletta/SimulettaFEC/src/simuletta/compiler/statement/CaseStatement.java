@@ -40,7 +40,7 @@ import simuletta.utilities.Util;
  *  		WhenKeyList ::= Which'IntegerNumber  <  ,  Which'IntegerNumber  >*
  * </pre>
  * 
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  */
 public class CaseStatement extends Statement {
 //	public int lineNumber;    // From SyntaxClass

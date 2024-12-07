@@ -1,6 +1,8 @@
 package bec.segment;
 
 import java.io.IOException;
+import java.util.Vector;
+
 import bec.AttributeOutputStream;
 import bec.descriptor.Kind;
 import bec.util.Global;
@@ -10,11 +12,10 @@ public class Segment { // extends Descriptor {
 	public String ident;
 	int segmentKind; // K_SEG_DATA, K_SEG_CONST, K_SEG_CODE
 
-
 	public Segment(String ident, int segmentKind) {
 		if(Global.SEGMAP.get(ident) != null) Util.IERR("Segment allready defined: " + ident);
-		Global.SEGMAP.put(ident, this);
 		this.ident = ident.toUpperCase();
+		Global.SEGMAP.put(this.ident, this);
 		this.segmentKind = segmentKind;
 	}
 
@@ -26,7 +27,7 @@ public class Segment { // extends Descriptor {
 		Segment seg = Global.SEGMAP.get(ident);
 		if(seg == null) {
 			Segment.listAll();
-			Util.IERR("Can't find Segment " + ident);
+			Util.IERR("Can't find Segment \"" + ident + '"');
 		}
 		return seg;
 	}
@@ -61,7 +62,7 @@ public class Segment { // extends Descriptor {
 	}
 	
 	public String toString() {
-		return Kind.edKind(segmentKind) + ':' + segmentKind + " " + ident;
+		return Kind.edKind(segmentKind) + ':' + segmentKind + " \"" + ident + '"';
 	}
 
 

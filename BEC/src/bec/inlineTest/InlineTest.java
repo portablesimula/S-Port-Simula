@@ -28,14 +28,14 @@ public class InlineTest {
 //		return "C:/Simuletta/SCode/simulaRTS/SYSR.scd";
 //		return "C:/Simuletta/SCode/simulaRTS/KNWN.scd";
 //		return "C:/Simuletta/SCode/simulaRTS/UTIL.scd";		
-		return "C:/Simuletta/SCode/simulaRTS/STRG.scd";
-		
+//		return "C:/Simuletta/SCode/simulaRTS/STRG.scd";	
 //		return "C:/Simuletta/SCode/simulaRTS/CENT.scd";
 //		return "C:/Simuletta/SCode/simulaRTS/CINT.scd";
-//		return "C:/Simuletta/SCode/simulaRTS/ARR.scd";
+//		return "C:/Simuletta/SCode/simulaRTS/ARR.scd";	
 //		return "C:/Simuletta/SCode/simulaRTS/FORM.scd";
 //		return "C:/Simuletta/SCode/simulaRTS/LIBR.scd";
-//		return "C:/Simuletta/SCode/simulaRTS/FIL.scd";
+		return "C:/Simuletta/SCode/simulaRTS/FIL.scd";
+		
 //		return "C:/Simuletta/SCode/simulaRTS/SMST.scd";
 //		return "C:/Simuletta/SCode/simulaRTS/SML.scd";
 //		return "C:/Simuletta/SCode/simulaRTS/EDIT.scd";

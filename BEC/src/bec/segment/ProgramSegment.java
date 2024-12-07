@@ -51,7 +51,7 @@ public class ProgramSegment extends Segment {
 	}
 
 	public String toString() {
-		return "ProgramSegment " + ident;
+		return "ProgramSegment \"" + ident + '"';
 	}
 
 	// ***********************************************************************************************

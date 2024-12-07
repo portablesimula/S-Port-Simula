@@ -6,15 +6,12 @@ import java.util.Vector;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
-import bec.ModuleIO;
-import bec.compileTimeStack.DataType;
+import bec.InterfaceModule;
 import bec.segment.DataSegment;
-import bec.statement.InsertStatement;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Tag;
 import bec.util.Type;
-import bec.util.Util;
 
 public class RecordDescr extends Descriptor {
 	public int size;      // Record size information
@@ -57,7 +54,8 @@ public class RecordDescr extends Descriptor {
 			
 		if(Scode.accept(Scode.S_INFO)) {
 			String info = Scode.inString();
-			if("TYPE".equalsIgnoreCase(info)) rec.infoType = true;
+//			if("TYPE".equalsIgnoreCase(info)) rec.infoType = true;
+			rec.infoType = true;
 		}
 		if(Scode.accept(Scode.S_PREFIX)) {
 			rec.prefixTag = Scode.ofScode();
@@ -68,6 +66,7 @@ public class RecordDescr extends Descriptor {
 		while(Scode.accept(Scode.S_ATTR)) {
 			Attribute attr = new Attribute(comnSize);
 			comnSize = comnSize + attr.size;
+			if(attr.repCount == 0) rec.nbrep = attr.size;
 			rec.attributes.add(attr);
 		}
 		rec.size = comnSize;
@@ -85,7 +84,8 @@ public class RecordDescr extends Descriptor {
 		}
 		Scode.expect(Scode.S_ENDRECORD);
 			
-		if(rec.infoType) {
+		if(Global.currentModule instanceof InterfaceModule) {
+//		if(rec.infoType) {
 			rec.buildPointerMap();
 			Type.newRecType(rec);
 		}

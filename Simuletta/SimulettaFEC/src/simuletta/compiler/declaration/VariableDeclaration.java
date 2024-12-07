@@ -61,7 +61,7 @@ import simuletta.utilities.Util;
  * </pre>
  * 
  * @see Type
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  */
 public class VariableDeclaration extends Declaration implements Externalizable {
 //	public int lineNumber;    // From SyntaxClass

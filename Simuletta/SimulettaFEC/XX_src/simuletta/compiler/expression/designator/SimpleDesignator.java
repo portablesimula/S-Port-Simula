@@ -46,7 +46,7 @@ import simuletta.utilities.Util;
  *					Argument ::=  Expression  |  ( Expression  <  ,  Expression  >*  ) 				
  * 
  * </pre>
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  */
 public abstract class SimpleDesignator extends DesignatorElement {
 //	public int lineNumber;    // From SyntaxClass

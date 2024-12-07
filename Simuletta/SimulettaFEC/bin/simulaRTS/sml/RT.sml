@@ -233,6 +233,15 @@ Visible define
  Visible infix(bioIns) bio;    -- BASICIO infix object, must received
                                -- special treatment in GARB
 
+ Visible record area; info "TYPE";  -- Definition of storage pool
+       begin ref(area) suc;         -- Used to organize the pool list
+             ref(entity) nxt,lim;   -- Boundary pointers within the pool
+             ref(entity) startgc;   -- "freeze-address" for the pool
+             size stepsize;         -- extend/contract step
+             size mingap;           -- for this pool
+             short integer sequ;    -- Sequence number (1,2, ... )
+       end;
+
 %title ******   P r o t o t y p e s   ******
  Visible record ptp;
  begin ref(pntvec) refVec; -- pnt_vec
@@ -581,7 +590,16 @@ Visible define
        variant ref()         ptr; --  pointer to some object unit
  end;
 
+%title ***   S I M S E T   ***
+
+Visible record linkag1:inst;
+begin ref(linkag) prd,suc end;
+
+Visible record linkag:linkag1; begin end;
+
+
 %title ***   M o d u l e   a n d   S i m o b   I  n f o   ***
+
 
  Visible record ptpExt;  --- Prototype extension
  begin ref(idfier)          idt;

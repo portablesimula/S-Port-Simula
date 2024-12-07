@@ -6,7 +6,6 @@ import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.segment.RTStack;
 import bec.util.Global;
-import bec.util.Scode;
 import bec.util.Type;
 import bec.value.Value;
 
@@ -29,7 +28,7 @@ public class SVM_PUSHC extends SVM_Instruction {
 	
 	@Override
 	public String toString() {
-		return "PUSHC    " + Scode.edTag(type.tag) + " " + value;
+		return "PUSHC    " + type + " " + value;
 	}
 
 	// ***********************************************************************************************

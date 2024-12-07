@@ -17,7 +17,7 @@ import simuletta.utilities.Token;
 import simuletta.utilities.Util;
 
 /**
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  */
 public class MacroScanner {
 	public static MacroScanner currentMacroScanner;

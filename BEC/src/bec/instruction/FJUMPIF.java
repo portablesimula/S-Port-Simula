@@ -4,11 +4,9 @@ import bec.compileTimeStack.CTStack;
 import bec.util.Global;
 import bec.util.Relation;
 import bec.util.Scode;
-import bec.virtualMachine.SVM_GOTOIF;
+import bec.virtualMachine.SVM_JUMPIF;
 
 public abstract class FJUMPIF extends Instruction {
-	Relation relation;
-	int destination;
 
 	/**
 	 * forward_jump ::= fjumpif relation destination:newindex
@@ -35,7 +33,7 @@ public abstract class FJUMPIF extends Instruction {
 		CTStack.pop();
 		
 		Global.DESTAB[destination] = Global.PSEG.nextAddress();
-		Global.PSEG.emit(new SVM_GOTOIF(relation, null), "FJUMPIF: ");
+		Global.PSEG.emit(new SVM_JUMPIF(relation, null), "FJUMPIF: "+relation);
 //		Global.PSEG.dump();
 //		CTStack.dumpStack();
 //		Util.IERR(""+this);

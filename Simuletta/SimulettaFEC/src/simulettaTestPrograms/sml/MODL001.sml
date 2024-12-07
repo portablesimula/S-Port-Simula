@@ -29,22 +29,15 @@ Module MODL01("TST 1.0");
 
 character xbuff(5);
 
-Visible routine TX2STR;
-import infix (txtqnt) txt; export infix (string) str; begin
-	integer tull; boolean cond;
-	str:="not observable";
-	
---	str.nchr:=txt.lp - txt.sp;
---	str.chradr:=if txt.lp = 0 then noname
---	else name(txt.ent.cha(txt.sp));
-	tull := 222 + if cond then 444 else 666;
-end;
 
- routine ED_iID; import ref(inst) ins;
- begin ref(ptpExt) xpp; label act;
-       act:=ins.pp qua ref(claptp).stm;
-end;
-   
+ Routine PASS3; import name(ref(entity)) xpnt;
+ begin 
+       name(ref(entity)) q;
+       
+       var(q) := var(q) qua ref(inst) . gcl
+       
+
+ end;
    
 end;
 

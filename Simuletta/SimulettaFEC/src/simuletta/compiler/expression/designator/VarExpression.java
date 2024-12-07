@@ -38,7 +38,7 @@ import simuletta.utilities.VarSet;
  *				Argument ::=  Expression  |  ( Expression  <  ,  Expression  >*  ) 				
  * 
  * </pre>
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  */
 public class VarExpression extends SimpleDesignator {
 //	public int lineNumber;     // From SyntaxClass

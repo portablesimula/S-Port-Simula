@@ -48,7 +48,7 @@ public class ProgramAddress extends Value {
 		if(descr == null) Util.IERR("IMPOSSIBLE: TESTING FAILED");
 		System.out.println("OADDR_Value.ofScode: descr="+descr.getClass().getSimpleName()+"  "+descr);
 		if(type == Type.T_RADDR) return ((RoutineDescr)descr).adr;
-		if(type == Type.T_PADDR) return ((LabelDescr)descr).adr;
+		if(type == Type.T_PADDR) return ((LabelDescr)descr).getAddress();
 		Util.IERR("NOT IMPL");
 		return null;
 	}

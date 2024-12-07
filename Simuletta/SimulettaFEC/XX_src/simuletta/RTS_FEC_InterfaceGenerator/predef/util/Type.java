@@ -11,7 +11,7 @@ import simuletta.RTS_FEC_InterfaceGenerator.predef.parser.Parser;
 
 /**
  * 
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  *
  */
 public class Type {

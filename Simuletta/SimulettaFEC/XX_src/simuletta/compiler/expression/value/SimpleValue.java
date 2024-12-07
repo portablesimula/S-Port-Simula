@@ -35,7 +35,7 @@ import static simuletta.compiler.common.S_Instructions.*;
  * 			
  * </pre>
  * 
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  */
 public class SimpleValue extends Value {
 	public final int instr;

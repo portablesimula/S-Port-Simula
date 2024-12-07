@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
+import bec.descriptor.Attribute;
 import bec.descriptor.Variable;
 import bec.util.Global;
 import bec.util.Scode;
@@ -44,12 +45,13 @@ public class IntegerValue extends Value {
 
 	public static IntegerValue ofScode_AADDR() {
 		Tag tag = Tag.ofScode();
-		Variable var = (Variable) tag.getMeaning();
+//		Variable var = (Variable) tag.getMeaning();
+		Attribute var = (Attribute) tag.getMeaning();
 		if(var == null) Util.IERR("IMPOSSIBLE: TESTING FAILED");
 //		System.out.println("OADDR_Value.ofScode: descr="+descr.getClass().getSimpleName()+"  "+descr);
-//		return new AADDR_Value(var.address.ofst);
-		Util.IERR("NOT IMPL");
-		return new IntegerValue(Type.T_AADDR, var.address.ofst);
+//		Util.IERR("NOT IMPL");
+//		return new IntegerValue(Type.T_AADDR, var.address.ofst);
+		return new IntegerValue(Type.T_AADDR, var.rela);
 	}
 
 	@Override

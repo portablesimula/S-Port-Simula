@@ -19,7 +19,7 @@ import simuletta.RTS_FEC_InterfaceGenerator.predef.util.Util;
 /**
  * All static utilities for parsing Simuletta Syntax
  * 
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  *
  */
 public final class Parser {

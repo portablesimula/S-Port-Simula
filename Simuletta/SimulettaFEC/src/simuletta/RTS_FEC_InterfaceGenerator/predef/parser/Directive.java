@@ -16,7 +16,7 @@ import java.io.Reader;
 import simuletta.RTS_FEC_InterfaceGenerator.predef.util.Util;
 
 /**
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  */
 public class Directive {
 

@@ -21,7 +21,7 @@ public abstract class REFER extends Instruction {
 //		CTStack.dumpStack();
 		Type type = Type.ofScode();
 		CTStack.checkTosType(Type.T_GADDR);
-		ObjectAddress a = new ObjectAddress(null, 0);
+		ObjectAddress a = ObjectAddress.ofRelAddr(null);
 		AddressItem adr = new AddressItem(type, 0, a);
         Util.GQfetch("REFER " + Scode.edTag(type.tag) + ": ");
 		adr.objState = adr.atrState = AddressItem.State.Calculated;

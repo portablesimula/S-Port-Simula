@@ -30,7 +30,7 @@ import simuletta.RTS_FEC_InterfaceGenerator.predef.util.Util;
  * </pre>
  * 
  * @see Type
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  */
 public class Variable extends Quantity {
 //	public int lineNumber;    // From Quantity

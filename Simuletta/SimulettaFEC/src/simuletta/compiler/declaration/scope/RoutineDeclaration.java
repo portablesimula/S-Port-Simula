@@ -70,7 +70,7 @@ import simuletta.utilities.Util;
  *
  * </pre>
  * 
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  * 
  */
 public class RoutineDeclaration extends DeclarationScope implements Externalizable {

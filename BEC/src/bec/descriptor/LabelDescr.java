@@ -7,16 +7,18 @@ import bec.AttributeOutputStream;
 import bec.compileTimeStack.CTStack;
 import bec.util.Global;
 import bec.util.Tag;
+import bec.util.Type;
 import bec.util.Util;
-import bec.value.ObjectAddress;
+import bec.value.FixupAddress;
 import bec.value.ProgramAddress;
 import bec.value.Value;
+import bec.virtualMachine.SVM_NOOP;
 
 //Record IntDescr:Descriptor;      -- K_Globalvar
 //begin infix(MemAddr) adr;        -- K_IntLabel
 //end;                             -- K_IntRoutine   Local Routine  ER FJÆRNET !"!!
 public class LabelDescr extends Descriptor {
-	public ProgramAddress adr;
+	private ProgramAddress adr;
 
 	private LabelDescr(int kind, Tag tag) {
 		super(kind, tag);
@@ -32,12 +34,26 @@ public class LabelDescr extends Descriptor {
 		return lab;
 	}
 	
-	public static LabelDescr ofLabel(Tag tag) {
+	public static LabelDescr ofLabelDef(Tag tag) {
 		LabelDescr lab = (LabelDescr) Global.DISPL.get(tag.val);
-		if(lab == null) lab = new LabelDescr(Kind.K_IntLabel,tag);
+		if(lab == null) {
+			lab = new LabelDescr(Kind.K_IntLabel,tag);
+		} else if(lab.adr instanceof FixupAddress fix) {
+			System.out.println("LabelDescr.ofLabelDef: "+lab);
+			System.out.println("LabelDescr.ofLabelDef: "+fix);
+			fix.setCurrentPADDR();
+	      	Global.PSEG.emit(new SVM_NOOP(), "LABEL " + tag);
+			Global.PSEG.dump("LabelDescr.ofLabelDef: ");
+//			Util.IERR("SJEKK DETTE");
+		}
 		lab.adr = Global.PSEG.nextAddress();
 		CTStack.checkStackEmpty();
 		return lab;
+	}
+	
+	public ProgramAddress getAddress() {
+		if(adr == null)	adr = new FixupAddress(Type.T_PADDR, this);
+		return adr;
 	}
 	
 	public String toString() {

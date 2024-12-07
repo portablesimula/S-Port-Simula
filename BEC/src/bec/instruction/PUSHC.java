@@ -90,7 +90,7 @@ public abstract class PUSHC extends Instruction {
 		    case Scode.S_C_OADDR:  type = Type.T_OADDR; value = ObjectAddress.ofScode(); break;
 		    case Scode.S_GNONE:    type = Type.T_GADDR; value = null; break;
 		    case Scode.S_C_GADDR:  type = Type.T_GADDR; value = GeneralAddress.ofScode(); break;
-		    case Scode.S_C_DOT:	   value = new DotAddress(); type = value.type; break;
+		    case Scode.S_C_DOT:	   value = DotAddress.ofScode(); type = value.type; break;
 		    case Scode.S_C_RECORD: value = RecordValue.ofScode(); type = value.type; break;
 		    case Scode.S_TEXT:	   type = Type.T_TEXT; value = TextValue.ofScode(); break;
 		    default: Util.IERR("NOT IMPLEMENTED: " + Scode.edInstr(Scode.curinstr));

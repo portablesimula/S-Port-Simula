@@ -45,7 +45,11 @@ public class Type {
 				Scode.inNumber(); // high
 			}
 		}
-		if(Scode.accept(Scode.S_FIXREP)) Util.IERR("DETTE ER EN 'ResolvedType' - HVA NÅ ?");
+//		if(Scode.accept(Scode.S_FIXREP)) {
+//			Scode.inNumber();
+////			Util.IERR("DETTE ER EN 'ResolvedType' - HVA NÅ ?");
+//			System.out.println("DETTE ER EN 'ResolvedType' - HVA NÅ ?");
+//		}
 //		System.out.println("NEW Type.ofScode: " + Scode.edTag(tag));
 		Type type = TMAP.get(tag);
 //		Util.IERR("SJEKK DETTE: " + type);

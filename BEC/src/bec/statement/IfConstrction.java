@@ -9,8 +9,8 @@ import bec.util.Scode;
 import bec.util.Util;
 import bec.value.ObjectAddress;
 import bec.value.ProgramAddress;
-import bec.virtualMachine.SVM_GOTO;
-import bec.virtualMachine.SVM_GOTOIF;
+import bec.virtualMachine.SVM_JUMP;
+import bec.virtualMachine.SVM_JUMPIF;
 import bec.virtualMachine.SVM_NOOP;
 import bec.virtualMachine.SVM_NOT_IMPL;
 
@@ -67,7 +67,7 @@ public abstract class IfConstrction {
 		
 		ProgramAddress IF_LABEL = Global.PSEG.nextAddress();
 		ProgramAddress ELSE_LABEL = null;
-		Global.PSEG.emit(new SVM_GOTOIF(relation.not(), null), "GOTOIF["+Global.ifDepth+"] NOT_" + relation + ':');
+		Global.PSEG.emit(new SVM_JUMPIF(relation.not(), null), "GOTOIF["+Global.ifDepth+"] NOT_" + relation + ':');
 //		Global.PSEG.dump();
 
 //		Relation relation = Relation.ofScode();
@@ -90,10 +90,10 @@ public abstract class IfConstrction {
 //			Util.IERR("");
 			
 			ELSE_LABEL = Global.PSEG.nextAddress();
-			Global.PSEG.emit(new SVM_GOTO(null), "GOTO_ENDIF["+Global.ifDepth+"]:");
+			Global.PSEG.emit(new SVM_JUMP(null), "GOTO_ENDIF["+Global.ifDepth+"]:");
 			
 			// FIXUP:
-			SVM_GOTO instr = (SVM_GOTO) Global.PSEG.instructions.get(IF_LABEL.ofst);
+			SVM_JUMP instr = (SVM_JUMP) Global.PSEG.instructions.get(IF_LABEL.ofst);
 			instr.destination = Global.PSEG.nextAddress();
 	      	Global.PSEG.emit(new SVM_NOOP(), "ELSE["+Global.ifDepth+"]:");
 	      	
@@ -118,12 +118,12 @@ public abstract class IfConstrction {
 		// program point.		
 		if(ELSE_LABEL != null) {
 			// FIXUP:
-			SVM_GOTO instr = (SVM_GOTO) Global.PSEG.instructions.get(ELSE_LABEL.ofst);
+			SVM_JUMP instr = (SVM_JUMP) Global.PSEG.instructions.get(ELSE_LABEL.ofst);
 			instr.destination = Global.PSEG.nextAddress();
 	      	Global.PSEG.emit(new SVM_NOOP(), "ENDIF["+Global.ifDepth+"]:");		
 		} else {
 			// FIXUP:
-			SVM_GOTO instr = (SVM_GOTO) Global.PSEG.instructions.get(IF_LABEL.ofst);
+			SVM_JUMP instr = (SVM_JUMP) Global.PSEG.instructions.get(IF_LABEL.ofst);
 			instr.destination = Global.PSEG.nextAddress();
 	      	Global.PSEG.emit(new SVM_NOOP(), "ENDIF["+Global.ifDepth+"]:");			
 		}

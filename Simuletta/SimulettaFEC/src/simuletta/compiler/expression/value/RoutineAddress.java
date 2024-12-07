@@ -33,7 +33,7 @@ import simuletta.utilities.Util;
  * The value is (the entry point of) the routine specified; a peculiar routine cannot occur.
  * NOBODY designates no routine body.
  * 
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  */
 public class RoutineAddress extends Value {
 	public final String ident;

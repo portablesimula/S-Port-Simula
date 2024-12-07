@@ -71,7 +71,7 @@ public abstract class CALL extends Instruction {
 //	    ---------  Final Actions  ---------
 	    if(pitem.nasspar != pitem.spc.params.size()) Util.IERR("Wrong number of Parameters");
 //	    ---------  Call Routine  ---------
-		ObjectAddress prfAddr = new ObjectAddress(spec.DSEG, 0);
+		ObjectAddress prfAddr = ObjectAddress.ofSegAddr(spec.DSEG, 0);
 	    if(CALL_TOS) {
 	    	Global.PSEG.emit(SVM_CALL.ofTOS(prfAddr), "");
 	    	CTStack.pop();
@@ -123,8 +123,9 @@ public abstract class CALL extends Instruction {
 		if(CTStack.TOS instanceof AddressItem) Util.GQfetch("putPar: ");
 		CTStack.pop();
 		
-		int n = parType.size();
-		Global.PSEG.emit(new SVM_POP2MEM(param.address, n), "putPar: ");
+		int parSize = parType.size();
+		ObjectAddress parAddr = param.address;
+		Global.PSEG.emit(new SVM_POP2MEM(parAddr, parSize), "putPar: ");
 		
 //		pItm.spc.printTree(2);
 //		Global.PSEG.dump("putPar: ");
@@ -132,26 +133,19 @@ public abstract class CALL extends Instruction {
 //		CTStack.dumpStack("putPar: ");
 //		Util.IERR("");
 		
-		if(nrep > 1) { // --- Then: Treat rest of rep-par ---
-			Util.IERR("Parse.XXX: NOT IMPLEMENTED");
-//	      repeat i:=i-1 while i <> 0
-//	      do tos:=tos.suc;
-//	--??     Husk at integer-type skal legges p} stacken m.h.t spesifikasjon!!!
-//	--??     CheckTypesEqual(tos.type,p.type);
-//	%+C      if tos.kind=K_Address then IERR("MODE mismatch below TOS") endif;
-//	         if tos.type <> parType
-//	         then
-//	%+S           if SYSGEN <> 0 then
-//	%+S           WARNING("PARSE: TYPE mismatch below TOS -- ASSREP") endif;
-//	              if    parType=T_WRD4 then ConvRepWRD4(nrep); goto L2;
-//	%+C           else IERR("PARSE: TYPE mismatch below TOS -- ASSREP");
-//	              endif;
-//	         endif;
-//	      endrepeat;
-//	   L2:if nrep < repCount
-//	      then
-//	%+E        Qf2(qDYADC,qSUB,qESP,cSTP,(repCount-nrep)*n);
-//	      endif;
+		if(nrep > 1) { // Then: Treat rest of rep-par ---
+			CTStack.dumpStack("putPar: ");
+			for(int i=nrep-1;i>0;i--) {
+				StackItem TOS = CTStack.takeTOS();
+				System.out.println("CALL.putPar: "+TOS);
+				if(TOS instanceof AddressItem) Util.IERR("MODE mismatch below TOS");
+				if(TOS.type != parType) Util.IERR("TYPE mismatch below TOS -- ASSREP");
+				parAddr = parAddr.ofset(parSize);
+				Global.PSEG.emit(new SVM_POP2MEM(parAddr, parSize), "putPar: ASSREP: ");
+			}
+//			CTStack.dumpStack("putPar: ");
+//			Global.PSEG.dump("putPar: ");
+//			Util.IERR("Parse.XXX: NOT IMPLEMENTED: nrep="+nrep);
 		}
 		npop = nrep;
 		return npop;

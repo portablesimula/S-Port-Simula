@@ -46,7 +46,7 @@ import simuletta.utilities.Tag;
  * <p>
  * 			c-dot T1 c-dot T2 ... c-aaddr LT   is    "T1.T2.. .LT".AADDR
  * 
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  */
 public class AttributeAddress extends Value {
 	public String offset;

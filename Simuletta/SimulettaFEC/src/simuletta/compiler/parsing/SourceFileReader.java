@@ -21,7 +21,7 @@ import simuletta.utilities.Option;
 /**
 * Input Utilities for the Simuletta Scanner.
 * 
-* @author Ã˜ystein Myhre Andersen
+* @author Øystein Myhre Andersen
 *
 */
 public final class SourceFileReader {

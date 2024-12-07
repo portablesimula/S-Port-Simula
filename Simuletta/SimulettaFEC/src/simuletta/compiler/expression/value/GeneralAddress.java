@@ -10,6 +10,8 @@ package simuletta.compiler.expression.value;
 import static simuletta.compiler.Global.*;
 import static simuletta.compiler.common.S_Instructions.*;
 
+import java.util.Vector;
+
 import simuletta.compiler.declaration.Declaration;
 import simuletta.compiler.declaration.VariableDeclaration;
 import simuletta.compiler.declaration.scope.Record;
@@ -20,6 +22,7 @@ import simuletta.compiler.parsing.Parser;
 import simuletta.type.Type;
 import simuletta.utilities.KeyWord;
 import simuletta.utilities.Tag;
+import simuletta.utilities.Util;
 
 /**
  * GeneralAddress.
@@ -49,7 +52,7 @@ import simuletta.utilities.Tag;
  * c-dot T1 c-dot T2 c-gaddr T3 is "T3.T2.T1".GADDR
  * 
  * 
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  */
 public class GeneralAddress extends Value {
 	public Designator dotList;
@@ -86,7 +89,7 @@ public class GeneralAddress extends Value {
 	// ***********************************************************************************************
 	// *** Coding: doOutConst
 	// ***********************************************************************************************
-	public Type doOutConst() {
+	public Type PREV_doOutConst() {
         if(TESTING) System.out.println("GeneralAddress.doOutConst:"+this+" ***********************************************************");
 		enterLine();
 		if(dotList==null) {			
@@ -113,6 +116,48 @@ public class GeneralAddress extends Value {
 		return(Type.Name(q.type));
 	}
 
+	public Type doOutConst() {
+        if(TESTING) System.out.println("GeneralAddress.doOutConst:"+this+" ***********************************************************");
+		enterLine();
+		if(dotList==null) {			
+			sCode.outinst(S_GNONE); sCode.outcode(); 
+			return(Type.Name);
+		} 
+		Vector<Tag> tagList = new Vector<Tag>();
+		String ident=dotList.getIdent(0);
+		VariableDeclaration q=(VariableDeclaration) Declaration.findMeaning(ident);
+		Tag tag=q.getTag();
+		int n = dotList.varset.size();
+		for(int i=1;i<n;i++) {
+			ident=dotList.getIdent(i);
+			System.out.println("GeneralAddress.doOutConst: "+ident);
+            if(q!=null) {
+//            	sCode.outinst(S_C_DOT);
+//            	sCode.outtag(tag);
+            	tagList.add(tag);
+            }
+			String refIdent=q.type.getRefIdent();
+			Record rec=(Record) Declaration.findMeaning(refIdent);
+			q=rec.findAttribute(ident);
+			tag=q.getTag();
+			rec=q.type.getQualifyingRecord();
+		}
+    	tagList.add(tag);
+
+    	for(int i=n-1;i>0;i--) {
+    		Tag attrTag = tagList.get(i);
+			System.out.println("GeneralAddress.doOutConst: tagList(i) = "+attrTag);
+        	sCode.outinst(S_C_DOT);
+        	sCode.outtag(tag);
+    	}
+    	Tag varTag = tagList.get(0);
+		System.out.println("GeneralAddress.doOutConst: varTag = "+varTag);
+//		sCode.outinst(S_C_GADDR); sCode.outtag(tag); sCode.outcode();
+		sCode.outinst(S_C_GADDR); sCode.outtag(varTag); sCode.outcode();
+		exitLine();
+//		Util.IERR("STOP HER !");
+		return(Type.Name(q.type));
+	}
 	
 	public String toString() {
 		if(dotList==null) return("GNONE");

@@ -27,7 +27,7 @@ import simuletta.type.Type;
  * 
  * </pre>
  * 
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  */
 public class BooleanValue extends Value {
 	public final boolean value;

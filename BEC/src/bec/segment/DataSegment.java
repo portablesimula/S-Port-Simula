@@ -36,11 +36,11 @@ public class DataSegment extends Segment {
 	}
 	
 	public ObjectAddress ofOffset(int ofst) {
-		return new ObjectAddress(this,ofst);
+		return ObjectAddress.ofSegAddr(this,ofst);
 	}
 	
 	public ObjectAddress nextAddress() {
-		return new ObjectAddress(this,values.size());
+		return ObjectAddress.ofSegAddr(this,values.size());
 	}
 	
 	public void store(int index, Value value) {
@@ -72,12 +72,12 @@ public class DataSegment extends Segment {
 //			if(Global.ATTR_OUTPUT_TRACE)
 				System.out.println("DataSegment.emitRepetitionValue: "+Scode.edInstr(Scode.nextByte())+"  Comment="+comment);
 			switch(Scode.nextByte()) {
-				case Scode.S_TEXT:     Scode.inputInstr(); TextValue.ofScode(); break;
-			    case Scode.S_C_INT:    Scode.inputInstr(); IntegerValue.ofScode_INT(); break;
-			    case Scode.S_C_CHAR:   Scode.inputInstr(); IntegerValue.ofScode_CHAR(); break;
-			    case Scode.S_C_SIZE:   Scode.inputInstr(); IntegerValue.ofScode_SIZE(); break;
-			    case Scode.S_C_REAL:   Scode.inputInstr(); new RealValue(); break;
-			    case Scode.S_C_LREAL:  Scode.inputInstr(); new LongRealValue(); break;
+				case Scode.S_TEXT:     Scode.inputInstr(); emit(TextValue.ofScode(), comment); break;
+			    case Scode.S_C_INT:    Scode.inputInstr(); emit(IntegerValue.ofScode_INT(), comment); break;
+			    case Scode.S_C_CHAR:   Scode.inputInstr(); emit(IntegerValue.ofScode_CHAR(), comment); break;
+			    case Scode.S_C_SIZE:   Scode.inputInstr(); emit(IntegerValue.ofScode_SIZE(), comment); break;
+			    case Scode.S_C_REAL:   Scode.inputInstr(); emit(new RealValue(), comment); break;
+			    case Scode.S_C_LREAL:  Scode.inputInstr(); emit(new LongRealValue(), comment); break;
 			    case Scode.S_TRUE:     Scode.inputInstr(); emit(new BooleanValue(true), comment); break;
 			    case Scode.S_FALSE:    Scode.inputInstr(); emit(new BooleanValue(false), comment); break;
 			    case Scode.S_NOSIZE:   Scode.inputInstr(); emit(null, comment); break;
@@ -86,12 +86,13 @@ public class DataSegment extends Segment {
 			    case Scode.S_NOBODY:   Scode.inputInstr(); emit(null, comment); break;
 			    case Scode.S_ONONE:    Scode.inputInstr(); emit(null, comment); break;
 			    case Scode.S_GNONE:    Scode.inputInstr(); emit(null, comment); break;
-			    case Scode.S_C_AADDR:  Scode.inputInstr(); IntegerValue.ofScode_AADDR(); break;
-			    case Scode.S_C_PADDR:  Scode.inputInstr(); ProgramAddress.ofScode(Type.T_PADDR); break;
-			    case Scode.S_C_RADDR:  Scode.inputInstr(); ProgramAddress.ofScode(Type.T_RADDR); break;
-			    case Scode.S_C_OADDR:  Scode.inputInstr(); ObjectAddress.ofScode(); break;
-			    case Scode.S_C_GADDR:  Scode.inputInstr(); GeneralAddress.ofScode(); break;
-			    case Scode.S_C_DOT:    Scode.inputInstr(); new DotAddress(); break;
+			    case Scode.S_C_AADDR:  Scode.inputInstr(); emit(IntegerValue.ofScode_AADDR(), comment); break;
+			    case Scode.S_C_PADDR:  Scode.inputInstr(); emit(ProgramAddress.ofScode(Type.T_PADDR), comment); break;
+			    case Scode.S_C_RADDR:  Scode.inputInstr(); emit(ProgramAddress.ofScode(Type.T_RADDR), comment); break;
+			    case Scode.S_C_OADDR:  Scode.inputInstr(); emit(ObjectAddress.ofScode(), comment); break;
+			    case Scode.S_C_GADDR:  Scode.inputInstr(); emit(GeneralAddress.ofScode(), comment); break;
+//			    case Scode.S_C_DOT:    Scode.inputInstr(); emit(new DotAddress(), comment); break;
+			    case Scode.S_C_DOT:    Scode.inputInstr(); emit(DotAddress.ofScode(), comment); break;
 			    case Scode.S_C_RECORD: Scode.inputInstr(); emitRecordValue(comment); break;
 				default:
 					System.out.println("DataSegment.emitRepetitionValue: TERMINATED BY: "+Scode.edInstr(Scode.nextByte())+"  Comment="+comment);
@@ -144,8 +145,8 @@ public class DataSegment extends Segment {
 	
 	public String toString() {
 		if(segmentKind == Kind.K_SEG_CONST)
-			return "ConstSegment " + ident;
-		return "DataSegment " + ident;
+			return "ConstSegment \"" + ident + '"';
+		return "DataSegment \"" + ident + '"';
 	}
 
 	// ***********************************************************************************************

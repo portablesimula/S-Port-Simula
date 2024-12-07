@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import bec.descriptor.ConstDescr;
 import bec.descriptor.Kind;
+import bec.descriptor.LabelDescr;
 import bec.AttributeInputStream;
 import bec.descriptor.Attribute;
 import bec.descriptor.ProfileDescr;
@@ -92,8 +93,10 @@ public class InsertStatement {
 				case Kind.K_ProfileDescr:	ProfileDescr.read(inpt); break;
 				case Kind.K_Import:			Variable.read(inpt, kind); break;
 				case Kind.K_Export:			Variable.read(inpt, kind); break;
+				case Kind.K_Exit:			Variable.read(inpt, kind); break;
 				case Kind.K_Retur:			Variable.read(inpt, kind); break;
 				case Kind.K_IntRoutine:		RoutineDescr.read(inpt); break;
+				case Kind.K_IntLabel:		LabelDescr.read(inpt, kind); break;
 				default: Util.IERR("MISSING: " + Kind.edKind(kind) + ", prevKind=" + Kind.edKind(prevKind));
 			}
 		}

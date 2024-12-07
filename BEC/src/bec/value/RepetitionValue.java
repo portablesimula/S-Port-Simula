@@ -84,7 +84,7 @@ public class RepetitionValue extends Value {
 				case Scode.S_C_RADDR:  Scode.inputInstr(); values.add(ProgramAddress.ofScode(Type.T_RADDR)); break;
 				case Scode.S_C_OADDR:  Scode.inputInstr(); values.add(ObjectAddress.ofScode()); break;
 				case Scode.S_C_GADDR:  Scode.inputInstr(); values.add(GeneralAddress.ofScode()); break;
-				case Scode.S_C_DOT:    Scode.inputInstr(); values.add(new DotAddress()); break;
+				case Scode.S_C_DOT:    Scode.inputInstr(); values.add(DotAddress.ofScode()); break;
 				case Scode.S_C_RECORD: Scode.inputInstr(); values.add(RecordValue.ofScode()); break;
 				default: break LOOP;
 			}

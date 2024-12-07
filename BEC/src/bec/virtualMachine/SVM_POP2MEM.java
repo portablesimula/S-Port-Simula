@@ -6,7 +6,6 @@ import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.segment.RTStack;
 import bec.util.Global;
-import bec.util.Util;
 import bec.value.ObjectAddress;
 import bec.value.Value;
 

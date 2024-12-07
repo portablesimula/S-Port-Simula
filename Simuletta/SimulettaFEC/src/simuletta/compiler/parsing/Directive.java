@@ -20,7 +20,7 @@ import simuletta.utilities.Tag;
 import simuletta.utilities.Util;
 
 /**
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  */
 public class Directive {
 

@@ -15,7 +15,7 @@ import java.util.Vector;
 import simuletta.type.Type;
 
 /**
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  */
 public class RepeatedConst extends Value {
 	public Vector<Value> values;

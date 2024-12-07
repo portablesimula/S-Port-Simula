@@ -4,7 +4,7 @@ import bec.compileTimeStack.CTStack;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
-import bec.virtualMachine.SVM_GOTO;
+import bec.virtualMachine.SVM_JUMP;
 
 public class FJUMP extends PREV_Instruction {
 	int destination;
@@ -33,7 +33,7 @@ public class FJUMP extends PREV_Instruction {
 		
 //		CTStack.dumpStack();
 		Global.DESTAB[destination] = Global.PSEG.nextAddress();
-		Global.PSEG.emit(new SVM_GOTO(null), ""+this);
+		Global.PSEG.emit(new SVM_JUMP(null), ""+this);
 //		Global.PSEG.dump();
 //		Util.IERR(""+this);
 	}

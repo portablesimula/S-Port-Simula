@@ -10,7 +10,7 @@ package simuletta.utilities;
 /**
  * Compile Time Options
  * 
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  *
  */
 public final class Option {

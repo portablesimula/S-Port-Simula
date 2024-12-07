@@ -49,14 +49,14 @@ public class TextValue extends Value {
 		addr = (ObjectAddress) Value.read(inpt);
 		if(Global.ATTR_INPUT_TRACE) System.out.println("TextValue.read: " + this);
 		System.out.println("NEW TextValue: " + this);
-		Util.IERR("SJEKK DETTE");
+//		Util.IERR("SJEKK DETTE");
 	}
 
 	public void write(AttributeOutputStream oupt) throws IOException {
 		if(Global.ATTR_OUTPUT_TRACE) System.out.println("Value.write: " + this);
 		oupt.writeKind(Scode.S_TEXT);
 		System.out.println("TextValue.write: addr.segID" + addr.segID);
-		Util.IERR("");
+//		Util.IERR("");
 		addr.write(oupt);
 	}
 

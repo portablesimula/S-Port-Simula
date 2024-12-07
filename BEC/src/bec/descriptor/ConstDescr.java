@@ -40,6 +40,17 @@ public class ConstDescr extends Descriptor {
 	 *	constant_definition
 	 *		::= const const:spectag quantity_descriptor repetition_value
 	 *
+	 *		quantity_descriptor ::= resolved_type < Rep count:number >?
+	 *
+	 *			resolved_type
+	 *				::= resolved_structure | simple_type
+	 *				::= INT range lower:number upper:number
+	 *				::= SINT
+	 *
+	 *				resolved_structure ::= structured_type < fixrep count:ordinal >?
+	 *
+	 *					structured_type ::= record_tag:tag
+	 *
 	 *		repetition_value
 	 *			::= <boolean_value>+
 	 *			::= <character_value>+ | text_value
@@ -62,6 +73,13 @@ public class ConstDescr extends Descriptor {
 		
 //		cnst.quant = new QuantityDescriptor();
 		cnst.type = Type.ofScode();
+		
+		if(Scode.accept(Scode.S_FIXREP)) {
+			Scode.inNumber();
+//			Util.IERR("DETTE ER EN 'ResolvedType' - HVA NÅ ?");
+			System.out.println("DETTE ER EN 'ResolvedType' - HVA NÅ ?");
+		}
+
 		int repCount = (Scode.accept(Scode.S_REP)) ? Scode.inNumber() : 1;
 
 		
@@ -82,6 +100,13 @@ public class ConstDescr extends Descriptor {
 		System.out.println("NEW ConstDescr.ofConstDef: "+cnst);
 //		cnst.quant = new QuantityDescriptor();
 		cnst.type = Type.ofScode();
+		
+		if(Scode.accept(Scode.S_FIXREP)) {
+			Scode.inNumber();
+//			Util.IERR("DETTE ER EN 'ResolvedType' - HVA NÅ ?");
+			System.out.println("DETTE ER EN 'ResolvedType' - HVA NÅ ?");
+		}
+
 		int repCount = (Scode.accept(Scode.S_REP)) ? Scode.inNumber() : 1;
 
 //		if(constDef) cnst.value = new RepetitionValue();
@@ -93,6 +118,8 @@ public class ConstDescr extends Descriptor {
 		
 		System.out.println("CONST.inConstant: " + cnst);
 //		if(Global.traceMode > 3) cnst.print("   ");
+		Global.CSEG.dump("ConstDescr.ofConstDef: ");
+		Global.DSEG.dump("ConstDescr.ofConstDef: ");
 //		Util.IERR("");
 		return cnst;
 	}

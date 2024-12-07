@@ -13,7 +13,7 @@ import java.io.IOException;
 /**
  * A set of all static Utility Methods
  * 
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  *
  */
 public final class Util { 

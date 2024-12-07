@@ -33,7 +33,7 @@ import simuletta.type.Type;
  * 
  * NOWHERE designates no program point.
  * 
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  */
 public class ProgramAddress extends Value {
 	public final String ident;

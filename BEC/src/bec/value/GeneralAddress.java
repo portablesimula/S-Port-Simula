@@ -8,13 +8,15 @@ import bec.descriptor.Variable;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Tag;
+import bec.util.Type;
 import bec.util.Util;
 
 public class GeneralAddress extends Value {
 	public ObjectAddress base;
 	public int ofst;
 	
-	private GeneralAddress(ObjectAddress base,	int ofst) {
+	GeneralAddress(ObjectAddress base,	int ofst) {
+		this.type = Type.T_GADDR;
 		this.base = base;
 		this.ofst = ofst;
 	}

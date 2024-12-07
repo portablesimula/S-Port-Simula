@@ -41,7 +41,7 @@ import simuletta.type.Type;
  * <p>
  * size = dist(first,next)
  * 
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  */
 public class DSizeExpression extends Expression {
 //	public int lineNumber;      // From SyntaxClass

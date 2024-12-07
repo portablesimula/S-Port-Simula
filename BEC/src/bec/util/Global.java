@@ -1,16 +1,13 @@
 package bec.util;
 
 import java.io.File;
-import java.util.HashMap;
+import java.util.Map;
 
 import bec.S_Module;
 import bec.descriptor.Descriptor;
-import bec.descriptor.ProfileDescr;
 import bec.segment.DataSegment;
 import bec.segment.ProgramSegment;
 import bec.segment.Segment;
-import bec.value.ObjectAddress;
-import bec.value.ProgramAddress;
 import bec.value.ProgramAddress;
 
 public class Global {
@@ -27,7 +24,8 @@ public class Global {
 	public static boolean SEGMENT_OUTPUT_DUMP = false;
 	
 	public static ProgramAddress PSC; // ProgramSequenceControl during execute
-	public static HashMap<String, Segment> SEGMAP;
+//	public static HashMap<String, Segment> SEGMAP;
+	public static Map<String, Segment> SEGMAP;
 
 	public static S_Module currentModule;
 	

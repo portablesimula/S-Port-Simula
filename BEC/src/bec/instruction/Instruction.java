@@ -7,6 +7,7 @@ import bec.descriptor.RecordDescr;
 import bec.descriptor.RoutineDescr;
 import bec.descriptor.SwitchDescr;
 import bec.statement.IfConstrction;
+import bec.statement.SkipifConstruction;
 import bec.util.Scode;
 import bec.util.Util;
 
@@ -95,7 +96,7 @@ public class Instruction { // extends ProgramElement {
 			case Scode.S_RUPDATE ->     RUPDATE.ofScode();
 			case Scode.S_BSEG ->        BSEG.ofScode();
 			case Scode.S_IF ->          IfConstrction.ofScode();
-			case Scode.S_SKIPIF ->      SKIPIF.ofScode();
+			case Scode.S_SKIPIF ->      SkipifConstruction.ofScode();
 			case Scode.S_PRECALL ->     CALL.ofScode(0);
 			case Scode.S_ASSCALL ->     CALL.ofScode(0);
 			case Scode.S_REPCALL ->     CALL.ofScode(Scode.inByte());

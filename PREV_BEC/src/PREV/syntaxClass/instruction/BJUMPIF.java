@@ -6,7 +6,7 @@ import bec.util.Relation;
 import bec.util.Scode;
 import bec.util.Util;
 import bec.value.MemAddr;
-import bec.virtualMachine.SVM_GOTOIF;
+import bec.virtualMachine.SVM_JUMPIF;
 
 public class BJUMPIF extends PREV_Instruction {
 	Relation relation;
@@ -49,7 +49,7 @@ public class BJUMPIF extends PREV_Instruction {
 		
 		MemAddr addr = Global.DESTAB[destination];
 		if(addr == null) Util.IERR("");
-		Global.PSEG.emit(new SVM_GOTOIF(relation, addr), ""+this);
+		Global.PSEG.emit(new SVM_JUMPIF(relation, addr), ""+this);
 		Global.DESTAB[destination] = null;
 		
 //		Global.PSEG.dump("BJUMPIF: ");

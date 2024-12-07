@@ -15,7 +15,7 @@ import simuletta.utilities.Util;
 
 /**
  * 
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  *
  */
 public final class Simuletta {

@@ -13,7 +13,7 @@ import java.io.File;
 /**
  * Global Variables 
  * 
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  *
  */
 public final class PredefGlobal {

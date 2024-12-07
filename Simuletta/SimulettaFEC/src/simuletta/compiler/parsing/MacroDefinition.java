@@ -34,7 +34,7 @@ import simuletta.utilities.Util;
  * 							   | % parnumber'IntegerNumber
  * </pre>
  *
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  *
  */
 public class MacroDefinition extends Mnemonic implements Externalizable {

@@ -21,7 +21,7 @@ import simuletta.RTS_FEC_InterfaceGenerator.predef.util.RTS_FEC_Interface_Option
 /**
 * Input Utilities for the Simuletta Scanner.
 * 
-* @author Ã˜ystein Myhre Andersen
+* @author Øystein Myhre Andersen
 *
 */
 public final class SourceFileReader {

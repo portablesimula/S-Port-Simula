@@ -18,7 +18,7 @@ public class SVM_IMP extends SVM_Instruction {
 	
 	@Override	
 	public String toString() {
-		return "ADD      " + type;
+		return "IMP      " + type;
 	}
 
 }

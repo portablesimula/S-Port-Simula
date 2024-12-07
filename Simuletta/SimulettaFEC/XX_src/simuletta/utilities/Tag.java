@@ -21,7 +21,7 @@ import simuletta.compiler.declaration.scope.InsertedModule;
 
 /**
  * 
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  *
  */
 public class Tag {

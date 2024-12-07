@@ -15,7 +15,7 @@ import simuletta.compiler.expression.Expression;
 import simuletta.type.Type;
 
 /**
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  */
 public abstract class Value extends Expression {
 //	public int lineNumber;     // From SyntaxClass

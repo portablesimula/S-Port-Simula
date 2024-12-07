@@ -49,7 +49,7 @@ import simuletta.utilities.Tag;
  * c-dot T1 c-dot T2 c-gaddr T3 is "T3.T2.T1".GADDR
  * 
  * 
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  */
 public class GeneralAddress extends Value {
 	public Designator dotList;

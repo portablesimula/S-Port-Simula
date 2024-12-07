@@ -1,5 +1,6 @@
 package bec.instruction;
 
+import bec.compileTimeStack.AddressItem;
 import bec.compileTimeStack.CTStack;
 import bec.compileTimeStack.ConstItem;
 import bec.compileTimeStack.StackItem;
@@ -9,6 +10,7 @@ import bec.util.Type;
 import bec.util.Util;
 import bec.value.IntegerValue;
 import bec.value.LongRealValue;
+import bec.value.ObjectAddress;
 import bec.value.RealValue;
 import bec.value.Value;
 import bec.virtualMachine.SVM_CONVERT;
@@ -53,8 +55,9 @@ public abstract class CONVERT extends Instruction {
 //				case Scode.TAG_GADDR: OK = totype == Type.T_AADDR || totype == Type.T_OADDR; break;
 //			}
 //			if(! OK) Util.IERR("Type conversion is undefined: " + fromtype + " ==> " + totype);
-			CTStack.pop(); CTStack.pushTemp(totype, "CONVERT: ");
 			Global.PSEG.emit(new SVM_CONVERT(totype), "");
+			CTStack.pop(); CTStack.pushTemp(totype, "CONVERT: ");
+//			TOS.type = totype;
 		}
 	}
 

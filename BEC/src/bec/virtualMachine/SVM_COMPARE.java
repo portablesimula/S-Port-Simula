@@ -6,7 +6,6 @@ import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Global;
 import bec.util.Relation;
-import bec.util.Type;
 
 public class SVM_COMPARE extends SVM_Instruction {
 	Relation relation;

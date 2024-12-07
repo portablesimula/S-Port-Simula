@@ -4,18 +4,18 @@ import java.io.IOException;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
+import bec.descriptor.ConstDescr;
+import bec.descriptor.Descriptor;
 import bec.descriptor.Variable;
 import bec.segment.DataSegment;
-import bec.segment.ProgramSegment;
 import bec.segment.Segment;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Tag;
 import bec.util.Util;
-import bec.virtualMachine.SVM_Instruction;
 
 public class ObjectAddress extends Value {
-//	public Segment seg;
+//	public DataSegment seg;
 	String segID;
 	public int ofst;
 	
@@ -25,7 +25,7 @@ public class ObjectAddress extends Value {
 		if(ofst > 9000 || ofst < 0) Util.IERR("");
 	}
 	
-	public ObjectAddress(Segment seg,	int ofst) {
+	private ObjectAddress(DataSegment seg,	int ofst) {
 //		this.seg = seg;
 		if(seg != null)	this.segID = seg.ident;
 		this.ofst = ofst;
@@ -41,45 +41,57 @@ public class ObjectAddress extends Value {
 	 */
 	public static ObjectAddress ofScode() {
 		Tag tag = Tag.ofScode();
-		Variable var = (Variable) tag.getMeaning();
-		if(var == null) Util.IERR("IMPOSSIBLE: TESTING FAILED");
+		Descriptor descr = tag.getMeaning();
+		if(descr == null) Util.IERR("IMPOSSIBLE: TESTING FAILED");
 //		System.out.println("OADDR_Value.ofScode: descr="+descr.getClass().getSimpleName()+"  "+descr);
 //		Util.IERR("NOT IMPL");
 //		return null;
-		return var.address;
+		if(descr instanceof Variable var) return var.address;
+		if(descr instanceof ConstDescr cns) return cns.address;
+		Util.IERR("MISSING: " + descr);
+		return null;
 	}
+	
+	public static ObjectAddress ofSegAddr(DataSegment seg, int ofst) {
+		return new ObjectAddress(seg, ofst);
+	}
+	
+	public static ObjectAddress ofRelAddr(DataSegment seg) {
+		return new ObjectAddress(seg, 0);
+	}
+	
 	
 	public ObjectAddress ofset(int ofst) {
 		return new ObjectAddress(segID, this.ofst + ofst);
 	}
 	
-	public Segment segment() {
+	public DataSegment segment() {
 		if(segID == null) return null;
-		return Segment.lookup(segID);
+		return (DataSegment) Segment.lookup(segID);
 	}
 	
 	public void store(Value value) {
-		DataSegment dseg = (DataSegment) segment();
+		DataSegment dseg = segment();
 		dseg.store(ofst, value);
 //		dseg.dump("MemAddr.store: ");
 //		Util.IERR("");
 	}
 	
 	public Value load() {
-		DataSegment dseg = (DataSegment) segment();
+		DataSegment dseg = segment();
 		Value value =  dseg.load(ofst);
 //		dseg.dump("MemAddr.load: ");
 //		Util.IERR("");	
 		return value;
 	}
 	
-	public void execute() {
-		ProgramSegment seg = (ProgramSegment) segment();
-		SVM_Instruction cur = seg.instructions.get(ofst);
-//		System.out.println("MemAddr.execute: " + cur);
-		cur.execute();
-//		Util.IERR("");
-	}
+//	public void execute() {
+//		ProgramSegment seg = (ProgramSegment) segment();
+//		SVM_Instruction cur = seg.instructions.get(ofst);
+////		System.out.println("MemAddr.execute: " + cur);
+//		cur.execute();
+////		Util.IERR("");
+//	}
 	
 	public String toString() {
 		String s = (segID == null) ? "RELADR" : segID;

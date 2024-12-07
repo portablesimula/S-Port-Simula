@@ -14,7 +14,7 @@ import simuletta.RTS_FEC_InterfaceGenerator.predef.util.KeyWord;
 
 /**
  * 
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  *
  */
 public final class Token {

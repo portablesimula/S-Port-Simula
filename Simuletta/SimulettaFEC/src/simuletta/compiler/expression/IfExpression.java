@@ -26,7 +26,7 @@ import simuletta.utilities.KeyWord;
  *
  * </pre>
  * 
- * @author Ã˜ystein Myhre Andersen
+ * @author Øystein Myhre Andersen
  * 
  */
 public class IfExpression extends Expression {
