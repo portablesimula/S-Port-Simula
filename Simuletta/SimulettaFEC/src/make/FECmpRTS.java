@@ -23,7 +23,7 @@ public final class FECmpRTS {
 	public static void main(String[] args) {
 		long startTimeMs = System.currentTimeMillis( );
 		Vector<String> names=new Vector<String>();
-		names.add("RT");
+//		names.add("RT");
 //		names.add("SYSR");
 //		names.add("KNWN");
 //		names.add("UTIL");
@@ -34,11 +34,10 @@ public final class FECmpRTS {
 //		names.add("FORM");
 //		names.add("LIBR");
 //		names.add("FIL");
-		names.add("SMST");
-		
+//		names.add("SMST");
 //		names.add("SML");
 //		names.add("EDIT");
-//		names.add("MNTR");
+		names.add("MNTR");
 
 //		names.add("RTS$INTERFACE"); // Will call RTS_FEC_InterfaceGenerator  which creates the files:
 		                            // - C:/Simuletta/Attrs/BEC/simulaRTS/RTS$INTERFACE.dat

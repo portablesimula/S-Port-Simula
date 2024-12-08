@@ -71,7 +71,7 @@ public class Value {
 	
 	private static Value read1(AttributeInputStream inpt) throws IOException {
 		int kind = inpt.readKind();
-		System.out.println("Value.read: kind="+Scode.edInstr(kind));
+//		System.out.println("Value.read: kind="+Scode.edInstr(kind));
 		switch(kind) {
 			case Scode.S_NULL:		return null;
 			case Scode.S_TRUE:		return new BooleanValue(true);

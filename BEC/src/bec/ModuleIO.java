@@ -39,7 +39,8 @@ public class ModuleIO {
 		modoupt.writeString(Global.modident);
 		modoupt.writeString(Global.modcheck);
 
-		if(Global.currentModule instanceof InterfaceModule) Type.writeRECTYPES(modoupt);
+//		if(Global.currentModule instanceof InterfaceModule)
+			Type.writeRECTYPES(modoupt);
 		
 //		Segment.writeSegments(modoupt);
 		

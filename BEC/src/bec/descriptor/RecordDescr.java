@@ -84,11 +84,11 @@ public class RecordDescr extends Descriptor {
 		}
 		Scode.expect(Scode.S_ENDRECORD);
 			
-		if(Global.currentModule instanceof InterfaceModule) {
+//		if(Global.currentModule instanceof InterfaceModule) {
 //		if(rec.infoType) {
 			rec.buildPointerMap();
 			Type.newRecType(rec);
-		}
+//		}
 //		if(Scode.inputTrace > 3)
 			rec.print("   ");
 		return rec;

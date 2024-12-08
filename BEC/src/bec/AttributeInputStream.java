@@ -22,7 +22,7 @@ public class AttributeInputStream {
 //	 */
 //	public ObjectReferenceMap objectReference;
 	
-	private boolean TRACE = true;//false; //true;
+	private boolean TRACE = false; //true;
 
     public AttributeInputStream(InputStream inpt) throws IOException {
     	this.inpt = new DataInputStream(inpt);

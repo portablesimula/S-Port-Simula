@@ -47,6 +47,11 @@ const infix(modinf) SMSMOD=record:modinf
 
 %tag (linkag,lkaPtp)
 
+Visible record linkag1:inst;
+begin ref(linkag) prd,suc end;
+
+Visible record linkag:linkag1; begin end;
+
 Visible const infix(claptp:2) lkaPtp=record:claptp
        (plv=0,lng=size(linkag),refVec=ref(LKAPNT),
 %-X     xpp=ref(LKAXPP),

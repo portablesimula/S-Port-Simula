@@ -55,7 +55,7 @@ public class TextValue extends Value {
 	public void write(AttributeOutputStream oupt) throws IOException {
 		if(Global.ATTR_OUTPUT_TRACE) System.out.println("Value.write: " + this);
 		oupt.writeKind(Scode.S_TEXT);
-		System.out.println("TextValue.write: addr.segID" + addr.segID);
+//		System.out.println("TextValue.write: addr.segID=" + addr.segID);
 //		Util.IERR("");
 		addr.write(oupt);
 	}

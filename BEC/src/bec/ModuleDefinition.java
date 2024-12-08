@@ -105,7 +105,7 @@ public class ModuleDefinition extends S_Module {
 //		DataType.dumpDataTypes("MONITOR.moduleDefinition'END: ");
 //		Global.DSEG.dump("MONITOR.moduleDefinition'END: ");
 //		Global.CSEG.dump("MONITOR.moduleDefinition'END: ");
-		Global.dumpDISPL("MONITOR.moduleDefinition'END: ");
+//		Global.dumpDISPL("MONITOR.moduleDefinition'END: ");
 //		Scode.dumpTAGIDENTS("MONITOR.moduleDefinition'END: ");
 		
 		try { ModuleIO.outputModule(nXtag);

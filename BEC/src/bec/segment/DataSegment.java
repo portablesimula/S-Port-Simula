@@ -174,7 +174,7 @@ public class DataSegment extends Segment {
 		for(int i=0;i<values.size();i++) {
 			oupt.writeString(comment.get(i));
 			Value val = values.get(i);
-			System.out.println("DataSegment.Write: "+val);
+//			System.out.println("DataSegment.Write: "+val);
 			if(val == null)
 				 oupt.writeInstr(Scode.S_NULL);
 			else val.write(oupt);

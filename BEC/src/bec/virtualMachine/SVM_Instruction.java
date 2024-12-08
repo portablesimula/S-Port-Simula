@@ -56,7 +56,7 @@ public class SVM_Instruction {
 	
 	public static SVM_Instruction readObject(AttributeInputStream inpt) throws IOException {
 		int opcode = inpt.readKind();
-		System.out.println("SVM_Instruction.read: opcode="+edOpcode(opcode));
+//		System.out.println("SVM_Instruction.read: opcode="+edOpcode(opcode));
 		switch(opcode) {
 			case iADD:		return SVM_ADD.read(inpt);
 			case iAND:		return SVM_AND.read(inpt);
@@ -74,7 +74,7 @@ public class SVM_Instruction {
 			case iRETURN:	return SVM_RETURN.read(inpt);
 			case iPOP2REG:	return SVM_POP2REG.read(inpt);
 			case iPOP2MEM:	return SVM_POP2MEM.read(inpt);
-//			case iSTOREC:	return SVM_STOREC.read(inpt);
+			case iREM:		return SVM_REM.read(inpt);
 			case iSUB:		return SVM_SUB.read(inpt);
 			case iSWITCH:	return SVM_SWITCH.read(inpt);
 			case iLINE:		return SVM_LINE.read(inpt);

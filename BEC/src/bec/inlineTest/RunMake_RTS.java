@@ -22,11 +22,10 @@ public class RunMake_RTS {
 //		names.add("FORM");
 //		names.add("LIBR");
 //		names.add("FIL");
-		
-		names.add("SMST");
+//		names.add("SMST");
 //		names.add("SML");
 //		names.add("EDIT");
-//		names.add("MNTR");
+		names.add("MNTR");
 
 		Global.verbose = true;
 //		Global.traceMode = 4;

@@ -29,7 +29,7 @@ public class Tag {
 	public static int lastTag=FirstUserTag-1;  // Last used tag number
 	public static int nxtag;  // Number of external tag numbers
 	public static InsertedModule currentInsert;
-	public static HashMap<String,Tag> predefined=new HashMap<String,Tag>();
+	private static HashMap<String,Tag> predefined=new HashMap<String,Tag>();
 	
 	private int sequ;          // Tag sequence number
 	private int xtag;          // External Tag number
@@ -37,7 +37,7 @@ public class Tag {
 	
 	public static void preDefine(String ident) {
 		Tag tag=new Tag(true,ident,"");
-//		System.out.println("Tag.preDefine: "+ident+"'tag="+tag);
+		System.out.println("Tag.preDefine: "+ident+"'tag="+tag);
 		predefined.put(ident.toUpperCase(),tag);
 	}
 	

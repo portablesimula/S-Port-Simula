@@ -590,13 +590,6 @@ Visible define
        variant ref()         ptr; --  pointer to some object unit
  end;
 
-%title ***   S I M S E T   ***
-
-Visible record linkag1:inst;
-begin ref(linkag) prd,suc end;
-
-Visible record linkag:linkag1; begin end;
-
 
 %title ***   M o d u l e   a n d   S i m o b   I  n f o   ***
 

@@ -158,7 +158,7 @@ public class Type {
 		oupt.writeKind(Kind.K_RECTYPES);
 		oupt.writeShort(RECTYPES.size());
 		for(Type type:RECTYPES) {
-			System.out.println("Type.writeRECTYPES: " + type.tag );
+//			System.out.println("Type.writeRECTYPES: " + type.tag );
 			oupt.writeTagID(type.tag);
 			oupt.writeShort(type.size);
 			if(type.pntmap != null) {
@@ -186,14 +186,23 @@ public class Type {
 				for(int j=0;j<npt;j++) pnts[j] = (byte) inpt.readShort();
 				type.pntmap = BitSet.valueOf(pnts);
 			}
+//			if(tag == Scode.TAG_STRING) ; // OK Predefinert
+//			else if(TMAP.get(tag) !=null) {
+//				Type.dumpTypes("Type.readRECTYPES: ");
+//				Util.IERR("Alredy defined: " + TMAP.get(tag) + " NEW in " + Global.currentModule);
+//			}
+//			TMAP.put(tag, type);
+//			RECTYPES.add(type);
+			
 			if(tag == Scode.TAG_STRING) ; // OK Predefinert
-			else if(TMAP.get(tag) !=null) {
-				Type.dumpTypes("Type.readRECTYPES: ");
-				Util.IERR("Alredy defined: " + TMAP.get(tag) + " NEW in " + Global.currentModule);
+			else if(TMAP.get(tag) ==null) {
+				TMAP.put(tag, type);
+				RECTYPES.add(type);
+//				Type.dumpTypes("Type.readRECTYPES: ");
 			}
-			TMAP.put(tag, type);
-			RECTYPES.add(type);
-			System.out.println("Type.readRECTYPES: NEW Type: " + type);
+			
+			
+//			System.out.println("Type.readRECTYPES: NEW Type: " + type);
 //			Util.IERR("");
 		}
 	}

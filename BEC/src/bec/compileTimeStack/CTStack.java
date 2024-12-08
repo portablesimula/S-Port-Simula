@@ -5,6 +5,7 @@ import bec.util.Scode;
 import bec.util.Type;
 import bec.util.Util;
 import bec.value.ObjectAddress;
+import bec.value.Value;
 import bec.virtualMachine.SVM_NOT_IMPL;
 import bec.virtualMachine.SVM_POP2REG;
 
@@ -37,6 +38,26 @@ public class CTStack {
 //	      tmp qua StackItem.size:=TTAB(type).nbyte;
 //	%+C   if TTAB(type).nbyte=0 then IERR("No info TYPE-3") endif;
 		push(tmp);
+	}
+	
+	public static void pushCoonst(Type type, Value value) {
+//	begin ref(Object) cns;
+//	      cns:=FreeObj(K_Coonst);
+//	      if cns <> none
+//	      then FreeObj(K_Coonst):=cns qua FreeObject.next;
+//	      else L: cns:=PoolNxt; PoolNxt:=PoolNxt+size(Coonst);
+//	           if PoolNxt >= PoolBot
+//	           then PALLOC(size(Coonst),cns); goto L endif;
+//	%+D        ObjCount(K_Coonst):=ObjCount(K_Coonst)+1;
+//	      endif;
+//	      cns.kind:=K_Coonst; cns.type:=type;
+//	      cns qua StackItem.repdist:=TTAB(type).nbyte;
+//	      cns qua StackItem.suc:=none; cns qua StackItem.pred:=none;
+//	      cns qua Coonst.itm:=itm;
+//	%+C   if TTAB(type).nbyte=0 then IERR("No info TYPE-4") endif;
+//	      DOpush(cns);
+		ConstItem cnst = new ConstItem(type, value);
+		push(cnst);
 	}
 
 

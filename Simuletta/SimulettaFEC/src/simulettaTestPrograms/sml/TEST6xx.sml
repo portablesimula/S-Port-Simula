@@ -5,7 +5,9 @@ Module TEST6xx("TEST6xx");
 
  Visible routine sysNam;
  import range(0:MAX_KEY) key; export infix(txtqnt) res;
- begin infix(string) from,to;
+ begin size lng;
+ 
+ 	lng := size(txtent:10);
  end;
 
 %page
