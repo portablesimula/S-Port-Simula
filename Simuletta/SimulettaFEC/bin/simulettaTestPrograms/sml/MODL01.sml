@@ -107,6 +107,20 @@ visible routine TEST_SWITCH; begin
       endcase;
    end;
    
+Visible Routine TEST_INDEX; begin
+	integer i;
+	character c,d;
+	real r(5);
+	character chr(8);
+	i := 3;
+  	chr(5) := 'X';
+  	chr(i) := 'Z';
+	c := chr(5);
+	d := chr(i);
+%       var(dst.chradr)(i):=var(src.chradr)(i);
+ end;
+   
+   
 visible routine TEST_EXIT; import integer code; infix(string) msg;  begin
 			TERMIN(code, msg);
 	end;   

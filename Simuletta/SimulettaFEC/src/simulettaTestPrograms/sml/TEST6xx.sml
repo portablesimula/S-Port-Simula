@@ -1,22 +1,14 @@
 
 Module TEST6xx("TEST6xx");
- begin sysinsert rt,sysr,knwn,util,strg,cent
+-- begin sysinsert rt,sysr,knwn,util,strg,cent
+ begin sysinsert rt
 
-
- Visible routine sysNam;
- import range(0:MAX_KEY) key; export infix(txtqnt) res;
- begin size lng;
- 
- 	lng := size(txtent:10);
+ Visible Routine XC_MOVE; import infix(string) src,dst;
+ begin
+  integer i;
+  real r(5);
+  character chr(8);
+  	chr(i) := 'X';
+%       var(dst.chradr)(i):=var(src.chradr)(i);
  end;
-
-%page
-
-  INACT:  curins:=curins;   goto FILDCL3;
-
-curins:=curins;
-curins:=curins;
-
-FILDCL3:  curins qua ref(filent).action:=COPY(txttmp);
-          nxtDcl(3);
 end;

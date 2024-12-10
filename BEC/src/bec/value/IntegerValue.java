@@ -53,6 +53,11 @@ public class IntegerValue extends Value {
 //		return new IntegerValue(Type.T_AADDR, var.address.ofst);
 		return new IntegerValue(Type.T_AADDR, var.rela);
 	}
+	
+	public static int intValue(IntegerValue val) {
+		if(val == null) return 0;
+		return val.value;
+	}
 
 	@Override
 	public Value neg() {

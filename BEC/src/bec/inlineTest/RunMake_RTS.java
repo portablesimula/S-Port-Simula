@@ -11,20 +11,20 @@ public class RunMake_RTS {
 	public static void main(String[] argv) {
 		Vector<String> names=new Vector<String>();
 		
-//		names.add("RT");
-//		names.add("SYSR");
-//		names.add("KNWN");
-//		names.add("UTIL");
-//		names.add("STRG");
-//		names.add("CENT");
-//		names.add("CINT");
-//		names.add("ARR");
-//		names.add("FORM");
-//		names.add("LIBR");
-//		names.add("FIL");
-//		names.add("SMST");
-//		names.add("SML");
-//		names.add("EDIT");
+		names.add("RT");
+		names.add("SYSR");
+		names.add("KNWN");
+		names.add("UTIL");
+		names.add("STRG");
+		names.add("CENT");
+		names.add("CINT");
+		names.add("ARR");
+		names.add("FORM");
+		names.add("LIBR");
+		names.add("FIL");
+		names.add("SMST");
+		names.add("SML");
+		names.add("EDIT");
 		names.add("MNTR");
 
 		Global.verbose = true;

@@ -6,8 +6,11 @@ import bec.util.Type;
 import bec.util.Util;
 import bec.value.ObjectAddress;
 import bec.value.Value;
+import bec.virtualMachine.RTAddress;
 import bec.virtualMachine.SVM_NOT_IMPL;
 import bec.virtualMachine.SVM_POP2REG;
+import bec.virtualMachine.SVM_PUSH;
+import bec.virtualMachine.SVM_PUSHC;
 
 public class CTStack {
 	
@@ -184,96 +187,6 @@ public class CTStack {
 		TOS = BOS = null;
 	}
 
-	public static void assertObjStacked() {
-		AddressItem tos = (AddressItem) CTStack.TOS;
-		if(tos.objState == AddressItem.State.NotStacked) {
-			tos.objState = AddressItem.State.FromConst;
-			ObjectAddress adr = tos.objadr;
-//	           case 0:adrMax (adr.kind)
-//	           when reladr,locadr: 
-//	%+E             Qf3(qPUSHA,0,qEBX,cOBJ,adr);
-//	           when segadr,fixadr,extadr:
-//	%+E             Qf2b(qPUSHC,0,qEBX,cOBJ,0,adr);
-//	%+C        otherwise IERR("CODER.AssertObjStacked-2")
-//	           endcase;
-			Global.PSEG.emit(new SVM_NOT_IMPL(), "assertObjStacked: "+tos);
-		}
-	}
-
-	public static void assertAtrStacked() {
-		assertObjStacked();
-		AddressItem tos = (AddressItem) CTStack.TOS;
-		if(tos.atrState == AddressItem.State.NotStacked) {
-//	           TOS qua Address.AtrState:=FromConst;
-//	           Qf2(qPUSHC,0,FreePartReg,cVAL,TOS qua Address.Offset);
-			Global.PSEG.emit(new SVM_NOT_IMPL(), "assertAtrStacked-1: "+tos);
-		} else if(tos.atrState == AddressItem.State.Calculated) {
-			if(tos.offset != 0) {
-//	%+E             Qf2(qLOADC,0,qEAX,cVAL,TOS qua Address.Offset);
-//	%+E             Qf1(qPOPR,qEBX,cVAL);
-//	%+E             Qf2(qDYADR,qADD,qEAX,cVAL,qEBX); Qf1(qPUSHR,qEAX,cVAL);
-//	                TOS qua Address.Offset:=0;
-				
-//				CTStack.dumpStack("assertAtrStacked");
-				Global.PSEG.emit(new SVM_NOT_IMPL(), "assertAtrStacked-2: "+tos);
-			}
-		}	      
-	}
-	
-	public static void getTosAdjustedIn86(int reg) {
-//	begin range(0:255) nbyte; infix(ValueItem) itm; range(0:MaxByte) type,cTYP;
-		if(TOS == null) Util.IERR("CODER.GetTosAdjusted-1");
-//	      type:=TOS.type; nbyte:=TTAB(type).nbyte;
-//	      if type<=T_MAX then cTYP:=cTYPE(type) else cTYP:=cANY endif;
-//	%+C   if nbyte=0 then IERR("CODER.GetTosAdjustedIn86-1") endif;
-//	%+C   if nbyte > AllignFac
-//	%+C   then WARNING("CODER.GetTosAdjusted-2");
-//	%+C        repeat while nbyte > AllignFac
-//	%+C        do qPOPKill(AllignFac); nbyte:=nbyte-AllignFac endrepeat
-//	%+C   endif;
-//	      if TOS.kind=K_Coonst
-//	      then qPOPKill(nbyte); itm:=TOS qua Coonst.itm;
-//	%-E        if type=T_NPADR
-//	%-E        then case 0:adrMax (itm.base.kind)
-//	%-E             when 0: Qf2(qLOADC,0,reg,cTYP,0) -- NOWHERE/NOBODY
-//	%-E             when reladr,locadr: Qf3(qLOADA,0,reg,cTYP,itm.base);
-//	%-E             when segadr,fixadr,extadr:
-//	%-E                           Qf2b(qLOADC,0,reg,cTYP,F_OFFSET,itm.base);
-//	%-E %+C         otherwise IERR("CODER.GetTosAdjusted-4")
-//	%-E             endcase;
-//	%-E        else Qf2(qLOADC,0,reg,cTYP,itm.wrd) endif;
-//	%+E        case 0:T_Max (type)
-//	%+E        when T_OADDR,T_PADDR,T_RADDR:
-//	%+E             case 0:adrMax (itm.base.kind)
-//	%+E             when 0: Qf2(qLOADC,0,reg,cTYP,0) -- NONE/NOWHERE/NOBODY
-//	%+E             when reladr,locadr: Qf3(qLOADA,0,reg,cTYP,itm.base);
-//	%+E             when segadr,fixadr,extadr: Qf2b(qLOADC,0,reg,cTYP,0,itm.base)
-//	%+E %+C         otherwise IERR("CODER.GetTosAdjusted-4")
-//	%+E             endcase;
-//	%+E        when T_BOOL,T_CHAR,T_BYT1,T_BYT2,T_WRD2,T_WRD4,
-//	%+E             T_REAL,T_SIZE,T_AADDR:
-//	%+E             Qf2(qLOADC,0,reg,cTYP,itm.int);
-//	%+E %+C    otherwise IERR("CODER:GetTosAdjusted-6");Qf2(qLOADC,0,reg,cTYP,0);
-//	%+E        endcase;
-//	      else case 0:AllignFac (nbyte)
-//	           when 1: GetTosValueIn86(LowPart(%reg%));
-//	                   if RegSize(reg) > 1
-//	                   then
-//	%-E                     Qf2(qLOADC,0,HighPart(%reg%),cTYP,0);
-//	%+E                     Qf2(qMOV,qZEXT,LowPart(%reg%),cTYP,LowPart(%reg%));
-//	                   endif;
-//	           when 2: GetTosValueIn86(WordReg(reg));
-//	%+E                if RegSize(reg) > 2
-//	%+E                then Qf2(qMOV,qZEXT,WordReg(reg),cTYP,WordReg(reg)) endif;
-//	%+E        when 4: GetTosValueIn86(WholeReg(reg));
-//	%+C        otherwise IERR("CODER.GetTosAdjusted-5")
-//	           endcase;
-//	      endif;
-		
-		getTosValueIn86(reg);
-//		Util.IERR("");
-	}
-
 	public static void getTosValueIn86(int reg) { // import range(0:255) reg;
 //	--     /* M} ikke bruke qDI p.g.a. RUPDATE. */
 //	begin infix(MemAddr) opr; range(0:MaxType) type; range(0:MaxByte) cTYP;
@@ -287,14 +200,14 @@ public class CTStack {
 //	           Pop; pushTemp(type);
 //	      endcase;
 		StackItem tos = CTStack.TOS;
+		System.out.println("CTStack.getTosValueIn86: reg="+reg+" TOS="+TOS);
 		if(tos instanceof AddressItem) {
-			Util.getTosSrcAdr();
 			Global.PSEG.emit(new SVM_POP2REG(reg), "getTosValueIn86'Address: ");
 			Global.PSEG.dump("getTosValueIn86'Address: ");
 			Util.IERR("NOT IMPL");
 		} else if(tos instanceof Temp) {
-//			Global.PSEG.emit(new SVM_POP2REG(reg), "getTosValueIn86'Temp: ");
-//			Global.PSEG.dump("getTosValueIn86'Temp: ");
+			Global.PSEG.emit(new SVM_POP2REG(reg), "getTosValueIn86'Temp: ");
+			Global.PSEG.dump("getTosValueIn86'Temp: ");
 //			Util.IERR("NOT IMPL");			
 		} else if(tos instanceof ConstItem) {
 			Global.PSEG.dump("getTosValueIn86: ");

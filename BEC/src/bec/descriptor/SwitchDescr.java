@@ -6,6 +6,7 @@ import bec.util.Scode;
 import bec.util.Tag;
 import bec.value.ObjectAddress;
 import bec.value.ProgramAddress;
+import bec.virtualMachine.RTRegister;
 import bec.virtualMachine.SVM_SWITCH;
 
 /**
@@ -26,8 +27,7 @@ public class SwitchDescr extends Descriptor {
 		CTStack.checkTosInt();
 //      if TOS.type < T_WRD2 then GQconvert(T_WRD2) endif;
 //      a:=sw.swtab;
-		int qEBX = 1; // MÅ RETTES
-		CTStack.getTosAdjustedIn86(qEBX);
+		CTStack.getTosValueIn86(RTRegister.qEBX);
 		CTStack.pop();
     	Global.PSEG.emit(new SVM_SWITCH(DESTAB), "");
 //    	Global.PSEG.dump("SWITCH: ");

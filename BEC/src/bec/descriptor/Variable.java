@@ -84,10 +84,14 @@ public class Variable extends Descriptor {
 		var.type = Type.ofScode();
 		var.repCount = (Scode.accept(Scode.S_REP)) ? Scode.inNumber() : 1;
 		var.address = seg.nextAddress();
-//		type.emitDefaultValue(Global.DSEG, var.toString());			
-		seg.emitDefaultValue(var.type.size(), "LOCAL " + var.type);
-		if(var.repCount > 1) {
-			Util.IERR("");
+//		type.emitDefaultValue(Global.DSEG, var.toString());	
+		
+//		seg.emitDefaultValue(var.type.size(), "LOCAL " + var.type);
+//		if(var.repCount > 1) {
+//			Util.IERR("");
+//		}
+		for(int i=0;i<var.repCount;i++) {
+			seg.emitDefaultValue(var.type.size(), "LOCAL " + var.type);			
 		}
 //		Global.dumpDISPL("Variable.ofGlobal: ");
 //		seg.dump("Variable.ofGlobal: ");

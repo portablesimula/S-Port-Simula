@@ -2,6 +2,8 @@ package bec.compileTimeStack;
 
 import bec.util.Type;
 import bec.value.ObjectAddress;
+import bec.virtualMachine.RTStack;
+import bec.virtualMachine.RTRegister;
 
 //Record Address:StackItem;
 //begin infix(MemAddr) Objadr;   -- Object Address
@@ -16,6 +18,8 @@ public class AddressItem extends StackItem {
 	public int offset;
 	public State objState;
 	public State atrState;
+	public int objReg;
+	public int atrReg;
 	
 	public AddressItem(Type type, int offset, ObjectAddress objadr) {
 		this.type = type;
@@ -28,6 +32,11 @@ public class AddressItem extends StackItem {
 	}
 
 	public String toString() {
-		return "" + type + " AT " + objadr + "[" + offset + "] objState="+objState + ", atrState="+atrState;
+		String s = "" + type + " AT " + objadr + "[" + offset + "]";
+		if(objReg > 0) s += "+" + RTRegister.edReg(objReg);
+		if(atrReg > 0) s += "+" + RTRegister.edReg(atrReg);
+//				+ " objState="+objState + ", atrState="+atrState;
+		return s;
 	}
+
 }

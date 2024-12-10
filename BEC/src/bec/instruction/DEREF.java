@@ -33,7 +33,7 @@ public abstract class DEREF extends Instruction {
 //%+S             then WARNING("DEREF on parameter") endif;
 //%+S        endif;
 
-		CTStack.assertAtrStacked();
+//		CTStack.assertAtrStacked();
 		CTStack.pop();
 		CTStack.pushTemp(Type.T_GADDR, "DEREF: ");
 

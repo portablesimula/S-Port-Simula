@@ -6,13 +6,10 @@ import java.util.HashMap;
 
 import bec.compileTimeStack.AddressItem;
 import bec.compileTimeStack.CTStack;
-import bec.compileTimeStack.ConstItem;
-import bec.compileTimeStack.DataType;
 import bec.compileTimeStack.StackItem;
 import bec.compileTimeStack.Temp;
-import bec.value.ObjectAddress;
+import bec.virtualMachine.RTAddress;
 import bec.virtualMachine.SVM_NOT_IMPL;
-import bec.virtualMachine.SVM_POP2REG;
 import bec.virtualMachine.SVM_PUSH;
 
 public class Util {
@@ -119,11 +116,13 @@ public class Util {
 //	      range(0:MaxWord) nbyte; range(0:MaxByte) cTYP;
 		if(CTStack.TOS instanceof AddressItem) {
 //	           opr:=GetTosSrcAdr;
-			ObjectAddress addr = getTosSrcAdr();
+//			ObjectAddress addr = getTosSrcAdr();
+			AddressItem addr = (AddressItem) CTStack.TOS;
 			System.out.println("Util.GQfetch: addr="+addr);
 			Type type = CTStack.TOS.type;
 //			int size = DataType.typeSize(type);
-			Global.PSEG.emit(new SVM_PUSH(type, addr, type.size()), comment + " " +type);
+			RTAddress rtAddr = new RTAddress(addr); 
+			Global.PSEG.emit(new SVM_PUSH(type, rtAddr, type.size()), comment + " " +type);
 			CTStack.pop(); CTStack.pushTemp(type, "GQFetch: ");
 			CTStack.dumpStack("GQfetch: "+comment);
 			Global.PSEG.dump("GQfetch: "+comment);
@@ -136,13 +135,14 @@ public class Util {
 //	      case 0:K_Max (TOS.kind)
 //	      when K_Coonst,K_Temp,K_Result:
 		StackItem tos = CTStack.TOS;
-		if(tos instanceof Temp) { // when K_Coonst,K_Temp,K_Result:
+		if(tos instanceof Temp tmp) { // when K_Coonst,K_Temp,K_Result:
 //	           nbyte:=TTAB(TOS.type).nbyte;
 //	           if nbyte <= AllignFac then qPOPKill(nbyte)
 //	           elsif nbyte <= (3*AllignFac)
 //	           then repeat qPOPKill(AllignFac); nbyte:=nbyte-AllignFac;
 //	                while nbyte<>0 do endrepeat;
 //	           else qPOPKill(nbyte) endif;
+			qPOPKill(tmp.size);
 		} else if(tos instanceof AddressItem) {
 //	      when K_Address:
 //	           if TOS qua Address.AtrState <> NotStacked
@@ -152,89 +152,27 @@ public class Util {
 //	%-E             qPOPKill(2);
 //	           endif;
 //	      endcase;
+			Util.IERR("");
 		} else Util.IERR("MISSING: "+tos.getClass().getSimpleName());
 		CTStack.pop();
 	}
 
-	public static ObjectAddress getTosSrcAdr() { //; export infix(MemAddr) srcAddr;
-		AddressItem tos = (AddressItem) CTStack.TOS;
-		ObjectAddress srcAddr = tos.objadr.ofset(tos.offset);
-		switch(tos.atrState) {
-		case NotStacked: break; // Nothing
-		case FromConst:
-//			qPOPKill(AllignFac);
-			Util.IERR("NOT IMPL");
-			break;
-		case Calculated:
-//			%+D        if GetIreg(srcAddr)<>0 then IERR("GetTosSrcAdr-0") endif;
-//			%+E        Qf1(qPOPR,qESI,cVAL);
-//			%+E        if srcAddr.sibreg=NoIBREG then srcAddr.sibreg:=bESI+iESI;
-//			%+E        else srcAddr.sibreg:=wOR(wAND(srcAddr.sibreg,BaseREG),iESI) endif;
-			Global.PSEG.emit(new SVM_NOT_IMPL(), "getTosSrcAdr");
-			break;
-		}
+	public static void qPOPKill(int aux) {
+//	begin ref(Object) qi; qi:=FreeObj(K_Qfrm2);
+//	      if qi=none then qi:=NEWOBX(size(Qfrm2));
+//	%+D        ObjCount(K_Qfrm2):=ObjCount(K_Qfrm2)+1;
+//	      else FreeObj(K_Qfrm2):=qi qua FreeObject.next endif;
+//	      qi.kind:=K_Qfrm2; qi qua Qfrm2.fnc:=qPOPK;
+//	      qi qua Qfrm2.subc:=qi qua Qfrm2.reg:=qi qua Qfrm2.type:=0;
+//	      qi qua Qfrm2.aux.val:=aux; AppendQinstr(qi);
 
-		switch(tos.objState) {
-		case NotStacked: break; // Nothing
-		case FromConst:
-//			qPOPKill(4);
-			Util.IERR("NOT IMPL");
-			break;
-		case Calculated:
-//	        Qf1(qPOPR,qEBX,cOBJ);
-//	        srcAddr.sibreg:=bOR(bAND(srcAddr.sibreg,IndxREG),bEBX);
-			Global.PSEG.emit(new SVM_POP2REG(1), ""+tos);
-
-//			Util.IERR("NOT IMPL");
-		}
-//		Util.IERR("");
-		return srcAddr;
+//		Global.PSEG.emit(new SVM_POPK(aux), "qPOPKill: ");
+		Global.PSEG.emit(new SVM_NOT_IMPL(), "qPOPKill: qPOPKill: ");
+		Global.PSEG.dump("qPOPKill: ");
+		CTStack.dumpStack("qPOPKill: ");
+//		Util.IERR("qPOPKill:  ");
 	}
 	
-	public static ObjectAddress getTosDstAdr() { // export infix(MemAddr) dstAddr;
-		AddressItem tos = (AddressItem) CTStack.TOS;
-		ObjectAddress dstAddr = tos.objadr.ofset(tos.offset);
-		switch(tos.atrState) {
-		case NotStacked: break; // Nothing
-		case FromConst:
-//			qPOPKill(AllignFac);
-			Util.IERR("NOT IMPL");
-			break;
-		case Calculated:
-//			%+D        if GetIreg(dstAddr)<>0 then IERR("GetTosDstAdr-0") endif;
-//			%+E        Qf1(qPOPR,qEDI,cVAL);
-//			%+E        if dstAddr.sibreg=NoIBREG then dstAddr.sibreg:=bEDI+iEDI;
-//			%+E        else dstAddr.sibreg:=wOR(wAND(dstAddr.sibreg,BaseREG),iEDI) endif;
-			
-//			Global.PSEG.emit(new SVM_POPR(1), ""+tos); // ???
-//			Util.IERR("NOT IMPL");
-			break;
-		}
-		switch(tos.objState) {
-		case NotStacked: break; // Nothing
-		case FromConst:
-//			qPOPKill(4);
-			Util.IERR("NOT IMPL");
-			break;
-		case Calculated:
-//	        Qf1(qPOPR,qEBX,cOBJ);
-//	        dstAddr.sibreg:=bOR(bAND(dstAddr.sibreg,IndxREG),bEBX);
-			Global.PSEG.emit(new SVM_POP2REG(1), ""+tos);
-
-//			Util.IERR("NOT IMPL");
-		}
-
-		
-//	%+E   case 0:2 (TOS qua Address.ObjState)
-//	%+E   when NotStacked: -- Nothing
-//	%+E   when FromConst:  qPOPKill(4);
-//	%+E   when Calculated: Qf1(qPOPR,qEBX,cOBJ);
-//	%+E        dstAddr.sibreg:=bOR(bAND(dstAddr.sibreg,IndxREG),bEBX);
-//	%+E   endcase;
-//		Util.IERR("");
-		return dstAddr;
-	}
-
 	public static int GQrelation() { // export range(0:255) res;
 //	%-E   import boolean jmprel;
 //	      export range(0:255) res;

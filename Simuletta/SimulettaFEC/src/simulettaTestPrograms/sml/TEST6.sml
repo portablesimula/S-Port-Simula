@@ -10,23 +10,25 @@
 
  -- MAIN Program:
  begin
- 	 insert envir0,modl01,modl02;
+-- 	 insert envir0,modl01,modl02;
+ 	 insert envir0,modl01;
 --   sysinsert rt,sysr,knwn,util;
 --     sysinsert rt,sysr,knwn,util,strg; 
 
     
-    TEST_ADD;
-    TEST_SUB;
-    TEST_DIV;
-    TEST_MULT;
+--    TEST_ADD;
+--    TEST_SUB;
+--    TEST_DIV;
+--    TEST_MULT;
     
 --    TEST_SWITCH;
+	TEST_INDEX;
     
 --    GET;
 
 --	ERRNON;
-	errorX:=entry(EXERR);
-	call PEXERR(errorX)(666,none);
+--	errorX:=entry(EXERR);
+--	call PEXERR(errorX)(666,none);
 	
 --	TEST_EXIT(444, "END PROGRAM");
 	TERMIN(0, "END PROGRAM");

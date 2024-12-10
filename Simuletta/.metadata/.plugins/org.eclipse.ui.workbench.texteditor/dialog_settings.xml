@@ -3,6 +3,7 @@
 	<item key="hasShownOverlayPopupBefore" value="true"/>
 	<item key="replaceBarOpen" value="true"/>
 	<list key="replacehistory">
+		<item value="%"/>
 		<item value="/"/>
 		<item value="Scode.TAGTABLE["/>
 		<item value="        Scode.TAGTABLE"/>
@@ -14,40 +15,45 @@
 		<item value="GitHub/S-Port-Simula/Simuletta"/>
 	</list>
 	<list key="searchhistory">
+		<item value="Record"/>
+		<item value="CONCAT"/>
+		<item value="ADR_THK_VEC"/>
+		<item value="UPDref"/>
+		<item value="IERR_R"/>
+		<item value="ø"/>
+		<item value="ED_IID"/>
+		<item value="TX2STR"/>
+		<item value="ERRNON"/>
+		<item value="RSUBEP"/>
+		<item value="SYSPRI"/>
 		<item value="PUTSTR"/>
 		<item value="\"/>
 		<item value="Scode.TAGTABLE"/>
 		<item value="&#x09;Scode.TAGTABLE["/>
-		<item value="ø"/>
-		<item value="oupt.write(&quot;"/>
-		<item value="&quot;);&quot;);"/>
-		<item value="):-copy("/>
-		<item value="\n&#x09;&#x09;ident("/>
-		<item value="SimulettaFECinJava"/>
 	</list>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="PUTSTR"/>
+		<item key="selection" value="DSIZE"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
-			<item value="PUTSTR"/>
-			<item value="MAXINT"/>
-			<item value="MAXLEN"/>
-			<item value="SYSINSERT"/>
-			<item value="BODY"/>
-			<item value="ROUTINE"/>
-			<item value="SYSPRI"/>
-			<item value="CURINS"/>
-			<item value="INTRHA"/>
-			<item value="STRING"/>
-			<item value="CALL_TOS"/>
-			<item value="CALL"/>
-			<item value="CALL-TOS"/>
-			<item value="verbose"/>
-			<item value="trace"/>
+			<item value="DSIZE"/>
+			<item value="FILDCL3"/>
+			<item value="PRECALL T1284X101:CONCAT"/>
+			<item value="CONCAT"/>
+			<item value="ACCESSCODE"/>
+			<item value="DOT"/>
+			<item value="ADR_THK_PTP"/>
+			<item value="LINE 195"/>
+			<item value="LOCATE"/>
+			<item value="BEGIN PASS 1 "/>
+			<item value="GET_ED"/>
+			<item value="ED_IID"/>
+			<item value="XBUFF"/>
+			<item value="LOCAL"/>
+			<item value="NEW Tag:"/>
 		</list>
 		<list key="replacehistory">
 			<item value="%   "/>
@@ -68,8 +74,8 @@
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
-		<item key="DIALOG_X_ORIGIN" value="1077"/>
-		<item key="DIALOG_Y_ORIGIN" value="249"/>
+		<item key="DIALOG_X_ORIGIN" value="1114"/>
+		<item key="DIALOG_Y_ORIGIN" value="233"/>
 		<item key="DIALOG_WIDTH" value="412"/>
 		<item key="DIALOG_HEIGHT" value="446"/>
 		<item key="DIALOG_FONT_NAME" value="1|Segoe UI|11.25|0|WINDOWS|1|-15|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>

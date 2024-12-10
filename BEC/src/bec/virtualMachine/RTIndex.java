@@ -5,42 +5,41 @@ import java.io.IOException;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Global;
-import bec.util.Util;
 
-public class SVM_NOT_IMPL extends SVM_Instruction {
-
-	public SVM_NOT_IMPL() {
-		this.opcode = SVM_Instruction.iNOT_IMPL;
-	}
-
-	@Override
-	public void execute() {
-		System.out.println("SVM_NOT_IMPL: DETTE MÅ RETTES");
-		Global.PSC.ofst++;
-		Util.IERR("");
-	}
+public class RTIndex {
+	public int size;
+	public int reg;
 	
-	@Override	
+	public RTIndex(int size, int reg) {
+		this.size = size;
+		this.reg = reg;
+	}
+
 	public String toString() {
-		return "NOT_IMPL ";
+		String s = RTRegister.edReg(reg);
+		if(size > 1) s += "*" + size;
+		return s;
 	}
-	
+
+
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	private SVM_NOT_IMPL(AttributeInputStream inpt) throws IOException {
-		this.opcode = SVM_Instruction.iNOT_IMPL;
+	private RTIndex(AttributeInputStream inpt) throws IOException {
+		this.size = inpt.readShort();
+		this.reg = inpt.readShort();
 		if(Global.ATTR_INPUT_TRACE) System.out.println("SVM.Read: " + this);
 	}
 
-	@Override
+//	@Override
 	public void write(AttributeOutputStream oupt) throws IOException {
 		if(Global.ATTR_OUTPUT_TRACE) System.out.println("SVM.Write: " + this);
-		oupt.writeKind(opcode);
+		oupt.writeShort(size);
+		oupt.writeShort(reg);
 	}
 
-	public static SVM_Instruction read(AttributeInputStream inpt) throws IOException {
-		return new SVM_NOT_IMPL(inpt);
+	public static RTIndex read(AttributeInputStream inpt) throws IOException {
+		return new RTIndex(inpt);
 	}
 
 }

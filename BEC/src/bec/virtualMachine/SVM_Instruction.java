@@ -33,6 +33,9 @@ public class SVM_Instruction {
 	public final static int iNOOP = 22;
 	public final static int iNOT = 23;
 	public final static int iGOTO = 24;
+	public final static int iPUSHR = 25;
+//	public final static int iINDEX = 26;
+	public final static int iPOPK = 27;
 	
 	public final static int iNOT_IMPL = 99;
 	
@@ -82,6 +85,9 @@ public class SVM_Instruction {
 			case iNOOP:		return SVM_NOOP.read(inpt);
 			case iNOT:		return SVM_NOT.read(inpt);
 			case iGOTO:		return SVM_GOTO.read(inpt);
+			case iPUSHR:	return SVM_PUSHR.read(inpt);
+//			case iINDEX:	return SVM_INDEX.read(inpt);
+			case iPOPK:		return SVM_POPK.read(inpt);
 			
 			case iNOT_IMPL:	return SVM_NOT_IMPL.read(inpt);
 			default: Util.IERR("MISSING: " + edOpcode(opcode));
@@ -107,7 +113,7 @@ public class SVM_Instruction {
 			case iRETURN:	return "iRETURN";
 			case iPOP2REG:	return "iPOPtoREG";
 			case iPOP2MEM:	return "iPOPtoMEM";
-//			case iSTOREC:	return "iSTOREC";
+			case iREM:	 	return "iSTOREC";
 			case iSUB:		return "iSUB";
 			case iSWITCH:	return "iSWITCH";
 			case iSYSCALL:	return "iSYSCALL";
@@ -115,6 +121,9 @@ public class SVM_Instruction {
 			case iNOOP:		return "iNOOP";
 			case iNOT:		return "iNOT";
 			case iGOTO:		return "iGOTO";
+			case iPUSHR:	return "iPUSHR";
+//			case iINDEX:	return "iINDEX";
+			case iPOPK:		return "iPOPK";
 
 			case iNOT_IMPL:	return "iNOT_IMPL";
 			default:		return "UNKNOWN:" + opcode;

@@ -1,4 +1,4 @@
-package bec.segment;
+package bec.virtualMachine;
 
 import java.util.Stack;
 
@@ -45,6 +45,10 @@ public abstract class RTStack {
 //		Util.IERR("");
 	}
 
+	public static void pushr(Type type, int reg) {
+		Util.IERR("");
+	}
+	
 	public static Value pop() {
 		return stack.pop();
 //		Util.IERR("");

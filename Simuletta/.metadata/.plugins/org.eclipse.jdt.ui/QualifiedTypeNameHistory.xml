@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
     <fullyQualifiedTypeName name="java.util.HashSet"/>
-    <fullyQualifiedTypeName name="simuletta.utilities.Util"/>
     <fullyQualifiedTypeName name="java.util.Hashtable"/>
     <fullyQualifiedTypeName name="java.util.Stack"/>
     <fullyQualifiedTypeName name="java.util.LinkedList"/>
@@ -26,4 +25,5 @@
     <fullyQualifiedTypeName name="simuletta.compiler.AttributeInput"/>
     <fullyQualifiedTypeName name="simuletta.compiler.declaration.VariableDeclaration.VarKind"/>
     <fullyQualifiedTypeName name="simuletta.RTS_FEC_InterfaceGenerator.RTS_FEC_InterfaceGenerator"/>
+    <fullyQualifiedTypeName name="simuletta.utilities.Util"/>
 </qualifiedTypeNameHistroy>

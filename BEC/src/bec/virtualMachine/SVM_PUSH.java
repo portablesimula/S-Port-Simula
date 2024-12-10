@@ -6,19 +6,29 @@ import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.descriptor.Variable;
 import bec.segment.DataSegment;
-import bec.segment.RTStack;
 import bec.util.Global;
 import bec.util.Type;
+import bec.util.Util;
 import bec.value.ObjectAddress;
 import bec.value.Value;
 
 // The count values at addr... is pushed onto the operand stack.
 public class SVM_PUSH extends SVM_Instruction {
 	Type type;
-	ObjectAddress addr;
+//	ObjectAddress addr;
+//	int indexReg;
+	RTAddress addr;
 	int count;
 	
-	public SVM_PUSH(Type type, ObjectAddress addr, int count) {
+//	public SVM_PUSH(Type type, ObjectAddress addr, int indexReg, int count) {
+//		this.opcode = SVM_Instruction.iPUSH;
+//		this.type = type;
+//		this.addr = addr;
+//		this.indexReg = indexReg;
+//		this.count = count;
+//	}
+	
+	public SVM_PUSH(Type type, RTAddress addr, int count) {
 		this.opcode = SVM_Instruction.iPUSH;
 		this.type = type;
 		this.addr = addr;
@@ -28,15 +38,16 @@ public class SVM_PUSH extends SVM_Instruction {
 	public SVM_PUSH(Variable var) {
 		this.opcode = SVM_Instruction.iPUSH;
 		this.type = var.type;
-		this.addr = var.address;
+		this.addr = new RTAddress(var.address);
 		this.count = var.repCount;
 	}
 	
 	@Override
 	public void execute() {
-		DataSegment dseg = (DataSegment) addr.segment();
+		ObjectAddress target = addr.toObjectAddress();
+		DataSegment dseg = (DataSegment) target.segment();
 //		dseg.dump("SVM_PUSH: " + addr + ", count=" + count);
-		int ofst = addr.ofst;
+		int ofst = target.ofst;
 		for(int i=0;i<count;i++) {
 			Value value = dseg.load(ofst++);
 //			System.out.println("SVM_PUSH: " + value);
@@ -47,7 +58,9 @@ public class SVM_PUSH extends SVM_Instruction {
 	
 	@Override
 	public String toString() {
-		return "PUSH     " + addr + ", " + count;
+		String s = "PUSH     " + addr;
+		if(count > 1) s += ", " + count;
+		return s;
 	}
 
 	// ***********************************************************************************************
@@ -56,7 +69,7 @@ public class SVM_PUSH extends SVM_Instruction {
 	private SVM_PUSH(AttributeInputStream inpt) throws IOException {
 		this.opcode = SVM_Instruction.iPUSH;
 		this.type = Type.read(inpt);
-		this.addr = (ObjectAddress) Value.read(inpt);
+		this.addr = RTAddress.read(inpt);
 		this.count = inpt.readShort();
 		if(Global.ATTR_INPUT_TRACE) System.out.println("SVM.Read: " + this);
 	}

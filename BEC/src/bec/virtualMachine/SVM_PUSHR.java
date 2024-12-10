@@ -8,47 +8,48 @@ import bec.util.Global;
 import bec.util.Type;
 import bec.value.Value;
 
-/**
- * Remove two items on the Runtime-Stack and push the value (SOS + TOS)
- */
-public class SVM_ADD extends SVM_Instruction {
+//The value in register REG is pushed onto the operand stack.
+public class SVM_PUSHR extends SVM_Instruction {
 	Type type;
-
-	public SVM_ADD(Type type) {
-		this.opcode = SVM_Instruction.iADD;
+	int reg;
+	
+	public SVM_PUSHR(Type type, int reg) {
+		this.opcode = SVM_Instruction.iPUSHR;
 		this.type = type;
+		this.reg = reg;
 	}
-
+	
 	@Override
 	public void execute() {
-		Value tos = RTStack.pop();
-		Value sos = RTStack.pop();
-		Value res = (tos == null)? sos : tos.add(sos);
-//		System.out.println("SVM_ADD: " + tos + " + " + sos + " = " + res);
-		RTStack.push(type, res);
+		RTStack.pushr(type, reg);
 		Global.PSC.ofst++;
-//		Util.IERR(""+res);
 	}
-
-	@Override	
+	
+	@Override
 	public String toString() {
-		return "ADD      " + type;
+		return "PUSHR    " + type + " R" + reg;
 	}
 
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
+	private SVM_PUSHR(AttributeInputStream inpt) throws IOException {
+		this.opcode = SVM_Instruction.iPUSHR;
+		this.type = Type.read(inpt);
+		this.reg = inpt.readShort();
+		if(Global.ATTR_INPUT_TRACE) System.out.println("SVM.Read: " + this);
+	}
 
+	@Override
 	public void write(AttributeOutputStream oupt) throws IOException {
 		if(Global.ATTR_OUTPUT_TRACE) System.out.println("SVM.Write: " + this);
 		oupt.writeKind(opcode);
-		type.write(oupt);;
+		type.write(oupt);
+		oupt.writeShort(reg);
 	}
 
-	public static SVM_ADD read(AttributeInputStream inpt) throws IOException {
-		SVM_ADD instr = new SVM_ADD(Type.read(inpt));
-		if(Global.ATTR_INPUT_TRACE) System.out.println("SVM.Read: " + instr);
-		return instr;
+	public static SVM_Instruction read(AttributeInputStream inpt) throws IOException {
+		return new SVM_PUSHR(inpt);
 	}
 
 }

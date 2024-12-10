@@ -17,6 +17,7 @@ import bec.value.RealValue;
 import bec.value.RecordValue;
 import bec.value.TextValue;
 import bec.value.Value;
+import bec.virtualMachine.RTAddress;
 import bec.virtualMachine.SVM_PUSH;
 import bec.virtualMachine.SVM_PUSHC;
 
@@ -101,7 +102,7 @@ public abstract class PUSHC extends Instruction {
 			TextValue txtval = (TextValue) value;
 			String strval = txtval.getString();
 //			Util.IERR(""+value);
-			Global.PSEG.emit(new SVM_PUSH(Type.T_OADDR, txtval.addr, 1), "TEXT'CHRADR'oaddr: "+strval);
+			Global.PSEG.emit(new SVM_PUSH(Type.T_OADDR, new RTAddress(txtval.addr), 1), "TEXT'CHRADR'oaddr: "+strval);
 			IntegerValue lng = new IntegerValue(Type.T_INT, txtval.getString().length());  // ELLER OMVENDT !
 			Global.PSEG.emit(new SVM_PUSHC(Type.T_INT, null), "TEXT'CHRADR'ofst:  "+strval);
 			Global.PSEG.emit(new SVM_PUSHC(Type.T_INT, lng), "TEXT'lng:   "+strval);

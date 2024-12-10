@@ -5,7 +5,6 @@ import java.io.IOException;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.segment.DataSegment;
-import bec.segment.RTStack;
 import bec.util.Global;
 import bec.value.ObjectAddress;
 import bec.value.ProgramAddress;

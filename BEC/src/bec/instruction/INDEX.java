@@ -4,11 +4,10 @@ import bec.compileTimeStack.AddressItem;
 import bec.compileTimeStack.CTStack;
 import bec.compileTimeStack.ConstItem;
 import bec.compileTimeStack.StackItem;
-import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
 import bec.value.IntegerValue;
-import bec.virtualMachine.SVM_NOT_IMPL;
+import bec.virtualMachine.RTRegister;
 
 public abstract class INDEX extends Instruction {
 	int instr; // INDEX | INDEXV
@@ -30,42 +29,11 @@ public abstract class INDEX extends Instruction {
 	 * be performed.
 	 */
 	public static void ofScode(int instr) {
-//		CTStack.dumpStack();
-
-		CTStack.checkTosInt();
-		CTStack.checkSosRef();
-//        adr:=TOS.suc; size:=adr.size;
-		AddressItem adr = (AddressItem) CTStack.TOS.suc;
-		int size = adr.size;
-		if(size == 0) Util.IERR("PARSE.INDEX: Not info type");
-//        if TOS.kind=K_Coonst
-		StackItem tos = CTStack.TOS;
-		if(tos instanceof ConstItem itm) {
-//        then itm:=TOS qua Coonst.itm;
-			IntegerValue ival = (IntegerValue) itm.value;
-			adr.offset = adr.offset + (size * ival.value);
-			Util.GQpop();
-             if(adr.atrState == AddressItem.State.FromConst) {
-            	 adr.atrState = AddressItem.State.NotStacked;
-//            	 qPOPKill(AllignFac);
-            	 Global.PSEG.emit(new SVM_NOT_IMPL(), "INDEX-1");
-             }
-		} else {
-//%+E             if TOS.type <> T_WRD4 then GQconvert(T_WRD4) endif;
-//%+E             GetTosAdjustedIn86(qEAX); Pop; AssertObjStacked;
-//%+E             GQeMultc(size); -- EAX:=EAX*size
-//%+E             if    adr.AtrState=FromConst then qPOPKill(4)
-//%+E             elsif adr.AtrState=Calculated
-//%+E             then Qf1(qPOPR,qEBX,cVAL);
-//%+E                  Qf2(qDYADR,qADDF,qEAX,cVAL,qEBX);
-//%+E             endif;
-//%+E             Qf1(qPUSHR,qEAX,cVAL); adr.AtrState:=Calculated;
-			CTStack.pop();
-			Global.PSEG.emit(new SVM_NOT_IMPL(), "INDEX-2");
-//        endif;
-		}
-		CTStack.checkTosRef();
-		
+		CTStack.checkTosInt(); CTStack.checkSosRef();
+		CTStack.getTosValueIn86(RTRegister.qEAX);
+		CTStack.pop();
+		AddressItem adr = (AddressItem) CTStack.TOS;
+		adr.objReg = RTRegister.qEAX;
 		if(instr == Scode.S_INDEXV) Util.GQfetch("INDEXV");
 
 //		Global.PSEG.dump();

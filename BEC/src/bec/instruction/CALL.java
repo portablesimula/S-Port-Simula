@@ -14,6 +14,7 @@ import bec.util.Scode;
 import bec.util.Type;
 import bec.util.Util;
 import bec.value.ObjectAddress;
+import bec.virtualMachine.RTAddress;
 import bec.virtualMachine.SVM_CALL;
 import bec.virtualMachine.SVM_POP2MEM;
 import bec.virtualMachine.SVM_PUSH;
@@ -95,7 +96,7 @@ public abstract class CALL extends Instruction {
 			Type returnType = export.type;
 //			System.out.println("CallInstructil.callSYS: returnType="+returnType);
 			CTStack.pushTemp(returnType, "EXPORT: ");
-			Global.PSEG.emit(new SVM_PUSH(returnType, export.address, returnType.size()), "CallInstruction: EXPORT " + spec);
+			Global.PSEG.emit(new SVM_PUSH(returnType, new RTAddress(export.address), returnType.size()), "CallInstruction: EXPORT " + spec);
 //			Global.PSEG.dump("END CallInstruction.doCode: ");
 //			CTStack.dumpStack("END CallInstruction.doCode: ");
 //			Util.IERR("");

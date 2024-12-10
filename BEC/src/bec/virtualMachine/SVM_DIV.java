@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
-import bec.segment.RTStack;
 import bec.util.Global;
 import bec.util.Type;
 import bec.util.Util;

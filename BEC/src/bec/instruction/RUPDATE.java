@@ -1,5 +1,6 @@
 package bec.instruction;
 
+import bec.compileTimeStack.AddressItem;
 import bec.compileTimeStack.CTStack;
 import bec.compileTimeStack.StackItem;
 import bec.util.Global;
@@ -23,7 +24,8 @@ public abstract class RUPDATE extends Instruction {
 	public static void ofScode() {
 		CTStack.dumpStack("RUPDATE-1: ");
 		CTStack.checkTosRef(); CTStack.checkSosValue(); CTStack.checkTypesEqual();
-		ObjectAddress adr = Util.getTosDstAdr();
+//		ObjectAddress adr = Util.getTosDstAdr();
+		AddressItem adr = (AddressItem) CTStack.TOS;
 		CTStack.dumpStack("RUPDATE-2: ");
 		StackItem tos = CTStack.pop();
 //		CTStack.dumpStack("RUPDATE: ");
