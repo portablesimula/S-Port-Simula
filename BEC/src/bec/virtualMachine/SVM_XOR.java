@@ -13,12 +13,12 @@ public class SVM_XOR extends SVM_Instruction {
 	Type type;
 
 	public SVM_XOR(Type type) {
-		this.type = type;
+//		this.opcode = SVM_Instruction.iXOR;
 	}
 	
 	@Override	
 	public String toString() {
-		return "ADD      " + type;
+		return "XOR      ";
 	}
 
 }

@@ -21,13 +21,13 @@ public class SVM_PUSHR extends SVM_Instruction {
 	
 	@Override
 	public void execute() {
-		RTStack.pushr(type, reg);
+		RTStack.pushr(type, reg, "" + RTRegister.edReg(reg));
 		Global.PSC.ofst++;
 	}
 	
 	@Override
 	public String toString() {
-		return "PUSHR    " + type + " R" + reg;
+		return "PUSHR    " + type + " " + RTRegister.edReg(reg);
 	}
 
 	// ***********************************************************************************************

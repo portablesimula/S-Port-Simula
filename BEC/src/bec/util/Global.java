@@ -22,6 +22,7 @@ public class Global {
 	public static boolean ATTR_OUTPUT_DUMP = false;
 	public static boolean SEGMENT_INPUT_DUMP = false;
 	public static boolean SEGMENT_OUTPUT_DUMP = false;
+	public static int EXEC_TRACE = 0;
 	
 	public static ProgramAddress PSC; // ProgramSequenceControl during execute
 //	public static HashMap<String, Segment> SEGMAP;

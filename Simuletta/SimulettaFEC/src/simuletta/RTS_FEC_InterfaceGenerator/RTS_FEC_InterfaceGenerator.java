@@ -63,14 +63,10 @@ public class RTS_FEC_InterfaceGenerator {
 		oupt=new FileWriter(fileName);
 		doGenerateTagTable(oupt);
 
-		fileName = PROJECT_BEC + "src/bec/util/INIT_TAGTABLE.java";
-
-		checkFile(fileName);
-//		Util.IERR();
-//		System.exit(0);
-
-		oupt=new FileWriter(fileName);
-		doGenerateBecTagTable(oupt);
+//		fileName = PROJECT_BEC + "src/bec/util/INIT_TAGTABLE.java";
+//		checkFile(fileName);
+//		oupt=new FileWriter(fileName);
+//		doGenerateBecTagTable(oupt);
 
 	}
 

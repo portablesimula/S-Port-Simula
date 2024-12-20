@@ -1,37 +1,39 @@
 package bec.virtualMachine;
 
 import java.io.IOException;
-
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Global;
-import bec.value.Value;
 
-/**
- * Remove two items on the Runtime-Stack and push the value (SOS + TOS)
- */
-public class SVM_ADD extends SVM_Instruction {
+public class SVM_PRECALL extends SVM_Instruction {
+	RTFrame frame;
+	SVM_PRECALL prevPRECALL;
 
-	public SVM_ADD() {
-		this.opcode = SVM_Instruction.iADD;
+//	public SVM_PRECALL(int exportSize) {
+	public SVM_PRECALL(RTFrame frame) {
+		this.opcode = SVM_Instruction.iPRECALL;
+//		this.exportSize = exportSize;
+		this.frame = frame;
 	}
 
 	@Override
 	public void execute() {
-//		RTStack.curFrame.dump("SVM_ADD-1: ");
-		Value tos = RTStack.pop().value();
-		Value sos = RTStack.pop().value();
-		Value res = (tos == null)? sos : tos.add(sos);
-//		System.out.println("SVM_ADD: " + tos + " + " + sos + " = " + res);
-		RTStack.push(res, "SVM_ADD: " + tos + " + " + sos + " = " + res);
+		prevPRECALL = RTStack.PRECALL;
+		RTStack.PRECALL = this;
+//		thisFrame = RTStack.nextFrame();
+		frame.enclFrame = RTStack.curFrame;
+		frame.rtStackIndex = RTStack.size();
+		for(int i=0;i<frame.exportSize;i++) {
+			RTStack.push(null, "EXPORT"); // Export slots		
+		}
+		
 		Global.PSC.ofst++;
-//		RTStack.curFrame.dump("SVM_ADD-2: ");
 //		Util.IERR(""+res);
 	}
-
+	
 	@Override	
 	public String toString() {
-		return "ADD      ";
+		return "PRECALL   ";
 	}
 
 	// ***********************************************************************************************
@@ -41,10 +43,12 @@ public class SVM_ADD extends SVM_Instruction {
 	public void write(AttributeOutputStream oupt) throws IOException {
 		if(Global.ATTR_OUTPUT_TRACE) System.out.println("SVM.Write: " + this);
 		oupt.writeKind(opcode);
+//		oupt.writeShort(exportSize);
+		frame.write(oupt);
 	}
 
-	public static SVM_ADD read(AttributeInputStream inpt) throws IOException {
-		SVM_ADD instr = new SVM_ADD();
+	public static SVM_PRECALL read(AttributeInputStream inpt) throws IOException {
+		SVM_PRECALL instr = new SVM_PRECALL(RTFrame.read(inpt));
 		if(Global.ATTR_INPUT_TRACE) System.out.println("SVM.Read: " + instr);
 		return instr;
 	}

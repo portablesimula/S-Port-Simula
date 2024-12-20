@@ -4,6 +4,7 @@ import bec.compileTimeStack.CTStack;
 import bec.util.Global;
 import bec.util.Type;
 import bec.util.Util;
+import bec.virtualMachine.RTRegister;
 import bec.virtualMachine.SVM_ADD;
 
 public abstract class INCO extends Instruction {
@@ -30,10 +31,10 @@ public abstract class INCO extends Instruction {
 //		%-E   Qf2(qDYADR,y,qAX,cOBJ,qDX); Qf1(qPUSHR,qAX,cOBJ);
 //		%+E   Qf2(qDYADR,y,qEAX,cOBJ,qEDX); Qf1(qPUSHR,qEAX,cOBJ);
 //		      pushTemp(T_OADDR);
-		Global.PSEG.emit(new SVM_ADD(Type.T_OADDR), "");
+		Global.PSEG.emit(new SVM_ADD(), "");
 		CTStack.pop();
 		CTStack.pop();
-	    CTStack.pushTemp(Type.T_OADDR, "INCO: ");
+	    CTStack.pushTemp(Type.T_OADDR, RTRegister.qEAX, 1, "INCO: ");
 //		Util.IERR("NOT IMPL");
 	}
 

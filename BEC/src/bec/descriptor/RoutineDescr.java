@@ -6,6 +6,7 @@ import java.util.Vector;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.compileTimeStack.CTStack;
+import bec.instruction.CALL;
 import bec.instruction.Instruction;
 import bec.segment.DataSegment;
 import bec.segment.ProgramSegment;
@@ -15,22 +16,33 @@ import bec.util.Scode;
 import bec.util.Tag;
 import bec.util.Type;
 import bec.util.Util;
+import bec.value.FixupAddress;
 import bec.value.ObjectAddress;
 import bec.value.ProgramAddress;
 import bec.value.Value;
+import bec.virtualMachine.SVM_ENTER;
+import bec.virtualMachine.SVM_NOOP;
+import bec.virtualMachine.SVM_POPK;
+import bec.virtualMachine.SVM_PUSHC;
 import bec.virtualMachine.SVM_RETURN;
 
 public class RoutineDescr extends Descriptor {
 	ProgramSegment PSEG;
-	public ProgramAddress adr;
+	private ProgramAddress adr;
 	public Tag prftag;
 	DataSegment DSEG; // With LOCAL Variables
 	Vector<Tag> locals;
+	public int localFrameSize;
 	
 	public RoutineDescr(int kind, Tag tag, Tag prftag) {
 		super(kind, tag);
 		this.prftag = prftag;
 		this.locals = new Vector<Tag>();
+	}
+	
+	public ProgramAddress getAddress() {
+		if(adr == null)	adr = new FixupAddress(Type.T_PADDR, this);
+		return adr;
 	}
 	
 	public String toString() {
@@ -61,49 +73,82 @@ public class RoutineDescr extends Descriptor {
 	 *		local_quantity
 	 *			::= local var:newtag quantity_descriptor
 	 */
-	public static void ofRoutine() {
+	public static void ofRoutineDef() {
 		Tag tag = Tag.ofScode();
 		Tag prftag = Tag.ofScode();
-//		Global.dumpDISPL("RoutineDescr.ofRoutine: ");
-//		System.out.println("RoutineDescr.ofRoutine: tag="+tag + "  prfTag="+prftag);
+//		Global.dumpDISPL("RoutineDescr.ofRoutineDef: ");
+//		System.out.println("RoutineDescr.ofRoutineDef: tag="+tag + "  prfTag="+prftag);
 		
 		RoutineDescr rut = (RoutineDescr) Global.DISPL.get(tag.val);
 		if(rut == null) rut = new RoutineDescr(Kind.K_IntRoutine, tag, prftag);
 		String id = Global.moduleID + '_' + prftag.ident();
-		rut.DSEG = new DataSegment("DSEG_LOCAL_" + id, Kind.K_SEG_DATA);
-		DataSegment prevDSEG = Global.DSEG; Global.DSEG = rut.DSEG;
+		
+		DataSegment prevDSEG = null;
+		if(! CALL.USE_FRAME_ON_STACK) {
+			rut.DSEG = new DataSegment("DSEG_LOCAL_" + id, Kind.K_SEG_DATA);
+			prevDSEG = Global.DSEG; Global.DSEG = rut.DSEG;
+		}
 		rut.PSEG = new ProgramSegment("PSEG_" + id, Kind.K_SEG_CODE);
 		ProgramSegment prevPSEG = Global.PSEG; Global.PSEG = rut.PSEG;
-		rut.adr = new ProgramAddress(Type.T_RADDR, rut.PSEG,0);
 		
-//		System.out.println("RoutineDescr.ofRoutine: "+Global.DISPL.get(prftag.val));
+//		boolean TESTING = id.equalsIgnoreCase("KNWN_REST");
+		ProgramAddress rutAddr = new ProgramAddress(Type.T_RADDR, rut.PSEG,0);
+		if(rut.adr instanceof FixupAddress fix) {
+//			System.out.println("RoutineDescr.ofRoutineDef: rut="+rut);
+//			System.out.println("RoutineDescr.ofRoutineDef: fix="+fix);
+			fix.setAddress(rutAddr);
+//			System.out.println("RoutineDescr.ofRoutineDef: Updated rut="+rut);
+//			System.out.println("RoutineDescr.ofRoutineDef: Updated fix="+fix);
+			
+//			Segment seg = Segment.lookup("PSEG_KNWN_ED_STR");
+//			seg.dump("RoutineDescr.ofRoutineDef: ");
+//			if(TESTING) Util.IERR("SJEKK DETTE");
+		}
+		rut.adr = rutAddr;
+		
+//		System.out.println("RoutineDescr.ofRoutineDef: "+Global.DISPL.get(prftag.val));
 		ProfileDescr prf = (ProfileDescr) Global.DISPL.get(prftag.val);
 		if(prf == null) Util.IERR("Missing Profile " + Scode.edTag(prftag.val));
 
 		Scode.inputInstr();
+		int rela = prf.frameSize;
 		while(Scode.curinstr == Scode.S_LOCAL) {
-			Variable local = Variable.ofLocal(rut.DSEG);
-			rut.locals.add(local.tag);
-			Scode.inputInstr();
-			prf.DSEG.dump("RoutineDescr.LOCAL: ");
-//			==================== RoutineDescr.ofRoutine: MODL02_PEXERRDSEG_ENVIR0_PEXERR DUMP ====================317574433
-//				     0: null                        RETUR
-//				     1: null                        IMPORT T[3:INT] size=1 pntmap=null null
-//				     2: null                        IMPORT T[8:OADDR] size=1 pntmap={0} null
-//				     3: null                        LOCAL T[10:PADDR] size=1 pntmap=null null
-//				     4: null                        LOCAL T[3:INT] size=1 pntmap=null null
-//			==================== RoutineDescr.ofRoutine: MODL02_PEXERRDSEG_ENVIR0_PEXERR END  ====================
+			if(CALL.USE_FRAME_ON_STACK) {
+				Variable local = Variable.ofLocal(rela);
+				rela = rela + local.type.size();
+				rut.locals.add(local.tag);
+//				Global.PSEG.emit(new SVM_PUSHC(local.type, null), ""+local);
+				Scode.inputInstr();
+//				Util.IERR(""+local.type.size());
+			} else {
+				Variable local = Variable.ofLocal(rut.DSEG);
+				rut.locals.add(local.tag);
+				Scode.inputInstr();
+//				prf.DSEG.dump("RoutineDescr.LOCAL: ");
+//				==================== RoutineDescr.ofRoutineDef: MODL02_PEXERRDSEG_ENVIR0_PEXERR DUMP ====================317574433
+//					     0: null                        RETUR
+//					     1: null                        IMPORT T[3:INT] size=1 pntmap=null null
+//				    	 2: null                        IMPORT T[8:OADDR] size=1 pntmap={0} null
+//					     3: null                        LOCAL T[10:PADDR] size=1 pntmap=null null
+//					     4: null                        LOCAL T[3:INT] size=1 pntmap=null null
+//				==================== RoutineDescr.ofRoutineDef: MODL02_PEXERRDSEG_ENVIR0_PEXERR END  ====================
+			}
 		}
+		rut.localFrameSize = rela - prf.frameSize;
+		Global.PSEG.emit(new SVM_ENTER(rut.localFrameSize), ""+rut);
 	
-		System.out.println("RoutineDescr.ofRoutine: " + rut + "??????????????????????????????????????????????????????????????????????????????????????");
+		System.out.println("RoutineDescr.ofRoutineDef: " + rut + "??????????????????????????????????????????????????????????????????????????????????????");
 		while(Instruction.inInstruction()) { Scode.inputInstr(); }
 	
 		if(Scode.curinstr != Scode.S_ENDROUTINE) Util.IERR("Missing - endroutine");
 		CTStack.checkStackEmpty();
+		prf.print("RoutineDescr.ofRoutineDef: ");
 		Global.PSEG.emit(new SVM_RETURN(prf.returSlot), "");
 		CTStack.checkStackEmpty();
 
-		Global.DSEG = prevDSEG;
+		if(! CALL.USE_FRAME_ON_STACK) {
+			Global.DSEG = prevDSEG;
+		}
 		Global.PSEG = prevPSEG;
 //		Util.IERR("");
 	}

@@ -4,6 +4,7 @@ import bec.compileTimeStack.CTStack;
 import bec.compileTimeStack.StackItem;
 import bec.util.Global;
 import bec.util.Type;
+import bec.virtualMachine.RTRegister;
 import bec.virtualMachine.SVM_REM;
 
 public abstract class REM extends Instruction {
@@ -32,10 +33,10 @@ public abstract class REM extends Instruction {
 		CTStack.checkTosArith(); CTStack.checkSosArith(); CTStack.checkSosValue(); CTStack.checkTypesEqual();
 		StackItem tos = CTStack.TOS;
 	    Type at = CTStack.arithType(tos.type, tos.suc.type);
-		Global.PSEG.emit(new SVM_REM(at), "REM:  ");
+		Global.PSEG.emit(new SVM_REM(), "REM:  ");
 		CTStack.pop();
 		CTStack.pop();
-	    CTStack.pushTemp(at, "REM:  ");
+	    CTStack.pushTemp(at, RTRegister.qEAX, 1, "REM:  ");
 //		CTStack.dumpStack("MULT.doCode: ");
 //		Global.PSEG.dump("MULT.doCode: ");
 //		Util.IERR(""+this);

@@ -4,6 +4,7 @@ import bec.compileTimeStack.CTStack;
 import bec.util.Global;
 import bec.util.Type;
 import bec.util.Util;
+import bec.virtualMachine.RTRegister;
 import bec.virtualMachine.SVM_SUB;
 
 public abstract class DECO extends Instruction {
@@ -30,10 +31,10 @@ public abstract class DECO extends Instruction {
 //		%-E   Qf2(qDYADR,y,qAX,cOBJ,qDX); Qf1(qPUSHR,qAX,cOBJ);
 //		%+E   Qf2(qDYADR,y,qEAX,cOBJ,qEDX); Qf1(qPUSHR,qEAX,cOBJ);
 //		      pushTemp(T_OADDR);
-		Global.PSEG.emit(new SVM_SUB(Type.T_OADDR), "");
+		Global.PSEG.emit(new SVM_SUB(), "");
 		CTStack.pop();
 		CTStack.pop();
-	    CTStack.pushTemp(Type.T_OADDR, "DECO: ");
+	    CTStack.pushTemp(Type.T_OADDR, RTRegister.qEAX, 1, "DECO: ");
 //		Util.IERR("NOT IMPL");
 	}
 

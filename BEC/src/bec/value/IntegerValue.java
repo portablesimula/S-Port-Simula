@@ -35,7 +35,7 @@ public class IntegerValue extends Value {
 		return new IntegerValue(Type.T_INT, Integer.valueOf(Scode.inString()));
 	}
 	public static IntegerValue ofScode_CHAR() {
-		return new IntegerValue(Type.T_INT, Scode.inByte());
+		return new IntegerValue(Type.T_CHAR, Scode.inByte());
 	}
 	
 	public static IntegerValue ofScode_SIZE() {
@@ -80,7 +80,7 @@ public class IntegerValue extends Value {
 			IntegerValue val2 = (IntegerValue) other;
 			res = this.value - val2.value;
 		} else res = this.value;
-		System.out.println("IntegerValue.sub: " + this.value + " - " + other + " = " + res);
+//		System.out.println("IntegerValue.sub: " + this.value + " - " + other + " = " + res);
 		if(res == 0) return null;
 		return new IntegerValue(this.type, res);
 	}
@@ -116,7 +116,7 @@ public class IntegerValue extends Value {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 	private IntegerValue(AttributeInputStream inpt) throws IOException {
-		this.type = Type.T_INT;
+		this.type = Type.read(inpt);
 		value = inpt.readInt();
 //		System.out.println("NEW IMPORT: " + this);
 	}
@@ -124,6 +124,7 @@ public class IntegerValue extends Value {
 	public void write(AttributeOutputStream oupt) throws IOException {
 		if(Global.ATTR_OUTPUT_TRACE) System.out.println("Value.write: " + this);
 		oupt.writeKind(Scode.S_C_INT);
+		type.write(oupt);
 		oupt.writeInt(value);
 	}
 

@@ -9,6 +9,7 @@ import bec.compileTimeStack.CTStack;
 import bec.compileTimeStack.StackItem;
 import bec.compileTimeStack.Temp;
 import bec.virtualMachine.RTAddress;
+import bec.virtualMachine.RTRegister;
 import bec.virtualMachine.SVM_NOT_IMPL;
 import bec.virtualMachine.SVM_PUSH;
 
@@ -122,8 +123,8 @@ public class Util {
 			Type type = CTStack.TOS.type;
 //			int size = DataType.typeSize(type);
 			RTAddress rtAddr = new RTAddress(addr); 
-			Global.PSEG.emit(new SVM_PUSH(type, rtAddr, type.size()), comment + " " +type);
-			CTStack.pop(); CTStack.pushTemp(type, "GQFetch: ");
+			Global.PSEG.emit(new SVM_PUSH(rtAddr, type.size()), comment + " " +type);
+			CTStack.pop(); CTStack.pushTemp(type, RTRegister.qEAX, 1, "GQFetch: ");
 			CTStack.dumpStack("GQfetch: "+comment);
 			Global.PSEG.dump("GQfetch: "+comment);
 //			Util.IERR("NOT IMPL");

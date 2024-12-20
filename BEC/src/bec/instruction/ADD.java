@@ -5,6 +5,7 @@ import bec.compileTimeStack.StackItem;
 import bec.util.Global;
 import bec.util.Type;
 import bec.util.Util;
+import bec.virtualMachine.RTRegister;
 import bec.virtualMachine.SVM_ADD;
 
 public abstract class ADD extends Instruction {
@@ -32,10 +33,10 @@ public abstract class ADD extends Instruction {
 		CTStack.checkTosArith(); CTStack.checkSosArith(); CTStack.checkSosValue(); CTStack.checkTypesEqual();
 		StackItem tos = CTStack.TOS;
 	    Type at = CTStack.arithType(tos.type, tos.suc.type);
-		Global.PSEG.emit(new SVM_ADD(at), "");
+		Global.PSEG.emit(new SVM_ADD(), "");
 		CTStack.pop();
 		CTStack.pop();
-	    CTStack.pushTemp(at, "ADD: ");
+	    CTStack.pushTemp(at, RTRegister.qEAX, 1, "ADD: ");
 	    
 //		CTStack.dumpStack("ADD: ");
 //		Global.PSEG.dump("ADD: ");

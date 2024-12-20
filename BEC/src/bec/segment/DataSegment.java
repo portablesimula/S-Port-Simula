@@ -64,6 +64,17 @@ public class DataSegment extends Segment {
 			emit(null, cmnt);
 		}
 	}
+	
+	public ObjectAddress emitChars(String chars, String cmnt) {
+		ObjectAddress addr = nextAddress();
+		int n = chars.length();
+		for(int i=0;i<n;i++) {
+			emit(new IntegerValue(Type.T_CHAR, chars.charAt(i)), cmnt);
+			
+		}
+		comment.add(cmnt);
+		return addr;
+	}
 
 	public ObjectAddress emitRepetitionValue(String comment) {
 //		MemAddr addr = Global.DSEG.nextAddress();

@@ -6,8 +6,8 @@ import bec.BecCompiler;
 public class InlineTest {
 	
 	public static void main(String[] argv) {
-//		String scodeSource = Pick_FEC_Source();
-		String scodeSource = Pick_RTS_Source();		
+//		String scodeSource = Pick_RTS_Source();		
+		String scodeSource = Pick_FEC_Source();
 		
 		Global.verbose = true;
 		Global.traceMode = 4;
@@ -44,7 +44,7 @@ public class InlineTest {
 
 
 	private static String Pick_FEC_Source() {
-//		return "C:/GitHub/SimulaCompiler2/simulaTestBatch2/src/simulaTestBatch/scode/simtst00.sim.scd";
+		return "C:/GitHub/SimulaCompiler2/simulaTestBatch2/src/simulaTestBatch/scode/simtst00.sim.scd";
 //		return "C:/GitHub/SimulaCompiler2/simulaTestBatch2/src/simulaTestBatch/scode/simtst01.sim.scd";
 //		return "C:/GitHub/SimulaCompiler2/simulaTestBatch2/src/simulaTestBatch/scode/simtst02.sim.scd";
 //		return "C:/GitHub/SimulaCompiler2/simulaTestBatch2/src/simulaTestBatch/scode/simtst03.sim.scd";
@@ -84,7 +84,7 @@ public class InlineTest {
 //		return "C:/GitHub/SimulaCompiler2/simulaTestBatch2/src/simulaTestBatch/scode/simtst33.sim.scd";
 //		return "C:/GitHub/SimulaCompiler2/simulaTestBatch2/src/simulaTestBatch/scode/simtst34.sim.scd";
 //		return "C:/GitHub/SimulaCompiler2/simulaTestBatch2/src/simulaTestBatch/scode/simtst35.sim.scd";
-		return "C:/GitHub/SimulaCompiler2/simulaTestBatch2/src/simulaTestBatch/scode/simtst36.sim.scd";
+//		return "C:/GitHub/SimulaCompiler2/simulaTestBatch2/src/simulaTestBatch/scode/simtst36.sim.scd";
 //		return "C:/GitHub/SimulaCompiler2/simulaTestBatch2/src/simulaTestBatch/scode/simtst37.sim.scd";
 //		return "C:/GitHub/SimulaCompiler2/simulaTestBatch2/src/simulaTestBatch/scode/simtst38.sim.scd";
 //		return "C:/GitHub/SimulaCompiler2/simulaTestBatch2/src/simulaTestBatch/scode/simtst39.sim.scd";

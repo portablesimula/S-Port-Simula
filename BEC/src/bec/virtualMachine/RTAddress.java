@@ -37,8 +37,8 @@ public class RTAddress {
 		return toObjectAddress().load();
 	}
 	
-	public void store(Value val) {
-		toObjectAddress().store(val);
+	public void store(Value val, String comment) {
+		toObjectAddress().store(val, comment);
 	}
 
 	public String toString() {
@@ -53,9 +53,10 @@ public class RTAddress {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 	private RTAddress(AttributeInputStream inpt) throws IOException {
-		this.objadr = (ObjectAddress) Value.read(inpt);
-		this.offset = inpt.readShort();
 		boolean present = inpt.readBoolean();
+		if(present) this.objadr = (ObjectAddress) Value.read(inpt);
+		this.offset = inpt.readShort();
+		present = inpt.readBoolean();
 		if(present) this.objIndex = RTIndex.read(inpt);
 		present = inpt.readBoolean();
 		if(present) this.atrIndex = RTIndex.read(inpt);
@@ -65,7 +66,11 @@ public class RTAddress {
 //	@Override
 	public void write(AttributeOutputStream oupt) throws IOException {
 		if(Global.ATTR_OUTPUT_TRACE) System.out.println("SVM.Write: " + this);
-		objadr.write(oupt);
+//		objadr.write(oupt);
+		if(objadr != null) {
+			oupt.writeBoolean(true);
+			objadr.write(oupt);
+		} else oupt.writeBoolean(false);
 		oupt.writeShort(offset);
 		if(objIndex != null) {
 			oupt.writeBoolean(true);

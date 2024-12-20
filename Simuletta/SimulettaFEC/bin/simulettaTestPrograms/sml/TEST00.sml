@@ -1,13 +1,11 @@
- begin sysinsert rt,sysr
+ begin sysinsert rt,sysr,knwn
 
-
-Visible routine REST; export infix(string) s;
-begin s.chradr:=@bio.utbuff(bio.utpos); s.nchr:=utlng-bio.utpos; end;
-
-Visible routine ED_STR; import infix(string) str; begin
---	infix(string) xstr;
---	xstr := REST;
-	bio.utpos:=bio.utpos+PUTSTR(REST,str);
-end;
-
+	ed_str("HELLO ! ");
+	ed_int(4567);
+	ed_out;
+	
+--	REST;
+	
+	TERMIN(0, "END PROGRAM");
+	
 end

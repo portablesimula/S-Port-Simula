@@ -13,13 +13,15 @@ import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Tag;
 import bec.util.Util;
+import bec.virtualMachine.RTStack;
+import bec.virtualMachine.RTStack.RTStackItem;
 
 public class ObjectAddress extends Value {
 //	public DataSegment seg;
 	String segID;
 	public int ofst;
 	
-	private ObjectAddress(String segID,	int ofst) {
+	public ObjectAddress(String segID,	int ofst) {
 		this.segID = segID;
 		this.ofst = ofst;
 		if(ofst > 9000 || ofst < 0) Util.IERR("");
@@ -70,19 +72,36 @@ public class ObjectAddress extends Value {
 		return (DataSegment) Segment.lookup(segID);
 	}
 	
-	public void store(Value value) {
+	public void store(Value value, String comment) {
+		if(segID == null) {
+			// store rel-addr  curFrame + ofst
+//			System.out.println("ObjectAddress.store: curFrame="+RTStack.curFrame.rtStackIndex);
+			RTStack.store(RTStack.curFrame.rtStackIndex + ofst, value, comment);
+//			Util.IERR("");
+			
+		} else {
 		DataSegment dseg = segment();
 		dseg.store(ofst, value);
 //		dseg.dump("MemAddr.store: ");
 //		Util.IERR("");
+		}
 	}
 	
 	public Value load() {
+		if(segID == null) {
+			// load from rel-addr  curFrame + ofst
+//			System.out.println("ObjectAddress.load: curFrame="+RTStack.curFrame.rtStackIndex);
+			RTStackItem item = RTStack.load(RTStack.curFrame.rtStackIndex + ofst);
+//			System.out.println("ObjectAddress.load: value="+value);
+//			Util.IERR("");
+			return item.value();
+		} else {
 		DataSegment dseg = segment();
 		Value value =  dseg.load(ofst);
 //		dseg.dump("MemAddr.load: ");
 //		Util.IERR("");	
 		return value;
+		}
 	}
 	
 //	public void execute() {

@@ -26,6 +26,8 @@ public abstract class RUPDATE extends Instruction {
 		CTStack.checkTosRef(); CTStack.checkSosValue(); CTStack.checkTypesEqual();
 //		ObjectAddress adr = Util.getTosDstAdr();
 		AddressItem adr = (AddressItem) CTStack.TOS;
+		System.out.println("RUPDATE.ofScode: adr="+adr.objReg);
+//		Util.IERR("");
 		CTStack.dumpStack("RUPDATE-2: ");
 		StackItem tos = CTStack.pop();
 //		CTStack.dumpStack("RUPDATE: ");

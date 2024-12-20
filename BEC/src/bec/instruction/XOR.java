@@ -5,6 +5,7 @@ import bec.compileTimeStack.StackItem;
 import bec.util.Global;
 import bec.util.Type;
 import bec.util.Util;
+import bec.virtualMachine.RTRegister;
 import bec.virtualMachine.SVM_XOR;
 
 public abstract class XOR extends Instruction {
@@ -40,7 +41,7 @@ public abstract class XOR extends Instruction {
 		Global.PSEG.emit(new SVM_XOR(at), "XOR: ");
 		CTStack.pop();
 		CTStack.pop();
-	    CTStack.pushTemp(at, "XOR: ");
+	    CTStack.pushTemp(at, RTRegister.qEAX, 1, "XOR: ");
 //		CTStack.dumpStack();
 //		Global.PSEG.dump();
 //		Util.IERR(""+this);

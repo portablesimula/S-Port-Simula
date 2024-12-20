@@ -19,14 +19,14 @@ public class MiniInlineTest {
 //		names.add("ENVIR_RT");
 //		names.add("MODL001");
 		
-		names.add("ENVIR0");
-		names.add("MODL01");
-//		names.add("MODL02");
-		names.add("TEST6");
+//		names.add("ENVIR0");
+//		names.add("MODL01");
+////		names.add("MODL02");
+//		names.add("TEST6");
 
 //		names.add("TEST6xx");
 
-//		names.add("TEST00");
+		names.add("TEST00");
 
 		Global.verbose = true;
 //		Global.traceMode = 4;
@@ -38,6 +38,7 @@ public class MiniInlineTest {
 //		Global.ATTR_OUTPUT_DUMP = true;
 //		Global.SEGMENT_INPUT_DUMP = true;
 //		Global.SEGMENT_OUTPUT_DUMP = true;
+		Global.EXEC_TRACE = 4;
 
 		for(String name:names) {
 			String fileName = "C:/Simuletta/SCode/simulettaTestPrograms/"+name+".scd";

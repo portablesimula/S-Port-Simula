@@ -5,7 +5,6 @@ import java.io.IOException;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Global;
-import bec.util.Type;
 import bec.value.Value;
 
 /**
@@ -16,28 +15,26 @@ import bec.value.Value;
  * Remove two items on the Runtime-Stack and push the value SOS - TOS
  */
 public class SVM_SUB extends SVM_Instruction {
-	Type type;
 
-	public SVM_SUB(Type type) {
+	public SVM_SUB() {
 		this.opcode = SVM_Instruction.iSUB;
-		this.type = type;
 	}
 
 	@Override
 	public void execute() {
-		Value tos = RTStack.pop();
-		Value sos = RTStack.pop();
-		System.out.println("SVM_SUB: " + sos + " - " + tos);
+		Value tos = RTStack.pop().value();
+		Value sos = RTStack.pop().value();
+//		System.out.println("SVM_SUB: " + sos + " - " + tos);
 		Value res = (sos == null)? tos.neg() : sos.sub(tos);
-		System.out.println("SVM_SUB: " + sos + " - " + tos + " = " + res);
-		RTStack.push(type, res);
+//		System.out.println("SVM_SUB: " + sos + " - " + tos + " = " + res);
+		RTStack.push(res, "SVM_SUB: " + sos + " - " + tos + " = " + res);
 		Global.PSC.ofst++;
 //		Util.IERR("");
 	}
 	
 	@Override	
 	public String toString() {
-		return "SUB      " + type;
+		return "SUB      ";
 	}
 
 	// ***********************************************************************************************
@@ -48,11 +45,10 @@ public class SVM_SUB extends SVM_Instruction {
 	public void write(AttributeOutputStream oupt) throws IOException {
 		if(Global.ATTR_OUTPUT_TRACE) System.out.println("SVM.Write: " + this);
 		oupt.writeKind(opcode);
-		type.write(oupt);;
 	}
 
 	public static SVM_Instruction read(AttributeInputStream inpt) throws IOException {
-		SVM_SUB instr = new SVM_SUB(Type.read(inpt));
+		SVM_SUB instr = new SVM_SUB();
 		if(Global.ATTR_INPUT_TRACE) System.out.println("SVM.Read: " + instr);
 		return instr;
 	}

@@ -34,8 +34,8 @@ public class CTStack {
 //	%+D   if TraceMode > 1 then DumpStack endif;
 	} // endmacro;
 	
-	public static void pushTemp(Type type, String comment) {
-		Temp tmp = new Temp(type, comment);
+	public static void pushTemp(Type type, int reg, int count, String comment) {
+		Temp tmp = new Temp(type, reg, count, comment);
 //		Util.IERR("NOT IMPL");
 //	      tmp.kind:=K_Temp; tmp.type:=type;
 //	      tmp qua StackItem.size:=TTAB(type).nbyte;

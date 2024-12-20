@@ -4,6 +4,7 @@ import bec.compileTimeStack.CTStack;
 import bec.util.Global;
 import bec.util.Relation;
 import bec.util.Type;
+import bec.virtualMachine.RTRegister;
 import bec.virtualMachine.SVM_COMPARE;
 
 public abstract class COMPARE extends Instruction {
@@ -28,7 +29,7 @@ public abstract class COMPARE extends Instruction {
 		CTStack.checkTypesEqual(); CTStack.checkSosValue();	
 		CTStack.pop(); CTStack.pop();
 		Global.PSEG.emit(new SVM_COMPARE(relation), "");
-		CTStack.pushTemp(Type.T_BOOL, "COMPARE: ");
+		CTStack.pushTemp(Type.T_BOOL, RTRegister.qEAX, 1, "COMPARE: ");
 
 //		CTStack.dumpStack();
 //		Global.PSEG.dump();

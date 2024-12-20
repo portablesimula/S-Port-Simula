@@ -32,11 +32,11 @@ public class AddressItem extends StackItem {
 	}
 
 	public String toString() {
-		String s = "" + type + " AT " + objadr + "[" + offset + "]";
+		String s = "" + type + " AT " + objadr + "[" + offset;
 		if(objReg > 0) s += "+" + RTRegister.edReg(objReg);
 		if(atrReg > 0) s += "+" + RTRegister.edReg(atrReg);
 //				+ " objState="+objState + ", atrState="+atrState;
-		return s;
+		return s  + "]";
 	}
 
 }

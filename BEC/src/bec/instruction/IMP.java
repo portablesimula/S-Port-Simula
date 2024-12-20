@@ -5,6 +5,7 @@ import bec.compileTimeStack.StackItem;
 import bec.util.Global;
 import bec.util.Type;
 import bec.util.Util;
+import bec.virtualMachine.RTRegister;
 import bec.virtualMachine.SVM_IMP;
 
 public abstract class IMP extends Instruction {
@@ -40,7 +41,7 @@ public abstract class IMP extends Instruction {
 		Global.PSEG.emit(new SVM_IMP(at), "IMP: ");
 		CTStack.pop();
 		CTStack.pop();
-	    CTStack.pushTemp(at, "IMP: ");
+	    CTStack.pushTemp(at, RTRegister.qEAX, 1, "IMP: ");
 //		CTStack.dumpStack();
 //		Global.PSEG.dump();
 //		Util.IERR(""+this);

@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
+import bec.segment.Segment;
 import bec.util.Global;
 import bec.util.Util;
 
@@ -17,6 +18,7 @@ public class SVM_NOT_IMPL extends SVM_Instruction {
 	public void execute() {
 		System.out.println("SVM_NOT_IMPL: DETTE MÅ RETTES");
 		Global.PSC.ofst++;
+//		Segment.dumpAll("PMD: ");
 		Util.IERR("");
 	}
 	

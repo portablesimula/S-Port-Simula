@@ -5,6 +5,7 @@ import bec.compileTimeStack.StackItem;
 import bec.util.Global;
 import bec.util.Type;
 import bec.util.Util;
+import bec.virtualMachine.RTRegister;
 import bec.virtualMachine.SVM_OR;
 
 public abstract class OR extends Instruction {
@@ -37,10 +38,10 @@ public abstract class OR extends Instruction {
 	    	CTStack.checkSosValue(); CTStack.checkSosType(Type.T_BOOL);
 	    }
 	    
-		Global.PSEG.emit(new SVM_OR(at), "OR: ");
+		Global.PSEG.emit(new SVM_OR(), "OR: ");
 		CTStack.pop();
 		CTStack.pop();
-	    CTStack.pushTemp(at, "OR: ");
+	    CTStack.pushTemp(at, RTRegister.qEAX, 1, "OR: ");
 //		CTStack.dumpStack();
 //		Global.PSEG.dump();
 //		Util.IERR(""+this);

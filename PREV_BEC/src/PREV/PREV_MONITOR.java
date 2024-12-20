@@ -150,7 +150,7 @@ public class PREV_MONITOR {
 				case Scode.S_CONST:		ConstDescr.inConstant(true);	break;
 				case Scode.S_RECORD:	RecordDescr.of(); break;
 				case Scode.S_PROFILE:   ProfileDescr.inProfile(Kind.P_VISIBLE); break;
-				case Scode.S_ROUTINE:	RoutineDescr.ofRoutine();	break;
+				case Scode.S_ROUTINE:	RoutineDescr.ofRoutineDef();	break;
 				case Scode.S_LINE:		setLine(0); break;
 				case Scode.S_DECL:		CTStack.checkStackEmpty(); setLine(Kind.qDCL); break;
 				case Scode.S_STMT:		CTStack.checkStackEmpty(); setLine(Kind.qSTM); break;
@@ -377,7 +377,7 @@ public class PREV_MONITOR {
 				case Scode.S_LABELSPEC:		LabelDescr.ofLabelSpec(); break;
 				case Scode.S_LABEL:			LabelDescr.ofLabel(Tag.inTag()); break;
 				case Scode.S_PROFILE:		ProfileDescr.inProfile(Kind.P_ROUTINE); break;
-				case Scode.S_ROUTINE:		RoutineDescr.ofRoutine(); break;
+				case Scode.S_ROUTINE:		RoutineDescr.ofRoutineDef(); break;
 				case Scode.S_IF:			new IfStatement(); break;
 				case Scode.S_SKIPIF:		new SkipifStatement(); break;
 				case Scode.S_SAVE:			new ProtectStatement(); break;

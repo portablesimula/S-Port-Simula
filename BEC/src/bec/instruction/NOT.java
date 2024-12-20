@@ -5,6 +5,7 @@ import bec.compileTimeStack.StackItem;
 import bec.util.Global;
 import bec.util.Type;
 import bec.util.Util;
+import bec.virtualMachine.RTRegister;
 import bec.virtualMachine.SVM_NOT;
 
 public abstract class NOT extends Instruction {
@@ -30,7 +31,7 @@ public abstract class NOT extends Instruction {
 	    }
 		Global.PSEG.emit(new SVM_NOT(at), "NOT: ");
 		CTStack.pop();
-	    CTStack.pushTemp(at, "NOT: ");
+	    CTStack.pushTemp(at, RTRegister.qEAX, 1, "NOT: ");
 	    
 //		CTStack.dumpStack("NOT: ");
 //		Global.PSEG.dump("NOT: ");

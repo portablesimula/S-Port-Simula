@@ -14,6 +14,7 @@ import bec.util.Scode;
 import bec.util.Tag;
 import bec.util.Type;
 import bec.util.Util;
+import bec.virtualMachine.RTStack;
 import bec.virtualMachine.SVM_Instruction;
 
 public class ProgramAddress extends Value {
@@ -47,7 +48,7 @@ public class ProgramAddress extends Value {
 		Descriptor descr = tag.getMeaning();
 		if(descr == null) Util.IERR("IMPOSSIBLE: TESTING FAILED");
 		System.out.println("OADDR_Value.ofScode: descr="+descr.getClass().getSimpleName()+"  "+descr);
-		if(type == Type.T_RADDR) return ((RoutineDescr)descr).adr;
+		if(type == Type.T_RADDR) return ((RoutineDescr)descr).getAddress();
 		if(type == Type.T_PADDR) return ((LabelDescr)descr).getAddress();
 		Util.IERR("NOT IMPL");
 		return null;
@@ -80,7 +81,12 @@ public class ProgramAddress extends Value {
 	public void execute() {
 		ProgramSegment seg = (ProgramSegment) segment();
 		SVM_Instruction cur = seg.instructions.get(ofst);
-//		System.out.println("MemAddr.execute: " + cur);
+//		System.out.println("ProgramAddress.execute: " + cur);
+		if(Global.EXEC_TRACE > 0) {
+//			RTStack.listRTStack();
+			System.out.println("EXECUTE: "+Global.PSC+"  "+cur);
+//			Util.IERR("");
+		}
 		cur.execute();
 //		Util.IERR("");
 	}

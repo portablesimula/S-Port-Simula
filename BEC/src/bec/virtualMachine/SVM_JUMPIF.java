@@ -6,7 +6,9 @@ import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Global;
 import bec.util.Relation;
+import bec.util.Util;
 import bec.value.ProgramAddress;
+import bec.value.Value;
 
 public class SVM_JUMPIF extends SVM_JUMP {
 	Relation relation;
@@ -17,6 +19,19 @@ public class SVM_JUMPIF extends SVM_JUMP {
 		this.opcode = SVM_Instruction.iJUMPIF;
 		this.relation = relation;
 //		this.destination = destination;
+	}
+
+	@Override
+	public void execute() {
+//		RTStack.dumpRTStack("SVM_JUMPIF: ");
+		Value tos = RTStack.pop().value();
+		Value sos = RTStack.pop().value();
+		boolean res = relation.eval(sos, tos);
+//		System.out.println("SVM_JUMPIF: " + tos + "  " + relation + "  " + sos + " = " + res);
+//		RTStack.push(type, res);
+		if(res) Global.PSC = destination;
+		else Global.PSC.ofst++;
+//		Util.IERR("");
 	}
 	
 	@Override	

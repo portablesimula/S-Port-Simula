@@ -32,13 +32,15 @@
 		<item value="&#x09;Scode.TAGTABLE["/>
 	</list>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="DSIZE"/>
+		<item key="selection" value="REST:body"/>
 		<item key="wrap" value="true"/>
-		<item key="casesensitive" value="false"/>
+		<item key="casesensitive" value="true"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="REST:body"/>
+			<item value="REST"/>
 			<item value="DSIZE"/>
 			<item value="FILDCL3"/>
 			<item value="PRECALL T1284X101:CONCAT"/>
@@ -52,8 +54,6 @@
 			<item value="GET_ED"/>
 			<item value="ED_IID"/>
 			<item value="XBUFF"/>
-			<item value="LOCAL"/>
-			<item value="NEW Tag:"/>
 		</list>
 		<list key="replacehistory">
 			<item value="%   "/>

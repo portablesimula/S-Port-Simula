@@ -56,6 +56,10 @@ Visible define
  Visible integer          inplth    system "INPLTH";-- inptlinelng
  Visible entry(PEXERR)          errorX    system "INIERR";
  Visible infix(bioIns) bio;
+ Visible integer iiii;
+ 
+ Visible infix(String) TEST_STRING;
+ Visible character TEST_BUFF(10);
  
  Visible const infix(string)
        nostring=record:string(nchr=0,chradr=noname);

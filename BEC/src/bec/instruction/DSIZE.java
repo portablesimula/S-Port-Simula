@@ -10,6 +10,7 @@ import bec.util.Tag;
 import bec.util.Type;
 import bec.util.Util;
 import bec.value.IntegerValue;
+import bec.virtualMachine.RTRegister;
 import bec.virtualMachine.SVM_NOT_IMPL;
 
 public abstract class DSIZE extends Instruction {
@@ -64,7 +65,7 @@ public abstract class DSIZE extends Instruction {
 //%+E                  TSTOFL:=OldTSTOFL;
 //%+E                  Qf1(qPUSHR,qEAX,cVAL);
 				Global.PSEG.emit(new SVM_NOT_IMPL(), "DSIZE: ");
-				CTStack.pushTemp(Type.T_SIZE, "DSIZE: ");
+				CTStack.pushTemp(Type.T_SIZE, RTRegister.qEAX, 1, "DSIZE: ");
 			}
 		} else {
 			Util.IERR("Illegal DSIZE on: " + fixrec);

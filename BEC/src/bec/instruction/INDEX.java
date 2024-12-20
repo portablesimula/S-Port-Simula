@@ -4,6 +4,7 @@ import bec.compileTimeStack.AddressItem;
 import bec.compileTimeStack.CTStack;
 import bec.compileTimeStack.ConstItem;
 import bec.compileTimeStack.StackItem;
+import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Util;
 import bec.value.IntegerValue;
@@ -34,11 +35,12 @@ public abstract class INDEX extends Instruction {
 		CTStack.pop();
 		AddressItem adr = (AddressItem) CTStack.TOS;
 		adr.objReg = RTRegister.qEAX;
+		
 		if(instr == Scode.S_INDEXV) Util.GQfetch("INDEXV");
 
-//		Global.PSEG.dump();
-//		CTStack.dumpStack();
-//		Util.IERR(""+this);
+//		Global.PSEG.dump("INDEX.ofScode: ");
+//		CTStack.dumpStack("INDEX.ofScode: ");
+//		Util.IERR("INDEX.ofScode: ");
 	}
 
 	@Override

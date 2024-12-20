@@ -5,7 +5,6 @@ import java.io.IOException;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Global;
-import bec.util.Type;
 import bec.util.Util;
 import bec.value.Value;
 
@@ -13,28 +12,26 @@ import bec.value.Value;
  * Remove to items on the Runtime-Stack and push the value (SOS / TOS)
  */
 public class SVM_DIV extends SVM_Instruction {
-	Type type;
 
-	public SVM_DIV(Type type) {
+	public SVM_DIV() {
 		this.opcode = SVM_Instruction.iDIV;
-		this.type = type;
 	}
 
 	@Override
 	public void execute() {
-		Value tos = RTStack.pop();
-		Value sos = RTStack.pop();
+		Value tos = RTStack.pop().value();
+		Value sos = RTStack.pop().value();
 		if(tos == null) Util.IERR("DIV by zero: " + sos + " / 0");
 		Value res = (tos == null)? null : tos.div(sos);
 		System.out.println("SVM_DIV: " + tos + " / " + sos + " = " + res);
-		RTStack.push(type, res);
+		RTStack.push(res, "SVM_DIV: " + tos + " / " + sos + " = " + res);
 		Global.PSC.ofst++;
 //		Util.IERR("");
 	}
 	
 	@Override	
 	public String toString() {
-		return "DIV      " + type;
+		return "DIV      ";
 	}
 
 	// ***********************************************************************************************
@@ -44,11 +41,10 @@ public class SVM_DIV extends SVM_Instruction {
 	public void write(AttributeOutputStream oupt) throws IOException {
 		if(Global.ATTR_OUTPUT_TRACE) System.out.println("SVM.Write: " + this);
 		oupt.writeKind(opcode);
-		type.write(oupt);;
 	}
 
 	public static SVM_DIV read(AttributeInputStream inpt) throws IOException {
-		SVM_DIV instr = new SVM_DIV(Type.read(inpt));
+		SVM_DIV instr = new SVM_DIV();
 		if(Global.ATTR_INPUT_TRACE) System.out.println("SVM.Read: " + instr);
 		return instr;
 	}

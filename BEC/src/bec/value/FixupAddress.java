@@ -1,20 +1,19 @@
 package bec.value;
 
-import bec.descriptor.LabelDescr;
-import bec.util.Global;
+import bec.descriptor.Descriptor;
 import bec.util.Type;
 
 public class FixupAddress extends ProgramAddress {
-	LabelDescr label;
+	Descriptor descr; // LabelDescr or RoutineDescr
 	
-	public FixupAddress(Type type, LabelDescr label) {
+	public FixupAddress(Type type, Descriptor descr) {
 		super(type, null, 0);
-		this.label = label;
+		this.descr = descr;
 	}
 
-	public void setCurrentPADDR() {
-		ProgramAddress current = Global.PSEG.nextAddress();
-		this.segID = current.segID;
-		this.ofst = current.ofst;
+	public void setAddress(ProgramAddress paddr) {
+//		System.out.println("FixupAddress.setAddress: "+paddr+"  "+paddr.segID);
+		this.segID = paddr.segID;
+		this.ofst = paddr.ofst;
 	}
 }

@@ -15,6 +15,9 @@
 --   sysinsert rt,sysr,knwn,util;
 --     sysinsert rt,sysr,knwn,util,strg; 
 
+--    TEST0(222, 333, 444);
+--    iiii := TEST0(222,333,444);
+--    TEST1(555);
     
 --    TEST_ADD;
 --    TEST_SUB;
@@ -22,7 +25,12 @@
 --    TEST_MULT;
     
 --    TEST_SWITCH;
-	TEST_INDEX;
+--	TEST_INDEX;
+  
+  TEST_STRING := REST;  
+--  PUTSTR(REST,"ABRA");
+-- 	ed_str("HELLO !");
+--	ed_out;
     
 --    GET;
 

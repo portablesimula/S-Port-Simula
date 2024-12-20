@@ -18,6 +18,7 @@ import bec.value.RecordValue;
 import bec.value.TextValue;
 import bec.value.Value;
 import bec.virtualMachine.RTAddress;
+import bec.virtualMachine.SVM_NOT_IMPL;
 import bec.virtualMachine.SVM_PUSH;
 import bec.virtualMachine.SVM_PUSHC;
 
@@ -97,20 +98,28 @@ public abstract class PUSHC extends Instruction {
 		    default: Util.IERR("NOT IMPLEMENTED: " + Scode.edInstr(Scode.curinstr));
 		}
 		
-		if(type == Type.T_TEXT) {
-			Global.CSEG.dump("PUSHC.doCode: ");
+		if(type == Type.T_GADDR) {
+			if(value == null) {
+//				Global.PSEG.emit(new SVM_PUSHC(Type.T_INT, null), "GADDR'OFST: ");
+				Global.PSEG.emit(new SVM_PUSHC(null), "GADDR'OADDR: ");
+				Global.PSEG.emit(new SVM_PUSHC(null), "GADDR'OFST: ");
+			} else {
+				GeneralAddress gval = (GeneralAddress) value;
+				Global.PSEG.emit(new SVM_PUSHC(gval.base), "GADDR'OADDR: ");
+				Global.PSEG.emit(new SVM_PUSHC(new IntegerValue(Type.T_INT, gval.ofst)), "GADDR'OFST: ");
+			}
+		} else if(type == Type.T_TEXT) {
+			Global.CSEG.dump("PUSHC.ofScode: ");
 			TextValue txtval = (TextValue) value;
-			String strval = txtval.getString();
-//			Util.IERR(""+value);
-			Global.PSEG.emit(new SVM_PUSH(Type.T_OADDR, new RTAddress(txtval.addr), 1), "TEXT'CHRADR'oaddr: "+strval);
-			IntegerValue lng = new IntegerValue(Type.T_INT, txtval.getString().length());  // ELLER OMVENDT !
-			Global.PSEG.emit(new SVM_PUSHC(Type.T_INT, null), "TEXT'CHRADR'ofst:  "+strval);
-			Global.PSEG.emit(new SVM_PUSHC(Type.T_INT, lng), "TEXT'lng:   "+strval);
-			type = Type.T_STRING;
+			Global.PSEG.emit(new SVM_PUSHC(txtval.addr), "TEXT'CHRADR'oaddr: ");
+			IntegerValue lng = new IntegerValue(Type.T_INT, txtval.length);
+			Global.PSEG.emit(new SVM_PUSHC(null), "TEXT'CHRADR'ofst:  ");
+			Global.PSEG.emit(new SVM_PUSHC(lng), "TEXT'lng:   ");
+			type = Type.T_STRING;				
 			Global.PSEG.dump("PUSHC: "+value+": ");
 //			Util.IERR("");
 		} else {
-			Global.PSEG.emit(new SVM_PUSHC(type, value), "");
+			Global.PSEG.emit(new SVM_PUSHC(value), "");
 		}
 		ConstItem cns = new ConstItem(type, value);
 		CTStack.push(cns);

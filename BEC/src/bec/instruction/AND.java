@@ -5,6 +5,7 @@ import bec.compileTimeStack.StackItem;
 import bec.util.Global;
 import bec.util.Type;
 import bec.util.Util;
+import bec.virtualMachine.RTRegister;
 import bec.virtualMachine.SVM_AND;
 
 public abstract class AND extends Instruction {
@@ -40,7 +41,7 @@ public abstract class AND extends Instruction {
 		Global.PSEG.emit(new SVM_AND(at), "");
 		CTStack.pop();
 		CTStack.pop();
-	    CTStack.pushTemp(at, "AND: ");
+	    CTStack.pushTemp(at, RTRegister.qEAX, 1, "AND: ");
 //		CTStack.dumpStack();
 //		Global.PSEG.dump();
 //		Util.IERR(""+this);

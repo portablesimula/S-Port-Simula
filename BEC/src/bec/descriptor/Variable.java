@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
+import bec.instruction.CALL;
 import bec.segment.DataSegment;
 import bec.util.Global;
 import bec.util.Type;
@@ -39,6 +40,16 @@ public class Variable extends Descriptor {
 		super(kind, tag);
 	}
 	
+	public static Variable ofIMPORT() {
+		Tag tag = Tag.ofScode();
+		Variable var = new Variable(Kind.K_Import, tag);
+		var.type = Type.ofScode();
+		var.repCount = (Scode.accept(Scode.S_REP)) ? Scode.inNumber() : 1;
+//		var.address = frame.nextAddress(var.type.size());
+//		seg.emitDefaultValue(var.type.size(), "IMPORT " + var.type);
+		return var;
+	}
+	
 	public static Variable ofIMPORT(DataSegment seg) {
 		if(seg == null) Util.IERR("");
 		Tag tag = Tag.ofScode();
@@ -47,6 +58,16 @@ public class Variable extends Descriptor {
 		var.repCount = (Scode.accept(Scode.S_REP)) ? Scode.inNumber() : 1;
 		var.address = seg.nextAddress();
 		seg.emitDefaultValue(var.type.size(), "IMPORT " + var.type);
+		return var;
+	}
+	
+	public static Variable ofEXPORT() {
+		Tag tag = Tag.ofScode();
+		Variable var = new Variable(Kind.K_Export, tag);
+		var.type = Type.ofScode();
+		var.repCount = (Scode.accept(Scode.S_REP)) ? Scode.inNumber() : 1;
+//		var.address = seg.nextAddress();
+//		seg.emitDefaultValue(var.type.size(), "EXPORT " + var.type);
 		return var;
 	}
 	
@@ -59,6 +80,14 @@ public class Variable extends Descriptor {
 		var.address = seg.nextAddress();
 //		type.emitDefaultValue(seg, "EXPORT " + type);
 		seg.emitDefaultValue(var.type.size(), "EXPORT " + var.type);
+		return var;
+	}
+	
+	public static Variable ofEXIT() {
+		Tag tag = Tag.ofScode();
+		Variable var = new Variable(Kind.K_Exit, tag);
+		var.type = Type.T_PADDR;
+//		var.address = returAddr;
 		return var;
 	}
 	
@@ -78,7 +107,18 @@ public class Variable extends Descriptor {
 		return var;
 	}
 	
+	public static Variable ofLocal(int rela) {
+		if(! CALL.USE_FRAME_ON_STACK) Util.IERR("ILLEGAL USE OF: ofLocal");
+		Tag tag = Tag.ofScode();
+		Variable var = new Variable(Kind.K_LocalVar, tag);
+		var.type = Type.ofScode();
+		var.repCount = (Scode.accept(Scode.S_REP)) ? Scode.inNumber() : 1;
+		var.address = new ObjectAddress(null, rela);
+		return var;
+	}
+	
 	public static Variable ofLocal(DataSegment seg) {
+		if(CALL.USE_FRAME_ON_STACK) Util.IERR("ILLEGAL USE OF: ofLocal");
 		Tag tag = Tag.ofScode();
 		Variable var = new Variable(Kind.K_LocalVar, tag);
 		var.type = Type.ofScode();
@@ -171,7 +211,11 @@ public class Variable extends Descriptor {
 		tag.write(oupt);
 		type.write(oupt);
 		oupt.writeShort(repCount);
-		address.write(oupt);
+//		address.write(oupt);
+		if(address != null) {
+			oupt.writeBoolean(true);
+			address.write(oupt);
+		} else oupt.writeBoolean(false);
 	}
 
 	public static Variable read(AttributeInputStream inpt, int kind) throws IOException {
@@ -179,7 +223,11 @@ public class Variable extends Descriptor {
 		Variable var = new Variable(kind, tag);
 		var.type = Type.read(inpt);
 		var.repCount = inpt.readShort();
-		var.address = (ObjectAddress) Value.read(inpt);
+//		var.address = (ObjectAddress) Value.read(inpt);
+		boolean present = inpt.readBoolean();
+		if(present) {
+			var.address = (ObjectAddress) Value.read(inpt);
+		}
 		if(Global.ATTR_INPUT_TRACE) System.out.println("Variable.Read: " + var);
 		return var;
 	}

@@ -65,7 +65,7 @@ public class RepetitionValue extends Value {
 		LOOP:while(true) {
 //			System.out.println("RepetitionValue.treatValue: "+Scode.edInstr(Scode.nextByte()));
 			switch(Scode.nextByte()) {
-				case Scode.S_TEXT:     Scode.inputInstr(); values.add(TextValue.ofScode()); break;
+				case Scode.S_TEXT:     Scode.inputInstr(); values.add(TextValue.ofScode()); break LOOP;
 				case Scode.S_C_INT:    Scode.inputInstr(); values.add(IntegerValue.ofScode_INT()); break;
 				case Scode.S_C_CHAR:   Scode.inputInstr(); values.add(IntegerValue.ofScode_CHAR()); break;
 				case Scode.S_C_SIZE:   Scode.inputInstr(); values.add(IntegerValue.ofScode_SIZE()); break;

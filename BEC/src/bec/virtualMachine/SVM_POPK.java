@@ -5,6 +5,8 @@ import java.io.IOException;
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
 import bec.util.Global;
+import bec.util.Util;
+import bec.value.IntegerValue;
 
 // POP RT-Stack'TOS 
 // The aux values on the top of the operand stack is popped off and forgotten.
@@ -15,7 +17,14 @@ public class SVM_POPK extends SVM_Instruction {
 		this.opcode = SVM_Instruction.iPOPK;
 		this.aux = aux;
 	}
-	
+
+	@Override
+	public void execute() {
+		for(int i=0;i<aux;i++) RTStack.pop();
+		Global.PSC.ofst++;
+//		Util.IERR("TEST DETTE");
+	}
+
 	public String toString() {
 		return "POPK     " + aux;
 	}
