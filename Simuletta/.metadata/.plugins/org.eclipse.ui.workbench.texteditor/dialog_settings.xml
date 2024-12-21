@@ -15,6 +15,7 @@
 		<item value="GitHub/S-Port-Simula/Simuletta"/>
 	</list>
 	<list key="searchhistory">
+		<item value="PUTSTR"/>
 		<item value="Record"/>
 		<item value="CONCAT"/>
 		<item value="ADR_THK_VEC"/>
@@ -26,21 +27,21 @@
 		<item value="ERRNON"/>
 		<item value="RSUBEP"/>
 		<item value="SYSPRI"/>
-		<item value="PUTSTR"/>
 		<item value="\"/>
 		<item value="Scode.TAGTABLE"/>
 		<item value="&#x09;Scode.TAGTABLE["/>
 	</list>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="REST:body"/>
+		<item key="selection" value="REST"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="true"/>
-		<item key="wholeword" value="false"/>
+		<item key="wholeword" value="true"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
-			<item value="REST:body"/>
 			<item value="REST"/>
+			<item value="PRF"/>
+			<item value="REST:body"/>
 			<item value="DSIZE"/>
 			<item value="FILDCL3"/>
 			<item value="PRECALL T1284X101:CONCAT"/>
@@ -53,7 +54,6 @@
 			<item value="BEGIN PASS 1 "/>
 			<item value="GET_ED"/>
 			<item value="ED_IID"/>
-			<item value="XBUFF"/>
 		</list>
 		<list key="replacehistory">
 			<item value="%   "/>
