@@ -48,40 +48,40 @@ public abstract class RTStack {
 //		Util.IERR("");
 	}
 
-	private static void push(Type type, Value value, String comment) {
-		
-		switch(type.tag) {
-		case Scode.TAG_TEXT:
-			Util.IERR("FJERN DETTE !!!");
-//			System.out.println("RTStack.push: " + value.getClass().getSimpleName());
-			TextValue text = (TextValue) value;
-			push(Type.T_OADDR, text.addr, comment+"'CHRADR.OADDR");
-			push(Type.T_INT, null,        comment+"'CHRADR.Offset");
-			push(Type.T_INT, new IntegerValue(Type.T_INT, text.getString().length()), comment+"'NCHR");
-//			Util.IERR("");
-			return;
-//			break;
-		case Scode.TAG_GADDR:
-			Util.IERR("FJERN DETTE !!!");
-			if(value == null) {
-				stack.push(null);
-				stack.push(null);
-			} else {
-//				System.out.println("RTStack.push: " + value.getClass().getSimpleName());
-//				RepetitionValue repval = (RepetitionValue) value;
-//				for(Value val:repval.values) {
-//					push(type, value);
-//				}
-				GeneralAddress gaddr = (GeneralAddress) value;
-				push(Type.T_OADDR, gaddr.base, comment+"'GADDR'base");
-				push(Type.T_INT, new IntegerValue(Type.T_INT, gaddr.ofst), comment+"'GADDR'ofst");
-//				Util.IERR("");
-			}
-		}
-//		System.out.println("RTStack.push: " + value);
-		stack.push(new RTStackItem(value, comment));
-//		Util.IERR("");
-	}
+//	private static void push(Type type, Value value, String comment) {
+//		
+//		switch(type.tag) {
+//		case Scode.TAG_TEXT:
+//			Util.IERR("FJERN DETTE !!!");
+////			System.out.println("RTStack.push: " + value.getClass().getSimpleName());
+//			TextValue text = (TextValue) value;
+//			push(Type.T_OADDR, text.addr, comment+"'CHRADR.OADDR");
+//			push(Type.T_INT, null,        comment+"'CHRADR.Offset");
+//			push(Type.T_INT, new IntegerValue(Type.T_INT, text.getString().length()), comment+"'NCHR");
+////			Util.IERR("");
+//			return;
+////			break;
+//		case Scode.TAG_GADDR:
+//			Util.IERR("FJERN DETTE !!!");
+//			if(value == null) {
+//				stack.push(null);
+//				stack.push(null);
+//			} else {
+////				System.out.println("RTStack.push: " + value.getClass().getSimpleName());
+////				RepetitionValue repval = (RepetitionValue) value;
+////				for(Value val:repval.values) {
+////					push(type, value);
+////				}
+//				GeneralAddress gaddr = (GeneralAddress) value;
+//				push(Type.T_OADDR, gaddr.base, comment+"'GADDR'base");
+//				push(Type.T_INT, new IntegerValue(Type.T_INT, gaddr.ofst), comment+"'GADDR'ofst");
+////				Util.IERR("");
+//			}
+//		}
+////		System.out.println("RTStack.push: " + value);
+//		stack.push(new RTStackItem(value, comment));
+////		Util.IERR("");
+//	}
 
 	public static void pushr(Type type, int reg, String comment) {
 		Value value = RTRegister.getValue(reg);
@@ -128,7 +128,7 @@ public abstract class RTStack {
 	
 	public static void dumpRTStack(String title) {
 //		if(stack.size() == 0) return;
-		System.out.println("==================== " + title + " RTStack'DUMP ====================");
+		System.out.println("==== RTStack ================ " + title + " RTStack'DUMP ====================");
 //		for(Value value:stack) {
 //			System.out.println("   " + value);
 //		}
@@ -137,8 +137,10 @@ public abstract class RTStack {
 		for(int i=0;i<n;i++) {
 //		for(int i=n-1;i>=0;i--) {
 			RTStackItem item = stack.get(i);
-			System.out.println("   " + i + ": " + item.value() + "      " + item.comment);
+			String s = "   " + i + ": " + item.value();
+			while(s.length() < 30) s += " ";
+			System.out.println(s + "  " + item.comment);
 		}
-		System.out.println("==================== " + title + " RTStack' END  ====================");
+		System.out.println("==== RTStack ================ " + title + " RTStack' END  ====================");
 	}
 }

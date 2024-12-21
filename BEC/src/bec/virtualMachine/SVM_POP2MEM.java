@@ -35,6 +35,7 @@ public class SVM_POP2MEM extends SVM_Instruction {
 	@Override
 	public void execute() {
 //		Global.PSC.segment().dump("POP2MEM.execute: ");
+		RTStack.dumpRTStack("POP2MEM.execute: ");
 		ObjectAddress target = addr.toObjectAddress();
 		target.ofst = target.ofst + count;
 		for(int i=0;i<count;i++) {
