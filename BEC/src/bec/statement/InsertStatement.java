@@ -51,7 +51,7 @@ public class InsertStatement {
 			System.out.println("**************   Begin  -  Input-module  " + modid + "  " + check + "   **************");
 		try {
 			current = this;
-			readDescriptors();
+			readDescriptors(sysmod);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -63,10 +63,16 @@ public class InsertStatement {
 //		Util.IERR("");
 	}
 	
-	private void readDescriptors() throws IOException {
-		String fileName = Global.getAttrFileName(modid, ".AT2");
-		AttributeInputStream inpt = new AttributeInputStream(new FileInputStream(fileName));
+	private void readDescriptors(boolean sysmod) throws IOException {
+		String fileName = null;
+		if(sysmod) {
+			fileName = Global.rtsDir+modid+".AT2";
+//			Util.IERR(""+modid+"  "+Global.rtsDir);
+		} else {
+			fileName = Global.getAttrFileName(modid, ".AT2");
+		}
 		if(Global.ATTR_INPUT_TRACE) System.out.println("ATTRIBUTE INPUT: " + fileName);
+		AttributeInputStream inpt = new AttributeInputStream(new FileInputStream(fileName));
 		int kind = inpt.readKind();
 		if(kind != Kind.K_Module) Util.IERR("Missing MODULE");
 		String modident = inpt.readString();

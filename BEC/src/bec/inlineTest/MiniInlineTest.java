@@ -41,7 +41,9 @@ public class MiniInlineTest {
 		Global.EXEC_TRACE = 4;
 
 		for(String name:names) {
-			String fileName = "C:/Simuletta/SCode/simulettaTestPrograms/"+name+".scd";
+//			String fileName = "C:/Simuletta/SCode/simulettaTestPrograms/"+name+".scd";
+			String fileName = "C:/GitHub/S-Port-Simula/FILES/simulettaTestPrograms/SCode/"+name+".scd";
+//			Global.simulettaTESTLib = "C:/GitHub/S-Port-Simula/SimulettaFEC/src/simulettaTestPrograms";
 			new BecCompiler(fileName);
 		}
 	}

@@ -27,19 +27,21 @@ public class RunMake_RTS {
 		names.add("EDIT");
 		names.add("MNTR");
 
+		Global.outputDIR = "C:/SPORT/RTS/";
 		Global.verbose = true;
 //		Global.traceMode = 4;
 //		Global.SCODE_INPUT_TRACE = true;
 //		Global.PRINT_SYNTAX_TREE = true;
 //		Global.ATTR_INPUT_TRACE = true;
-//		Global.ATTR_OUTPUT_TRACE = true;
+		Global.ATTR_OUTPUT_TRACE = true;
 //		Global.ATTR_INPUT_DUMP = true;
 //		Global.ATTR_OUTPUT_DUMP = true;
 //		Global.SEGMENT_INPUT_DUMP = true;
 //		Global.SEGMENT_OUTPUT_DUMP = true;
 
 		for(String name:names) {
-			String fileName = "C:/Simuletta/SCode/simulaRTS/"+name+".scd";
+//			String fileName = "C:/Simuletta/SCode/simulaRTS/"+name+".scd";
+			String fileName = "C:/GitHub/S-Port-Simula/FILES/simulaRTS/SCode/"+name+".scd";
 			new BecCompiler(fileName);
 		}
 	}

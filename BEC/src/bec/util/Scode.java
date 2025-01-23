@@ -365,7 +365,7 @@ public class Scode {
 //
 	// *** INIT TAGIDENT ***
 //	private static void initTagTable() {
-//		String fileName = "C:/GitHub/S-Port-Simula/FEC/src/fec/source/RTS-FEC-TAGTABLE.def";
+//		String fileName = "C:/GitHub/S-Port-Simula/SimulaFEC/src/fec/source/RTS-FEC-TAGTABLE.def";
 //		try {
 //			FileInputStream inputStream = new FileInputStream(fileName);
 //			BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));	

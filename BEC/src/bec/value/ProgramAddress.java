@@ -80,6 +80,10 @@ public class ProgramAddress extends Value {
 	
 	public void execute() {
 		ProgramSegment seg = (ProgramSegment) segment();
+		if(seg.instructions.size() == 0) {
+			System.out.println("ProgramAddress.execute: " + seg.ident + " IS EMPTY -- NOTHING TO EXECUTE");
+			System.exit(-1);
+		}
 		SVM_Instruction cur = seg.instructions.get(ofst);
 //		System.out.println("ProgramAddress.execute: " + cur);
 		if(Global.EXEC_TRACE > 0) {

@@ -29,9 +29,6 @@ public class Global {
 	public static Map<String, Segment> SEGMAP;
 
 	public static S_Module currentModule;
-	
-	// C:/Simuletta/SCode/simulaRTS/RT.AT2
-	public final static String rtsDir = "C:/Simuletta/SCode/simulaRTS/Attr/";
 
 //	public static Array<SyntaxClass> Display = new Array<SyntaxClass>();
 //	public static SyntaxClass getMeaning(int tag) {
@@ -86,12 +83,15 @@ public class Global {
 		System.out.println("============ "+title+"ENDOF Dump Display ================");
 	}
 	
-	public static String scodeSource;	// S-Code source file name;
+	public static String scodeSource;	// S-Code source file name
 	public static String progIdent;		// S-Code PROG String
 	public static String moduleID;		// S-Module ident String or MAIN
 	public static String modident;   	// Ident of module being defined
 	public static String modcheck;		// Check code of module being defined
 	public static String PROGID;		// Ident of program being defined
+	public static String outputDIR;		// At2 and SVM-Code output directory
+	
+	public final static String rtsDir = "C:/SPORT/RTS/";
 	public static int sourceLineNumber;
 	public static int curline;		// Current source line number
 	public static int nTags; // See: INSERT

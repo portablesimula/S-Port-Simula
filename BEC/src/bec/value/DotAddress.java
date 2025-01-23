@@ -24,6 +24,8 @@ public abstract class DotAddress {
 		
 		do {
 			Tag aTag = Tag.ofScode();
+//			Descriptor descr = Global.getMeaning(aTag);
+//			System.out.println("DotAddress.ofScode: descr=" + descr);
 			Attribute attr = (Attribute) Global.getMeaning(aTag);
 			offset += attr.rela;
 			System.out.println("DotAddress.ofScode: " + attr + "  offset="+offset);
