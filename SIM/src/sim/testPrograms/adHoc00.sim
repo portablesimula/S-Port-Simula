@@ -1,6 +1,9 @@
 begin
+	text t;
+	t :- copy("Bare tull");
 
-	outtext("Hello World");
+%	outtext("Hello World");
+	outtext(t);
 	outimage;
 	
 %	bare tull

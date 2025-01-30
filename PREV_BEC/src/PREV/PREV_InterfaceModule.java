@@ -84,7 +84,7 @@ public class PREV_InterfaceModule extends PREV_S_Module {
 		}
 		Scode.expect(Scode.S_ENDMODULE);
  		
-  		if(Global.PRINT_SYNTAX_TREE) printTree(0);
+  		if(Global.PRINT_SVM_CODE) printTree(0);
   		
   		try {
 			this.write();

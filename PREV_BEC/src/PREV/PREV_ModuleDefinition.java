@@ -107,7 +107,7 @@ public class PREV_ModuleDefinition extends PREV_S_Module {
 			programElements.add(elt);
 		}
 
-  		if(Global.PRINT_SYNTAX_TREE) printTree(0);
+  		if(Global.PRINT_SVM_CODE) printTree(0);
 
 		if(Scode.curinstr != Scode.S_ENDMODULE)
 			Util.IERR("Improper termination of module");

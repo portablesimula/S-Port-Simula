@@ -190,7 +190,7 @@ begin
 
 %+T      procedure outTagWithIdent(t); short integer t; begin
 %+T      	text id; id:-tagID(t);
-% +T		    STRC2("SCODER0",sourceline,"outTagWithIdent: " & edit(t) & " = " & id & "   LNG=" & edit(id.length));
+%+T		    STRC2("SCODER0",sourceline,"outTagWithIdent: " & edit(t) & " = " & id & "   LNG=" & edit(id.length));
 %+T     	out2byte(0); out2byte(t);
 %+T     	outbyte(id.length);
 %+T     	outtext(id);
@@ -227,7 +227,7 @@ begin
          end;
          
 %+T      procedure STRC3(m1,line,m2,m3); integer line; text m1,m2,m3;
-%+T    	 if traceScode > 1 then begin
+%+T    	 if traceScode then begin
 %+T			if sysout.image.length < 300 then sysout.image :- blanks(300);
 % +T			sysout.outtext("SCODER0.STRC3: sysout.image.length=" & edit(sysout.image.length)); outimage;
 % +T			sysout.outtext("SCODER0.STRC3: m1=""" & m1 & """"); outimage;
@@ -242,7 +242,7 @@ begin
 %+T    	 end;
          
 %+T      procedure STRC2(m1,line,m2); integer line; text m1,m2;
-%+T    	 if traceScode > 1 then begin
+%+T    	 if traceScode then begin
 %+T			sysout.image.sub(1,8):="SCode: ";
 %+T			sysout.image.sub(8,51):=m1 & ".LINE " & edit(line) & ": ";
 % +T			sysout.image.sub(32,90):=m2;
@@ -251,7 +251,7 @@ begin
 %+T    	 end;
          
 %+T      procedure STRC(m); text m;
-%+T    	 if traceScode > 1 then begin
+%+T    	 if traceScode then begin
 %+T          sysout.outtext("SCode: " & m ); 
 %+T          sysout.outimage;
 %+T    	 end;

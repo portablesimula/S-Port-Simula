@@ -108,7 +108,7 @@ public class IntegerValue extends Value {
 	}
 
 	public String toString() {
-		return "C-INT " + value;
+		return "C-INT " + value; // + "   " + (char)value;
 	}
 	
 

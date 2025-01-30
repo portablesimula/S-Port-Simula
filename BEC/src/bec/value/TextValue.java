@@ -53,12 +53,12 @@ public class TextValue extends Value {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 	private TextValue(AttributeInputStream inpt) throws IOException {
-		System.out.println("BEGIN TextValue.read: " + this);
+//		System.out.println("BEGIN TextValue.read: " + this);
 		this.type = Type.T_TEXT;
 		length = inpt.readShort();
 		addr = (ObjectAddress) Value.read(inpt);
 		if(Global.ATTR_INPUT_TRACE) System.out.println("TextValue.read: " + this);
-		System.out.println("NEW TextValue: " + this);
+//		System.out.println("NEW TextValue: " + this);
 //		Util.IERR("SJEKK DETTE");
 	}
 

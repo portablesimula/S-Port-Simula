@@ -12,7 +12,7 @@ public class InlineTest {
 		Global.verbose = true;
 		Global.traceMode = 4;
 		Global.SCODE_INPUT_TRACE = true;
-		Global.PRINT_SYNTAX_TREE = true;
+		Global.PRINT_SVM_CODE = true;
 		Global.ATTR_INPUT_TRACE = true;
 		Global.ATTR_OUTPUT_TRACE = true;
 //		Global.ATTR_INPUT_DUMP = true;

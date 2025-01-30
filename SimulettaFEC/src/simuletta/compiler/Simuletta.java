@@ -40,21 +40,27 @@ public final class Simuletta {
 
 	public static void main(String[] argv) {
 		String fileName = null;
+		File outputFile = null;
 		Option.verbose=false;
 		Option.WARNINGS=true;
 //		Global.initProperties();
-
+		Global.simulaRtsLib = "C:/GitHub/S-Port-Simula/FILES/simulaRTS/Attrs";
+		
 		// Parse command line arguments.
 		for(int i=0;i<argv.length;i++) {
 			String arg=argv[i];
 			if (arg.charAt(0) == '-') { // command line option
 				if (arg.equalsIgnoreCase("-help")) help();
-				else if (arg.equalsIgnoreCase("-noexec")) Option.noExecution=true;
-				else if (arg.equalsIgnoreCase("-nowarn")) { Option.WARNINGS=false; }
-				else if (arg.equalsIgnoreCase("-select")) setSelectors(argv[++i]);
 				else if (arg.equalsIgnoreCase("-verbose")) Option.verbose=true;
-				else if (arg.equalsIgnoreCase("-packetName")) Global.packetName=argv[++i];
-				else if (arg.equalsIgnoreCase("-output")) setOutputDir(argv[++i]);
+				else if (arg.equalsIgnoreCase("-verbose")) Option.verbose=true;
+				else if (arg.equalsIgnoreCase("-SML:Scode")) outputFile = new File(argv[++i]);
+				else if (arg.equalsIgnoreCase("-traceScode")) Option.TRACE_CODING = Integer.valueOf(argv[++i]);
+
+//				else if (arg.equalsIgnoreCase("-noexec")) Option.noExecution=true;
+//				else if (arg.equalsIgnoreCase("-nowarn")) { Option.WARNINGS=false; }
+//				else if (arg.equalsIgnoreCase("-select")) setSelectors(argv[++i]);
+//				else if (arg.equalsIgnoreCase("-packetName")) Global.packetName=argv[++i];
+//				else if (arg.equalsIgnoreCase("-output")) setOutputDir(argv[++i]);
 				else error("Unknown option "+arg);
 			} else if(fileName==null) fileName = arg;
 			else error("multiple input files specified");
@@ -62,7 +68,7 @@ public final class Simuletta {
 		//System.out.println("FILE: "+fileName);
 //	    Global.simulaRtsLib=new File(Global.simulaHome,"rts");
 		if (fileName == null) {
-//		    //printGlobalList("*** STARTING SIMULETTA EDITOR ***");
+		    if(Option.verbose) System.out.println("*** STARTING SIMULETTA EDITOR ***");
 //			Global.sampleSourceDir=new File(Global.simulaHome,"samples");
 //			RTOption.InitRuntimeOptions();
 //	    	Option.InitCompilerOptions();
@@ -70,8 +76,8 @@ public final class Simuletta {
 //	    	editor.setVisible(true);
 			Util.NOT_IMPLEMENTED("Simuletta Editor");
 		} else {
-		    //printGlobalList("*** STARTING SIMULA COMPILER ***");
-		    new SimulettaCompiler(fileName,null).doCompile();
+			if(Option.verbose) System.out.println("*** STARTING SIMULA COMPILER ***");
+		    new SimulettaCompiler(fileName,outputFile).doCompile();
 		}
 	}
 

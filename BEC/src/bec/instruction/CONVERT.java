@@ -126,7 +126,7 @@ public abstract class CONVERT extends Instruction {
 		} break;
 		default: toValue = null;
 		}
-		if(toValue == null) Util.ERROR("Constant conversion is undefined");
+		if(toValue == null) Util.ERROR("Constant conversion is undefined; " + fromtype + " ==> " + totype);
 		TOS.value = toValue; TOS.type = totype;
 	}
 

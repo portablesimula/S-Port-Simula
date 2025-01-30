@@ -17,7 +17,8 @@ public class Value {
 	 * @param indent number of spaces leading the lines
 	 */
 	public void print(final String indent) {
-		Util.IERR("Method print need a redefinition in "+this.getClass().getSimpleName());
+		System.out.println(this.getClass().getSimpleName() + ".print: " +  toString());
+		Thread.dumpStack();
 	}
 
 	public Value neg() {

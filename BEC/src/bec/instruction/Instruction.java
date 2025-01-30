@@ -98,7 +98,7 @@ public class Instruction { // extends ProgramElement {
 			case Scode.S_IF ->          IfConstrction.ofScode();
 			case Scode.S_SKIPIF ->      SkipifConstruction.ofScode();
 			case Scode.S_PRECALL ->     CALL.ofScode(0);
-			case Scode.S_ASSCALL ->     CALL.ofScode(0);
+			case Scode.S_ASSCALL ->     CALL.ofScode(1);
 			case Scode.S_REPCALL ->     CALL.ofScode(Scode.inByte());
 			case Scode.S_GOTO ->        GOTO.ofScode();
 			case Scode.S_PUSHLEN ->     PUSHLEN.ofScode();

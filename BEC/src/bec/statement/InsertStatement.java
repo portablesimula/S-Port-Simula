@@ -66,10 +66,10 @@ public class InsertStatement {
 	private void readDescriptors(boolean sysmod) throws IOException {
 		String fileName = null;
 		if(sysmod) {
-			fileName = Global.rtsDir+modid+".AT2";
+			fileName = Global.rtsDir+modid+".svm";
 //			Util.IERR(""+modid+"  "+Global.rtsDir);
 		} else {
-			fileName = Global.getAttrFileName(modid, ".AT2");
+			fileName = Global.getAttrFileName(modid, ".svm");
 		}
 		if(Global.ATTR_INPUT_TRACE) System.out.println("ATTRIBUTE INPUT: " + fileName);
 		AttributeInputStream inpt = new AttributeInputStream(new FileInputStream(fileName));
@@ -84,7 +84,7 @@ public class InsertStatement {
 		LOOP:while(true) {
 			int prevKind = kind;
 			kind = inpt.readKind();
-			System.out.println("InsertStatement.readDescriptors'LOOP: " + Kind.edKind(kind));
+//			System.out.println("InsertStatement.readDescriptors'LOOP: " + Kind.edKind(kind));
 			if(kind == Kind.K_EndModule) break LOOP;
 			switch(kind) {
 				case Kind.K_RECTYPES:		Type.readRECTYPES(inpt); break;

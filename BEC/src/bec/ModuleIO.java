@@ -34,8 +34,8 @@ public class ModuleIO {
 	public static void outputModule(int nXtag) throws IOException {
 		if(Global.ATTR_OUTPUT_TRACE)
 			System.out.println("**************   Begin  -  Output-module  " + Global.modident + "  " + Global.modcheck + "   **************");
-//		AttributeOutputStream modoupt = new AttributeOutputStream(new FileOutputStream(Global.getAttrFileName(Global.modident, ".AT2")));
-		AttributeOutputStream modoupt = new AttributeOutputStream(new FileOutputStream(Global.outputDIR+Global.modident+".AT2"));
+//		AttributeOutputStream modoupt = new AttributeOutputStream(new FileOutputStream(Global.getAttrFileName(Global.modident, ".svm")));
+		AttributeOutputStream modoupt = new AttributeOutputStream(new FileOutputStream(Global.outputDIR+Global.modident+".svm"));
 		modoupt.writeKind(Kind.K_Module);
 		modoupt.writeString(Global.modident);
 		modoupt.writeString(Global.modcheck);

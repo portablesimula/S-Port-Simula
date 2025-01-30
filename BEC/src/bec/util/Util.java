@@ -87,24 +87,48 @@ public class Util {
 	// ***************************************************************
 	// *** EXECUTE OS COMMAND
 	// ***************************************************************
+//	public static int exec(String... cmd) throws IOException {
+//		Runtime runtime = Runtime.getRuntime();
+//		String line="";
+//		for(int i=0;i<cmd.length;i++) line=line+" "+cmd[i];
+//        System.out.println("MakeCompiler.execute: command="+line);
+////	    String cmd=command.trim()+'\n';
+//		Process process = runtime.exec(cmd);
+//		//try
+//		{ InputStream err=process.getErrorStream();
+//		  InputStream inp=process.getInputStream();
+//		  while(process.isAlive())
+//		  { while(err.available()>0) System.err.append((char)err.read());
+//		    while(inp.available()>0) System.out.append((char)inp.read());
+//			
+//		  }
+//		  // process.waitFor();
+//		} //catch(InterruptedException e) { e.printStackTrace(); }
+//		return(process.exitValue());
+//	}
+
 	public static int exec(String... cmd) throws IOException {
-		Runtime runtime = Runtime.getRuntime();
 		String line="";
 		for(int i=0;i<cmd.length;i++) line=line+" "+cmd[i];
-        System.out.println("MakeCompiler.execute: command="+line);
-//	    String cmd=command.trim()+'\n';
-		Process process = runtime.exec(cmd);
-		//try
-		{ InputStream err=process.getErrorStream();
-		  InputStream inp=process.getInputStream();
-		  while(process.isAlive())
-		  { while(err.available()>0) System.err.append((char)err.read());
-		    while(inp.available()>0) System.out.append((char)inp.read());
-			
-		  }
-		  // process.waitFor();
-		} //catch(InterruptedException e) { e.printStackTrace(); }
-		return(process.exitValue());
+        System.out.println("MakeSML.execute: command="+line);
+		ProcessBuilder processBuilder = new ProcessBuilder(cmd);
+		processBuilder.redirectErrorStream(true);
+		try {
+			Process process = processBuilder.start();		
+			InputStream output = process.getInputStream();  // Process' output
+			while (process.isAlive()) {
+				while (output.available() > 0)
+					System.out.append((char) output.read());
+//				System.out.println("ALIVE: "+process.isAlive());
+			}
+//			System.out.println("RETURN: "+process.exitValue());
+//			Thread.dumpStack();
+			return (process.exitValue());
+
+		} catch(Exception e) {
+			System.out.println("ERROR: "+e);
+			throw new RuntimeException("Process Execution failed: " + line, e);
+		}
 	}
 
 	// ***************************************************************

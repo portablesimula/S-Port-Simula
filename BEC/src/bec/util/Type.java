@@ -65,6 +65,16 @@ public class Type {
 		
 	}
 
+	public static Type lookupType(RecordDescr rec) {
+		Type type = TMAP.get(rec.tag.val);
+		if(type == null) Util.IERR("Type.recType: UNKNOWN: " + rec);
+		
+		rec.print("Type.lookupType: ");
+		System.out.println("Type.lookupType: type=" + type);
+		
+		return type;
+	}
+
 	public static void newRecType(RecordDescr rec) {
 //		Type x = new Type(rec.size, null, rec.tag.toString());
 		Type type = new Type(rec.tag.val, rec.size, 0);

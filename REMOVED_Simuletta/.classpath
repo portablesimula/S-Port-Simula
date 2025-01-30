@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="ListSimulaAttrFile/src"/>
+	<classpathentry kind="src" path="Removed/src"/>
+	<classpathentry kind="src" path="SimulettaFEC/src"/>
+	<classpathentry kind="src" path="SimulettaFEC/XX_src"/>
+	<classpathentry kind="src" path="SimulaAttrFile/src"/>
+	<classpathentry kind="output" path="ListSimulaAttrFile/bin"/>
+</classpath>

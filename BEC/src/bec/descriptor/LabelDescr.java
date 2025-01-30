@@ -80,10 +80,10 @@ public class LabelDescr extends Descriptor {
 //		System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  BEGIN IntDescr.Read");
 		Tag tag = Tag.read(inpt);
 		LabelDescr lab = new LabelDescr(kind, tag);
-		System.out.println("AFTER NEW CONST: "+lab);
+//		System.out.println("AFTER NEW CONST: "+lab);
 		boolean present = inpt.readBoolean();
 		if(present) lab.adr = (ProgramAddress) Value.read(inpt);
-		System.out.println("AFTER NEW MEMADDR: "+lab);
+//		System.out.println("AFTER NEW MEMADDR: "+lab);
 		if(Global.ATTR_INPUT_TRACE) System.out.println("LabelDescr.Read: " + lab);
 		return(lab);
 	}

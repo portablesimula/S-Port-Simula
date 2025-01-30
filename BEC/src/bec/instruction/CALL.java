@@ -43,18 +43,19 @@ public abstract class CALL extends Instruction {
 	 * 			::= <instruction>+ asspar
 	 * 			::= <instruction>+ assrep n:byte
 	 */
-	public static void ofScode(int n) {
+	public static void ofScode(int nParStaced) {
 		int profileTag = Scode.ofScode();
 		Scode.inputInstr();
 		
 //		if(Scode.inputTrace > 3) System.out.println("CallInstruction: n="+n+", Curinstr="+Scode.edInstr(Scode.curinstr));
 		ProfileDescr spec = (ProfileDescr) Global.DISPL.get(profileTag);
 		if(spec == null) Util.IERR(""+Scode.edTag(profileTag));
-		System.out.println("Call.ofScode-1: BEGIN CALL "+Scode.edTag(profileTag)+" ================================================================================");
-		spec.print("Call.ofScode-1: ");
+//		System.out.println("Call.ofScode-1: BEGIN CALL "+Scode.edTag(profileTag)+" ================================================================================");
+//		spec.print("Call.ofScode-1: ");
 		ProfileItem pitem = new ProfileItem(Type.T_VOID,spec);
+		pitem.nasspar = nParStaced;
 		CTStack.push(pitem);
-	    CTStack.dumpStack("Call.ofScode-1: ");
+//	    CTStack.dumpStack("Call.ofScode-1: ");
 //	    Util.IERR("");
 	    
 		if(CALL.USE_FRAME_ON_STACK) {
@@ -75,7 +76,8 @@ public abstract class CALL extends Instruction {
 				Scode.inputInstr();
 				putPar(pitem,1);
 		      	Global.PSEG.emit(new SVM_NOOP(), "ASSPAR ");
-			    CTStack.dumpStack("Call.ofScode-2: ");
+				System.out.println("CallInstruction: ASSPAR: nasspar="+pitem.nasspar);
+//			    CTStack.dumpStack("Call.ofScode-2: ");
 //			    Util.IERR("");
 			}
 			else if(Scode.curinstr == Scode.S_ASSREP) {
@@ -83,7 +85,7 @@ public abstract class CALL extends Instruction {
 				Scode.inputInstr();
 				putPar(pitem,nRep);
 		      	Global.PSEG.emit(new SVM_NOOP(), "ASSREP " + nRep);
-			    CTStack.dumpStack("Call.ofScode-3: ");
+//			    CTStack.dumpStack("Call.ofScode-3: ");
 //			    Util.IERR("");
 //				System.out.println("CallInstruction: ASSREP: NextInstr="+Scode.edInstr(Scode.nextByte()));
 			}
@@ -95,10 +97,12 @@ public abstract class CALL extends Instruction {
 		}
 //	    Util.IERR("");
 //	    ---------  Final Actions  ---------
-	    if(pitem.nasspar != pitem.spc.params.size()) Util.IERR("Wrong number of Parameters");
+		System.out.println("CallInstruction: FINAL: " + pitem.spc);
+	    if(pitem.nasspar != pitem.spc.params.size())
+	    	Util.IERR("Wrong number of Parameters: got " + pitem.nasspar + ", required" + +pitem.spc.params.size());
 //	    ---------  Call Routine  ---------
 		if(CALL.USE_FRAME_ON_STACK) {
-			System.out.println("CALL.ofScode: export="+spec.export);
+//			System.out.println("CALL.ofScode: export="+spec.export);
 //			Util.IERR("");
 		    if(CALL_TOS) {
 //		    	Util.IERR("NOT IMPL");
@@ -133,7 +137,7 @@ public abstract class CALL extends Instruction {
 		    }
 		}
 //	    repeat while npop<>0 do Pop; npop:=npop-1 endrepeat;
-	    CTStack.dumpStack("PARSE.CallSYS-3");
+//	    CTStack.dumpStack("PARSE.CallSYS-3");
 	    if(CTStack.TOS != pitem) Util.IERR("PARSE.CallSYS-3");
 	    CTStack.pop();
 		
@@ -150,7 +154,7 @@ public abstract class CALL extends Instruction {
 //			CTStack.dumpStack("END CallInstruction.doCode: ");
 //			Util.IERR("");
 		}
-		Global.PSEG.dump("END CALL: ");
+//		Global.PSEG.dump("END CALL: ");
 //		Util.IERR("");
 	}
 	
@@ -182,7 +186,7 @@ public abstract class CALL extends Instruction {
 //		pItm.spc.printTree(2);
 //		Global.PSEG.dump("putPar: ");
 //		pItm.spc.DSEG.dump("putPar: ");
-		CTStack.dumpStack("ZZZZZZZZZZZZ putPar: ");
+//		CTStack.dumpStack("ZZZZZZZZZZZZ putPar: ");
 //		Util.IERR("");
 		
 		if(nrep > 1) { // Then: Treat rest of rep-par ---

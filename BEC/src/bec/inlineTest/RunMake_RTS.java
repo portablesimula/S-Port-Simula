@@ -11,27 +11,31 @@ public class RunMake_RTS {
 	public static void main(String[] argv) {
 		Vector<String> names=new Vector<String>();
 		
-		names.add("RT");
-		names.add("SYSR");
-		names.add("KNWN");
-		names.add("UTIL");
-		names.add("STRG");
-		names.add("CENT");
-		names.add("CINT");
-		names.add("ARR");
-		names.add("FORM");
-		names.add("LIBR");
-		names.add("FIL");
-		names.add("SMST");
-		names.add("SML");
-		names.add("EDIT");
-		names.add("MNTR");
+		// ============================================
+		//  BACKEND COMPILE RTS FROM SCODE TO SVM-CODE
+		// ============================================
+		
+		names.add("RT");	// SCode ==> C:/SPORT/RTS/RT.svm
+		names.add("SYSR");	// SCode ==> C:/SPORT/RTS/SYSR.svm
+		names.add("KNWN");	// SCode ==> C:/SPORT/RTS/KNWN.svm
+		names.add("UTIL");	// SCode ==> C:/SPORT/RTS/UTIL.svm
+		names.add("STRG");	// SCode ==> C:/SPORT/RTS/STRG.svm
+		names.add("CENT");	// SCode ==> C:/SPORT/RTS/CENT.svm
+		names.add("CINT");	// SCode ==> C:/SPORT/RTS/CINT.svm
+		names.add("ARR");	// SCode ==> C:/SPORT/RTS/ARR.svm
+		names.add("FORM");	// SCode ==> C:/SPORT/RTS/FORM.svm
+		names.add("LIBR");	// SCode ==> C:/SPORT/RTS/LIBR.svm
+		names.add("FIL");	// SCode ==> C:/SPORT/RTS/FIL.svm
+		names.add("SMST");	// SCode ==> C:/SPORT/RTS/SMST.svm
+		names.add("SML");	// SCode ==> C:/SPORT/RTS/SML.svm
+		names.add("EDIT");	// SCode ==> C:/SPORT/RTS/EDIT.svm
+		names.add("MNTR");	// SCode ==> C:/SPORT/RTS/MNTR.svm
 
 		Global.outputDIR = "C:/SPORT/RTS/";
 		Global.verbose = true;
 //		Global.traceMode = 4;
 //		Global.SCODE_INPUT_TRACE = true;
-//		Global.PRINT_SYNTAX_TREE = true;
+//		Global.PRINT_SVM_CODE = true;
 //		Global.ATTR_INPUT_TRACE = true;
 		Global.ATTR_OUTPUT_TRACE = true;
 //		Global.ATTR_INPUT_DUMP = true;
@@ -40,7 +44,6 @@ public class RunMake_RTS {
 //		Global.SEGMENT_OUTPUT_DUMP = true;
 
 		for(String name:names) {
-//			String fileName = "C:/Simuletta/SCode/simulaRTS/"+name+".scd";
 			String fileName = "C:/GitHub/S-Port-Simula/FILES/simulaRTS/SCode/"+name+".scd";
 			new BecCompiler(fileName);
 		}

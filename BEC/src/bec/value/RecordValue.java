@@ -5,9 +5,12 @@ import java.util.Vector;
 
 import bec.AttributeInputStream;
 import bec.AttributeOutputStream;
+import bec.descriptor.LabelDescr;
+import bec.descriptor.RecordDescr;
 import bec.util.Global;
 import bec.util.Scode;
 import bec.util.Tag;
+import bec.util.Type;
 import bec.util.Util;
 
 public class RecordValue extends Value {
@@ -45,6 +48,8 @@ public class RecordValue extends Value {
 //		Scode.checkEqual(Scode.S_ENDRECORD);
 		
 //		if(Scode.inputTrace > 3) printTree(0);
+		RecordDescr recordDescr = (RecordDescr) Global.DISPL.get(rec.tag.val);
+		rec.type = Type.lookupType(recordDescr);
 		return rec;
 	}
 

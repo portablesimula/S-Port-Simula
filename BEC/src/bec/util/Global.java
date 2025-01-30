@@ -15,7 +15,7 @@ public class Global {
 	public static boolean verbose = false;
 	public static int traceMode = 0;
 	public static boolean SCODE_INPUT_TRACE = false;
-	public static boolean PRINT_SYNTAX_TREE = false;
+	public static boolean PRINT_SVM_CODE = false;
 	public static boolean ATTR_INPUT_TRACE = false;
 	public static boolean ATTR_OUTPUT_TRACE = false;
 	public static boolean ATTR_INPUT_DUMP = false;
@@ -89,7 +89,7 @@ public class Global {
 	public static String modident;   	// Ident of module being defined
 	public static String modcheck;		// Check code of module being defined
 	public static String PROGID;		// Ident of program being defined
-	public static String outputDIR;		// At2 and SVM-Code output directory
+	public static String outputDIR;		// Attributes and SVM-Code output directory
 	
 	public final static String rtsDir = "C:/SPORT/RTS/";
 	public static int sourceLineNumber;
@@ -120,7 +120,7 @@ public class Global {
 		if(modident == null) {
 			int p = scodeSource.indexOf('.');
 			String s = scodeSource.substring(0, p);
-//			Util.IERR(s + ".AT2");
+//			Util.IERR(s + ".svm");
 			return s + suffix;
 		} else {
 			return rtsDir + modident + suffix;

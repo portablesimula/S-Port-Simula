@@ -27,7 +27,7 @@ public class BecCompiler {
 			if (arg.charAt(0) == '-') { // command line option
 				if (arg.equalsIgnoreCase("-help")) help();
 				else if (arg.equalsIgnoreCase("-inputTrace")) Global.SCODE_INPUT_TRACE = true;
-				else if (arg.equalsIgnoreCase("-listing")) Global.PRINT_SYNTAX_TREE = true;
+				else if (arg.equalsIgnoreCase("-listing")) Global.PRINT_SVM_CODE = true;
 				else if (arg.equalsIgnoreCase("-verbose")) Global.verbose=true;
 				else {
 					Util.ERROR("Unknown option " + arg);
@@ -78,7 +78,7 @@ public class BecCompiler {
 	 * 		::= main <local_quantity>* <program_element>*
 	 */
 	public BecCompiler(String scodeSource) {
-		if(Global.verbose) System.out.println("START: SportBEC: " + scodeSource);
+		if(Global.verbose) System.out.println("START: BecCompiler: " + scodeSource);
 		Global.scodeSource = scodeSource;
 		Global.DISPL = new Array<Descriptor>();
 		Global.SEGMAP = new HashMap<String, Segment>();
@@ -105,7 +105,7 @@ public class BecCompiler {
 			}
 		} else Util.IERR("Illegal S-Program");
 		
-		if(Global.verbose) System.out.println("DONE: SportBEC: " + scodeSource);
+		if(Global.verbose) System.out.println("DONE: BecCompiler: " + scodeSource);
 	}
 
 }

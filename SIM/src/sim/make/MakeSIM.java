@@ -22,7 +22,9 @@ public class MakeSIM {
 	static boolean verbose;
 	static String selectors;
 	static boolean fecListing;
+	static boolean fecSCodeTrace;
 	static int fecTraceLevel;
+	static boolean becSCodeTrace;
 	static boolean becListing;
 	static String sourceFileName;
 	static String sCodeFileName;
@@ -49,39 +51,6 @@ public class MakeSIM {
 		System.out.println("                             Then, for each character, the corresponding selector is set");
 		System.out.println("  -sport                     Enable all S-PORT extensions");
 		
-		System.out.println("  -keepJava <directory>      Specify where to place generated .java files");
-		System.out.println("                             Default: Temp directory which is deleted upon exit");
-		System.out.println("  -output <directory>        Specify where to place generated executable .jar file");
-		System.out.println("                             Default: Same directory as source file");
-		System.out.println("  -extLib <directory>        Specify where to search for precompiled classes and procedures");
-		System.out.println("                             If not found, output directory is also searched");
-		System.out.println("");
-		System.out.println("sourceFile ::= Simula Source File");
-		System.out.println("");
-		System.out.println("modeString ::= viaJavaSource | directClassFiles | simulaClassLoader");
-		System.out.println("");
-		System.out.println("");
-		System.out.println("viaJavaSource");
-		System.out.println("   The Simula Compiler will generate Java source files and use");
-		System.out.println("   the Java compiler to generate JavaClass files which in turn");
-		System.out.println("   are collected together with the Runtime System into the");
-		System.out.println("   resulting executable jar-file.");
-		System.out.println("");
-		System.out.println("");
-		System.out.println("directClassFiles");
-		System.out.println("   The Simula Compiler will generate JavaClass files directly");
-		System.out.println("   which in turn are collected together with the Runtime System");
-		System.out.println("   into the resulting executable jar-file.");
-		System.out.println("   No Java source files are generated.");
-		System.out.println("");
-		System.out.println("");
-		System.out.println("simulaClassLoader");
-		System.out.println("   The Simula Compiler will generate ClassFile byte array and");
-		System.out.println("   load it directly. No intermediate files are created.");
-		System.out.println("");
-		System.out.println("   NOTE: In this mode, the editor will terminate after the first");
-		System.out.println("         program execution");
-
 		System.exit(0);
 	}
 
@@ -143,28 +112,36 @@ public class MakeSIM {
 		sCodeFileName  = "C:\\GitHub\\S-Port-Simula\\SIM\\src\\sim\\testPrograms\\scode\\"+name+".scd";
 		
 //		verbose = true;
-//		fecListing = true;
+		fecListing = true;
+		fecSCodeTrace = true;
+		fecTraceLevel = 4;
+
 		becListing = true;
-//		fecTraceLevel = 4;
+		becSCodeTrace = true;
 		
-		int execCode = callFEC();
-//		System.out.println("ExitCode = "+execCode);
+		int execCode = callSimulaFEC();
+		verbose = true;
+		if(verbose) System.out.println("RETURN FROM FEC: ExitCode = "+execCode+"\n\n");
 		
 		if(execCode == 0) callBEC();
 	}
 	
-	private static int callFEC() {
+	private static int callSimulaFEC() {
 		Vector<String> cmds = new Vector<String>();
 		cmds.add("java");
 		cmds.add("-jar");
-		cmds.add("C:\\SPORT\\FEC.jar");
+		cmds.add("C:\\SPORT\\SimulaFEC.jar");
+		cmds.add("-SPORT:noConsole");
 		if(verbose) cmds.add("-verbose");
 		if(fecTraceLevel > 0) { cmds.add("-SPORT:trace"); cmds.add(""+fecTraceLevel); }
 		if(fecListing) cmds.add("-SPORT:listing");
+		if(fecSCodeTrace) cmds.add("-SPORT:traceScode");
+		// -SPORT:traceScode
 		if(selectors != null) {	cmds.add("-SPORT:select"); cmds.add(selectors); }
 		cmds.add("-SPORT:SCodeFile"); cmds.add(sCodeFileName);
 		cmds.add(sourceFileName);
 
+		if(verbose) System.out.println("BEGIN SIMULA FEC ==> " + sCodeFileName);
 		try {
 			return exec(cmds);
 		} catch (IOException e) {
@@ -172,18 +149,20 @@ public class MakeSIM {
 			e.printStackTrace();
 			System.exit(0);
 		}
-		return -4;
+		return 0;
 	}
 	
 	private static int callBEC() {
 		Vector<String> cmds = new Vector<String>();
 		cmds.add("java");
 		cmds.add("-jar");
-		cmds.add("C:\\SPORT\\BEC.jar");
+		cmds.add("C:\\SPORT\\CommonBEC.jar");
 		cmds.add("-verbose");
+		if(becSCodeTrace) cmds.add("-inputTrace");
 		if(becListing) cmds.add("-listing");
 		cmds.add(sCodeFileName);
 
+		if(verbose) System.out.println("BEGIN BEC " + sCodeFileName + " ==> .svm");
 		try {
 			return exec(cmds);
 		} catch (IOException e) {
@@ -204,23 +183,27 @@ public class MakeSIM {
 	}
 
 	public static int exec(String... cmd) throws IOException {
-		Runtime runtime = Runtime.getRuntime();
 		String line="";
 		for(int i=0;i<cmd.length;i++) line=line+" "+cmd[i];
-        System.out.println("MakeCompiler.execute: "+line);
-//	    String cmd=command.trim()+'\n';
-		Process process = runtime.exec(cmd);
-		//try
-		{ InputStream err=process.getErrorStream();
-		  InputStream inp=process.getInputStream();
-		  while(process.isAlive())
-		  { while(err.available()>0) System.err.append((char)err.read());
-		    while(inp.available()>0) System.out.append((char)inp.read());
-			
-		  }
-		  // process.waitFor();
-		} //catch(InterruptedException e) { e.printStackTrace(); }
-		return(process.exitValue());
+        System.out.println("MakeSIM.execute: command="+line);
+		ProcessBuilder processBuilder = new ProcessBuilder(cmd);
+		processBuilder.redirectErrorStream(true);
+		try {
+			Process process = processBuilder.start();		
+			InputStream output = process.getInputStream();  // Process' output
+			while (process.isAlive()) {
+				while (output.available() > 0)
+					System.out.append((char) output.read());
+//				System.out.println("ALIVE: "+process.isAlive());
+			}
+			System.out.println("RETURN: "+process.exitValue());
+			Thread.dumpStack();
+			return (process.exitValue());
+
+		} catch(Exception e) {
+			System.out.println("ERROR: "+e);
+			throw new RuntimeException("Process Execution failed: " + line, e);
+		}
 	}
 
 	
